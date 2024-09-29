@@ -185,37 +185,75 @@ margin-top: -60px;
             z-index: 900;
         }
 
-        /* Close button */
-#close-invite-btn {
-    background-image: url("assets/img/close_btn.png");
-    padding: 5px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    width: 16%;
-    text-align: center;
-    background-size: 100% 100%;
-    font-size: 0px;
-    background-color: transparent;
-    position: absolute; /* Make it absolute to position inside the popup */
-top: 15px;
-    right: 0px;      /* Align to the right */
-}
-#close-leaderboard-btn {
-    background-image: url("assets/img/close_btn.png");
-    padding: 5px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    width: 16%;
-    text-align: center;
-    background-size: 100% 100%;
-    font-size: 0px;
-    background-color: transparent;
-    position: absolute; /* Make it absolute to position inside the popup */
-top: 15px;
-    right: 0px;      /* Align to the right */
-}
+
+
+
+
+   #close-invite-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: transparent;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    /* Responsive Close Button Size */
+    @media (max-width: 600px) {
+        #close-invite-btn img {
+            width: 18px;
+            height: 18px;
+        }
+    }
+
+    @media (min-width: 601px) and (max-width: 900px) {
+        #close-invite-btn img {
+            width: 22px;
+            height: 22px;
+        }
+    }
+
+    @media (min-width: 901px) {
+        #close-invite-btn img {
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+
+
+   #close-leaderboard-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: transparent;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    /* Responsive Close Button Size */
+    @media (max-width: 600px) {
+        #close-leaderboard-btn img {
+            width: 18px;
+            height: 18px;
+        }
+    }
+
+    @media (min-width: 601px) and (max-width: 900px) {
+        #close-leaderboard-btn img {
+            width: 22px;
+            height: 22px;
+        }
+    }
+
+    @media (min-width: 901px) {
+        #close-leaderboard-btn img {
+            width: 24px;
+            height: 24px;
+        }
+    }
  /* Popup styles */
         #overlay {
             display: none;
@@ -536,7 +574,7 @@ position: fixed;
 
     <!-- Leaderboard Popup -->
     <div id="leaderboard-popup">
-    <button id="close-tasks-btn" style="position: absolute;top: -20px;right: -14px;background-color: transparent;border: none;font-size: 20px;cursor: pointer;">
+    <button id="close-leaderboard-btn" style="position: absolute;top: -20px;right: -14px;background-color: transparent;border: none;font-size: 20px;cursor: pointer;">
         <img src="assets/img/close_btn.png" alt="Close" style="width: 48px; height: 44px;">
     </button>
 
@@ -643,7 +681,7 @@ position: fixed;
 
 <!-- Tasks Popup -->
 <div id="tasks-popup">
-    <button id="close-btn" style="position: absolute;top: -20px;right: -14px;background-color: transparent;border: none;font-size: 20px;cursor: pointer;">
+    <button id="close-tasks-btn" style="position: absolute;top: -20px;right: -14px;background-color: transparent;border: none;font-size: 20px;cursor: pointer;">
         <img src="assets/img/close_btn.png" alt="Close" style="width: 48px; height: 44px;">
     </button>
 
@@ -779,7 +817,7 @@ position: fixed;
 
 <!-- Invite Popup -->
 <div id="invite-popup">
-    <button id="close-btn" style="position: absolute;top: -20px;right: -14px;background-color: transparent;border: none;font-size: 20px;cursor: pointer;">
+    <button id="close-invite-btn" style="position: absolute;top: -20px;right: -14px;background-color: transparent;border: none;font-size: 20px;cursor: pointer;">
         <img src="assets/img/close_btn.png" alt="Close" style="width: 48px; height: 44px;">
     </button>
 
@@ -1137,6 +1175,11 @@ function showPopupMessage() {
         document.getElementById('overlay').style.display = 'block';
     });
 
+    document.getElementById('tasks-btn').addEventListener('click', function() {
+        document.getElementById('tasks-popup').style.display = 'block';
+        document.getElementById('overlay').style.display = 'block';
+    });
+
     // Show the invite popup when the invite button is clicked
     document.getElementById('invite-btn').addEventListener('click', function() {
         document.getElementById('invite-popup').style.display = 'block';
@@ -1146,6 +1189,12 @@ function showPopupMessage() {
     // Close the leaderboard popup when the leaderboard close button is clicked
     document.getElementById('close-leaderboard-btn').addEventListener('click', function() {
         document.getElementById('leaderboard-popup').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+    });
+
+    // Close the leaderboard popup when the leaderboard close button is clicked
+    document.getElementById('close-tasks-btn').addEventListener('click', function() {
+        document.getElementById('tasks-popup').style.display = 'none';
         document.getElementById('overlay').style.display = 'none';
     });
 
