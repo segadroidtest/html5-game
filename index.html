@@ -1158,5 +1158,23 @@ function showPopupMessage() {
         <script src="js/bootstrap.bundle.min.js"></script>
     <!-- Splide -->
     <script src="js/splide.min.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+    const tg = window.Telegram.WebApp;
+
+    tg.ready();  // Ensure the web app is initialized
+    
+    // Access user data
+    const user = tg.initDataUnsafe?.user;
+    if (user) {
+        console.log("User info:", user);
+        alert(`Hello, ${user.first_name}!`);
+    }
+
+    // Customize bot interface (optional)
+    tg.MainButton.text = "Play Game";
+    tg.MainButton.show(); // Shows the main button (can link to start game, etc.)
+</script>
+
 </body>
 </html>
