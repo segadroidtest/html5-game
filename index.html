@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en" style="overflow: hidden;">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+    <link rel="stylesheet" href="css/style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title></title>
+<link rel="stylesheet" href="js/app.css" type="text/css">
+<style>
+            .invite-link {
+            font-size: 16px;
+            margin-bottom: 20px;
+            background-color: #e7f3fe;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #b3d7ff;
+        }
+        .friends-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .friend-item {
+            background: #f9f9f9;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .coins-earned {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .scrollable {
+        display: none; /* Enable scrolling */
+    }
+
+    .scrollable::-webkit-scrollbar {
+        display: none; /* Hide scrollbar */
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .scrollable {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+        /* Main button style */
+       #leaderboard-btn {
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        /* The leaderboard popup container */
+        #leaderboard-popup {
+            display: none; /* Hidden by default */
+ position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 503px;
+    padding-bottom: 0px;
+    background-image: url(assets/img/message_window.png);
+    border: 0px solid #333;
+    border-radius: 10px;
+    z-index: 1000;
+    background-size: 100% 100%;
+    padding-top: 0px;
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 550px;
+        }
+
+        /* Leaderboard heading */
+        #leaderboard-popup h2 {
+            margin-top: -60px;
+            text-align: center;
+            background-image: url("assets/img/leaderboard_banner.png");
+            background-size: 100% 100%;
+            font-size: 0px;
+            padding-top: 60px;
+            margin-bottom: 0px;
+        }
+
+        /* List of players */
+        #leaderboard-popup ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #leaderboard-popup ul li {
+            padding: 7px;
+            background-color: #bf5d05;
+            border: 1px solid #a24e03;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            display: flex;
+            color: white;
+            font-size: 15px;
+        }
+
+       #invite-btn {
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        /* The invite popup container */
+        #invite-popup {
+display: none;
+position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 503px;
+    padding-bottom: 0px;
+    background-image: url(assets/img/message_window.png);
+    border: 0px solid #333;
+    border-radius: 10px;
+    z-index: 1000;
+    background-size: 100% 100%;
+    padding-top: 0px;
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 590px;
+        }
+
+        /* Invite heading */
+        #invite-popup h2 {
+margin-top: -60px;
+    text-align: left;
+    background-size: 100% 100%;
+    padding-top: 60px;
+    margin-bottom: 0px;
+    font-size: 15px;
+        }
+
+        /* List of players */
+        #invite-popup ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #invite-popup ul li {
+            padding-left: 11px;
+            background-color: #bf5d05;
+            border: 1px solid #a24e03;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            display: flex;
+            color: white;
+            font-size: 15px;
+            padding-bottom: 0px;
+            padding-top: 0px;
+            padding-right: 11px;
+        }
+
+
+        /* Overlay behind the popup */
+        #overlay {
+            position: fixed;
+            display: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 900;
+        }
+
+        /* Close button */
+#close-invite-btn {
+    background-image: url("assets/img/close_btn.png");
+    padding: 5px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 16%;
+    text-align: center;
+    background-size: 100% 100%;
+    font-size: 0px;
+    background-color: transparent;
+    position: absolute; /* Make it absolute to position inside the popup */
+top: 15px;
+    right: 0px;      /* Align to the right */
+}
+#close-leaderboard-btn {
+    background-image: url("assets/img/close_btn.png");
+    padding: 5px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 16%;
+    text-align: center;
+    background-size: 100% 100%;
+    font-size: 0px;
+    background-color: transparent;
+    position: absolute; /* Make it absolute to position inside the popup */
+top: 15px;
+    right: 0px;      /* Align to the right */
+}
+ /* Popup styles */
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+
+
+
+
+
+
+/* Styling for the table layout */
+#friends-and-coins-table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: separate;
+}
+
+#friends-and-coins-table td {
+    padding: 10px;
+    text-align: center;
+    border: none;
+    vertical-align: middle;
+    background-color: #bf5d05;
+    border-radius: 8px;
+    border: 1px solid #a24e03;
+}
+
+/* Friends Invited and Coins Earned Sections */
+#friends-invited-section h2,
+#coins-earned-section h2 {
+    margin-bottom: 5px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+#friends-invited-section p,
+#coins-earned-section p {
+    font-size: 16px;
+    color: #333;
+}
+
+/* Friends List */
+#friendsList {
+    margin-top: 10px;
+    padding: 0;
+    list-style: none;
+}
+
+#friendsList li {
+    background-color: #e6f7ff;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    color: #007acc;
+}
+
+/* Button Container */
+#button-container {
+    margin-top: 3px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#inviteTelegramButton {
+    color: #ffff;
+    border: none;
+    padding: 5px 5px;
+    font-size: 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 68%;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-image: url(assets/img/invite_btn.png);
+    background-size: 100% 100%;
+    background-color: transparent;
+}
+
+#inviteTelegramButton:hover {
+    background-color: #45a049;
+}
+
+/* Copy Link Button */
+#copyLinkButton {
+    color: #0c2705;
+    border: none;
+    padding: 5px;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 30%;
+    text-align: center;
+    font-weight: bold;
+    background-image: url(assets/img/copy_btn.png);
+    font-weight: bold;
+    background-size: 100% 100%;
+    background-color: transparent;
+}
+
+#copyLinkButton:hover {
+    background-color: #005f8a;
+}
+
+.popup-message {
+background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 11px;
+    border-radius: 5px;
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+    z-index: 1000;
+    text-align: center;
+    width: auto;
+}
+
+
+
+
+#friends-invited-section {
+    margin-top: 20px;
+}
+
+#referralTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#referralTable th,
+#referralTable td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+#referralTable th {
+    background-color: #4CAF50; /* Green background for the header */
+    color: white; /* White text for header */
+    padding: 0px !important;!i;!;
+    padding-left: 10px !important;!i;!;
+    font-size: 13px;
+}
+
+#referralTable td {
+    background-color: #f9f9f9; /* Light grey for table cells */
+    padding: 0px !important;!i;!;
+    padding-left: 10px !important;!i;!;
+    color: black;
+    font-size: 14px;
+}
+
+#referralTable tr:nth-child(even) td {
+    background-color: #f1f1f1; /* Slightly darker grey for even rows */
+}
+
+#referralTable tr:hover td {
+    background-color: #e1e1e1; /* Light grey for hover effect */
+}
+
+#friendsInvitedCount {
+    color: #4CAF50; /* Green text color */
+    font-weight: bold; /* Bold text */
+}
+
+#coinsEarn {
+    color: #FF9800; /* Orange text color */
+    font-weight: bold; /* Bold text */
+}
+
+
+
+
+#tasks-popup {
+    display: none;
+position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 503px;
+    padding-bottom: 0px;
+    background-image: url(assets/img/message_window.png);
+    border: 0px solid #333;
+    border-radius: 10px;
+    z-index: 1000;
+    background-size: 100% 100%;
+    padding-top: 0px;
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 550px;
+    }
+
+
+
+
+
+
+
+
+
+   #close-tasks-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: transparent;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    /* Responsive Close Button Size */
+    @media (max-width: 600px) {
+        #close-tasks-btn img {
+            width: 18px;
+            height: 18px;
+        }
+    }
+
+    @media (min-width: 601px) and (max-width: 900px) {
+        #close-tasks-btn img {
+            width: 22px;
+            height: 22px;
+        }
+    }
+
+    @media (min-width: 901px) {
+        #close-tasks-btn img {
+            width: 24px;
+            height: 24px;
+        }
+    }
+    </style>
+<style>
+        #SD-loadscrn {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            z-index: 9999;
+        }
+
+        #SD-loadtext {
+            position: absolute;
+            font-family: sans-serif;
+            top: 50%;
+            left: 50%;
+            width: 250px;
+            margin-left: -125px;
+            margin-top: -125px;
+            text-align: center;
+            line-height: 150%;
+            font-size: 16px;
+        }
+    </style>
+<script type="text/javascript"></script>
+<script language="javascript"></script>
+<script type="text/javascript">
+        window.gameLangs = ['en'];
+        window.gameJS = ['js/game.js'];
+        window.gameOnLoadScript = "init();";
+    </script>
+<script type="text/javascript" src="js/script.js"></script>
+<script type="text/javascript" src="js/hooks.js"></script>
+<script type="text/javascript" src="js/ads.js"></script>
+</head>
+<body>
+<div id="viewporter">
+<canvas id="canvas" width="700" height="900"></canvas>
+</div>
+</div>
+</div>
+
+    <!-- App Bottom Menu -->
+    <div class="appBottomMenu">
+        <div class="item">
+<a href="javascript:void(0);" class="icon" id="gameButton">
+    <p>
+        <i class="icon ion-ios-play"></i>
+        <span>Game</span>
+    </p>
+</a>
+        </div>
+    <div class="item" id="leaderboard-btn">
+        <a href="javascript:void(0);">
+            <p>
+                <i class="icon ion-ios-trophy"></i>
+                <span>Leaderboard</span>
+            </p>
+        </a>
+    </div>
+        <div id="overlay"></div>
+
+    <!-- Leaderboard Popup -->
+    <div id="leaderboard-popup">
+    <button id="close-tasks-btn" style="position: absolute;top: -20px;right: -14px;background-color: transparent;border: none;font-size: 20px;cursor: pointer;">
+        <img src="assets/img/close_btn.png" alt="Close" style="width: 48px; height: 44px;">
+    </button>
+
+<div id="popup-title" style="position: relative;margin-bottom: 10px;display: inline-block;width: 100%;">
+        <!-- Background image with dynamic size based on text size -->
+        <center><img src="assets/img/title_bg.png" alt="Title Background" style="width: auto;height: 45px;display: inline-block;margin-top: -10px;"></center>
+
+        <!-- Title text, positioned over the image -->
+        <span style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 24px;font-weight: bold;color: #ffffff;white-space: nowrap;margin-top: -4px;">
+            Leaderboard
+        </span>
+    </div>
+
+        <p style="margin-top: 0px;color: #a34e03;font-size: 13px;font-weight: bold;width: 100%;text-align: right;height: 7px;">Total points earned</p>
+<div id="leaderboard-container" style="height: 400px; overflow-y: auto; border: 0px !important; padding: 5px;">
+    <ul id="leaderboard-list" style="margin-bottom: -5px; margin-top: -5px; list-style-type: none; padding: 0;">
+    </ul>
+</div>
+
+<script>
+        // Generate 1000 players
+    const leaderboard = document.getElementById('leaderboard-list');
+    const playersCount = 1000; // Number of players
+
+    // Predefined unique scores from high to low
+    const predefinedScores = [
+        980, 950, 925, 900, 867, 850, 830, 820, 810, 800,
+        790, 780, 770, 763, 750, 740, 735, 730, 725, 720,
+        715, 710, 705, 700, 695, 690, 685, 680, 675, 670,
+        665, 660, 655, 650, 645, 640, 630, 620, 610, 605,
+        600, 590, 580, 570, 560, 550, 540, 530, 520, 510,
+        500, 490, 480, 470, 460, 450, 442, 430, 420, 410,
+        400, 390, 380, 370, 360, 351, 340, 330, 320, 310,
+        300, 290, 280, 270, 260, 250, 240, 230, 220, 210,
+        200, 190, 180, 170, 160, 150, 140, 130, 120, 110,
+        100, 90, 80, 70, 60, 50, 40, 30, 20, 10,
+        5, 4, 3, 2, 1
+    ];
+
+    // Ensure we have exactly 1000 scores
+    const scoresToGenerate = playersCount - predefinedScores.length;
+    for (let i = 0; i < scoresToGenerate; i++) {
+        predefinedScores.push(Math.floor(Math.random() * 200) + 1); // Random scores for additional players
+    }
+
+    // Sort all scores in descending order
+    predefinedScores.sort((a, b) => b - a);
+
+    for (let i = 0; i < playersCount; i++) {
+        let rankImg = '';
+
+        // Assign medals to top 3 players
+        if (i === 0) {
+            rankImg = '<img src="assets/img/medal-1.png" style="height: 30px; margin-top: -3px;">';
+        } else if (i === 1) {
+            rankImg = '<img src="assets/img/medal-2.png" style="height: 30px; margin-top: -3px;">';
+        } else if (i === 2) {
+            rankImg = '<img src="assets/img/medal-3.png" style="height: 30px; margin-top: -3px;">';
+        }
+
+        // Create the player element
+        const playerLi = document.createElement('li');
+        playerLi.style.fontWeight = 'bold';
+        playerLi.style.display = 'flex';
+        playerLi.style.justifyContent = 'space-between';
+        playerLi.style.alignItems = 'center';
+
+        // Create the player info (left side)
+        const playerInfoDiv = document.createElement('div');
+        playerInfoDiv.innerHTML = `${rankImg} <span>Player ${i + 1}</span>`;
+
+        // Create the player's score (right side)
+        const scoreSpan = document.createElement('span');
+        scoreSpan.style.fontStyle = 'italic';
+        scoreSpan.style.fontWeight = 'normal';
+
+        // Get the player's score from the sorted array
+        const score = predefinedScores[i];
+        scoreSpan.innerHTML = `${score} <img src="assets/img/littlediamond.png" style="height: 15px;"> Diamonds`;
+
+        // Append both player info and score to the list item
+        playerLi.appendChild(playerInfoDiv);
+        playerLi.appendChild(scoreSpan);
+
+        // Append the list item to the leaderboard
+        leaderboard.appendChild(playerLi);
+    }
+</script>
+
+</ul>
+
+        <span style="color: #a34e03;font-size: 13px;font-weight: bold;">Updated every 10 mins</span>
+    </div>
+<div class="item" id="tasks-btn">
+    <a href="javascript:void(0);">
+        <p>
+            <i class="icon ion-ios-clipboard"></i>
+            <span>Tasks</span>
+        </p>
+    </a>
+</div>
+
+<div id="overlay"></div>
+
+<!-- Tasks Popup -->
+<div id="tasks-popup">
+    <button id="close-btn" style="position: absolute;top: -20px;right: -14px;background-color: transparent;border: none;font-size: 20px;cursor: pointer;">
+        <img src="assets/img/close_btn.png" alt="Close" style="width: 48px; height: 44px;">
+    </button>
+
+<div id="popup-title" style="position: relative;margin-bottom: 10px;display: inline-block;width: 100%;">
+        <!-- Background image with dynamic size based on text size -->
+        <center><img src="assets/img/title_bg.png" alt="Title Background" style="width: auto;height: 45px;display: inline-block;margin-top: -10px;"></center>
+
+        <!-- Title text, positioned over the image -->
+        <span style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 24px;font-weight: bold;color: #ffffff;white-space: nowrap;margin-top: -4px;">
+            Tasks
+        </span>
+    </div>
+
+    <!-- Available Points Section -->
+<div id="available-points" style="text-align: center; font-size: 16px; font-weight: bold; color: #a44e03;">
+        <span style="font-size: 16px; font-weight: bold;">Total Available Points:</span>
+        <div id="total-points" style="font-size: 38px; font-weight: bold; color: #a34e03; margin-top: 0px;">
+            0 <img src="assets/img/littlediamond.png" style="margin-top: -8px; margin-left: -10px; height: 40px; vertical-align: middle;">
+        </div>
+        <p style="font-size: 13px; color: #aa5509; margin-top: 10px; font-weight: 600; line-height: 18px; padding: 3px;">
+            The more points you earn, the higher your chance of receiving rewards!
+        </p>
+    </div>
+
+    <p style="margin-top: 20px;color: #a34e03;font-size: 13px;font-weight: bold;width: 100%;text-align: left;height: 10px;padding-left: 6px;">Available Tasks:</p>
+
+    <div id="tasks-container" style="height: 400px; overflow-y: auto; border: 0px !important; padding: 5px;">
+<ul id="tasks-list" style="margin-bottom: -5px;margin-top: -5px;list-style-type: none;padding: 0;">
+  <li style="font-weight: bold;margin-bottom: 10px;background-color: #bf5d05;border: 1px solid #a24e03;color: white;font-size: 13px;padding-left: 13px;border-radius: 10px;line-height: 20px;padding-top: 10px;padding-bottom: 10px;">
+    <span style="display: block;">Share to your Telegram Story</span>
+    <span style="font-weight: bold;">
+      <img src="assets/img/littlediamond.png" style="height: 15px;"> +500 </span>
+    <img src="" style="height: 20px; margin-left: 10px;">
+  </li>
+  <li style="font-weight: bold;margin-bottom: 15px;font-weight: bold;margin-bottom: 10px;background-color: #bf5d05;border: 1px solid #a24e03;color: white;font-size: 13px;padding-left: 13px;border-radius: 10px;line-height: 20px;padding-top: 10px;padding-bottom: 10px;">
+    <span style="display: block;">Daily check-in</span>
+    <span style="font-weight: bold;">
+      <img src="assets/img/littlediamond.png" style="height: 15px;"> +100 </span>
+    <img src="" style="height: 20px; margin-left: 10px;">
+  </li>
+  <li style="font-weight: bold;margin-bottom: 10px;background-color: #bf5d05;border: 1px solid #a24e03;color: white;font-size: 13px;padding-left: 13px;border-radius: 10px;line-height: 20px;padding-top: 10px;padding-bottom: 10px;">
+    <span style="display: block;">Subscribe to Telegram Channel</span>
+    <span style="font-weight: bold;">
+      <img src="assets/img/littlediamond.png" style="height: 15px;"> +500 </span>
+    <img src="" style="height: 20px; margin-left: 10px;">
+  </li>
+  <li style="font-weight: bold; margin-bottom: 15px; background-color: #bf5d05; border: 1px solid #a24e03; color: white; font-size: 13px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+  <div>
+    <span style="display: block;">Invite 10 Friends</span>
+    <span style="font-weight: bold; display: flex; align-items: center;">
+      <img src="assets/img/littlediamond.png" style="height: 15px; margin-right: 5px;"> +1000 
+    </span>
+  </div>
+  <span style="border: 1px solid #fff; border-radius: 10px; padding: 5px 10px; background-color: rgba(255, 255, 255, 0.2); margin-left: auto;">
+    0/10
+  </span>
+  <img src="" style="height: 20px; margin-left: 10px;">
+</li>
+
+</ul>
+    </div>
+</div>
+
+<script>
+    // Task data: description, points, and completion status
+    const tasks = [];
+
+    const tasksList = document.getElementById('tasks-list');
+    const totalPointsElement = document.getElementById('total-points');
+    let totalPoints = 1200;
+
+    tasks.forEach(task => {
+        const taskItem = document.createElement('li');
+        taskItem.style.fontWeight = 'bold';
+        taskItem.style.marginBottom = '0px';  // Adjusted margin for spacing
+
+        const taskDescription = document.createElement('span');
+        taskDescription.innerText = `${task.description}`;
+        taskDescription.style.display = 'block';  // Ensures the description is on its own line
+
+
+        const taskPoints = document.createElement('span');
+        taskPoints.innerHTML = `<img src="" style="height: 15px;"> +${task.points}`;
+        taskPoints.style.fontWeight = 'bold';
+        taskPoints.style.color = '#fffff';
+
+        const taskIcon = document.createElement('img');
+        taskIcon.src = task.completed ? '' : ''; // Completed or not
+        taskIcon.style.height = '0px';
+        taskIcon.style.marginLeft = '0px';
+
+        // Append all elements
+        taskItem.appendChild(taskDescription);
+        taskItem.appendChild(taskPoints);
+        taskItem.appendChild(taskIcon);
+        tasksList.appendChild(taskItem);
+
+        // Add points only if the task is completed
+        if (task.completed) {
+            totalPoints += task.points;
+        }
+    });
+
+    // Update the total available points at the top of the popup
+    totalPointsElement.innerHTML = `${totalPoints} <img src="assets/img/littlediamond.png" style="    margin-top: -8px;
+    margin-left: -8px;height: 40px; vertical-align: middle;">`;
+
+    // Show/Hide functionality for the Tasks popup
+    const tasksBtn = document.getElementById('tasks-btn');
+    const tasksPopup = document.getElementById('tasks-popup');
+    const overlay = document.getElementById('overlay');
+    const closeTasksBtn = document.getElementById('close-tasks-btn');
+
+    tasksBtn.addEventListener('click', () => {
+        tasksPopup.style.display = 'block';
+        overlay.style.display = 'block';
+    });
+
+    closeTasksBtn.addEventListener('click', () => {
+        tasksPopup.style.display = 'none';
+        overlay.style.display = 'none';
+    });
+</script>
+<div class="item" id="invite-btn">
+    <a href="javascript:void(0);">
+        <p>
+            <i class="icon ion-ios-people"></i>
+            <span>Invite</span>
+        </p>
+    </a>
+</div>
+<div id="overlay"></div>
+
+<!-- Invite Popup -->
+<div id="invite-popup">
+    <button id="close-btn" style="position: absolute;top: -20px;right: -14px;background-color: transparent;border: none;font-size: 20px;cursor: pointer;">
+        <img src="assets/img/close_btn.png" alt="Close" style="width: 48px; height: 44px;">
+    </button>
+
+<div id="popup-title" style="position: relative;margin-bottom: 10px;display: inline-block;width: 100%;">
+        <!-- Background image with dynamic size based on text size -->
+        <center><img src="assets/img/title_bg.png" alt="Title Background" style="width: auto;height: 45px;display: inline-block;margin-top: -10px;"></center>
+
+        <!-- Title text, positioned over the image -->
+        <span style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 24px;font-weight: bold;color: #ffffff;white-space: nowrap;margin-top: -4px;">
+            Invite
+        </span>
+    </div>
+
+
+    <div id="leaderboard-container" style="height: 510px;overflow-y: auto;border: 0px !important;padding-left: 0px;p;padding-right: 0px;padding-top: 10px;">
+          <h2 style="
+    !i;!;
+    padding-top: 55px;
+    margin-bottom: -15px !important;!i;!;
+    text-align: center;
+    font-size: 17px;
+    font-weight: bold;
+    color: #a44e03;
+">Invite Friends and get Rewards!</h2>
+
+<table id="friends-and-coins-table">
+        <tr>
+            <td>
+<div id="friends-invited-section">
+                    <h2 style="
+    width: 150%;margin-top: -76px;
+">Friends Invited</h2>
+                    <p id="friendsInvitedCount" style="
+    margin-bottom: 10px;
+    margin-top: 10px;
+"><img style="width: 20%;" src="assets/img/friends.png"><strong style="
+    color: white;
+"> x 10</strong>
+</p>
+                </div>
+            </td>
+            <td>
+<div id="coins-earned-section">
+                    <h2 style="
+    margin-top: -65px;
+    
+">Coins Earned</h2>
+                    <p id="coinsEarn" style="
+    margin-bottom: 0px;
+    margin-top: 14px;
+"><img style="width: 20%;" src="assets/img/littlediamond.png"><strong style="
+    color: white;
+"> x 1800</strong></p>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+<h2 style="
+    !i;!;
+    padding-top: 70px;
+    font-size: 13px;
+    font-weight: 550;
+    padding-bottom: 0px;
+    margin-bottom: 13px !important;!i;!;
+    color: #9b4e09;
+    font-weight: 600;
+">• You could earn 10% of all points earned by players you have invited.</h2>
+
+<h2 style="
+    !i;!;
+    padding-top: 60px;
+    font-size: 13px;
+    font-weight: 550;
+    padding-bottom: 0px;
+    margin-bottom: 13px !important;!i;!;
+    color: #9b4e09;
+    font-weight: 600;
+">• Invited friends will receive a gift of 1000 points.</h2>
+<div style="display: flex; justify-content: space-between; width: 100%; padding-left: 10px; padding-top: 0px; padding-bottom: 0px; height: 5%;">
+    <p style="margin: 0; color: #a34e03; font-size: 13px; font-weight: bold;">No.</p>
+    <p style="margin: 0; color: #a34e03; font-size: 13px; font-weight: bold;">Friends Name</p>
+    <p style="margin: 0; color: #a34e03; font-size: 13px; font-weight: bold;">Coins Earned</p>
+</div>
+<ul id="leaderboard-list" style="margin-top: 2px; list-style-type: none; padding: 0; overflow-y: auto; height: 150px; padding-left: 10px;">
+    <li style="font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+        <span style="flex: 0 0 30px;">1.</span>
+        <div><span>Alex</span></div>
+        <span style="font-style: italic; font-weight: normal;">980 <img src="assets/img/littlediamond.png" style="height: 15px;"> Diamonds</span>
+    </li>
+    <li style="font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+        <span style="flex: 0 0 30px;">2.</span>
+        <div><span>Sophia</span></div>
+        <span style="font-style: italic; font-weight: normal;">250 <img src="assets/img/littlediamond.png" style="height: 15px;"> Diamonds</span>
+    </li>
+    <li style="font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+        <span style="flex: 0 0 30px;">3.</span>
+        <div><span>Michael</span></div>
+        <span style="font-style: italic; font-weight: normal;">125 <img src="assets/img/littlediamond.png" style="height: 15px;"> Diamonds</span>
+    </li>
+    <li style="font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+        <span style="flex: 0 0 30px;">4.</span>
+        <div><span>Emily</span></div>
+        <span style="font-style: italic; font-weight: normal;">90 <img src="assets/img/littlediamond.png" style="height: 15px;"> Diamonds</span>
+    </li>
+    <li style="font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+        <span style="flex: 0 0 30px;">5.</span>
+        <div><span>James</span></div>
+        <span style="font-style: italic; font-weight: normal;">87 <img src="assets/img/littlediamond.png" style="height: 15px;"> Diamonds</span>
+    </li>
+    <li style="font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+        <span style="flex: 0 0 30px;">6.</span>
+        <div><span>Olivia</span></div>
+        <span style="font-style: italic; font-weight: normal;">85 <img src="assets/img/littlediamond.png" style="height: 15px;"> Diamonds</span>
+    </li>
+    <li style="font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+        <span style="flex: 0 0 30px;">7.</span>
+        <div><span>Daniel</span></div>
+        <span style="font-style: italic; font-weight: normal;">83 <img src="assets/img/littlediamond.png" style="height: 15px;"> Diamonds</span>
+    </li>
+    <li style="font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+        <span style="flex: 0 0 30px;">8.</span>
+        <div><span>Isabella</span></div>
+        <span style="font-style: italic; font-weight: normal;">82 <img src="assets/img/littlediamond.png" style="height: 15px;"> Diamonds</span>
+    </li>
+    <li style="font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+        <span style="flex: 0 0 30px;">9.</span>
+        <div><span>David</span></div>
+        <span style="font-style: italic; font-weight: normal;">10 <img src="assets/img/littlediamond.png" style="height: 15px;"> Diamonds</span>
+    </li>
+    <li style="font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+        <span style="flex: 0 0 30px;">10.</span>
+        <div><span>Ava</span></div>
+        <span style="font-style: italic; font-weight: normal;">8 <img src="assets/img/littlediamond.png" style="height: 15px;"> Diamonds</span>
+    </li>
+</ul>
+
+
+<h2 style="padding-top: 40px;font-size: 13px;font-weight: 550;padding-bottom: 10px;margin-bottom: 13px !important;padding-left: 10px;color: #773b06;font-weight: BOLD;">Displaying the most recent 300 records only</h2>
+        <h2></h2>
+<p style=" margin-bottom: -60px !important; " id="referralLink">
+             <span style=" font-size: 0px; " id="linkText"></span>
+        </p>
+
+        <div id="button-container">
+            <!-- Telegram Invite Button -->
+            <button id="inviteTelegramButton" onclick="inviteViaTelegram()">Invite Friends!</button>
+
+            <!-- Copy Link Button -->
+            <button id="copyLinkButton" onclick="copyReferralLink()"><i class="icon ion-ios-copy" style="
+    margin-right: 5px;
+"></i>Copy</button>
+        </div>
+    </div>
+    <div class="popup-message" id="popupMessage">Copied to clipboard!</div>
+</div>
+
+<script>
+   // Generate a random referral ID
+function generateReferralID() {
+    return 'ref_' + Math.random().toString(36).substring(2, 10);
+}
+
+// Initialize referral link
+const referralID = generateReferralID();
+const baseLink = "https://t.me/Game_Name_bot/start?startApp=";
+document.getElementById('linkText').innerText = baseLink + referralID;
+
+// Function to copy the referral link
+function copyReferralLink() {
+    const linkText = document.getElementById('linkText').innerText;
+    navigator.clipboard.writeText(linkText).then(() => {
+        showPopupMessage();
+    }).catch(err => {
+        console.error('Error copying text: ', err);
+    });
+}
+
+// Function to invite via Telegram
+function inviteViaTelegram() {
+    const referralLink = document.getElementById('linkText').innerText;
+    const telegramInviteLink = `tg://msg_url?url=${encodeURIComponent(referralLink)}`;
+    window.open(telegramInviteLink, '_blank');
+}
+
+// Show popup message
+function showPopupMessage() {
+    const popupMessage = document.getElementById('popupMessage');
+    popupMessage.style.display = 'block';
+    setTimeout(() => {
+        popupMessage.style.opacity = '0';
+        setTimeout(() => {
+            popupMessage.style.display = 'none';
+            popupMessage.style.opacity = '1';
+        }, 500);
+    }, 1500);
+}
+
+    // Open the invite popup
+    function openPopup() {
+        document.getElementById('invite-popup').style.display = 'block';
+        document.getElementById('overlay').style.display = 'block';
+    }
+
+    // Close the invite popup
+    function closePopup() {
+        document.getElementById('invite-popup').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+    }
+
+   // Example: Populate the friends list and coins earned (this would come from your backend)
+ const friends = ['Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Frank', 'Grace', 'Heidi', 'Ivy', 'Jack']; // 10 friends
+   const coinsPerFriend = 10;
+
+    // Loop through the friends array and populate the table
+    friends.forEach((friend, index) => {
+        const tableRow = document.createElement('tr');
+
+        // Create table cells for number, friend's name, and coins earned
+        const numberCell = document.createElement('td');
+        numberCell.textContent = index + 1; // Friend's number (starting from 1)
+        numberCell.style.padding = '10px';
+
+        const nameCell = document.createElement('td');
+        nameCell.textContent = friend; // Friend's name
+        nameCell.style.padding = '10px';
+
+        const coinsCell = document.createElement('td');
+        coinsCell.textContent = coinsPerFriend; // Coins earned
+        coinsCell.style.padding = '10px';
+
+        // Append the cells to the row
+        tableRow.appendChild(numberCell);
+        tableRow.appendChild(nameCell);
+        tableRow.appendChild(coinsCell);
+
+        // Append the row to the table body
+        document.getElementById('referralTableBody').appendChild(tableRow);
+    });
+
+    document.getElementById('coinsEarned').innerHTML = `<img style="width: 20%;" src="assets/img/littlediamond.png"></img><strong style=" color: white; "> x ${coinsEarned}</strong>`;
+
+    // Event listeners
+    document.getElementById('invite-btn').addEventListener('click', openPopup);
+    document.getElementById('close-btn').addEventListener('click', closePopup);
+</script>
+</div>
+
+        
+
+    </div>
+    <!-- * App Bottom Menu -->
+
+    <!-- Sidebar Menu -->
+    <div class="offcanvas offcanvas-start sidebarWrapper" tabindex="-1" id="appSidebar">
+        <div class="offcanvas-body">
+            <nav class="sidebar">
+                <div class="profilebox">
+                    <img src="images/avatar.jpg" alt="avatar" class="avatar">
+                    <h2 class="title">Jane Antunes</h2>
+                    <h5 class="lead">
+                        <i class="icon ion-ios-pin me-1"></i>
+                        Chicago
+                    </h5>
+                    <div class="sidebutton">
+                        <a href="#">
+                            <i class="icon ion-ios-settings"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="sidebarGroup">
+                    <ul class="sidebarMenu">
+                        <li>
+                            <a href="social-home.html">
+                                <i class="icon ion-ios-people"></i>
+                                Social
+                            </a>
+                        </li>
+                        <li>
+                            <a href="social-chat.html">
+                                <i class="icon ion-ios-chatboxes"></i>
+                                Chat
+                            </a>
+                        </li>
+                        <li>
+                            <a href="pages.html">
+                                <i class="icon ion-ios-apps"></i>
+                                Pages
+                            </a>
+                        </li>
+                        <li>
+                            <a href="components.html">
+                                <i class="icon ion-ios-analytics"></i>
+                                Components
+                            </a>
+                        </li>
+                        <li>
+                            <a href="blog-home.html">
+                                <i class="icon ion-ios-book"></i>
+                                Magazine - Blog
+                            </a>
+                        </li>
+                        <li>
+                            <a href="page-login.html">
+                                <i class="icon ion-ios-lock"></i>
+                                Login
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="sidebarGroup">
+                    <ul class="sidebarMenu">
+                        <li class="title">Online</li>
+                        <li>
+                            <a href="#">
+                                <img src="images/avatar2.jpg" alt="avatar" class="avatar">
+                                Guiying K.
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="images/avatar3.jpg" alt="avatar" class="avatar">
+                                Kita Chihoko
+                                <span class="badge badge-primary">2</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="images/avatar4.jpg" alt="avatar" class="avatar">
+                                Leonetta Lloyd
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="images/avatar5.jpg" alt="avatar" class="avatar">
+                                Lizzie Rose
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <img src="images/avatar6.jpg" alt="avatar" class="avatar">
+                                Kari Granleese
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </nav>
+        </div>
+    </div>
+<script>
+    // Show the leaderboard popup when the leaderboard button is clicked
+    document.getElementById('leaderboard-btn').addEventListener('click', function() {
+        document.getElementById('leaderboard-popup').style.display = 'block';
+        document.getElementById('overlay').style.display = 'block';
+    });
+
+    // Show the invite popup when the invite button is clicked
+    document.getElementById('invite-btn').addEventListener('click', function() {
+        document.getElementById('invite-popup').style.display = 'block';
+        document.getElementById('overlay').style.display = 'block';
+    });
+
+    // Close the leaderboard popup when the leaderboard close button is clicked
+    document.getElementById('close-leaderboard-btn').addEventListener('click', function() {
+        document.getElementById('leaderboard-popup').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+    });
+
+    // Close the invite popup when the invite close button is clicked
+    document.getElementById('close-invite-btn').addEventListener('click', function() {
+        document.getElementById('invite-popup').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
+    });
+
+    // Close both popups when the overlay is clicked
+    document.getElementById('overlay').addEventListener('click', function() {
+        document.getElementById('leaderboard-popup').style.display = 'none';
+        document.getElementById('invite-popup').style.display = 'none';
+        this.style.display = 'none';
+    });
+</script>
+
+
+
+        <script src="js/bootstrap.bundle.min.js"></script>
+    <!-- Splide -->
+    <script src="js/splide.min.js"></script>
+</body>
+</html>
