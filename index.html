@@ -1173,17 +1173,7 @@ function showPopupMessage() {
     const tg = window.Telegram.WebApp;
 
     tg.ready();  // Ensure the web app is initialized
-    
-    // Access user data
-    const user = tg.initDataUnsafe?.user;
-    if (user) {
-        console.log("User info:", user);
-        alert(`Hello, ${user.first_name}!`);
-    }
 
-    // Customize bot interface (optional)
-    tg.MainButton.text = "Play Game";
-    tg.MainButton.show(); // Shows the main button (can link to start game, etc.)
 </script>
 
 </body>
