@@ -1,3 +1,12 @@
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', () => {
+    document.body.style.height = window.visualViewport.height + 'px';
+  });
+}
+// This will ensure user never overscroll the page
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 0) window.scrollTo(0, 0);
+});
 var myAudio = document.createElement("audio");
 myAudio.src = "assets/sound/music.mp3";
 myAudio.play();
