@@ -1,0 +1,17 @@
+/* fonts.css */
+@font-face {
+    font-family: 'Noto Sans';
+    src: url('fonts/NotoSans-Regular.woff2') format('woff2'),
+         url('fonts/NotoSans-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Add other font weights or styles if necessary */
+@font-face {
+    font-family: 'Noto Sans';
+    src: url('fonts/NotoSans-Bold.woff2') format('woff2'),
+         url('fonts/NotoSans-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
