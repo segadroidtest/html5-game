@@ -15669,13 +15669,7 @@ h3.prototype.totalStars = function() {
         m5 += this.starsPerLevel[b5]; // Add stars for each level
     }
     
-    // Submit total score to Telegram
-    if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
-        const user = Telegram.WebApp.initDataUnsafe.user;
-        const chat_id = Telegram.WebApp.initDataUnsafe.chat ? Telegram.WebApp.initDataUnsafe.chat.id : null;
 
-        Telegram.GameScore.setScore(user.id, m5, chat_id);
-    }
 
     return m5; // Return total score
 };
