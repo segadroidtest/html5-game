@@ -1,0 +1,88 @@
+<html>
+<head>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-73915025-2');
+    gtag('event', 'page_view', { 'send_to': 'UA-73915025-7' });
+</script>
+<meta charset="UTF-8" />
+  <title>Gamezop - Ludo With Friends</title>
+  <meta name="HandheldFriendly" content="true" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=0, minimal-ui" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="Gamezop - Ludo With Friends">
+  <meta name="description" content="Here's the best multiplayer Ludo game! Play with your friends or with thousands of other players online." />
+  <meta name="version" content="1.1.0" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta property="og:title" content="Gamezop - Ludo With Friends" />
+  <meta property="og:type" content="website" />
+  <meta property="og:description" content="Here's the best multiplayer Ludo game! Play with your friends or with thousands of other players online." />
+  <meta property="og:url" content="http://gamezop.com/" />
+  <meta property="og:image" content="https://static.gamezop.io/SkhljT2fdgb/thumb.png" />
+  <link rel="icon" type="image/png" href="icon.png" />
+  <link rel="shortcut icon" href="favicon.png" />
+	<link rel="apple-touch-icon-precomposed" href="icon.png"/>
+	<link rel="stylesheet" href="fonts/fonts.css">
+
+	<style type="text/css">
+		@font-face{
+			font-family: "KG";
+			src:url('assets/KGInimitableOriginal.ttf')format('truetype');
+			font-weight: normal;
+			font-style: normal;
+		}
+	</style>
+	<!-- <script
+	src="https://browser.sentry-cdn.com/6.7.0/bundle.tracing.min.js"
+	integrity="sha384-K7OJwDwztIMC6ZY17JBkWNnmTftP9GBiV2Nv0I6RGdIsGeDbm6i1gB9L7ZtMIWrZ"
+	crossorigin="anonymous"
+  	></script> -->
+	<script type="text/javascript" async=false src="js/gamezop.js"></script>
+	<!-- <script src="https://markknol.github.io/console-log-viewer/console-log-viewer.js"></script>	 -->
+</head>
+	<body>
+		<script>
+			// var test_var = 6;
+			console.warn("Ludo V3.0.0-rc.0.30");
+		</script>
+		<style type="text/css">
+			body{
+				margin: 0 auto;
+  			padding: 0;
+  			overflow: hidden;
+  			background-color: black;
+			}
+			#rotate{
+			margin: 0 auto;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-image: url('gzpAssets/rotate.png');
+			background-size: auto 100%;
+			background-repeat: no-repeat;
+			background-position: center;
+			background-color: rgb(0, 0, 0);
+			z-index: 999;
+			display: none;
+			}
+		</style>
+			<div id="TOPMOST" ></div>
+			<div id="gameBody"></div>
+			<div id="rotate"></div>
+		<script type="text/javascript" src="js/libs/socket.io.js"></script>
+		<script type="text/javascript" src="js/libs/socket.io_msgpack_parzer.js"></script>
+		<script type="text/javascript" src="js/libs/gzpLoader.js"></script>
+		<script type="text/javascript" src="js/libs/MetaManager_v1.js"></script>
+		<script type="text/javascript" src="js/libs/phaser.min.js"></script>
+		<script src="js/libs/phaser-input_prod_v2_0.2.js"></script>
+		<script type="text/javascript" src="js/libs/phaser-list-view.js"></script>
+		<script type="text/javascript" src="js/libs/radio.min.js"></script>
+		<script type = "text/javascript" src = "js/sdk_pluto.js"></script> 
+		<script type="text/javascript" src="js/game.js"></script>
+	</body>
+</html>
