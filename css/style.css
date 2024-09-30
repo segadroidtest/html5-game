@@ -207,7 +207,7 @@ a {
 
 .appBottomMenu {
   background-color: transparant !important;
-  min-height: 100px;
+  min-height: 61px;
   position: fixed;
   z-index: 9999;
   bottom: 0;
@@ -221,7 +221,6 @@ a {
   background-size: 100% 100%;
   background-image: url(../assets/img/bottombanner.png) !important;
   font-size: 10px !important;
-  padding-top:10px;
   }
   .appBottomMenu .item {
     width: 23%;
