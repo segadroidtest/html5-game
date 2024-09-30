@@ -205,23 +205,47 @@ a {
   .searchBlock .form-control {
     padding-left: 56px; }
 
-.appBottomMenu {
-  background-color: transparant !important;
-  min-height: 61px;
-  position: fixed;
-  z-index: 9999;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  border-top: 0px solid #E5E9F2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: env(safe-area-inset-bottom);
-  background-size: 100% 100%;
-  background-image: url(../assets/img/bottombanner.png) !important;
-  font-size: 10px !important;
+@media only screen and (max-width: 767px) {
+  .appBottomMenu {
+    background-color: transparent !important;
+    min-height: 100px;
+    position: fixed;
+    z-index: 9999;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-top: 0px solid #E5E9F2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: env(safe-area-inset-bottom);
+    background-size: 100% 100%;
+    background-image: url(../assets/img/bottombanner.png) !important;
+    font-size: 10px !important;
+    padding-top: 10px;
   }
+}
+
+@media only screen and (min-width: 768px) {
+  .appBottomMenu {
+    background-color: transparent !important;
+    min-height: 61px;
+    position: fixed;
+    z-index: 9999;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-top: 0px solid #E5E9F2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: env(safe-area-inset-bottom);
+    background-size: 100% 100%;
+    background-image: url(../assets/img/bottombanner.png) !important;
+    font-size: 10px !important;
+  }
+}
+
   .appBottomMenu .item {
     width: 23%;
     text-align: center;
