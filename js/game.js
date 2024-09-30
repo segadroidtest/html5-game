@@ -1,3 +1,30 @@
+let apiUrl;
+
+if (window.location.hostname === "localhost") {
+    apiUrl = 'http://localhost:3000/submit-referral'; // Local development
+} else {
+    apiUrl = 'https://anasamhs2017.github.io/submit-referral'; // Live server
+}
+
+document.getElementById('submitButton').onclick = function() {
+    const referralCode = 'someReferralCode'; // Replace with actual referral code
+    const telegramId = 'user_telegram_id'; // Replace with actual Telegram ID
+    
+    fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ referralCode, telegramId }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+};
 
 function depositTON(telegramId, amount) {
     fetch('https://anasamhs2017.github.io/deposit', {
