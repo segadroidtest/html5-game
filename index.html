@@ -1217,32 +1217,22 @@ function showPopupMessage() {
         <script src="js/bootstrap.bundle.min.js"></script>
     <!-- Splide -->
     <script src="js/splide.min.js"></script>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script>
-        const tg = window.Telegram.WebApp;
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+    const tg = window.Telegram.WebApp;
 
-        tg.ready();  // Ensure the web app is initialized
+    tg.ready();  // Ensure the web app is initialized
 
-        // This function can be used to resize or adjust elements when the web app is ready
-        function adjustToWebApp() {
-            document.body.style.height = `${tg.innerHeight}px`;
-            document.body.style.width = `${tg.innerWidth}px`;
-            resizeCanvas(); // Call to resize the canvas
-        }
+    function startGame() {
+        tg.expand(); // This will expand the mini app to use more available space
 
-        function resizeCanvas() {
-            const canvas = document.getElementById('gameCanvas');
-            canvas.width = tg.innerWidth; // Set width based on Telegram's width
-            canvas.height = tg.innerHeight; // Set height based on Telegram's height
-            // Add any additional logic to fit your game elements
-        }
+        // Initialize your game here
+        resizeCanvas(); // Resize your game canvas if necessary
+    }
 
-        // Adjust the canvas when the app is ready
-        tg.onEvent('resize', adjustToWebApp);
-        adjustToWebApp(); // Initial adjustment
-
-        window.addEventListener('resize', resizeCanvas); // Adjust canvas on window resize
-    </script>
+    // Call startGame on an event like a button click
+    tg.onEvent('mainButtonClicked', startGame);
+</script>
 
 </body>
 </html>
