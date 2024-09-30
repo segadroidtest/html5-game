@@ -1,3 +1,22 @@
+function submitReferral(referralCode, telegramId) {
+    fetch('https://anasamhs2017.github.io/submit-referral', { // Update this URL to your server
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ referralCode, telegramId }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        // Handle success (e.g., show success message)
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        // Handle error (e.g., show error message)
+    });
+}
+
 if (window.visualViewport) {
   window.visualViewport.addEventListener('resize', () => {
     document.body.style.height = window.visualViewport.height + 'px';
