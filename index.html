@@ -1222,14 +1222,14 @@ function showPopupMessage() {
     const tg = window.Telegram.WebApp;
 
     tg.ready();  // Ensure the web app is initialized
-
+tg.expand();
     function startGame() {
         tg.expand(); // This will expand the mini app to use more available space
 
         // Initialize your game here
         resizeCanvas(); // Resize your game canvas if necessary
     }
-
+window.Telegram.WebApp.ready(); window.Telegram.WebApp.expand();
     // Call startGame on an event like a button click
     tg.onEvent('mainButtonClicked', startGame);
 </script>
