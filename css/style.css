@@ -207,7 +207,7 @@ a {
 
 .appBottomMenu {
   background-color: transparant !important;
-  min-height: 61px;
+  min-height: 81px;
   position: fixed;
   z-index: 9999;
   bottom: 0;
