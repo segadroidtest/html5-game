@@ -684,46 +684,38 @@ position: fixed;
 
         <!-- Title text, positioned over the image -->
         <span style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 24px;font-weight: bold;color: #ffffff;white-space: nowrap;margin-top: -4px;">
-            Seed
-    <div id="address"></div>
+            Seed</span>
+<div class="popup">
+    <div class="close-btn" onclick="closePopup()">✖</div>
+    <h2>Wallet Address</h2>
+    <div id="address" style="font-weight: bold; margin-bottom: 10px;"></div>
     <div id="qrcode" style="margin-top: 10px;"></div>
     <button id="copyButton">Copy Address</button>
-
-<script>
-    function copyAddress() {
-        const address = $('#address').text();
-        navigator.clipboard.writeText(address).then(() => {
-            alert('Address copied to clipboard!');
-        }, (err) => {
-            alert('Could not copy address: ', err);
-        });
-    }
-</script>
+    <button id="nextAddressButton">Next Address</button>
+</div>
 
 
 <script>
+    // Predefined wallet addresses
+    const walletAddresses = [
+        "0:1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
+        "0:abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
+        "0:11223344556677889900aabbccddeeff00112233445566778899aabbccddeeff",
+        "0:deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+        "0:abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdef"
+    ];
 
-
- // Function to generate a new wallet address (for demonstration)
-    function generateWalletAddress() {
-        // Here you would normally call your backend or wallet API to get a real address.
-        // This is just a dummy address for demonstration purposes.
-        return '0:1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef';
-    }
+    let currentAddressIndex = 0;
 
     function showAddressAndQRCode() {
-        const existingAddress = localStorage.getItem('tonWalletAddress');
-
-        // Check if we already have a stored address
-        if (existingAddress) {
-            $('#address').text(existingAddress);
+        // Check if we have addresses to show
+        if (walletAddresses.length > 0) {
+            $('#address').text(walletAddresses[currentAddressIndex]);
         } else {
-            const newAddress = generateWalletAddress();
-            $('#address').text(newAddress);
-            localStorage.setItem('tonWalletAddress', newAddress);
+            $('#address').text('No addresses available.');
         }
 
-        // Generate QR code
+        // Generate QR code for the current address
         $('#qrcode').empty(); // Clear previous QR code
         $('#qrcode').qrcode({
             text: $('#address').text(),
@@ -741,6 +733,12 @@ position: fixed;
         });
     }
 
+    function nextAddress() {
+        // Cycle through the addresses
+        currentAddressIndex = (currentAddressIndex + 1) % walletAddresses.length;
+        showAddressAndQRCode();
+    }
+
     function closePopup() {
         $('.popup').hide();
     }
@@ -751,9 +749,8 @@ position: fixed;
 
         // Set up the copy button
         $('#copyButton').on('click', copyAddress);
+        $('#nextAddressButton').on('click', nextAddress);
     });
-
-    
 </script>
 
 
