@@ -691,9 +691,11 @@ position: fixed;
 
 <script>
     function copyAddress() {
-        let address = document.getElementById("wallet-address").textContent;
+        const address = $('#address').text();
         navigator.clipboard.writeText(address).then(() => {
-            alert("Address copied: " + address);
+            alert('Address copied to clipboard!');
+        }, (err) => {
+            alert('Could not copy address: ', err);
         });
     }
 </script>
