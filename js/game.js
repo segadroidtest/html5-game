@@ -7425,7 +7425,7 @@ this.createjs = this.createjs || {},
             F3 = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
             Q5, u5, a3 = {
                 "\b": "\\b",
-                "	": "\\t",
+                "   ": "\\t",
                 "\n": "\\n",
                 "\f": "\\f",
                 "\r": "\\r",
@@ -12295,7 +12295,7 @@ createjs.Touch.enable(this.stage);
             if (m5) {
                 if (C7N8y.b24(Constants.ASSETS_HEIGHT, Constants.SCREEN_HEIGHT) && !this.haveFill) {
                     this.haveFill = C7N8y.s22;
-					var h5 = DNAssetsManager.g_instance.getImage(Images.FILL_TOP);
+                    var h5 = DNAssetsManager.g_instance.getImage(Images.FILL_TOP);
                     this.addChild(h5);
                     var b5 = DNAssetsManager.g_instance.getImage(Images.FILL_BOTTOM);
                     this.addChild(b5);
@@ -12432,7 +12432,7 @@ createjs.Touch.enable(this.stage);
                 scaleY: C7N8y.T8U
             }, C7N8y.N7U, createjs.Ease.linear).wait(m5);
             this.findGUIObject(Layouts.NAME_BUTTON_PLAY).setHandler(function() {
-				integration.showInterstitial();
+                integration.showInterstitial();
                 return DNStateManager.g_instance.pushState(new CoolTransitionInState(new SelectLevelState()));
             });
             this.title = this.findGUIObject(C7N8y.N12);
@@ -15240,7 +15240,7 @@ createjs.Touch.enable(this.stage);
                     return;
                 }
                 createjs.Sound.setMute(h5);
-				myAudio.pause();
+                myAudio.pause();
             } catch (m5) {}
         };
         r3.prototype.play = function(b5, h5) {
@@ -15249,7 +15249,7 @@ createjs.Touch.enable(this.stage);
                     h5 = 1;
                 }
                 if (this.initiliazed && this.soundEnabled) {
-					myAudio.play();
+                    myAudio.play();
                     return createjs.Sound.play(b5, createjs.Sound.INTERRUPT_NONE, 0, 0, 0, h5);
                 }
             } catch (m5) {}
@@ -15679,7 +15679,7 @@ h3.prototype.totalStars = function() {
     })(),
     GameOverState = (function(u5) {
         function d3(b5, h5, O5) {
-			integration.showInterstitial();
+            integration.showInterstitial();
             var W5 = function() {
                 P5.x = -C7N8y.q62;
             };
@@ -15707,7 +15707,7 @@ h3.prototype.totalStars = function() {
             R5(C7N8y.d02);
             P5.scaleX = P5.scaleY = C7N8y.l72;
             var g3 = new DNJellyButton(Images.BUTTON_EXIT, function() {
-				integration.showInterstitial();
+                integration.showInterstitial();
                 return K5.onExitTouch();
             });
             this.panel.addChild(g3);
@@ -18764,10 +18764,7 @@ h3.prototype.totalStars = function() {
             this.inputMode = this.allModes[m5];
             this.inputModeText.text = this.inputMode;
         };
-        document.getElementById("gameButton").addEventListener("click", function() {
 
-         return DNStateManager.g_instance.pushState(new CoolTransitionInState(new SelectLevelState()));
-});
 
         E3.prototype.onPlayTouch = function() {
             this.generageLevel();
@@ -18976,7 +18973,7 @@ h3.prototype.totalStars = function() {
             var O5 = function(m5) {
                 t5.x = m5;
             };
-			var R5 = function() {
+            var R5 = function() {
                 d3.y = -C7N8y.c52;
             };
             var S5 = function(m5) {
@@ -18984,7 +18981,7 @@ h3.prototype.totalStars = function() {
             };
             var K5 = function(m5) {
                 d3.te;
-			};
+            };
             var W5 = function(m5) {
                 K5.y = 0;
             };
@@ -19011,15 +19008,15 @@ h3.prototype.totalStars = function() {
             h5();
             W5(C7N8y.a52);
             var P5 = new DNJellyButton(Images.BUTTON_EXIT, function() {
-				integration.showInterstitial();
+                integration.showInterstitial();
                 return S5.onExitTouch();
             });
             this.panel.addChild(P5);
             this.addGuiObject(P5);
             h5(C7N8y.d02);
-			b5(C7N8y.W8U);
+            b5(C7N8y.W8U);
             G5(C7N8y.a52);
-			this.setSoundButton();
+            this.setSoundButton();
         }
         __extends(J5, g3);
         J5.prototype.setSoundButton = function() {
