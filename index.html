@@ -7,7 +7,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,shrink-to-fit=no,viewport-fit=cover">
 <title></title>
     <script src="https://cdn.jsdelivr.net/npm/@tonconnect/sdk@0.2.0"></script>
-
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
         <script src="js/bootstrap.bundle.min.js"></script>
         <script src="js/qrcode.js"></script>
@@ -703,25 +704,18 @@ position: fixed;
 
 
 <script>
-
-document.getElementById("qrcode").innerHTML = "";
-
-
-    function openPopup() {
-    document.getElementById("popup").style.display = "block";
-    displayWallet(); // Trigger when the popup opens
-}
-
-
-    
-// Selects the wallet address and generates the QR code and display it.
 function displayWallet() {
-    let walletAddress = getUniqueAddress();
-    
-    console.log("Generated Wallet Address: " + walletAddress); // Debugging
+        // Check if the address is already stored in local storage
+        let walletAddress = localStorage.getItem('walletAddress');
 
-    // Check if walletAddress is valid
-    if (walletAddress) {
+        if (!walletAddress) {
+            // If no address is found, generate a new one
+            walletAddress = getUniqueAddress();
+            localStorage.setItem('walletAddress', walletAddress); // Store the generated address
+        }
+
+        console.log("Using Wallet Address: " + walletAddress); // Debugging
+
         // Generate the QR code
         let qrElement = document.getElementById("qrcode");
         qrElement.innerHTML = "";  // Clear any previous QR code
@@ -729,28 +723,42 @@ function displayWallet() {
 
         // Display the address
         document.getElementById("wallet-address").textContent = walletAddress;
-    } else {
-        console.error("No wallet address generated.");
+        $('#wallet-popup').show();
+        $('#overlay').show();
     }
-}
 
-// Function to simulate getting a unique wallet address
-function getUniqueAddress() {
-    // For example, return a random wallet address (replace this logic with real address retrieval)
-    let addresses = [
-        "EQB4djqmv2I3jFdfw12jp9iGuC4uXtGpX1GaZ-5W5_EOsb3K",
-        "EQD4dFqmv5I3jkdwf9gfk9iGcZuuXtGpX1GtB-9W5_FEJxN",
-        "EQH7hFvmv3I3jqkw22k9foiGc4tFxGpX1FqZ-5H5_GRPsbT"
-    ];
-    let ipHash = Math.floor(Math.random() * addresses.length);
-    return addresses[ipHash];
-}
+    function getUniqueAddress() {
+        // Replace this logic with the actual method to retrieve a unique address
+        // For demonstration, we're using a static list of sample addresses
+        let addresses = [
+            "EQB4djqmv2I3jFdfw12jp9iGuC4uXtGpX1GaZ-5W5_EOsb3K",
+            "EQD4dFqmv5I3jkdwf9gfk9iGcZuuXtGpX1GtB-9W5_FEJxN",
+            "EQH7hFvmv3I3jqkw22k9foiGc4tFxGpX1FqZ-5H5_GRPsbT"
+        ];
+        let randomIndex = Math.floor(Math.random() * addresses.length);
+        return addresses[randomIndex];
+    }
 
-// Call the display function on window load or after the popup opens
-window.onload = displayWallet;
+    // Show the wallet popup when the button is clicked
+    $('#show-popup').on('click', function() {
+        displayWallet();
+    });
 
+    // Close the popup
+    $('#close-popup').on('click', function() {
+        $('#wallet-popup').hide();
+        $('#overlay').hide();
+    });
 
-    
+    // Copy the wallet address to clipboard
+    $('#copy-address').on('click', function() {
+        const address = document.getElementById("wallet-address").textContent;
+        navigator.clipboard.writeText(address).then(function() {
+            alert("Wallet address copied to clipboard!");
+        }, function(err) {
+            console.error("Could not copy text: ", err);
+        });
+    });
 </script>
 
 
