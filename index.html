@@ -684,78 +684,73 @@ position: fixed;
         <!-- Title text, positioned over the image -->
         <span style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 24px;font-weight: bold;color: #ffffff;white-space: nowrap;margin-top: -4px;">
             Seed
-        </span><div id="popup" class="popup">
-    <span class="close-button" onclick="closePopup()">×</span>
-    <h2>Send TON to this Wallet</h2>
-    <div id="qrcode"></div>
-    <div class="wallet-address" id="wallet-address"></div>
-    <button class="copy-button" onclick="copyAddress()">Copy Address</button>
-</div>
+<div id="qrcode" style="width: 128px; height: 128px; margin: 0 auto;"></div>
+
+<!-- Wallet address text -->
+<p id="wallet-address"></p>
+
+<!-- Button to copy the address -->
+<button onclick="copyAddress()">Copy Address</button>
 
 <script>
-    // Array of pre-generated wallet addresses
-    const walletAddresses = [
-        "EQDN2y2T-4VUTqYsR5GvVRcQXzRCCOY_A73p1o4_1UJGqewv",
-        "EQDPAuChxr7UStisoy-ZM3sbrdXfD0shfQh1rkixkxjX3wK7",
-        "EQD7iJSQcmJDqiJx-ZW8gO7FgP6bCdyemhOEe8ftjs46xfRj",
-        // Add more addresses here...
-    ];
-
-    let walletAddress = '';
-
-    // Generate a unique address for each user (e.g., based on their device or IP)
-    function getUniqueAddress() {
-        // For simplicity, select a random address from the list
-        const randomIndex = Math.floor(Math.random() * walletAddresses.length);
-        walletAddress = walletAddresses[randomIndex];
-        console.log("Selected Address: " + walletAddress); // Debugging
-        return walletAddress;
-    }
-
-    // Show the popup with the QR code and wallet address
-    function showPopup() {
-        const popup = document.getElementById("popup");
-        popup.classList.add("open");
-
-        // Get a unique address and display it
-        const address = getUniqueAddress();
-        const walletAddressEl = document.getElementById("wallet-address");
-        walletAddressEl.innerText = address;
-        console.log("Address displayed in popup: " + address); // Debugging
-
-        // Generate a QR code
-        const qrcodeEl = document.getElementById("qrcode");
-        qrcodeEl.innerHTML = ''; // Clear previous QR code
-        new QRCode(qrcodeEl, {
-            text: address,
-            width: 128,
-            height: 128,
-            colorDark: "#000000",
-            colorLight: "#ffffff"
-        });
-        console.log("QR Code generated for address: " + address); // Debugging
-    }
-
-    // Close the popup
-    function closePopup() {
-        const popup = document.getElementById("popup");
-        popup.classList.remove("open");
-    }
-
-    // Copy wallet address to clipboard
     function copyAddress() {
-        navigator.clipboard.writeText(walletAddress).then(() => {
-            alert("Address copied to clipboard!");
+        let address = document.getElementById("wallet-address").textContent;
+        navigator.clipboard.writeText(address).then(() => {
+            alert("Address copied: " + address);
         });
     }
+</script>
 
-    // Check if QRCode.js is loaded
-    if (typeof QRCode !== "function") {
-        console.error("QRCode.js library is not loaded!");
+
+<script>
+
+document.getElementById("qrcode").innerHTML = "";
+
+
+    function openPopup() {
+    document.getElementById("popup").style.display = "block";
+    displayWallet(); // Trigger when the popup opens
+}
+
+
+    
+// Selects the wallet address and generates the QR code and display it.
+function displayWallet() {
+    let walletAddress = getUniqueAddress();
+    
+    console.log("Generated Wallet Address: " + walletAddress); // Debugging
+
+    // Check if walletAddress is valid
+    if (walletAddress) {
+        // Generate the QR code
+        let qrElement = document.getElementById("qrcode");
+        qrElement.innerHTML = "";  // Clear any previous QR code
+        new QRCode(qrElement, walletAddress);
+
+        // Display the address
+        document.getElementById("wallet-address").textContent = walletAddress;
     } else {
-        console.log("QRCode.js library loaded successfully.");
+        console.error("No wallet address generated.");
     }
-    console.log("Generated Wallet Address: " + walletAddress);
+}
+
+// Function to simulate getting a unique wallet address
+function getUniqueAddress() {
+    // For example, return a random wallet address (replace this logic with real address retrieval)
+    let addresses = [
+        "EQB4djqmv2I3jFdfw12jp9iGuC4uXtGpX1GaZ-5W5_EOsb3K",
+        "EQD4dFqmv5I3jkdwf9gfk9iGcZuuXtGpX1GtB-9W5_FEJxN",
+        "EQH7hFvmv3I3jqkw22k9foiGc4tFxGpX1FqZ-5H5_GRPsbT"
+    ];
+    let ipHash = Math.floor(Math.random() * addresses.length);
+    return addresses[ipHash];
+}
+
+// Call the display function on window load or after the popup opens
+window.onload = displayWallet;
+
+
+    
 </script>
 
 
