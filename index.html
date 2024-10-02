@@ -686,71 +686,60 @@ position: fixed;
         <span style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 24px;font-weight: bold;color: #ffffff;white-space: nowrap;margin-top: -4px;">
             Seed</span>
 <div class="popup">
-    <div class="close-btn" onclick="closePopup()">✖</div>
-    <h2>Wallet Address</h2>
-    <div id="address" style="font-weight: bold; margin-bottom: 10px;"></div>
-    <div id="qrcode" style="margin-top: 10px;"></div>
-    <button id="copyButton">Copy Address</button>
-    <button id="nextAddressButton">Next Address</button>
+<div id="qrcode" style="width: 128px; height: 128px; margin: 0 auto;"></div>
+
+<!-- Wallet address text -->
+<p id="wallet-address"></p>
+<button onclick="copyAddress()">Copy Address</button>
+
+<script>
+    function copyAddress() {
+        let address = document.getElementById("wallet-address").textContent;
+        navigator.clipboard.writeText(address).then(() => {
+            alert("Address copied: " + address);
+        });
+    }
+</script>
 </div>
 
 
 <script>
-    // Predefined wallet addresses
-    const walletAddresses = [
-        "0:1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
-        "0:abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
-        "0:11223344556677889900aabbccddeeff00112233445566778899aabbccddeeff",
-        "0:deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
-        "0:abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdef"
+   
+// Selects the wallet address and generates the QR code and display it.
+function displayWallet() {
+    let walletAddress = getUniqueAddress();
+    
+    console.log("Generated Wallet Address: " + walletAddress); // Debugging
+
+    // Check if walletAddress is valid
+    if (walletAddress) {
+        // Generate the QR code
+        let qrElement = document.getElementById("qrcode");
+        qrElement.innerHTML = "";  // Clear any previous QR code
+        new QRCode(qrElement, walletAddress);
+
+        // Display the address
+        document.getElementById("wallet-address").textContent = walletAddress;
+    } else {
+        console.error("No wallet address generated.");
+    }
+}
+
+// Function to simulate getting a unique wallet address
+function getUniqueAddress() {
+    // For example, return a random wallet address (replace this logic with real address retrieval)
+    let addresses = [
+        "EQB4djqmv2I3jFdfw12jp9iGuC4uXtGpX1GaZ-5W5_EOsb3K",
+        "EQD4dFqmv5I3jkdwf9gfk9iGcZuuXtGpX1GtB-9W5_FEJxN",
+        "EQH7hFvmv3I3jqkw22k9foiGc4tFxGpX1FqZ-5H5_GRPsbT"
     ];
+    let ipHash = Math.floor(Math.random() * addresses.length);
+    return addresses[ipHash];
+}
 
-    let currentAddressIndex = 0;
-
-    function showAddressAndQRCode() {
-        // Check if we have addresses to show
-        if (walletAddresses.length > 0) {
-            $('#address').text(walletAddresses[currentAddressIndex]);
-        } else {
-            $('#address').text('No addresses available.');
-        }
-
-        // Generate QR code for the current address
-        $('#qrcode').empty(); // Clear previous QR code
-        $('#qrcode').qrcode({
-            text: $('#address').text(),
-            width: 128,
-            height: 128
-        });
-    }
-
-    function copyAddress() {
-        const address = $('#address').text();
-        navigator.clipboard.writeText(address).then(() => {
-            alert('Address copied to clipboard!');
-        }, (err) => {
-            alert('Could not copy address: ', err);
-        });
-    }
-
-    function nextAddress() {
-        // Cycle through the addresses
-        currentAddressIndex = (currentAddressIndex + 1) % walletAddresses.length;
-        showAddressAndQRCode();
-    }
-
-    function closePopup() {
-        $('.popup').hide();
-    }
-
-    // Initialize on page load
-    $(document).ready(function() {
-        showAddressAndQRCode();
-
-        // Set up the copy button
-        $('#copyButton').on('click', copyAddress);
-        $('#nextAddressButton').on('click', nextAddress);
-    });
+// Call the display function on window load or after the popup opens
+window.onload = displayWallet;
+    
 </script>
 
 
