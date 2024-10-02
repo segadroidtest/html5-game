@@ -1339,7 +1339,8 @@ function showPopupMessage() {
     const tg = window.Telegram.WebApp;
 
     tg.ready();  // Ensure the web app is initialized
-
+window.Telegram.WebApp.ready(); 
+    window.Telegram.WebApp.expand();
 </script>
 
 </body>
