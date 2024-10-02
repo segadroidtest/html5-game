@@ -729,11 +729,54 @@ position: fixed;
     // Function to simulate getting a unique wallet address
     function getUniqueAddress() {
         // List of predefined wallet addresses
-        let addresses = [
-            "EQB4djqmv2I3jFdfw12jp9iGuC4uXtGpX1GaZ-5W5_EOsb3K",
-            "EQD4dFqmv5I3jkdwf9gfk9iGcZuuXtGpX1GtB-9W5_FEJxN",
-            "EQH7hFvmv3I3jqkw22k9foiGc4tFxGpX1FqZ-5H5_GRPsbT"
-        ];
+let addresses = [
+    "EQB4djqmv2I3jFdfw12jp9iGuC4uXtGpX1GaZ-5W5_EOsb3K",
+    "EQD4dFqmv5I3jkdwf9gfk9iGcZuuXtGpX1GtB-9W5_FEJxN",
+    "EQH7hFvmv3I3jqkw22k9foiGc4tFxGpX1FqZ-5H5_GRPsbT",
+    "EQB5mHhT2gE7zW3Lby8J-Hg-QB8sv-1BhFg8iFcdT4cTQzXr",
+    "EQA2cI9lj4U8RZ8exwF4vTuxHevntr83klA7h5BSDE4X8wX5",
+    "EQA1d8qcJ8Z3iC6N5hHw2yKSeS6_Rh-YXQw8c1v9UJwZQhH2",
+    "EQE5QWb_pVvXkL7lTsfO1VujxMQUFS8eAbxExhtM8X2B9M7M",
+    "EQEtYHc_Xa9nWQ2P7NLPSzMmEZOMMj4Az87b0C-bCQi_pQ2G",
+    "EQDlEBm2T_-2A0wzzIMs3OdZ0gfr8IekMiTE9RQUZVn16Z71",
+    "EQA2hskA2C5vJH4RCSwG3KAd7PcTUM1U7IF0Gk0qEGy7CqG6",
+    "EQB3XwzLFd1bFAeE05wGlNxQt7j5T0ufx-n5vA5D9fVn6fwH",
+    "EQE5_xvKN80yzqD-vHK2_1TFotPqO0e2BOGItNPGDBqV6y-c",
+    "EQDaP_rhPz-B4nUqZ_Puf3SREk7glvEdGF7YlV7a6gKuwBcZ",
+    "EQCRjG31_x1xu20r7r0dp_DiwhqZaZo4Hp2aW4T7XxOwwFYf",
+    "EQA1nBNtU2qkswT_0He1KrTH3spVotT49r4lzn7Nq64G9VeU",
+    "EQB4a8QhlvEFwCN1ipUgVIXLUR1rEOPNzS5cOjg7h-2K7fqz",
+    "EQA2yN6Z5gD-0tHNXvvl65eDg4o0zLzEEgweDPO_fDa7Zp7f",
+    "EQD4t0Y_cNOq5c5_6azr0OW0QDlF-wDtMTnThy8FCuF3G4Ej",
+    "EQA2PqeX0Ch4fPKcV5cT6FqIExONpB9ezQ2F83Kz1MO4Ib1G",
+    "EQB2L8xBQf2yNGB9gMoUTPV1N5wAf5cXrHeW1kkC5gF_9-Bi",
+    "EQA2P9E7n2ObJqL9-u1eU8l5UunW_Y4LGu-TTNN7OH5xxwMA",
+    "EQB7e5fZTQObOi8Rkt8PA3WW1W50boTHlLkIfPMU7fNdMfMh",
+    "EQDRRfGgj7fKjW3LiAfBIMFXeLlo1F1nb4kAELZBl8WAlqTn",
+    "EQA0FvG9SefPqMCUR1cyYY2k5GvvoA2GVkVobuyYbhR42WwI",
+    "EQDaKcrq1BOQTHtJ2NC2a_1yFDEZ0eQAMRgE_-Y9cPRd-uZn",
+    "EQB5H0swOWi4c6RpNePZyVhP-xO2dd4AvCgL-J6tcE-FT-ZS",
+    "EQA2H-XFZrW1bK-VqCO3UokPzJmNRV0_M-AOgb8N9f9BN2OR",
+    "EQA2qf2etRBaTRN3_-26JMz4bL-bzKp-c8e3coqFv0UUD-px",
+    "EQA2TDrwAZRnk2mV3pY7qZbb_t8whxnZ2w5Tshsw4aFr7ywU",
+    "EQA2qKCoE6oL8bqVvJ93jH65_3EGZ_Mc2hL3Y5bTzzHkO69H",
+    "EQDAWbX12Xc2A7Rpq2Ly4c61hl8HjqjMzzqOvB-HvsChlN-V",
+    "EQD4I8_M12YEl0zI9SgXcXnKg4mEjbNeB5VZC0r0iKmALBdu",
+    "EQA2ZnPYW-uESsSHe2pL2Gk8kOgOe-Qz6-LIojmq7eHfyEDd",
+    "EQA2Dq7P4IoIFGoOjsD4cYZqV7toGfRf6Z1ueoXhOdq91B-C",
+    "EQAAfTOUK8sXvF7-xHqZ5_MWY3lNNyUEO0va0aNqSOZ5VxYo",
+    "EQAOy3-m5Krnp2FrYq0-G6uW6nDj2WZQSwuDbIIOZrV2Z1sk",
+    "EQA8M2os8buSn1eIgCLQW-5TXYfYxZ3CzZXI3JpWILsYgEUD",
+    "EQA2EBuxp1S7k_AySDndk7LiH9rQzbyc-A2taJ_f_G8UheS-",
+    "EQA2EN9W1Ws4H8AIoKu5bspPhn_h8W1UoUVtwcA1h0kPWTn3",
+    "EQA1GdoeY29J61cEoHv6IEZG-K4aSbPQBzURP1OhhbF_a2Ks",
+    "EQB2tD4zQpN6EJSsGVVft8Oi_LszdoS_U13pADUuGgFePe1E",
+    "EQB2D5kXolJrZZm7mckpbKboB3z3CDU8n7E8_F6Q8vWyejb4",
+    "EQA3ejmEjVYFZHSzF3IS_qDah4QzB8lBHY-c4f7ivNMBpnpM",
+    "EQD5fJ65DkNU3RTq5WLBYQZREu3f5X_0T9ZSyF3aK2Gr3qu7",
+    "EQB8-pDyJxO_pLY2V31RrK48DB04y_dhtgYV_9Kef0p_wPjk",
+    "EQA8LMqe1VFm-nSHjbEx6IKmEX4B4N0ZZbWOhAXn6tAQbn6N"
+];
         let randomIndex = Math.floor(Math.random() * addresses.length);
         return addresses[randomIndex];
     }
