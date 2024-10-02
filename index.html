@@ -414,6 +414,32 @@ margin-top: -60px;
     background-color: transparent;
 }
 
+
+
+        #qrcode {
+            margin-bottom: 20px;
+        }
+        .wallet-address {
+            background-color: #4e4e4e;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            word-break: break-all;
+            margin-bottom: 20px;
+        }
+        .copy-button {
+            padding: 10px 15px;
+            background-color: #2a72e5;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+
+
+
 #inviteTelegramButton:hover {
     background-color: #45a049;
 }
@@ -648,9 +674,83 @@ position: fixed;
         <span style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 24px;font-weight: bold;color: #ffffff;white-space: nowrap;margin-top: -4px;">
             Seed
         </span>
+
+
+    <h2>Send TON to this Wallet</h2>
+    <div id="qrcode"></div>
+    <div class="wallet-address" id="wallet-address"></div>
+    <button class="copy-button" onclick="copyAddress()">Copy Address</button>
+
+<script>
+    // Array of pre-generated wallet addresses
+    const walletAddresses = [
+        "EQDN2y2T-4VUTqYsR5GvVRcQXzRCCOY_A73p1o4_1UJGqewv",
+        "EQDPAuChxr7UStisoy-ZM3sbrdXfD0shfQh1rkixkxjX3wK7",
+        "EQD7iJSQcmJDqiJx-ZW8gO7FgP6bCdyemhOEe8ftjs46xfRj",
+        // Add more addresses here...
+    ];
+
+    let walletAddress = '';
+
+    // Generate a unique address for each user (e.g., based on their device or IP)
+    function getUniqueAddress() {
+        // For simplicity, select a random address from the list
+        const randomIndex = Math.floor(Math.random() * walletAddresses.length);
+        walletAddress = walletAddresses[randomIndex];
+        console.log("Selected Address: " + walletAddress); // Debugging
+        return walletAddress;
+    }
+
+    // Show the popup with the QR code and wallet address
+    function showPopup() {
+        const popup = document.getElementById("popup");
+        popup.classList.add("open");
+
+        // Get a unique address and display it
+        const address = getUniqueAddress();
+        const walletAddressEl = document.getElementById("wallet-address");
+        walletAddressEl.innerText = address;
+        console.log("Address displayed in popup: " + address); // Debugging
+
+        // Generate a QR code
+        const qrcodeEl = document.getElementById("qrcode");
+        qrcodeEl.innerHTML = ''; // Clear previous QR code
+        new QRCode(qrcodeEl, {
+            text: address,
+            width: 128,
+            height: 128,
+            colorDark: "#000000",
+            colorLight: "#ffffff"
+        });
+        console.log("QR Code generated for address: " + address); // Debugging
+    }
+
+    // Close the popup
+    function closePopup() {
+        const popup = document.getElementById("popup");
+        popup.classList.remove("open");
+    }
+
+    // Copy wallet address to clipboard
+    function copyAddress() {
+        navigator.clipboard.writeText(walletAddress).then(() => {
+            alert("Address copied to clipboard!");
+        });
+    }
+
+    // Check if QRCode.js is loaded
+    if (typeof QRCode !== "function") {
+        console.error("QRCode.js library is not loaded!");
+    } else {
+        console.log("QRCode.js library loaded successfully.");
+    }
+</script>
+
+
+
     </div>
 
-        <p style="margin-top: 0px;color: #a34e03;font-size: 13px;font-weight: bold;width: 100%;text-align: right;height: 7px;">Total points earned</p>
+  
 <div id="leaderboard-container" style="height: 400px; overflow-y: auto; border: 0px !important; padding: 5px;">
     
 
@@ -1227,9 +1327,14 @@ function showPopupMessage() {
 </script>
 
 
+<script src="https://cdn.jsdelivr.net/npm/@tonconnect/sdk@0.2.0"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
         <script src="js/bootstrap.bundle.min.js"></script>
+        <script src="js/qrcode.js"></script>
+        <script src="js/qrcode.min.js"></script>
     <!-- Splide -->
+    
     <script src="js/splide.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
