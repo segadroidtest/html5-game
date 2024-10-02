@@ -673,13 +673,13 @@ position: fixed;
         <!-- Title text, positioned over the image -->
         <span style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);font-size: 24px;font-weight: bold;color: #ffffff;white-space: nowrap;margin-top: -4px;">
             Seed
-        </span>
-
-
+        </span><div id="popup" class="popup">
+    <span class="close-button" onclick="closePopup()">×</span>
     <h2>Send TON to this Wallet</h2>
     <div id="qrcode"></div>
     <div class="wallet-address" id="wallet-address"></div>
     <button class="copy-button" onclick="copyAddress()">Copy Address</button>
+</div>
 
 <script>
     // Array of pre-generated wallet addresses
