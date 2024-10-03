@@ -21,7 +21,6 @@
         /* Container for the page content */
         .content {
             height: calc(100% - 60px); /* Adjusting height for the app bar */
-            overflow-y: auto; /* Allows scrolling if content is long */
         }
 
         /* Content sections */
@@ -68,7 +67,7 @@ background-color: transparent;
         }
 
         .app-bar button:hover {
-            color: #ddd;
+            color: #613105;
         }
 
         /* Styles for the canvas loader */
@@ -230,72 +229,120 @@ canvas {
         </div>
 
 
-<div id="page5" class="page" style="background-color: #282c34; color: #ffffff;">
-    <h2 style="text-align: center;">Page 5: Help</h2>
-    <p style="text-align: center;">Need help? You're in the right place.</p>
+<div id="page5" class="page" style="background: url(assets/img/back.png);color: #ffffff;padding: 20px;border-radius: 0px;width: auto;margin: 0 auto;box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);height: 100%;overflow-y: hidden;">
+    <h2 style="text-align: center; color: #402104; font-size: 28px; margin-top: 0; font-family: system-ui;margin-bottom: 15px;">SEEDSALE</h2>
+    <p style="text-align: center; color: #402104; margin-top: -10px;">STAGE 1</p>
 
-    <span style="position: absolute; top: 10%; left: 50%; transform: translate(-50%, -50%); font-size: 24px; font-weight: bold; color: #ffffff; white-space: nowrap; margin-top: -4px;">
-        Seed
-    </span>
 
-    <div id="qrcode" style="width: 128px; height: 128px; margin: 20px auto;"></div>
+    <!-- QR Code and Address Container -->
+    <div style="text-align: center;">
+        <!-- QR Code -->
+        <div id="qrcode" style="margin: 20px auto; width: 228px; height: 228px; background-color: #ffffff; padding: 10px; border-radius: 10px;"></div>
+<p style="text-align: center;margin-top: 10px;color: #613105;font-size: 17px;font-weight: 600;background: #fda93e;padding-top: 10px;border-top-left-radius: 10px;   /* Adjust this value as needed */border-top-right-radius: 10px;border-top: 1px solid #4c2604;border-left: 1px solid #4c2604;border-right: 1px solid #4c2604;">Send funds only to this wallet</p>
+        <!-- Wallet Address and Copy Button Container -->
+        <div style="display: flex;justify-content: center;align-items: center;gap: 0px;margin-top: -20px;background: #fda93e;border-bottom-right-radius: 10px;   /* Adjust this value as needed */border-bottom-left-radius: 10px;border-bottom: 1px solid #4c2604;border-left: 1px solid #4c2604;border-right: 1px solid #4c2604;">
+            <!-- Wallet Address -->
+            <p id="wallet-address" style="font-size: 16px; background-color: #ffffff; color: #1e2739; padding: 10px 15px; width: 230px; text-align: left; white-space: nowrap; overflow: hidden; display: inline-block; border: 1px solid #ccc; border: 1px solid #4c2604; border-top-left-radius: 10px;   /* Adjust this value as needed */ border-bottom-left-radius: 10px;">
+                <!-- Address will be dynamically updated -->
+            </p>
 
-    <!-- Wallet address text -->
-    <p id="wallet-address" style="text-align: center; font-size: 18px; margin: 10px 0;"></p>
-    <button onclick="copyAddress()" style="display: block; margin: 0 auto; padding: 10px 20px; font-size: 16px; font-weight: bold; background-color: #61dafb; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">
-        Copy Address
-    </button>
+            <!-- Styled Copy Button (Icon) -->
+            <button onclick="copyAddress()" style="background-color: #4c2604;border: none;cursor: pointer;padding: 0;padding: 6px;border-top-right-radius: 10px;   /* Adjust this value as needed */border-bottom-right-radius: 10px;">
+                <img src="https://img.icons8.com/ios-glyphs/30/ffffff/copy.png" alt="Copy Icon" style="width: 24px; height: 24px;">
+            </button>
+        </div>
+    </div>
 
-    <script>
-        function copyAddress() {
-            let address = document.getElementById("wallet-address").textContent;
-            navigator.clipboard.writeText(address).then(() => {
-                alert("Address copied: " + address);
-            });
+  <div style="margin: 20px 0; text-align: center;">
+       <p style="color: #4c2604; font-size: 16px; margin-top: -10px; font-weight: 550;">
+            <i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right: 8px; vertical-align: middle;"></i>
+            Minimum purchase is 10 TON. Any smaller transactions will be refunded.
+        </p>
+    </div>
+
+    <!-- Popup Message for Copy Notification -->
+    <div id="copy-popup" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(0, 0, 0, 0.8); color: #ffffff; padding: 10px 20px; border-radius: 5px; font-size: 14px; display: none; z-index: 999;">
+        Copied to clipboard!
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+    // Function to copy the wallet address
+    function copyAddress() {
+        let address = document.getElementById("wallet-address").textContent;
+        navigator.clipboard.writeText(address).then(() => {
+            showCopyPopup(); // Show the popup message
+        });
+    }
+
+    // Function to display the wallet address and QR code
+    function displayWallet() {
+        let walletAddress;
+
+        // Check if an address is already stored in localStorage
+        if (localStorage.getItem('walletAddress')) {
+            walletAddress = localStorage.getItem('walletAddress');
+        } else {
+            // Generate a new unique wallet address
+            walletAddress = getUniqueAddress();
+            // Store the generated address in localStorage
+            localStorage.setItem('walletAddress', walletAddress);
         }
 
-        // Function to display the wallet address and QR code
-        function displayWallet() {
-            let walletAddress;
+        console.log("Displayed Wallet Address: " + walletAddress); // Debugging
 
-            // Check if an address is already stored in localStorage
-            if (localStorage.getItem('walletAddress')) {
-                walletAddress = localStorage.getItem('walletAddress');
-            } else {
-                // Generate a new unique wallet address
-                walletAddress = getUniqueAddress();
-                // Store the generated address in localStorage
-                localStorage.setItem('walletAddress', walletAddress);
-            }
+        // Generate the QR code
+        let qrElement = document.getElementById("qrcode");
+        qrElement.innerHTML = "";  // Clear any previous QR code
+        // Set fixed dimensions for the QR code
+        new QRCode(qrElement, {
+            text: walletAddress,
+            width: 228,  // Fixed width
+            height: 228  // Fixed height
+        });
 
-            console.log("Displayed Wallet Address: " + walletAddress); // Debugging
+        // Display the truncated address (first 10 and last 10 characters)
+        const displayAddress = truncateAddress(walletAddress);
+        document.getElementById("wallet-address").textContent = displayAddress;
+    }
 
-            // Generate the QR code
-            let qrElement = document.getElementById("qrcode");
-            qrElement.innerHTML = "";  // Clear any previous QR code
-            new QRCode(qrElement, walletAddress);
+    // Function to truncate the address
+    function truncateAddress(address) {
+        const start = address.slice(0, 10); // First 10 characters
+        const end = address.slice(-10); // Last 10 characters
+        return `${start}...${end}`; // Combined with ellipsis
+    }
 
-            // Display the address
-            document.getElementById("wallet-address").textContent = walletAddress;
-        }
+    // Function to simulate getting a unique wallet address
+    function getUniqueAddress() {
+        // List of predefined wallet addresses
+        let addresses = [
+            "EQB4djqmv2I3jFdfw12jp9iGuC4uXtGpX1GaZ-5W5_EOsb3K",
+            "EQD4dFqmv5I3jkdwf9gfk9iGcZuuXtGpX1GtB-9W5_FEJxN",
+            "EQH7hFvmv3I3jqkw22k9foiGc4tFxGpX1FqZ-5H5_GRPsbT"
+        ];
+        
+        // Return a random address from the list
+        let randomIndex = Math.floor(Math.random() * addresses.length);
+        return addresses[randomIndex];
+    }
 
-        // Function to simulate getting a unique wallet address
-        function getUniqueAddress() {
-            // List of predefined wallet addresses
-            let addresses = [
-                "EQB4djqmv2I3jFdfw12jp9iGuC4uXtGpX1GaZ-5W5_EOsb3K",
-                "EQD4dFqmv5I3jkdwf9gfk9iGcZuuXtGpX1GtB-9W5_FEJxN",
-                "EQH7hFvmv3I3jqkw22k9foiGc4tFxGpX1FqZ-5H5_GRPsbT"
-            ];
-            
-            // Return a random address from the list
-            let randomIndex = Math.floor(Math.random() * addresses.length);
-            return addresses[randomIndex];
-        }
+    // Function to show the in-page popup message
+    function showCopyPopup() {
+        const popup = document.getElementById("copy-popup");
+        popup.style.display = "block";
 
-        // Call the display function on window load or after the popup opens
-        window.onload = displayWallet;
-    </script>
+        // Hide the popup after 2 seconds
+        setTimeout(() => {
+            popup.style.display = "none";
+        }, 2000);
+    }
+
+    // Call the display function on window load or after the popup opens
+    window.onload = displayWallet;
+</script>
+
 </div>
 
         <div id="page4" class="page">
