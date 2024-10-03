@@ -4,108 +4,110 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multi-page App with Fixed App Bar</title>
+    <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script type="text/javascript" src="js/script.js"></script>
-    <script type="text/javascript" src="js/hooks.js"></script>
-    <script type="text/javascript" src="js/ads.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/qrcode.js"></script>
+    <script src="js/qrcode.min.js"></script>
     <style>
-body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    font-family: Arial, sans-serif;
-}
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
 
-/* Container for the page content */
-.content {
-    height: calc(100% - 60px); /* Adjusting height for the app bar */
-    overflow: hidden; /* Prevent scrolling in content */
-}
+        /* Container for the page content */
+        .content {
+            height: calc(100% - 60px); /* Adjusting height for the app bar */
+            overflow-y: auto; /* Allows scrolling if content is long */
+        }
 
-/* Content sections */
-.page {
-    display: none;
-    padding: 0; /* No padding to maximize canvas space */
-}
+        /* Content sections */
+        .page {
+            display: none;
+            padding: 20px;
+        }
 
-.active {
-    display: block;
-}
+        .active {
+            display: block;
+        }
 
-/* Fixed app bar at the bottom */
-.app-bar {
-    position: fixed;
+        /* Fixed app bar at the bottom */
+        .app-bar {
+position: fixed;
     bottom: 0;
     width: 100%;
-    height: 60px;
-    background-color: #333;
+    height: 70px;
+    background: url(assets/img/bottombanner.png);
     display: flex;
     justify-content: space-around;
     align-items: center;
     color: white;
-}
+    background-size: 100% 100%;
+        }
 
-.app-bar button {
-    background-color: transparent;
+        .app-bar button {
+background-color: transparent;
     border: none;
-    color: white;
+    color: #613106;
     font-size: 14px;
     cursor: pointer;
     outline: none;
     display: flex;
     flex-direction: column;
     align-items: center;
-}
+    font-weight: bold;
+    font-family: sans-serif;
+        }
 
-.app-bar button i {
-    font-size: 20px;
-    margin-bottom: 3px;
-}
+        .app-bar button i {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
 
-.app-bar button:hover {
-    color: #ddd;
-}
+        .app-bar button:hover {
+            color: #ddd;
+        }
 
-/* Viewporter styles */
-#viewporter {
-    height: 100%; /* Set to full height */
-    position: relative; /* Positioning for internal elements */
+        /* Styles for the canvas loader */
+        #SD-loadscrn {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            z-index: 9999;
+        }
+
+        #SD-loadtext {
+            position: absolute;
+            font-family: sans-serif;
+            top: 50%;
+            left: 50%;
+            width: 250px;
+            margin-left: -125px;
+            margin-top: -125px;
+            text-align: center;
+            line-height: 150%;
+            font-size: 16px;
+        }
+        #viewporter {
+    width: 100%;
+    height: 100%;
     display: flex;
-    justify-content: center; /* Center the canvas horizontally */
-    align-items: center; /* Center the canvas vertically */
+    justify-content: center;
+    align-items: center;
 }
 
 canvas {
-    max-height: 100%; /* Ensure canvas does not exceed viewable height */
-    max-width: 100%; /* Ensure canvas does not exceed viewable width */
-    height: auto; /* Maintain aspect ratio */
-    width: auto; /* Maintain aspect ratio */
-}
-
-/* Styles for the canvas loader */
-#SD-loadscrn {
-    position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
-    background-color: #fff;
-    z-index: 9999;
+    height: auto;
+    max-width: 700px;
+    max-height: 900px;
 }
-
-#SD-loadtext {
-    position: absolute;
-    font-family: sans-serif;
-    top: 50%;
-    left: 50%;
-    width: 250px;
-    margin-left: -125px;
-    margin-top: -125px;
-    text-align: center;
-    line-height: 150%;
-    font-size: 16px;
-}
-
 
     </style>
 </head>
@@ -114,60 +116,260 @@ canvas {
     <!-- Content Container -->
     <div class="content">
         <!-- Home Page with only the canvas -->
-        <div id="page1" class="page active">
+        <div id="page1" class="page active" style=" padding: 0px; height: 100% !important;">
+            <!-- Canvas screen code -->
             <script type="text/javascript">
                 window.gameLangs = ['en'];
                 window.gameJS = ['js/game.js'];
                 window.gameOnLoadScript = "init();";
             </script>
+            <script type="text/javascript" src="js/script.js"></script>
+            <script type="text/javascript" src="js/hooks.js"></script>
+            <script type="text/javascript" src="js/ads.js"></script>
 
             <div id="viewporter">
                 <canvas id="canvas" width="700" height="900"></canvas>
             </div>
+
+            <!-- Loader styles already in the <head> -->
         </div>
 
         <div id="page2" class="page">
-            <h2>Page 2: Profile</h2>
-            <p>This is your profile page.</p>
+
+
+<div id="page2" class="page" style="background-color: #282c34; color: #ffffff; padding: 20px; text-align: center; display: block;">
+    <h2>Page 2: Leaderboard</h2>
+    
+    <div id="leaderboard-container" style="height: 400px; overflow-y: auto; border: 1px solid #fff; padding: 5px; background-color: rgba(255, 255, 255, 0.1);">
+        <ul id="leaderboard-list" style="margin-bottom: -5px; margin-top: -5px; list-style-type: none; padding: 0;"></ul>
+    </div>
+
+    <span style="color: #a34e03; font-size: 13px; font-weight: bold;">Updated every 10 mins</span>
+
+    <script>
+        // Generate 1000 players
+        const leaderboard = document.getElementById('leaderboard-list');
+        const playersCount = 1000; // Number of players
+
+        // Predefined unique scores from high to low
+        const predefinedScores = [
+            980, 950, 925, 900, 867, 850, 830, 820, 810, 800,
+            790, 780, 770, 763, 750, 740, 735, 730, 725, 720,
+            715, 710, 705, 700, 695, 690, 685, 680, 675, 670,
+            665, 660, 655, 650, 645, 640, 630, 620, 610, 605,
+            600, 590, 580, 570, 560, 550, 540, 530, 520, 510,
+            500, 490, 480, 470, 460, 450, 442, 430, 420, 410,
+            400, 390, 380, 370, 360, 351, 340, 330, 320, 310,
+            300, 290, 280, 270, 260, 250, 240, 230, 220, 210,
+            200, 190, 180, 170, 160, 150, 140, 130, 120, 110,
+            100, 90, 80, 70, 60, 50, 40, 30, 20, 10,
+            5, 4, 3, 2, 1
+        ];
+
+        // Ensure we have exactly 1000 scores
+        const scoresToGenerate = playersCount - predefinedScores.length;
+        for (let i = 0; i < scoresToGenerate; i++) {
+            predefinedScores.push(Math.floor(Math.random() * 200) + 1); // Random scores for additional players
+        }
+
+        // Sort all scores in descending order
+        predefinedScores.sort((a, b) => b - a);
+
+        for (let i = 0; i < playersCount; i++) {
+            let rankImg = '';
+
+            // Assign medals to top 3 players
+            if (i === 0) {
+                rankImg = '<img src="assets/img/medal-1.png" style="height: 30px; margin-top: -3px;">';
+            } else if (i === 1) {
+                rankImg = '<img src="assets/img/medal-2.png" style="height: 30px; margin-top: -3px;">';
+            } else if (i === 2) {
+                rankImg = '<img src="assets/img/medal-3.png" style="height: 30px; margin-top: -3px;">';
+            }
+
+            // Create the player element
+            const playerLi = document.createElement('li');
+            playerLi.style.fontWeight = 'bold';
+            playerLi.style.display = 'flex';
+            playerLi.style.justifyContent = 'space-between';
+            playerLi.style.alignItems = 'center';
+
+            // Create the player info (left side)
+            const playerInfoDiv = document.createElement('div');
+            playerInfoDiv.innerHTML = `${rankImg} <span>Player ${i + 1}</span>`;
+
+            // Create the player's score (right side)
+            const scoreSpan = document.createElement('span');
+            scoreSpan.style.fontStyle = 'italic';
+            scoreSpan.style.fontWeight = 'normal';
+
+            // Get the player's score from the sorted array
+            const score = predefinedScores[i];
+            scoreSpan.innerHTML = `${score} <img src="assets/img/littlediamond.png" style="height: 15px;"> Diamonds`;
+
+            // Append both player info and score to the list item
+            playerLi.appendChild(playerInfoDiv);
+            playerLi.appendChild(scoreSpan);
+
+            // Append the list item to the leaderboard
+            leaderboard.appendChild(playerLi);
+        }
+    </script>
+</div>
+
+
+
         </div>
 
         <div id="page3" class="page">
             <h2>Page 3: Messages</h2>
-            <p>Check your messages here.</p>
+            
+
+
+
         </div>
+
+
+<div id="page5" class="page" style="background-color: #282c34; color: #ffffff;">
+    <h2 style="text-align: center;">Page 5: Help</h2>
+    <p style="text-align: center;">Need help? You're in the right place.</p>
+
+    <span style="position: absolute; top: 10%; left: 50%; transform: translate(-50%, -50%); font-size: 24px; font-weight: bold; color: #ffffff; white-space: nowrap; margin-top: -4px;">
+        Seed
+    </span>
+
+    <div id="qrcode" style="width: 128px; height: 128px; margin: 20px auto;"></div>
+
+    <!-- Wallet address text -->
+    <p id="wallet-address" style="text-align: center; font-size: 18px; margin: 10px 0;"></p>
+    <button onclick="copyAddress()" style="display: block; margin: 0 auto; padding: 10px 20px; font-size: 16px; font-weight: bold; background-color: #61dafb; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">
+        Copy Address
+    </button>
+
+    <script>
+        function copyAddress() {
+            let address = document.getElementById("wallet-address").textContent;
+            navigator.clipboard.writeText(address).then(() => {
+                alert("Address copied: " + address);
+            });
+        }
+
+        // Function to display the wallet address and QR code
+        function displayWallet() {
+            let walletAddress;
+
+            // Check if an address is already stored in localStorage
+            if (localStorage.getItem('walletAddress')) {
+                walletAddress = localStorage.getItem('walletAddress');
+            } else {
+                // Generate a new unique wallet address
+                walletAddress = getUniqueAddress();
+                // Store the generated address in localStorage
+                localStorage.setItem('walletAddress', walletAddress);
+            }
+
+            console.log("Displayed Wallet Address: " + walletAddress); // Debugging
+
+            // Generate the QR code
+            let qrElement = document.getElementById("qrcode");
+            qrElement.innerHTML = "";  // Clear any previous QR code
+            new QRCode(qrElement, walletAddress);
+
+            // Display the address
+            document.getElementById("wallet-address").textContent = walletAddress;
+        }
+
+        // Function to simulate getting a unique wallet address
+        function getUniqueAddress() {
+            // List of predefined wallet addresses
+            let addresses = [
+                "EQB4djqmv2I3jFdfw12jp9iGuC4uXtGpX1GaZ-5W5_EOsb3K",
+                "EQD4dFqmv5I3jkdwf9gfk9iGcZuuXtGpX1GtB-9W5_FEJxN",
+                "EQH7hFvmv3I3jqkw22k9foiGc4tFxGpX1FqZ-5H5_GRPsbT"
+            ];
+            
+            // Return a random address from the list
+            let randomIndex = Math.floor(Math.random() * addresses.length);
+            return addresses[randomIndex];
+        }
+
+        // Call the display function on window load or after the popup opens
+        window.onload = displayWallet;
+    </script>
+</div>
 
         <div id="page4" class="page">
             <h2>Page 4: Settings</h2>
-            <p>Adjust your settings here.</p>
-        </div>
+            
 
-        <div id="page5" class="page">
-            <h2>Page 5: Help</h2>
-            <p>Need help? You're in the right place.</p>
+<div id="available-points" style="text-align: center; font-size: 16px; font-weight: bold; color: #a44e03;">
+
+    </div>
+
+    <p style="margin-top: 20px;color: #a34e03;font-size: 13px;font-weight: bold;width: 100%;text-align: left;height: 10px;padding-left: 6px;">Available Tasks:</p>
+
+    <div id="tasks-container" style="height: 400px; overflow-y: auto; border: 0px !important; padding: 5px;">
+<ul id="tasks-list" style="margin-bottom: -5px;margin-top: -5px;list-style-type: none;padding: 0;">
+  <li style="font-weight: bold;margin-bottom: 10px;background-color: #bf5d05;border: 1px solid #a24e03;color: white;font-size: 13px;padding-left: 13px;border-radius: 10px;line-height: 20px;padding-top: 10px;padding-bottom: 10px;">
+    <span style="display: block;">Share to your Telegram Story</span>
+    <span style="font-weight: bold;">
+      <img src="assets/img/littlediamond.png" style="height: 15px;"> +500 </span>
+    <img src="" style="height: 20px; margin-left: 10px;">
+  </li>
+  <li style="font-weight: bold;margin-bottom: 15px;font-weight: bold;margin-bottom: 10px;background-color: #bf5d05;border: 1px solid #a24e03;color: white;font-size: 13px;padding-left: 13px;border-radius: 10px;line-height: 20px;padding-top: 10px;padding-bottom: 10px;">
+    <span style="display: block;">Daily check-in</span>
+    <span style="font-weight: bold;">
+      <img src="assets/img/littlediamond.png" style="height: 15px;"> +100 </span>
+    <img src="" style="height: 20px; margin-left: 10px;">
+  </li>
+  <li style="font-weight: bold;margin-bottom: 10px;background-color: #bf5d05;border: 1px solid #a24e03;color: white;font-size: 13px;padding-left: 13px;border-radius: 10px;line-height: 20px;padding-top: 10px;padding-bottom: 10px;">
+    <span style="display: block;">Subscribe to Telegram Channel</span>
+    <span style="font-weight: bold;">
+      <img src="assets/img/littlediamond.png" style="height: 15px;"> +500 </span>
+    <img src="" style="height: 20px; margin-left: 10px;">
+  </li>
+  <li style="font-weight: bold; margin-bottom: 15px; background-color: #bf5d05; border: 1px solid #a24e03; color: white; font-size: 13px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+  <div>
+    <span style="display: block;">Invite 10 Friends</span>
+    <span style="font-weight: bold; display: flex; align-items: center;">
+      <img src="assets/img/littlediamond.png" style="height: 15px; margin-right: 5px;"> +1000 
+    </span>
+  </div>
+  <span style="border: 1px solid #fff; border-radius: 10px; padding: 5px 10px; background-color: rgba(255, 255, 255, 0.2); margin-left: auto;">
+    0/10
+  </span>
+  <img src="" style="height: 20px; margin-left: 10px;">
+</li>
+
+</ul>
+
+
+
+
         </div>
     </div>
 
     <!-- Fixed App Bar -->
     <div class="app-bar">
         <button onclick="showPage('page1')">
-            <i class="fas fa-home"></i>
-            Home
+            <i class="fas fa-gamepad"></i>
+            Game
         </button>
         <button onclick="showPage('page2')">
-            <i class="fas fa-user"></i>
-            Profile
+            <i class="fas fa-trophy"></i>
+            Rank
         </button>
         <button onclick="showPage('page3')">
-            <i class="fas fa-envelope"></i>
-            Messages
+            <i class="fas fa-users"></i>
+            Invite
         </button>
         <button onclick="showPage('page4')">
-            <i class="fas fa-cog"></i>
-            Settings
+            <i class="fas fa-tasks"></i>
+            Tasks
         </button>
         <button onclick="showPage('page5')">
-            <i class="fas fa-question-circle"></i>
-            Help
+            <i class="fas fa-wallet"></i>
+            Seed
         </button>
     </div>
 
