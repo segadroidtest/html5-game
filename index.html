@@ -277,38 +277,41 @@ canvas {
     }
 
     // Function to display the wallet address and QR code
-    async function displayWallet() {
-        let walletAddress;
+async function displayWallet(userId) {
+    let walletAddress;
 
-        try {
-            // Fetch wallet address from the API
-            const response = await fetch('https://html5-game-pi.vercel.app/api/getWalletAddress');
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            const data = await response.json();
-            walletAddress = data.walletAddress;
-        } catch (error) {
-            console.error("Error fetching wallet address:", error);
-            document.getElementById("wallet-address").textContent = "Error fetching wallet address.";
-            return;
-        }
-
-        console.log("Displayed Wallet Address: " + walletAddress); // Debugging
-
-        // Generate the QR code
-        let qrElement = document.getElementById("qrcode");
-        qrElement.innerHTML = "";  // Clear any previous QR code
-        new QRCode(qrElement, {
-            text: walletAddress,
-            width: 228,  // Fixed width
-            height: 228  // Fixed height
-        });
-
-        // Display the truncated address (first 10 and last 10 characters)
-        const displayAddress = truncateAddress(walletAddress);
-        document.getElementById("wallet-address").textContent = displayAddress;
+    try {
+        // Fetch wallet address from the API, including user ID
+        const response = await fetch(`/api/getWalletAddress?userId=${userId}`);
+        const data = await response.json();
+        walletAddress = data.walletAddress;
+    } catch (error) {
+        console.error("Error fetching wallet address:", error);
+        return;
     }
+
+    console.log("Displayed Wallet Address: " + walletAddress); // Debugging
+
+    // Generate the QR code
+    let qrElement = document.getElementById("qrcode");
+    qrElement.innerHTML = "";  // Clear any previous QR code
+    new QRCode(qrElement, {
+        text: walletAddress,
+        width: 228,  // Fixed width
+        height: 228  // Fixed height
+    });
+
+    // Display the truncated address (first 10 and last 10 characters)
+    const displayAddress = truncateAddress(walletAddress);
+    document.getElementById("wallet-address").textContent = displayAddress;
+}
+
+// Call the display function on window load or after the popup opens
+window.onload = function() {
+    const userId = 'user_telegram_id'; // Replace this with the actual user ID from the Telegram bot
+    displayWallet(userId);
+};
+
 
     // Function to truncate the address
     function truncateAddress(address) {
