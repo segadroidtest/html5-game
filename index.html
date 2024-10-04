@@ -427,6 +427,16 @@ window.onload = function() {
             document.getElementById(pageId).classList.add('active');
         }
     </script>
+<script>bot.onText(/\/openapp/, (msg) => {
+    const chatId = msg.chat.id;
+    const userId = msg.from.id; // Get the user ID from the message
 
+    // Create the mini app URL with the userId as a query parameter
+    const miniAppUrl = `https://html5-game-pi.vercel.app/?userId=${userId}`;
+
+    // Send the mini app URL to the user
+    bot.sendMessage(chatId, `Click here to open the app: ${miniAppUrl}`);
+});
+</script>
 </body>
 </html>
