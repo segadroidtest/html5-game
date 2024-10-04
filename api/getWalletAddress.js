@@ -5,10 +5,15 @@ const addresses = [
     "EQH7hFvmv3I3jqkw22k9foiGc4tFxGpX1FqZ-5H5_GRPsbT"
 ];
 
-const userWallets = {}; // Store wallets based on user IDs
+// Store wallets based on user IDs
+const userWallets = {}; 
 
 export default function handler(req, res) {
     const userId = req.query.userId; // Expect user ID as a query parameter
+
+    if (!userId) {
+        return res.status(400).json({ error: 'User ID is required.' });
+    }
 
     // Check if wallet address already exists for this user
     if (!userWallets[userId]) {
