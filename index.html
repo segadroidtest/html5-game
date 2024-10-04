@@ -9,6 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/qrcode.js"></script>
+    <script src="api/getWalletAddress.js"></script>
     <script src="js/qrcode.min.js"></script>
     <style>
         body, html {
@@ -282,11 +283,15 @@ canvas {
 
         try {
             // Fetch wallet address from the API
-            const response = await fetch('/api/getWalletAddress');
+            const response = await fetch('https://html5-game-pi.vercel.app/api/getWalletAddress');
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
             const data = await response.json();
             walletAddress = data.walletAddress;
         } catch (error) {
             console.error("Error fetching wallet address:", error);
+            document.getElementById("wallet-address").textContent = "Error fetching wallet address.";
             return;
         }
 
@@ -324,9 +329,10 @@ canvas {
         }, 2000);
     }
 
-    // Call the display function on window load or after the popup opens
+    // Call the display function on window load
     window.onload = displayWallet;
 </script>
+
 
 
 
