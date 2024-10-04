@@ -276,7 +276,7 @@ canvas {
         });
     }
 
-    // Function to display the wallet address and QR code
+// Function to display the wallet address and QR code
 async function displayWallet(userId) {
     let walletAddress;
 
@@ -305,6 +305,12 @@ async function displayWallet(userId) {
     const displayAddress = truncateAddress(walletAddress);
     document.getElementById("wallet-address").textContent = displayAddress;
 }
+
+// Call the display function on window load or after the popup opens
+window.onload = function() {
+    const userId = 'user_telegram_id'; // Replace this with the actual user ID from the Telegram bot
+    displayWallet(userId);
+};
 
 // Call the display function on window load or after the popup opens
 window.onload = function() {
