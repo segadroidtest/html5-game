@@ -1,44 +1,35 @@
-const express = require('express');
-const cors = require('cors');
-const app = express();
-const port = process.env.PORT || 3000;
+const TelegramBot = require('node-telegram-bot-api');
+const fetch = require('node-fetch');
 
-// Enable CORS for requests from your front-end (GitHub Pages)
-app.use(cors());
+const token = process.env.TELEGRAM_BOT_TOKEN;  // Make sure you set this in your environment variables
+const bot = new TelegramBot(token, { polling: false });
 
-// Simulate a database to store user wallet addresses
-let userWallets = {};
+module.exports = async (req, res) => {
+    if (req.method === 'POST') {
+        const update = req.body;
 
-// Function to generate a random wallet address
-function generateUniqueWalletAddress() {
-    let addresses = [
-        "EQB4djqmv2I3jFdfw12jp9iGuC4uXtGpX1GaZ-5W5_EOsb3K",
-        "EQD4dFqmv5I3jkdwf9gfk9iGcZuuXtGpX1GtB-9W5_FEJxN",
-        "EQH7hFvmv3I3jqkw22k9foiGc4tFxGpX1FqZ-5H5_GRPsbT"
-    ];
-    let randomIndex = Math.floor(Math.random() * addresses.length);
-    return addresses[randomIndex];
-}
+        // Handle incoming updates
+        if (update.message) {
+            const chatId = update.message.chat.id;
 
-// Endpoint to get a wallet address for a specific user
-app.get('/getWalletAddress', (req, res) => {
-    const user_id = req.query.user_id; // Retrieve user_id from query string
-    
-    if (!user_id) {
-        return res.status(400).send({error: "user_id is required"});
+            if (update.message.text === '/start') {
+                bot.sendMessage(chatId, "Welcome! Use /getWallet to generate your wallet address.");
+            }
+
+            if (update.message.text === '/getWallet') {
+                try {
+                    const response = await fetch('https://html5-game-pi.vercel.app/api/getWalletAddress');
+                    const data = await response.json();
+                    bot.sendMessage(chatId, `Your wallet address is: ${data.walletAddress}`);
+                } catch (error) {
+                    console.error("Error fetching wallet address:", error);
+                    bot.sendMessage(chatId, "There was an error retrieving your wallet address.");
+                }
+            }
+        }
+
+        res.status(200).send('OK');
+    } else {
+        res.status(403).send('Forbidden');
     }
-    
-    // Check if the user already has a wallet address
-    if (!userWallets[user_id]) {
-        // If not, generate a new one and store it
-        userWallets[user_id] = generateUniqueWalletAddress();
-    }
-
-    // Respond with the wallet address
-    res.send({walletAddress: userWallets[user_id]});
-});
-
-// Start the server
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
+};
