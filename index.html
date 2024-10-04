@@ -108,6 +108,142 @@ canvas {
     max-height: 900px;
 }
 
+ .user-rank, .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            font-weight: bold;
+        }
+
+        .user-rank:last-child, .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+
+        #user-rank {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 10px; /* Reduced padding to match leaderboard items */
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        #user-rank img {
+            height: 25px;
+            margin-right: 10px;
+        }
+
+        #leaderboard-container {
+            height: 250px; /* Fixed height for scrollable area */
+            overflow-y: auto; /* Enable vertical scrolling */
+            border: 1px solid #ecf0f1;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        #leaderboard-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #updated {
+            color: #ecf0f1;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .medal {
+            margin-right: 10px;
+            font-size: 20px; /* Adjust size as needed */
+        }
+     .leaderboard-header {
+            position: sticky; /* Make header sticky */
+            top: 0; /* Position it at the top of the container */
+            background-color: rgba(255, 255, 255, 0.1);
+            z-index: 1; /* Ensure it is above the items */
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+                #referral-stats {
+ display: flex;
+    justify-content: space-between;
+    background-color: #bf5d05;
+    border: 1px solid #a24e03;
+    padding: 13px;
+    border-radius: 10px;
+        }
+        .stat {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+        .stat-icon {
+            margin-right: 10px;
+            font-size: 20px; /* Adjust icon size */
+            color: #ffffff; /* Icon color */
+        }
+        .stat-text {
+            font-weight: bold;
+        }
+        #referral-link-section {
+            background-color: #bf5d05;
+            border: 1px solid #a24e03;
+            padding: 0px;
+            text-align: left;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-left: 20px;
+        }
+        .copy-button {
+            background-color: #894507;
+            color: white;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            border-radius: 0px;
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+        }
+        .copy-button:hover {
+            background-color: #894507;
+        }
+        .referral-link {
+            flex-grow: 1;
+            margin-right: 10px;
+            font-weight: bold;
+            color: #ffffff;
+            white-space: nowrap; /* Prevent line break */
+            overflow: hidden; /* Hide overflow */
+            text-overflow: ellipsis; /* Add ellipsis */
+        }
+        .stat-icon {
+            margin-right: 5px;
+        }
+        /* Popup styles */
+.popup {
+    position: fixed;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Offset by half the width and height */
+background-color: #000000;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: none;
+    z-index: 1000;
+    text-align: center;
+    opacity: 0.7;
+}
     </style>
 </head>
 <body>
@@ -133,121 +269,215 @@ canvas {
             <!-- Loader styles already in the <head> -->
         </div>
 
-        <div id="page2" class="page">
 
+<div id="page3" class="page" style="background: url(assets/img/back.png); color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: 100%; overflow-y: hidden;">
+    <h2 style="text-align: center; color: #402104; font-size: 28px; margin-top: 0; font-family: system-ui; margin-bottom: 15px;">INVITE</h2>
+    <p style="text-align: center; color: #402104; margin-top: -10px;">Your Referral Progress</p>
 
-<div id="page2" class="page" style="background-color: #282c34; color: #ffffff; padding: 20px; text-align: center; display: block;">
-    <h2>Page 2: Leaderboard</h2>
-    
-    <div id="leaderboard-container" style="height: 400px; overflow-y: auto; border: 1px solid #fff; padding: 5px; background-color: rgba(255, 255, 255, 0.1);">
-        <ul id="leaderboard-list" style="margin-bottom: -5px; margin-top: -5px; list-style-type: none; padding: 0;"></ul>
+ <div id="referral-stats">
+        <!-- Referrals Made Section -->
+        <div class="stat" style="border-right: 1px solid #a24e03; padding-right: 10px;">
+            <img src="assets/img/friends.png" style="height: 15px;padding-right: 8px;">
+            <span class="stat-text">Referrals: <span id="referrals-count">0</span></span>
+        </div>
+        <!-- Points Earned Section -->
+        <div class="stat" style="padding-left: 10px;">
+            <img src="assets/img/littlediamond.png" style="height: 15px;padding-right: 8px;">
+            <span class="stat-text">Earned: <span id="points-earned">0</span></span>
+        </div>
     </div>
 
-    <span style="color: #a34e03; font-size: 13px; font-weight: bold;">Updated every 10 mins</span>
+    <h3 style="text-align: center; color: #402104; margin-top: 15px;
+    margin-bottom: 10px;">Referrals by Level</h3>
 
-    <script>
-        // Generate 1000 players
-        const leaderboard = document.getElementById('leaderboard-list');
-        const playersCount = 1000; // Number of players
+    <!-- Invite Header -->
+    <div class="invite-header" style="border: none !important; background: #894507; padding: 10px 15px; margin-top: 0; margin-bottom: 0px; display: flex; justify-content: space-between; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+        <span style="flex: 1; text-align: left; font-weight: bold;">Name</span>
+        <span style="flex: 1; text-align: center; font-weight: bold;">Level</span>
+        <span style="flex: 1; text-align: right; font-weight: bold;">Earned</span>
+    </div>
 
-        // Predefined unique scores from high to low
-        const predefinedScores = [
-            980, 950, 925, 900, 867, 850, 830, 820, 810, 800,
-            790, 780, 770, 763, 750, 740, 735, 730, 725, 720,
-            715, 710, 705, 700, 695, 690, 685, 680, 675, 670,
-            665, 660, 655, 650, 645, 640, 630, 620, 610, 605,
-            600, 590, 580, 570, 560, 550, 540, 530, 520, 510,
-            500, 490, 480, 470, 460, 450, 442, 430, 420, 410,
-            400, 390, 380, 370, 360, 351, 340, 330, 320, 310,
-            300, 290, 280, 270, 260, 250, 240, 230, 220, 210,
-            200, 190, 180, 170, 160, 150, 140, 130, 120, 110,
-            100, 90, 80, 70, 60, 50, 40, 30, 20, 10,
-            5, 4, 3, 2, 1
-        ];
+    <div id="example-users" style="background-color: #bf5d05; border: 1px solid #a24e03; padding: 0px; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+        <ul id="users-list" style="list-style-type: none; padding: 0; margin: 0;">
+            <li style="display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #a24e03;">
+                <span style="flex: 1; text-align: left;">John</span>
+                <span style="flex: 1; text-align: center;">6</span>
+                <span style="flex: 1; text-align: right;">231 <img src="assets/img/littlediamond.png" style="height: 15px;"></span>
+            </li>
+            <li style="display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #a24e03;">
+                <span style="flex: 1; text-align: left;">Jane</span>
+                <span style="flex: 1; text-align: center;">3</span>
+                <span style="flex: 1; text-align: right;">462 <img src="assets/img/littlediamond.png" style="height: 15px;"></span>
+            </li>
+            <li style="display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #a24e03;">
+                <span style="flex: 1; text-align: left;">Mike</span>
+                <span style="flex: 1; text-align: center;">4</span>
+                <span style="flex: 1; text-align: right;">136 <img src="assets/img/littlediamond.png" style="height: 15px;"></span>
+            </li>
+            <li style="display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #a24e03;">
+                <span style="flex: 1; text-align: left;">Emily</span>
+                <span style="flex: 1; text-align: center;">1</span>
+                <span style="flex: 1; text-align: right;">211 <img src="assets/img/littlediamond.png" style="height: 15px;"></span>
+            </li>
+            <li style="display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #a24e03;">
+                <span style="flex: 1; text-align: left;">Chris</span>
+                <span style="flex: 1; text-align: center;">5</span>
+                <span style="flex: 1; text-align: right;">235 <img src="assets/img/littlediamond.png" style="height: 15px;"></span>
+            </li>
+            <li style="display: flex; justify-content: space-between; padding: 10px;">
+                <span style="flex: 1; text-align: left;">Sarah</span>
+                <span style="flex: 1; text-align: center;">2</span>
+                <span style="flex: 1; text-align: right;">171 <img src="assets/img/littlediamond.png" style="height: 15px;"></span>
+            </li>
+        </ul>
+    </div>
+       <h3 style="text-align: center; color: #402104; margin-top: 15px;
+    margin-bottom: 0px;">Your Invite Link:</h3>
+   <div id="referral-link-section" style=" border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; border-top-right-radius: 10px; border-top-left-radius: 10px; ">
+        <div class="referral-link" id="referral-link">
+            https://t.me/gamesegadroid_test_bot/start?startApp={chat_id}..
+        </div>
+        <button class="copy-button" onclick="copyLink()" style=" border-bottom-right-radius: 10px; border-top-right-radius: 10px; ">
+            <i class="fas fa-copy"></i>
+        </button>
+    </div>
+  <div id="copy-popup" class="popup">Referral link copied to clipboard!</div>
 
-        // Ensure we have exactly 1000 scores
-        const scoresToGenerate = playersCount - predefinedScores.length;
-        for (let i = 0; i < scoresToGenerate; i++) {
-            predefinedScores.push(Math.floor(Math.random() * 200) + 1); // Random scores for additional players
-        }
-
-        // Sort all scores in descending order
-        predefinedScores.sort((a, b) => b - a);
-
-        for (let i = 0; i < playersCount; i++) {
-            let rankImg = '';
-
-            // Assign medals to top 3 players
-            if (i === 0) {
-                rankImg = '<img src="assets/img/medal-1.png" style="height: 30px; margin-top: -3px;">';
-            } else if (i === 1) {
-                rankImg = '<img src="assets/img/medal-2.png" style="height: 30px; margin-top: -3px;">';
-            } else if (i === 2) {
-                rankImg = '<img src="assets/img/medal-3.png" style="height: 30px; margin-top: -3px;">';
-            }
-
-            // Create the player element
-            const playerLi = document.createElement('li');
-            playerLi.style.fontWeight = 'bold';
-            playerLi.style.display = 'flex';
-            playerLi.style.justifyContent = 'space-between';
-            playerLi.style.alignItems = 'center';
-
-            // Create the player info (left side)
-            const playerInfoDiv = document.createElement('div');
-            playerInfoDiv.innerHTML = `${rankImg} <span>Player ${i + 1}</span>`;
-
-            // Create the player's score (right side)
-            const scoreSpan = document.createElement('span');
-            scoreSpan.style.fontStyle = 'italic';
-            scoreSpan.style.fontWeight = 'normal';
-
-            // Get the player's score from the sorted array
-            const score = predefinedScores[i];
-            scoreSpan.innerHTML = `${score} <img src="assets/img/littlediamond.png" style="height: 15px;"> Diamonds`;
-
-            // Append both player info and score to the list item
-            playerLi.appendChild(playerInfoDiv);
-            playerLi.appendChild(scoreSpan);
-
-            // Append the list item to the leaderboard
-            leaderboard.appendChild(playerLi);
-        }
-    </script>
-</div>
 
 
 
         </div>
 
-        <div id="page3" class="page">
-            <h2>Page 3: Messages</h2>
+
+
+ <div id="page4" class="page" style="background: url(assets/img/back.png);color: #ffffff;padding: 20px;border-radius: 0px;width: auto;margin: 0 auto;box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);height: 100%;overflow-y: hidden;">
+    <h2 style="text-align: center; color: #402104; font-size: 28px; margin-top: 0; font-family: system-ui;margin-bottom: 15px;">TASKS</h2>
+  <p style="text-align: center; color: #402104; margin-top: -10px;">Finish Tasks</p>
             
 
 
 
-        </div>
+    <p style="margin-top: 20px;color: #8e4404;font-size: 16px;font-weight: bold;width: 100%;text-align: left;height: 10px;padding-left: 6px;">Available Tasks:</p>
 
+    <div id="tasks-container" style="height: 400px; overflow-y: auto; border: 0px !important; padding: 5px;">
+<ul id="tasks-list" style="margin-bottom: -5px;margin-top: -5px;list-style-type: none;padding: 0;">
+  <ul style="list-style-type: none;padding-left: 0;">
+  <!-- Share to Telegram Story -->
+  <li id="share-story" style="position: relative; margin-bottom: 10px;background-color: #bf5d05;border: 1px solid #a24e03;color: white;font-weight: 590; font-size: 14px;padding-left: 13px;border-radius: 10px;line-height: 20px;padding-top: 10px;padding-bottom: 10px;cursor: pointer;" onclick="shareToTelegram()">
+    <span style="display: block;font-size: 15px;">Share to your Telegram Story</span>
+    <span style="font-weight: bold;">
+      <img src="assets/img/littlediamond.png" style="height: 15px;"> +500 
+    </span>
+    <img id="share-approved" src="" style="height: 20px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
+  </li>
+
+  <!-- Daily Check-In -->
+  <li id="daily-checkin" style="position: relative; margin-bottom: 15px;background-color: #bf5d05;border: 1px solid #a24e03;color: white;font-weight: 590; font-size: 14px;padding-left: 13px;border-radius: 10px;line-height: 20px;padding-top: 10px;padding-bottom: 10px;cursor: pointer;" onclick="dailyCheckin()">
+    <span style="display: block;font-size: 15px;">Daily check-in</span>
+    <span style="font-weight: bold;">
+      <img src="assets/img/littlediamond.png" style="height: 15px;"> +100 
+    </span>
+    <img id="checkin-approved" src="" style="height: 20px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
+  </li>
+
+  <!-- Subscribe to Telegram Channel -->
+  <li id="subscribe-channel" style="position: relative; margin-bottom: 10px;background-color: #bf5d05;border: 1px solid #a24e03;color: white;font-weight: 590; font-size: 14px;padding-left: 13px;border-radius: 10px;line-height: 20px;padding-top: 10px;padding-bottom: 10px;cursor: pointer;" onclick="subscribeToChannel()">
+    <span style="display: block;font-size: 15px;">Subscribe to Telegram Channel</span>
+    <span style="font-weight: bold;">
+      <img src="assets/img/littlediamond.png" style="height: 15px;"> +500 
+    </span>
+    <img id="subscribe-approved" src="" style="height: 20px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
+  </li>
+
+
+
+
+  <li style="font-weight: 590; font-size: 14px;margin-bottom: 15px; background-color: #bf5d05; border: 1px solid #a24e03; color: white; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <span style="display: block;font-size: 15px;">Invite 10 Friends</span>
+      <span style="font-weight: bold; display: flex; align-items: center;">
+        <img src="assets/img/littlediamond.png" style="height: 15px; margin-right: 5px;"> +1000 </span>
+    </div>
+    <span style="border: 1px solid #fff; border-radius: 10px; padding: 5px 10px; background-color: rgba(255, 255, 255, 0.2); margin-left: auto;"> 0/10 </span>
+    <img src="" style="height: 20px; margin-left: 10px;">
+  </li>
+</ul>
+<script>
+  // Function to share to Telegram Story
+  function shareToTelegram() {
+    const shareLink = "https://google.com";
+    window.open(`https://t.me/share/url?url=${encodeURIComponent(shareLink)}`, '_blank');
+    
+    setTimeout(function() {
+      document.getElementById('share-approved').src = 'assets/img/approved.png';
+    }, 3000);
+  }
+
+  // Function for daily check-in
+  function dailyCheckin() {
+    document.getElementById('checkin-approved').src = 'assets/img/approved.png';
+  }
+
+  // Function to subscribe to Telegram channel
+  function subscribeToChannel() {
+    const channelLink = "https://t.me/ppkas_space";
+    window.open(channelLink, '_blank');
+
+    setTimeout(function() {
+      document.getElementById('subscribe-approved').src = 'assets/img/approved.png';
+    }, 3000);
+  }
+</script>
+
+
+
+        </div>
+    </div>
+       
+     <div id="page2" class="page" style="background: url(assets/img/back.png);color: #ffffff;padding: 20px;border-radius: 0px;width: auto;margin: 0 auto;box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);height: 100%;overflow-y: hidden;">
+
+    <h2 style="text-align: center; color: #402104; font-size: 28px; margin-top: 0; font-family: system-ui;margin-bottom: 15px;">LEADERBOARD</h2>
+  <p style="text-align: center; color: #402104; margin-top: -10px;">Ranks</p>
+        
+<div id="user-rank" class="user-rank" style="
+    background-color: #bf5d05;
+    border: 1px solid #a24e03;
+">
+        <div>
+            <span>Your Rank: #1</span>
+        </div>
+        <span style="font-style: italic;">YourUsername</span>
+    </div>
+    <div id="leaderboard-container" style="padding-left: 0px; padding-right:0px; background-color: #bf5d05; border: 1px solid #a24e03; scrollbar-width: none; padding-top: 0px; ">
+<div class="leaderboard-header" style="border: none !important;background: #894507;padding-left: 15px;padding-right: 15px;padding-top: 10px;margin-top: 0px;padding-bottom: 10px;margin-bottom: 0px;">
+            <span>Players Name</span>
+            <span>Points Earned</span>
+        </div>
+        <ul id="leaderboard-list"></ul>
+    </div>
+
+    <p id="updated" style="text-align: left;margin-top: 10px !important;color: #864204;">Updated every 10 mins</p>
+</div>
 
 <div id="page5" class="page" style="background: url(assets/img/back.png);color: #ffffff;padding: 20px;border-radius: 0px;width: auto;margin: 0 auto;box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);height: 100%;overflow-y: hidden;">
     <h2 style="text-align: center; color: #402104; font-size: 28px; margin-top: 0; font-family: system-ui;margin-bottom: 15px;">SEEDSALE</h2>
-    <p style="text-align: center; color: #402104; margin-top: -10px;">STAGE 1</p>
+    <p style="text-align: center; color: #402104; margin-top: -10px;">Stage 1</p>
 
 
     <!-- QR Code and Address Container -->
     <div style="text-align: center;">
         <!-- QR Code -->
         <div id="qrcode" style="margin: 20px auto; width: 228px; height: 228px; background-color: #ffffff; padding: 10px; border-radius: 10px;"></div>
-<p style="text-align: center;margin-top: 10px;color: #613105;font-size: 17px;font-weight: 600;background: #fda93e;padding-top: 10px;border-top-left-radius: 10px;   /* Adjust this value as needed */border-top-right-radius: 10px;border-top: 1px solid #4c2604;border-left: 1px solid #4c2604;border-right: 1px solid #4c2604;">Send funds only to this wallet</p>
+<p style="text-align: center;margin-top: 10px;color: #ffffff;font-size: 17px;font-weight: 600;background: #894507;padding-top: 10px;border-top-left-radius: 10px;   /* Adjust this value as needed */border-top-right-radius: 10px;border-top: 1px solid #a24e03;border-left: 1px solid #a24e03;border-right: 1px solid #a24e03;padding-bottom: 14px;">Send funds only to this wallet</p>
         <!-- Wallet Address and Copy Button Container -->
-        <div style="display: flex;justify-content: center;align-items: center;gap: 0px;margin-top: -20px;background: #fda93e;border-bottom-right-radius: 10px;   /* Adjust this value as needed */border-bottom-left-radius: 10px;border-bottom: 1px solid #4c2604;border-left: 1px solid #4c2604;border-right: 1px solid #4c2604;">
+        <div style="display: flex;justify-content: center;align-items: center;gap: 0px;margin-top: -20px;background: #bf5d05;border-bottom-right-radius: 10px;   /* Adjust this value as needed */border-bottom-left-radius: 10px;border-bottom: 1px solid #a24e03;border-left: 1px solid #a24e03;border-right:1px solid #a24e03">
             <!-- Wallet Address -->
-            <p id="wallet-address" style="font-size: 16px; background-color: #ffffff; color: #1e2739; padding: 10px 15px; width: 230px; text-align: left; white-space: nowrap; overflow: hidden; display: inline-block; border: 1px solid #ccc; border: 1px solid #4c2604; border-top-left-radius: 10px;   /* Adjust this value as needed */ border-bottom-left-radius: 10px;">
+            <p id="wallet-address" style="font-size: 16px; background-color: #ffffff; color: #1e2739; padding: 10px 15px; width: 230px; text-align: left; white-space: nowrap; overflow: hidden; display: inline-block; border: 1px solid #ccc; border: 1px solid #a24e03; border-top-left-radius: 10px;   /* Adjust this value as needed */ border-bottom-left-radius: 10px;">
                 <!-- Address will be dynamically updated -->
             </p>
 
             <!-- Styled Copy Button (Icon) -->
-            <button onclick="copyAddress()" style="background-color: #4c2604;border: none;cursor: pointer;padding: 0;padding: 6px;border-top-right-radius: 10px;   /* Adjust this value as needed */border-bottom-right-radius: 10px;">
+            <button onclick="copyAddress()" style="background-color: #894507;border: none;cursor: pointer;padding: 0;padding: 6px;border-top-right-radius: 10px;   /* Adjust this value as needed */border-bottom-right-radius: 10px;">
                 <img src="https://img.icons8.com/ios-glyphs/30/ffffff/copy.png" alt="Copy Icon" style="width: 24px; height: 24px;">
             </button>
         </div>
@@ -276,48 +506,66 @@ canvas {
         });
     }
 
-// Function to display the wallet address and QR code
-async function displayWallet(userId) {
-    let walletAddress;
+    // Function to display the wallet address and QR code
+function displayWallet() {
+    fetch("/api/getWalletAddress")
+        .then(response => response.json())
+        .then(data => {
+            const walletAddress = data.walletAddress;
 
-    try {
-        // Fetch wallet address from the API, including user ID
-        const response = await fetch(`/api/getWalletAddress?userId=${userId}`);
-        const data = await response.json();
-        walletAddress = data.walletAddress;
-    } catch (error) {
-        console.error("Error fetching wallet address:", error);
-        return;
-    }
+            // Display the wallet address and QR code
+            const displayAddress = truncateAddress(walletAddress);
+            document.getElementById("wallet-address").textContent = displayAddress;
 
-    console.log("Displayed Wallet Address: " + walletAddress); // Debugging
-
-    // Generate the QR code
-    let qrElement = document.getElementById("qrcode");
-    qrElement.innerHTML = "";  // Clear any previous QR code
-    new QRCode(qrElement, {
-        text: walletAddress,
-        width: 228,  // Fixed width
-        height: 228  // Fixed height
-    });
-
-    // Display the truncated address (first 10 and last 10 characters)
-    const displayAddress = truncateAddress(walletAddress);
-    document.getElementById("wallet-address").textContent = displayAddress;
+            // Generate the QR code
+            let qrElement = document.getElementById("qrcode");
+            qrElement.innerHTML = "";  // Clear any previous QR code
+            new QRCode(qrElement, {
+                text: walletAddress,
+                width: 228,
+                height: 228
+            });
+        })
+        .catch(err => console.error("Error fetching wallet address:", err));
 }
 
-// Call the display function on window load or after the popup opens
-window.onload = function() {
-    const userId = 'user_telegram_id'; // Replace this with the actual user ID from the Telegram bot
-    displayWallet(userId);
-};
 
-// Call the display function on window load or after the popup opens
-window.onload = function() {
-    const userId = 'user_telegram_id'; // Replace this with the actual user ID from the Telegram bot
-    displayWallet(userId);
-};
+    // Function to fetch a wallet address from the backend
+    function fetchWalletAddress() {
+        // Replace the URL with your Vercel backend URL
+        const apiUrl = "https://html5-game-pi.vercel.app/api/getWalletAddress";
 
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                let walletAddress = data.walletAddress;
+                console.log("Fetched Wallet Address: " + walletAddress); // Debugging
+
+                // Store the generated address in localStorage
+                localStorage.setItem('walletAddress', walletAddress);
+                renderWallet(walletAddress); // Render wallet once fetched
+            })
+            .catch(error => {
+                console.error('Error fetching wallet address:', error);
+            });
+    }
+
+    // Function to render the wallet address and QR code
+    function renderWallet(walletAddress) {
+        // Generate the QR code
+        let qrElement = document.getElementById("qrcode");
+        qrElement.innerHTML = "";  // Clear any previous QR code
+        // Set fixed dimensions for the QR code
+        new QRCode(qrElement, {
+            text: walletAddress,
+            width: 228,  // Fixed width
+            height: 228  // Fixed height
+        });
+
+        // Display the truncated address (first 10 and last 10 characters)
+        const displayAddress = truncateAddress(walletAddress);
+        document.getElementById("wallet-address").textContent = displayAddress;
+    }
 
     // Function to truncate the address
     function truncateAddress(address) {
@@ -337,65 +585,18 @@ window.onload = function() {
         }, 2000);
     }
 
-    // Call the display function on window load
+    // Call the display function on window load or after the popup opens
     window.onload = displayWallet;
 </script>
 
 
-
-
 </div>
 
-        <div id="page4" class="page">
-            <h2>Page 4: Settings</h2>
-            
-
-<div id="available-points" style="text-align: center; font-size: 16px; font-weight: bold; color: #a44e03;">
-
-    </div>
-
-    <p style="margin-top: 20px;color: #a34e03;font-size: 13px;font-weight: bold;width: 100%;text-align: left;height: 10px;padding-left: 6px;">Available Tasks:</p>
-
-    <div id="tasks-container" style="height: 400px; overflow-y: auto; border: 0px !important; padding: 5px;">
-<ul id="tasks-list" style="margin-bottom: -5px;margin-top: -5px;list-style-type: none;padding: 0;">
-  <li style="font-weight: bold;margin-bottom: 10px;background-color: #bf5d05;border: 1px solid #a24e03;color: white;font-size: 13px;padding-left: 13px;border-radius: 10px;line-height: 20px;padding-top: 10px;padding-bottom: 10px;">
-    <span style="display: block;">Share to your Telegram Story</span>
-    <span style="font-weight: bold;">
-      <img src="assets/img/littlediamond.png" style="height: 15px;"> +500 </span>
-    <img src="" style="height: 20px; margin-left: 10px;">
-  </li>
-  <li style="font-weight: bold;margin-bottom: 15px;font-weight: bold;margin-bottom: 10px;background-color: #bf5d05;border: 1px solid #a24e03;color: white;font-size: 13px;padding-left: 13px;border-radius: 10px;line-height: 20px;padding-top: 10px;padding-bottom: 10px;">
-    <span style="display: block;">Daily check-in</span>
-    <span style="font-weight: bold;">
-      <img src="assets/img/littlediamond.png" style="height: 15px;"> +100 </span>
-    <img src="" style="height: 20px; margin-left: 10px;">
-  </li>
-  <li style="font-weight: bold;margin-bottom: 10px;background-color: #bf5d05;border: 1px solid #a24e03;color: white;font-size: 13px;padding-left: 13px;border-radius: 10px;line-height: 20px;padding-top: 10px;padding-bottom: 10px;">
-    <span style="display: block;">Subscribe to Telegram Channel</span>
-    <span style="font-weight: bold;">
-      <img src="assets/img/littlediamond.png" style="height: 15px;"> +500 </span>
-    <img src="" style="height: 20px; margin-left: 10px;">
-  </li>
-  <li style="font-weight: bold; margin-bottom: 15px; background-color: #bf5d05; border: 1px solid #a24e03; color: white; font-size: 13px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
-  <div>
-    <span style="display: block;">Invite 10 Friends</span>
-    <span style="font-weight: bold; display: flex; align-items: center;">
-      <img src="assets/img/littlediamond.png" style="height: 15px; margin-right: 5px;"> +1000 
-    </span>
-  </div>
-  <span style="border: 1px solid #fff; border-radius: 10px; padding: 5px 10px; background-color: rgba(255, 255, 255, 0.2); margin-left: auto;">
-    0/10
-  </span>
-  <img src="" style="height: 20px; margin-left: 10px;">
-</li>
-
-</ul>
 
 
 
-
-        </div>
-    </div>
+     
+       
 
     <!-- Fixed App Bar -->
     <div class="app-bar">
@@ -433,16 +634,107 @@ window.onload = function() {
             document.getElementById(pageId).classList.add('active');
         }
     </script>
-<script>bot.onText(/\/openapp/, (msg) => {
-    const chatId = msg.chat.id;
-    const userId = msg.from.id; // Get the user ID from the message
 
-    // Create the mini app URL with the userId as a query parameter
-    const miniAppUrl = `https://html5-game-pi.vercel.app/?userId=${userId}`;
 
-    // Send the mini app URL to the user
-    bot.sendMessage(chatId, `Click here to open the app: ${miniAppUrl}`);
-});
+<script>
+    // Generate 1000 players
+    const leaderboard = document.getElementById('leaderboard-list');
+    const playersCount = 1000; // Total number of players
+    const predefinedScores = [
+        980, 950, 925, 900, 867, 850, 830, 820, 810, 800,
+        // additional scores
+    ];
+
+    // Generate random scores for the remaining players
+    const scoresToGenerate = playersCount - predefinedScores.length;
+    for (let i = 0; i < scoresToGenerate; i++) {
+        predefinedScores.push(Math.floor(Math.random() * 200) + 1); // Random scores
+    }
+
+    predefinedScores.sort((a, b) => b - a);
+
+    // Display the top 5 players
+    for (let i = 0; i < 5; i++) {
+        let rankIcon = '';
+
+        if (i === 0) {
+            rankIcon = '<span class="medal"><i class="fas fa-medal" style="color: gold;"></i></span>'; // Gold medal
+        } else if (i === 1) {
+            rankIcon = '<span class="medal"><i class="fas fa-medal" style="color: silver;"></i></span>'; // Silver medal
+        } else if (i === 2) {
+            rankIcon = '<span class="medal"><i class="fas fa-medal" style="color: #cd7f32;"></i></span>'; // Bronze medal
+        }
+
+        const playerLi = document.createElement('li');
+        playerLi.className = 'leaderboard-item';
+        const playerInfoDiv = document.createElement('div');
+        playerInfoDiv.innerHTML = `${rankIcon} Player ${i + 1}`;
+
+        const scoreSpan = document.createElement('span');
+        scoreSpan.style.fontStyle = 'italic';
+        const score = predefinedScores[i];
+        scoreSpan.innerHTML = `${score} <img src="assets/img/littlediamond.png" style="height: 15px;"> Diamonds`;
+
+        playerLi.appendChild(playerInfoDiv);
+        playerLi.appendChild(scoreSpan);
+        leaderboard.appendChild(playerLi);
+    }
+
+    // Display the rest of the players
+    for (let i = 5; i < playersCount; i++) {
+        const playerLi = document.createElement('li');
+        playerLi.className = 'leaderboard-item';
+        const playerInfoDiv = document.createElement('div');
+        playerInfoDiv.innerHTML = `Player ${i + 1}`;
+
+        const scoreSpan = document.createElement('span');
+        scoreSpan.style.fontStyle = 'italic';
+        const score = predefinedScores[i];
+        scoreSpan.innerHTML = `${score} <img src="assets/img/littlediamond.png" style="height: 15px;"> Diamonds`;
+
+        playerLi.appendChild(playerInfoDiv);
+        playerLi.appendChild(scoreSpan);
+        leaderboard.appendChild(playerLi);
+    }
+
+    // Placeholder for current Telegram user's rank and name
+    const currentUserRank = 10; // Example rank
+    const currentUserName = "@UserExample"; // Example Telegram name
+
+    document.querySelector('#user-rank span').innerText = `Your Rank: #NaN`;
+    document.querySelector('#user-rank span[style*="font-style"]').innerText = `${currentUserName}`;
 </script>
+<script>
+       function copyLink() {
+            const referralLink = document.getElementById('referral-link').innerText;
+            navigator.clipboard.writeText(referralLink).then(() => {
+                showPopup();
+            }, (err) => {
+                console.error('Could not copy text: ', err);
+            });
+        }
+
+        function showPopup() {
+            const popup = document.getElementById('copy-popup');
+            popup.style.display = 'block'; // Show popup
+            setTimeout(() => {
+                popup.style.display = 'none'; // Hide after 3 seconds
+            }, 3000);
+        }
+    // Placeholder for the user's referrals and points
+    const referralsCount = 50; // Example number of referrals made
+    const pointsEarned = 150; // Example points earned from referrals
+
+    document.getElementById('referrals-count').innerText = referralsCount;
+    document.getElementById('points-earned').innerText = pointsEarned;
+
+    // Update the user's rank and name
+    const currentUserRank = Math.floor(Math.random() * 100) + 1; // Example rank
+    const currentUserName = "@UserExample"; // Example Telegram name
+
+    document.querySelector('#user-rank span').innerText = `Your Rank: #${currentUserRank}`;
+    document.querySelector('#user-rank span[style*="font-style"]').innerText = `${currentUserName}`;
+</script>
+
 </body>
 </html>
