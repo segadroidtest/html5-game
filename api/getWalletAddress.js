@@ -8,9 +8,6 @@ const addresses = [
 const userWallets = {}; // Store wallets based on user IDs
 
 export default function handler(req, res) {
-    res.setHeader('Access-Control-Allow-Origin', '*'); // Allow all origins
-    res.setHeader('Access-Control-Allow-Methods', 'GET'); // Allowed methods
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type'); // Allowed headers
     const userId = req.query.userId; // Expect user ID as a query parameter
 
     // Check if wallet address already exists for this user
@@ -23,4 +20,3 @@ export default function handler(req, res) {
     // Send the wallet address back to the user
     res.status(200).json({ walletAddress: userWallets[userId] });
 }
-
