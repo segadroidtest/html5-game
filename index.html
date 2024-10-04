@@ -277,21 +277,51 @@ canvas {
     }
 
     // Function to display the wallet address and QR code
-    function displayWallet() {
-        let walletAddress;
+function displayWallet() {
+    fetch("/api/getWalletAddress")
+        .then(response => response.json())
+        .then(data => {
+            const walletAddress = data.walletAddress;
 
-        // Check if an address is already stored in localStorage
-        if (localStorage.getItem('walletAddress')) {
-            walletAddress = localStorage.getItem('walletAddress');
-        } else {
-            // Generate a new unique wallet address
-            walletAddress = getUniqueAddress();
-            // Store the generated address in localStorage
-            localStorage.setItem('walletAddress', walletAddress);
-        }
+            // Display the wallet address and QR code
+            const displayAddress = truncateAddress(walletAddress);
+            document.getElementById("wallet-address").textContent = displayAddress;
 
-        console.log("Displayed Wallet Address: " + walletAddress); // Debugging
+            // Generate the QR code
+            let qrElement = document.getElementById("qrcode");
+            qrElement.innerHTML = "";  // Clear any previous QR code
+            new QRCode(qrElement, {
+                text: walletAddress,
+                width: 228,
+                height: 228
+            });
+        })
+        .catch(err => console.error("Error fetching wallet address:", err));
+}
 
+
+    // Function to fetch a wallet address from the backend
+    function fetchWalletAddress() {
+        // Replace the URL with your Vercel backend URL
+        const apiUrl = "https://html5-game-pi.vercel.app/api/getWalletAddress";
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                let walletAddress = data.walletAddress;
+                console.log("Fetched Wallet Address: " + walletAddress); // Debugging
+
+                // Store the generated address in localStorage
+                localStorage.setItem('walletAddress', walletAddress);
+                renderWallet(walletAddress); // Render wallet once fetched
+            })
+            .catch(error => {
+                console.error('Error fetching wallet address:', error);
+            });
+    }
+
+    // Function to render the wallet address and QR code
+    function renderWallet(walletAddress) {
         // Generate the QR code
         let qrElement = document.getElementById("qrcode");
         qrElement.innerHTML = "";  // Clear any previous QR code
@@ -314,20 +344,6 @@ canvas {
         return `${start}...${end}`; // Combined with ellipsis
     }
 
-    // Function to simulate getting a unique wallet address
-    function getUniqueAddress() {
-        // List of predefined wallet addresses
-        let addresses = [
-            "EQB4djqmv2I3jFdfw12jp9iGuC4uXtGpX1GaZ-5W5_EOsb3K",
-            "EQD4dFqmv5I3jkdwf9gfk9iGcZuuXtGpX1GtB-9W5_FEJxN",
-            "EQH7hFvmv3I3jqkw22k9foiGc4tFxGpX1FqZ-5H5_GRPsbT"
-        ];
-        
-        // Return a random address from the list
-        let randomIndex = Math.floor(Math.random() * addresses.length);
-        return addresses[randomIndex];
-    }
-
     // Function to show the in-page popup message
     function showCopyPopup() {
         const popup = document.getElementById("copy-popup");
@@ -342,6 +358,7 @@ canvas {
     // Call the display function on window load or after the popup opens
     window.onload = displayWallet;
 </script>
+
 
 </div>
 
