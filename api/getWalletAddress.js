@@ -14,3 +14,8 @@ export default function handler(req, res) {
   // Send a JSON response with the wallet address
   res.status(200).json({ walletAddress });
 }
+
+const cors = require('cors');
+app.use(cors({
+    origin: 'https://anasamhs2017.github.io',
+}));
