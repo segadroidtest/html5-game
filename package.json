@@ -1,15 +1,13 @@
 {
-    "name": "my-game-server",
-    "version": "1.0.0",
-    "main": "index.js",
-    "scripts": {
-        "start": "node index.js"
-    },
-    "dependencies": {
-        "express": "^4.17.1",
-        "mongoose": "^5.10.9",
-        "cors": "^2.8.5",
-        "body-parser": "^1.19.0",
-        "tonweb": "^0.2.3"
-    }
+  "name": "my-vercel-app",
+  "version": "1.0.0",
+  "description": "My Vercel app",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "qrcode": "^1.4.4"  // Ensure these dependencies are correct
+  }
 }
