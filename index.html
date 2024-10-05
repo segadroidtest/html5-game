@@ -209,6 +209,10 @@ background-color: #000000;
 .user-details {
                    display: flex;
             flex-direction: column;
+    }
+
+            .rank-details {
+        display: inline-block; /* Aligns user details inline with the profile picture */
         width: calc(100% - 70px); /* Make room for profile picture */
         position: relative; /* Needed for absolute positioning of rank info */
         color: #000000; /* Text color for visibility */
@@ -623,6 +627,10 @@ if (user.photo_url) {
 const userDetails = document.createElement('div');
 userDetails.classList.add('user-details');
 
+// Create a container for the user details (username and ranks)
+const rankDetails = document.createElement('div');
+rankDetails.classList.add('rank-details');
+
 // Create a span for the username
 const usernameSpan = document.createElement('span');
 usernameSpan.innerText = user.username || user.first_name || "User";
@@ -632,17 +640,16 @@ usernameSpan.classList.add('username');
 const rankInfoSpan = document.createElement('span');
 rankInfoSpan.innerText = `Rank: #${Math.floor(Math.random() * 1000) + 1}`; // Simulate a random rank
 rankInfoSpan.classList.add('rank-info');
+rankInfoSpan.style.float = 'right';
 
 // Create the second rank info span for additional text
 const additionalRankInfoSpan = document.createElement('span');
 additionalRankInfoSpan.innerText = "Additional Info"; // Replace with your desired text
-additionalRankInfoSpan.classList.add('rank-info'); // Add the same class for styling
-additionalRankInfoSpan.style.float = 'right'; // Align it to the right
 
 // Append the username and rank to the user details container
 userDetails.appendChild(usernameSpan);
-userDetails.appendChild(rankInfoSpan);
-userDetails.appendChild(additionalRankInfoSpan); // Append the additional rank info
+userDetails.appendChild(additionalRankInfoSpan);
+rankDetails.appendChild(rankInfoSpan); // Append the additional rank info
 
 // Append the profile picture and user details to the user-rank section
 userRankElement.appendChild(profilePicture);
