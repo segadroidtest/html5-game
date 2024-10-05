@@ -2,13 +2,19 @@
 <html lang="en" style="    scrollbar-width: none !important;">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
     <title>Multi-page App with Fixed App Bar</title>
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
         <script src="https://telegram.org/js/telegram-web-app.js"></script>
+        <script type="text/javascript">
+            
+            window.Telegram.WebApp.ready(); window.Telegram.WebApp.expand();
+        </script>
     <script src="js/qrcode.js"></script>
     <script src="js/qrcode.min.js"></script>
     <style>
@@ -32,6 +38,7 @@
 
         .active {
             display: block;
+
         }
 
         /* Fixed app bar at the bottom */
@@ -107,6 +114,8 @@ canvas {
     height: auto;
     max-width: 700px;
     max-height: 900px;
+    height: calc(100vh - 60px) !important;
+    margin-top: -60px !important;
 }
 
 
@@ -242,14 +251,15 @@ background-color: #000000;
             <script type="text/javascript" src="js/ads.js"></script>
 
             <div id="viewporter">
-                <canvas id="canvas" width="700" height="900"></canvas>
+                <canvas id="canvas" width="700" height="900" style="height: calc(100vh - 60px) !important;
+    margin-top: -60px !important;"></canvas>
             </div>
 
             <!-- Loader styles already in the <head> -->
         </div>
 
 
-<div id="page3" class="page" style="background: url(assets/img/back.png); color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 100px); overflow-y: auto;">
+<div id="page3" class="page" style="background: linear-gradient(to bottom, #ff9f2f, #f7be5c) !important; color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 100px); overflow-y: auto;">
 
     <div id="referral-stats">
         <!-- Referrals Made Section -->
@@ -311,7 +321,7 @@ background-color: #000000;
     <h3 style="text-align: center; color: #402104; margin-top: 15px; margin-bottom: 0px;">Your Invite Link:</h3>
     <div id="referral-link-section" style="border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; border-top-right-radius: 10px; border-top-left-radius: 10px;">
         <div class="referral-link" id="referral-link">
-            https://t.me/gamesegadroid_test_bot/start?startApp={chat_id}
+            https://t.me/gamesbotegadroid_test_bot/start?startApp={chat_id}
         </div>
 <button class="copy-button" onclick="copyLink()" style="border-bottom-right-radius: 10px; border-top-right-radius: 10px;">
     <i class="fas fa-copy"></i>
@@ -355,7 +365,7 @@ background-color: #000000;
 
 
 
- <div id="page4" class="page" style="background: url(assets/img/back.png);color: #ffffff;padding: 20px;border-radius: 0px;width: auto;margin: 0 auto;box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);height: 100%;overflow-y: hidden;">
+ <div id="page4" class="page" style="background: linear-gradient(to bottom, #ff9f2f, #f7be5c) !important;color: #ffffff;padding: 20px;border-radius: 0px;width: auto;margin: 0 auto;box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);height: 100%;overflow-y: hidden;">
             
 
 
@@ -437,7 +447,7 @@ background-color: #000000;
         </div>
     </div>
        
-    <div id="page2" class="page" style="background: url(assets/img/back.png); color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 70px); overflow-y: auto;  padding-top: 7px !important;">
+    <div id="page2" class="page" style="background: linear-gradient(to bottom, #ff9f2f, #f7be5c) !important;color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 70px); overflow-y: auto;  padding-top: 7px !important;">
 
     <!-- Current User Rank -->
     <div id="user-rank" class="user-info" style="width: auto !important; background: #bf5d05; color: white !important; border: 1px solid #a34e03;">
@@ -575,7 +585,7 @@ pointsSpan.style.marginLeft = 'auto';
 </div>
 
 
-<div id="page5" class="page" style="background: url(assets/img/back.png);color: #ffffff;padding: 20px;border-radius: 0px;width: auto;margin: 0 auto;box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);height: 100%;overflow-y: hidden;">
+<div id="page5" class="page" style="background: linear-gradient(to bottom, #ff9f2f, #f7be5c) !important;color: #ffffff;padding: 20px;border-radius: 0px;width: auto;margin: 0 auto;box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);height: 100%;overflow-y: hidden;">
     <h2 style="text-align: center; color: #402104; font-size: 28px; margin-top: 0; font-family: system-ui;margin-bottom: 15px;">SEEDSALE</h2>
     <p style="text-align: center; color: #402104; margin-top: -10px;">Stage 1</p>
 
@@ -600,7 +610,7 @@ pointsSpan.style.marginLeft = 'auto';
     </div>
 
   <div style="margin: 20px 0; text-align: center;">
-       <p style="color: #4c2604; font-size: 16px; margin-top: -10px; font-weight: 550;">
+       <p style="color: #4c2604; font-size: 16px; margin-top: -10px; font-weight: 590;">
             <i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right: 8px; vertical-align: middle;"></i>
             Minimum purchase is 10 TON. Any smaller transactions will be refunded.
         </p>
