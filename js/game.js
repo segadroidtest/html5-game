@@ -11881,43 +11881,16 @@ var DNStateManager = (function() {
             this.lastMouseDownHandlerTime = -C7N8y.T8U;
             this.lastMouseMoveHandlerTime = -C7N8y.T8U;
             DNGameConfig.loadAPI();
-
-function resizeCanvas() {
-    var canvas = document.getElementById('canvas');
-    var bottomMenuHeight = document.querySelector('.appBottomMenu') ? document.querySelector('.appBottomMenu').offsetHeight : 0;
-    var availableHeight = window.innerHeight - bottomMenuHeight;
-
-    // Set canvas dimensions
-    canvas.height = availableHeight;
-    canvas.width = window.innerWidth;
-
-    // Ensure g_instance and its stage are defined before using
-    if (typeof g_instance !== 'undefined' && g_instance.stage) {
-        g_instance.stage.update();
-    }
-}
-
-// Add the event listeners after everything is initialized
-window.addEventListener('resize', resizeCanvas);
-window.addEventListener('load', resizeCanvas);
-
-
-h3.g_instance = this;  // Set the global instance
-this.states = Array();
-this.canvas = k6S46[D46]['getElementById']("canvas");
-this.stage = new createjs.Stage(this.canvas);
-this.stage.autoClear = C7N8y.Q72;
-
-// Now that g_instance is defined, call resizeCanvas
-resizeCanvas();
-
-var Q5 = k6S46[j46][s46].indexOf(P5) > -C7N8y.T8U && !(k6S46[j46][n46].indexOf(K5) > -C7N8y.T8U);
-if (Q5 && createjs.Touch.isSupported()) {
-    this.stage.enableDOMEvents(C7N8y.Q72);
-}
-createjs.Touch.enable(this.stage);
-
-
+            h3.g_instance = this;
+            this.states = Array();
+            this.canvas = k6S46[D46]['getElementById']("canvas");
+            this.stage = new createjs.Stage(this.canvas);
+            this.stage.autoClear = C7N8y.Q72;
+            var Q5 = k6S46[j46][s46].indexOf(P5) > -C7N8y.T8U && !(k6S46[j46][n46].indexOf(K5) > -C7N8y.T8U);
+            if (Q5 && createjs.Touch.isSupported()) {
+                this.stage.enableDOMEvents(C7N8y.Q72);
+            }
+            createjs.Touch.enable(this.stage);
             this.stage.enableMouseOver(C7N8y.f8U);
             J5(createjs);
             createjs.Ticker.setFPS(C7N8y.J62);
@@ -12021,7 +11994,7 @@ createjs.Touch.enable(this.stage);
                 });
             }
             GameData.getInstance().load();
-            this.changeState(new MainMenuState());
+            this.changeState(new SelectLevelState());
             if (DNGameConfig.needShowRotateScreen) {
                 if (this.isLandscape()) {
                     this.pushState(new PortraitLockState());
@@ -15654,17 +15627,13 @@ createjs.Touch.enable(this.stage);
         h3.prototype.getStarsInLevel = function(m5) {
             return this.starsPerLevel[m5];
         };
-h3.prototype.totalStars = function() {
-    var m5 = 0; // Initialize total score
-    for (var b5 = 0; b5 < this.getTotalLevels(); b5++) {
-        m5 += this.starsPerLevel[b5]; // Add stars for each level
-    }
-    
-
-
-    return m5; // Return total score
-};
-
+        h3.prototype.totalStars = function() {
+            var m5 = C7N8y.W8U;
+            for (var b5 = C7N8y.W8U; C7N8y.U2w(b5, this.getTotalLevels()); b5++) {
+                m5 += this.starsPerLevel[b5];
+            }
+            return m5;
+        };
         h3.prototype.getGold = function() {
             return this.gold;
         };
@@ -18764,8 +18733,6 @@ h3.prototype.totalStars = function() {
             this.inputMode = this.allModes[m5];
             this.inputModeText.text = this.inputMode;
         };
-
-
         E3.prototype.onPlayTouch = function() {
             this.generageLevel();
             DNStateManager.g_instance.pushState(new PlayState(-C7N8y.T8U, C7N8y.Q72, []));
@@ -20815,27 +20782,42 @@ h3.prototype.totalStars = function() {
             }
         };
         return G5;
-    })(DNGameState),
-    PreloaderState = (function(S5) {
-        function t5(b5, h5, O5, W5) {
-            var R5 = "#ffffff";
-            var G5 = this;
-            S5.call(this);
-            this.loadingBar = new DNLoadingBar(C7N8y.C82, C7N8y.Z22, R5, C7N8y.Z22);
-            new DNAssetsManager(b5, h5, O5, W5, function(m5) {
-                return G5.handleProgress(m5);
-            });
-            this.addChild(this.loadingBar);
-            this.loadingBar.x = C7N8y.f3p(Constants.ASSETS_WIDTH, C7N8y.A8U);
-            this.loadingBar.y = C7N8y.S3p(Constants.ASSETS_HEIGHT, C7N8y.A8U);
-        }
-        __extends(t5, S5);
-        t5.prototype.handleProgress = function(m5) {
-            this.loadingBar.setProgress(m5.loaded);
-        };
-        t5.prototype.onOrientationChanged = function(m5) {};
-        return t5;
-    })(DNGameState),
+})(DNGameState),
+PreloaderState = (function(S5) {
+    function t5(b5, h5, O5, W5) {
+        var G5 = this;
+        S5.call(this);
+
+        // Create a div for the background
+        var backgroundDiv = document.createElement('div');
+        backgroundDiv.style.position = 'fixed';  // Use fixed positioning
+        backgroundDiv.style.top = '0';
+        backgroundDiv.style.left = '0';
+        backgroundDiv.style.width = '100vw';  // Full viewport width
+        backgroundDiv.style.height = '100vh'; // Full viewport height
+        backgroundDiv.style.backgroundImage = 'url("assets/img/splashscreen.png")'; // Path to your background image
+        backgroundDiv.style.backgroundSize = 'cover'; // Cover the entire area
+        backgroundDiv.style.backgroundPosition = 'center'; // Center the image
+        backgroundDiv.style.zIndex = '-1'; // Send it to the back
+        document.body.appendChild(backgroundDiv); // Add to the document
+
+        // Create loading bar
+        this.loadingBar = new DNLoadingBar(C7N8y.C82, C7N8y.Z22, "#ffffff", C7N8y.Z22);
+        new DNAssetsManager(b5, h5, O5, W5, function(m5) {
+            return G5.handleProgress(m5);
+        });
+
+        this.addChild(this.loadingBar);
+        this.loadingBar.x = C7N8y.f3p(Constants.ASSETS_WIDTH, C7N8y.A8U);
+        this.loadingBar.y = C7N8y.S3p(Constants.ASSETS_HEIGHT, C7N8y.A8U);
+    }
+    __extends(t5, S5);
+    t5.prototype.handleProgress = function(m5) {
+        this.loadingBar.setProgress(m5.loaded);
+    };
+    t5.prototype.onOrientationChanged = function(m5) {};
+    return t5;
+})(DNGameState),
     RunLolipopEffect = (function(h5) {
         function O5() {
             h5.call(this);
@@ -21011,54 +20993,49 @@ h3.prototype.totalStars = function() {
         };
         return q3;
     })(PopupState),
-SelectLevelButton = (function(Q5) {
-    function u5(b5, h5) {
-        var O5 = 0.82;
-        var W5 = this;
-        Q5.call(this, b5, C7N8y.S22);
-        this.locked = C7N8y.Q72;
-        this.levelNum = h5;
-        this.setHandler(function() {
-            return W5.onTouch();
-        });
-        
-        // Force unlock all levels
-        if (true) {
-            var R5 = function() {
-                S5.x = -S5.getBounds().width / 2 - 5;
-            };
-            var G5 = function() {
-                S5.y = -S5.getBounds().height / 2 - 9;
-            };
-            var S5 = new DNTextField((h5 + C7N8y.T8U).toString(), DNFontDef.MAP_FONT);
-            this.getPicture().addChild(S5);
-            R5();
-            G5();
-            
-            // Get the stars in the level
-            var t5 = GameData.getInstance().getStarsInLevel(h5);
-            if (C7N8y.a3p(t5, C7N8y.W8U)) {
-                var K5 = [O5, C7N8y.T8U, O5];
-                for (var P5 = C7N8y.W8U; C7N8y.g0p(P5, C7N8y.L8U); P5++) {
-                    var g3 = function(m5) {
-                        F3.y = m5;
-                    };
-                    var J5 = function() {
-                        F3.x = -C7N8y.f92 + P5 * C7N8y.a92;
-                    };
-                    var F3 = DNAssetsManager.g_instance.getCenteredImageWithProxy((C7N8y.E0p(P5, t5)) ? Images.STAR_MINI_EMPTY : Images.STAR_MINI);
-                    J5();
-                    g3(C7N8y.X92);
-                    F3.scaleX = F3.scaleY = K5[P5];
-                    this.getPicture().addChild(F3);
+    SelectLevelButton = (function(Q5) {
+        function u5(b5, h5) {
+            var O5 = 0.82;
+            var W5 = this;
+            Q5.call(this, b5, C7N8y.S22);
+            this.locked = C7N8y.Q72;
+            this.levelNum = h5;
+            this.setHandler(function() {
+                return W5.onTouch();
+            });
+            if (C7N8y.e3p(h5, GameData.getInstance().levelsAvailable())) {
+                var R5 = function() {
+                    S5.x = -S5.getBounds().width / 2 - 5;
+                };
+                var G5 = function() {
+                    S5.y = -S5.getBounds().height / 2 - 9;
+                };
+                var S5 = new DNTextField((h5 + C7N8y.T8U).toString(), DNFontDef.MAP_FONT);
+                this.getPicture().addChild(S5);
+                R5();
+                G5();
+                var t5 = GameData.getInstance().getStarsInLevel(h5);
+                if (C7N8y.a3p(t5, C7N8y.W8U)) {
+                    var K5 = [O5, C7N8y.T8U, O5];
+                    for (var P5 = C7N8y.W8U; C7N8y.g0p(P5, C7N8y.L8U); P5++) {
+                        var g3 = function(m5) {
+                            F3.y = m5;
+                        };
+                        var J5 = function() {
+                            F3.x = -C7N8y.f92 + P5 * C7N8y.a92;
+                        };
+                        var F3 = DNAssetsManager.g_instance.getCenteredImageWithProxy((C7N8y.E0p(P5, t5)) ? Images.STAR_MINI_EMPTY : Images.STAR_MINI);
+                        J5();
+                        g3(C7N8y.X92);
+                        F3.scaleX = F3.scaleY = K5[P5];
+                        this.getPicture().addChild(F3);
+                    }
                 }
+            } else {
+                this.visible = C7N8y.Q72;
             }
-        } else {
-            this.visible = C7N8y.Q72;
         }
-    }
-    __extends(u5, Q5);
-
+        __extends(u5, Q5);
         u5.prototype.onTouch = function() {
             var m5 = new SelectBoosterState(this.levelNum);
             m5.shader.visible = C7N8y.Q72;
@@ -21238,32 +21215,18 @@ SelectLevelButton = (function(Q5) {
                 k2();
             }
             this.loadLayout(CurLayouts.SELECT_LEVEL_LAYOUT, this);
-// Global scaling and offset values to adjust all positions at once
-const xOffset = 30;  // Adjust this value to move levels horizontally
-const yOffset = -200;  // Adjust this value to move levels vertically
-const xScale = 1.0;   // Start with no scaling
-const yScale = 1.0;   // Start with no scaling
 
-// Loop through levels and apply the scaling and offset transformation
-for (var o0 = 0; o0 < this.levelsPositions.length / 1; o0++) {
-    var levelButton = new SelectLevelButton(Images.LEVEL_BUTTON, o0);
-    this.addGuiObject(levelButton);
-    this.layer.addChild(levelButton);
-
-    // Apply scaling and offset to each level's position
-    levelButton.x = (this.levelsPositions[o0 * 2] * xScale) + xOffset;
-    levelButton.y = (this.levelsPositions[o0 * 2 + 1] * yScale) + yOffset;
-
-    // Log the position for debugging
-    console.log("Level " + o0 + " X: " + levelButton.x + " Y: " + levelButton.y);
-
-    // Highlight the current level (optional)
-    if (o0 == this.currentLevel) {
-        levelButton.shine();
-        this.layer.y = (Constants.ASSETS_HEIGHT / 2) - levelButton.y;
-    }
-}
-
+            for (var o0 = C7N8y.W8U; C7N8y.U0p(o0, this.levelsPositions.length / C7N8y.A8U); o0++) {
+                var X0 = new SelectLevelButton(Images.LEVEL_BUTTON, o0);
+                this.addGuiObject(X0);
+                this.layer.addChild(X0);
+                X0.x = (this.levelsPositions[C7N8y.u0p(o0, C7N8y.A8U)]);
+                X0.y = this.levelsPositions[C7N8y.m2p(o0, C7N8y.A8U) + C7N8y.T8U];
+                if (C7N8y.p2p(o0, m5)) {
+                    X0.shine();
+                    this.layer.y = +Constants.ASSETS_HEIGHT / C7N8y.A8U - X0.y;
+                }
+            }
             this.checkConstrains();
             this.findGUIObject(Layouts.NAME_STARS).setText(GameData.getInstance().totalStars().toString());
             this.findGUIObject(Layouts.NAME_SCORE).setText(GameData.getInstance().getTotalScore().toString());
