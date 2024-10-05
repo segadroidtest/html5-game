@@ -637,24 +637,12 @@ if (user.photo_url) {
 const userDetails = document.createElement('div');
 userDetails.classList.add('user-details');
 
-const rankDetails = document.createElement('div');
-rankDetails.classList.add('rank-details');
 
 // Create a span for the username
 const usernameSpan = document.createElement('span');
 usernameSpan.innerText = user.username || user.first_name || "User";
 usernameSpan.classList.add('username');
 
-// Create a container for rank details
-const rankDetails = document.createElement('div');
-rankDetails.classList.add('rank-details');
-rankDetails.style.textAlign = "right"; // Align rank details to the right
-
-// Create the first rank info span
-const rankInfoSpan = document.createElement('span');
-rankInfoSpan.innerText = "321 XYZ"; // Replace with your desired text
-rankInfoSpan.style.color = "white"; // Set additional text color to white
-rankInfoSpan.style.textAlign = "right"; // Align rank details to the right
 
 // Create the second rank info span for additional text
 const additionalRankInfoSpan = document.createElement('span');
@@ -666,13 +654,10 @@ additionalRankInfoSpan.style.color = "white"; // Set rank text color to white
 userDetails.appendChild(usernameSpan);
 userDetails.appendChild(additionalRankInfoSpan);
 
-// Append the rank info to the rank details container
-rankDetails.appendChild(rankInfoSpan); // Append the rank info
 
 // Append the profile picture, user details, and rank details to the user-rank section
 userRankElement.appendChild(profilePicture);
 userRankElement.appendChild(userDetails);
-userRankElement.appendChild(rankDetails); // Append the rank details to the user-rank section
 
 
 
