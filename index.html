@@ -441,229 +441,126 @@ background-color: #000000;
         </div>
     </div>
        
-     <div id="page2" class="page" style="background: url(assets/img/back.png);color: #ffffff;padding: 20px;border-radius: 0px;width: auto;margin: 0 auto;box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);height: 100%;
-    height: calc(100vh - 100px);
-    overflow-y: auto;">
-  <h2 style="text-align: center; color: #402104; font-size: 28px; margin-top: 0; font-family: system-ui;margin-bottom: 15px;">LEADERBOARD</h2>
-  <p style="text-align: center; color: #402104; margin-top: -10px;">Ranks</p>
+    <div id="page2" class="page" style="background: url(assets/img/back.png); color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 100px); overflow-y: auto;">
+    <h2 style="text-align: center; color: #402104; font-size: 28px; margin-top: 0; font-family: system-ui; margin-bottom: 15px;">LEADERBOARD</h2>
+    <p style="text-align: center; color: #402104; margin-top: -10px;">Ranks</p>
 
-  <!-- Current User Rank -->
-    <div id="user-rank" class="user-info" style=" width: auto !important;!i;!; background: #bf5d05; color: white !important;!i;!; border: 1px solid #a34e03; ">
+    <!-- Current User Rank -->
+    <div id="user-rank" class="user-info" style="width: auto !important; background: #bf5d05; color: white !important; border: 1px solid #a34e03;">
         <!-- User Profile Picture and Username will be inserted here -->
     </div>
 
-
-
-
-  <!-- Leaderboard Container -->
-<div id="leaderboard-container" style="
-    background-color: #bf5d05;
-    border: 1px solid #a24e03;
-    padding: 0;
-    max-height: 60vh;
-    overflow: hidden; /* Hide overflow for container */
-  ">
-    <div class="leaderboard-header" style="border: none !important;background: #894507;padding-left: 15px;padding-right: 15px;padding-top: 10px;margin-top: 0;padding-bottom: 30px;position: sticky; top: 0; z-index: 10;">
-      <span style="float: left;">Players Name</span>
-      <span style="float: right;">Points Earned</span>
+    <!-- Leaderboard Container -->
+    <div id="leaderboard-container" style="background-color: #bf5d05; border: 1px solid #a24e03; padding: 0; max-height: 60vh; overflow: hidden;">
+        <div class="leaderboard-header" style="background: #894507; padding: 15px; position: sticky; top: 0; z-index: 10;">
+            <span style="float: left;">Players Name</span>
+            <span style="float: right;">Points Earned</span>
+        </div>
+        <ul id="leaderboard-list" style="list-style: none; padding: 0; margin: 0; max-height: 50vh; overflow-y: auto;">
+            <!-- Leaderboard items will be added here -->
+        </ul>
     </div>
-    <ul id="leaderboard-list" style="
-        scrollbar-width: none;
-        list-style: none; 
-        padding: 0; 
-        margin: 0; 
-        max-height: 50vh; /* Limit height for scrolling */
-        overflow-y: auto; /* Enable vertical scrolling */
-      ">
-      <!-- Leaderboard items will be added here -->
-    </ul>
+    <p id="updated" style="text-align: left; margin-top: 10px; color: #864204;">Updated every 10 mins</p>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', generateLeaderboard);
+
+        function generateLeaderboard() {
+            const leaderboardList = document.getElementById('leaderboard-list');
+            const colors = ['#F28B82', '#FBBC05', '#34A853', '#4285F4', '#A142F4', '#FF6D01', '#46BD8B', '#FFBF00', '#FF4500', '#9932CC'];
+            const usernames = ['ShadowMaster', 'PixelKnight', 'CryptoWiz', 'StellarBlaze', 'DrakeKing', 'ZaraStorm'];
+            const userCount = 1000;
+            const maxPoints = 1940;
+            const minPoints = 120;
+            const pointsStep = 2;
+
+            let currentPoints = maxPoints;
+            let telegramUserInserted = false;
+
+            // Telegram API Integration
+            Telegram.WebApp.ready();
+            const user = Telegram.WebApp.initDataUnsafe.user;
+            const userRankElement = document.getElementById('user-rank');
+
+            if (user && userRankElement) {
+                const userRank = Math.floor(Math.random() * 1000) + 1;
+                const userPoints = currentPoints - (userRank * pointsStep);
+                
+                // Display Telegram user in the Current User Rank section
+                userRankElement.innerHTML = `
+                    <div style="width: 60px; height: 60px; border-radius: 50%; background-color: ${colors[userRank % colors.length]}; color: #ffffff; text-align: center; line-height: 60px; font-size: 24px;">
+                        ${user.username ? user.username.charAt(0).toUpperCase() : 'U'}
+                    </div>
+                    <div>
+                        <span>${user.username || "User"}</span>
+                        <span style="display: block; color: white;">Rank: #${userRank}</span>
+                    </div>
+                    <span style="color: white;">${userPoints} XYZ</span>
+                `;
+
+                // Insert Telegram user in leaderboard
+                addLeaderboardEntry(user.username || "User", userPoints, userRank, colors[userRank % colors.length]);
+                telegramUserInserted = true;
+            }
+
+            // Generate and add random users to leaderboard
+            for (let i = 1; i <= userCount; i++) {
+                if (telegramUserInserted && i === userRank) continue;
+
+                const username = usernames[i % usernames.length];
+                const points = currentPoints > minPoints ? currentPoints : minPoints;
+                currentPoints -= pointsStep;
+
+                addLeaderboardEntry(username, points, i, colors[i % colors.length]);
+            }
+
+            function addLeaderboardEntry(username, points, rank, color) {
+                const listItem = document.createElement('li');
+                listItem.style.display = 'flex';
+                listItem.style.alignItems = 'center';
+                listItem.style.padding = '10px';
+                listItem.style.borderBottom = '1px solid #a24e03';
+
+                const profilePicture = document.createElement('div');
+                profilePicture.style.width = '30px';
+                profilePicture.style.height = '30px';
+                profilePicture.style.borderRadius = '50%';
+                profilePicture.style.backgroundColor = color;
+                profilePicture.style.color = '#ffffff';
+                profilePicture.style.display = 'flex';
+                profilePicture.style.justifyContent = 'center';
+                profilePicture.style.alignItems = 'center';
+                profilePicture.innerText = username.charAt(0).toUpperCase();
+                profilePicture.style.marginRight = '10px';
+
+                const usernameContainer = document.createElement('div');
+                const usernameSpan = document.createElement('span');
+                usernameSpan.innerText = username;
+                usernameSpan.style.fontSize = '15px';
+
+                const rankSpan = document.createElement('span');
+                rankSpan.innerText = `Rank: #${rank}`;
+                rankSpan.style.fontSize = '13px';
+                rankSpan.style.color = 'white';
+
+                usernameContainer.appendChild(usernameSpan);
+                usernameContainer.appendChild(rankSpan);
+
+                const pointsSpan = document.createElement('span');
+                pointsSpan.innerText = `${points} XYZ`;
+                pointsSpan.style.color = 'white';
+                pointsSpan.style.marginLeft = 'auto';
+
+                listItem.appendChild(profilePicture);
+                listItem.appendChild(usernameContainer);
+                listItem.appendChild(pointsSpan);
+
+                leaderboardList.appendChild(listItem);
+            }
+        }
+    </script>
 </div>
 
-
-  <p id="updated" style="text-align: left;margin-top: 10px !important;color: #864204;">Updated every 10 mins</p>
-
-
-<script>
-document.addEventListener('DOMContentLoaded', generateLeaderboard);
-
-function generateLeaderboard() {
-    const leaderboardList = document.getElementById('leaderboard-list');
-    const colors = ['#F28B82', '#FBBC05', '#34A853', '#4285F4', '#A142F4', '#FF6D01', '#46BD8B', '#FFBF00', '#FF4500', '#9932CC'];
-    const usernames = ['ShadowMaster', 'PixelKnight', 'CryptoWiz', 'StellarBlaze', 'DrakeKing', 'ZaraStorm', 'TigerPaw', 'LunaRider', 
-        // Add more usernames if needed...
-    ];
-
-    const userCount = 1000;
-    const maxPoints = 1940; 
-    const minPoints = 120;   
-    const pointsStep = 2;    
-
-    let currentPoints = maxPoints;
-    
-    leaderboardList.innerHTML = '';
-
-    const leaderboardData = [];
-
-    // Fill leaderboard with initial data
-    for (let i = 1; i <= userCount; i++) {
-        leaderboardData.push({
-            rank: i,
-            username: usernames[i % usernames.length],
-            points: currentPoints > minPoints ? currentPoints : minPoints,
-            color: colors[i % colors.length]
-        });
-        currentPoints -= pointsStep;
-    }
-
-    // Update user rank and points based on Telegram data
-    const user = Telegram.WebApp.initDataUnsafe.user;
-    const userRank = 100; // Example user rank; you can fetch this from actual data
-    const userPoints = 1000; // Example user points
-
-    leaderboardData.splice(userRank - 1, 0, {
-        rank: userRank,
-        username: user.username || user.first_name || "User",
-        points: userPoints,
-        color: "#4CAF50" 
-    });
-
-    leaderboardData.forEach((entry, index) => {
-        const listItem = document.createElement('li');
-        listItem.style.display = 'flex';
-        listItem.style.alignItems = 'center';
-        listItem.style.padding = '10px';
-        listItem.style.borderBottom = '1px solid #a24e03';
-
-        const profilePicture = document.createElement('div');
-        profilePicture.style.width = '30px';
-        profilePicture.style.height = '30px';
-        profilePicture.style.borderRadius = '50%';
-        profilePicture.style.backgroundColor = entry.color;
-        profilePicture.style.display = 'flex';
-        profilePicture.style.justifyContent = 'center';
-        profilePicture.style.alignItems = 'center';
-        profilePicture.style.color = '#ffffff';
-        profilePicture.style.fontWeight = 'bold';
-        profilePicture.style.fontSize = '16px';
-        profilePicture.innerText = entry.username.charAt(0).toUpperCase();
-        profilePicture.style.marginRight = '10px';
-
-        const usernameContainer = document.createElement('div');
-        const usernameSpan = document.createElement('span');
-        usernameSpan.innerText = entry.username;
-        usernameSpan.style.fontSize = '15px';
-        
-        const rankSpan = document.createElement('span');
-        rankSpan.innerText = `Rank: #${index + 1}`;
-        rankSpan.style.fontSize = '13px';
-        rankSpan.style.color = 'white';
-
-        usernameContainer.appendChild(usernameSpan);
-        usernameContainer.appendChild(rankSpan);
-        
-        const pointsSpan = document.createElement('span');
-        pointsSpan.innerText = `${entry.points} XYZ`;
-        pointsSpan.style.color = 'white';
-        pointsSpan.style.marginLeft = 'auto';
-
-        listItem.appendChild(profilePicture);
-        listItem.appendChild(usernameContainer);
-        listItem.appendChild(pointsSpan);
-        
-        leaderboardList.appendChild(listItem);
-    });
-}
-
-Telegram.WebApp.ready();
-
-
-// Get the user info from Telegram
-const user = Telegram.WebApp.initDataUnsafe.user;
-
-// Select the user-rank element
-const userRankElement = document.getElementById('user-rank');
-
-// Check if userRankElement exists before proceeding
-if (userRankElement) {
-    // Set width to match leaderboard list width
-    userRankElement.style.width = "100%"; // Set to 100% or your desired width
-    userRankElement.style.display = "flex"; // Use flexbox for alignment
-    userRankElement.style.alignItems = "center"; // Center items vertically
-    userRankElement.style.justifyContent = "space-between"; // Space items evenly
-
-    // Create a container for the profile picture
-    const profilePicture = document.createElement('div');
-    profilePicture.classList.add('profile-picture');
-    profilePicture.style.marginRight = "10px"; // Add margin to the right
-
-    // Check if the user has a profile picture; if not, create one with the first character
-    if (user.photo_url) {
-        // Create an image element for the profile picture
-        const imgElement = document.createElement('img');
-        imgElement.src = user.photo_url;
-        imgElement.alt = "Profile Picture"; // Set a default alt text
-        imgElement.style.width = "60px"; // Set width
-        imgElement.style.height = "60px"; // Set height
-        imgElement.style.borderRadius = "50%"; // Make it a circle
-        imgElement.style.objectFit = "cover"; // Ensure the image covers the container
-        imgElement.style.display = "block"; // Ensure it behaves like a block element
-        imgElement.style.margin = "0 auto"; // Center the image
-        profilePicture.appendChild(imgElement);
-    } else {
-        // Create a colored circle for the profile picture with the first character
-        const profileCharacter = (user.username || user.first_name || "User").charAt(0).toUpperCase();
-        profilePicture.innerText = profileCharacter; // Set the text to the first character
-        profilePicture.style.width = "60px"; // Set width
-        profilePicture.style.height = "60px"; // Set height
-        profilePicture.style.borderRadius = "50%"; // Make it a circle
-        profilePicture.style.display = "flex"; // Use flexbox for centering
-        profilePicture.style.alignItems = "center"; // Center vertically
-        profilePicture.style.justifyContent = "center"; // Center horizontally
-        profilePicture.style.fontSize = "24px"; // Set font size for the character
-        profilePicture.style.color = "#ffffff"; // Text color
-        profilePicture.style.backgroundColor = "#4CAF50"; // Background color
-        profilePicture.style.overflow = "hidden"; // Hide any overflow to maintain the circle shape
-        profilePicture.style.boxSizing = "border-box"; // Ensure padding/border doesn't affect width/height
-    }
-
-    // Create a container for the user details (username and ranks)
-    const userDetails = document.createElement('div');
-    userDetails.classList.add('user-details');
-    userDetails.style.display = "flex"; // Use flexbox for user details alignment
-    userDetails.style.flexDirection = "column"; // Stack username and rank info vertically
-
-    // Create a span for the username
-    const usernameSpan = document.createElement('span');
-    usernameSpan.innerText = user.username || user.first_name || "User";
-    usernameSpan.classList.add('username');
-
-    // Create the second rank info span for additional text
-    const additionalRankInfoSpan = document.createElement('span');
-    additionalRankInfoSpan.innerText = `Rank: #${Math.floor(Math.random() * 1000) + 1}`; // Simulate a random rank
-    additionalRankInfoSpan.classList.add('rank-info');
-    additionalRankInfoSpan.style.color = "white"; // Set rank text color to white
-
-    // Create a span for the additional "0 xyz" text
-    const additionalTextSpan = document.createElement('span');
-    additionalTextSpan.innerText = "0 xyz"; // Add static text "0 xyz"
-    additionalTextSpan.style.color = "white"; // Set text color to white
-    additionalTextSpan.style.marginLeft = "auto"; // Push this to the right
-
-    // Append the username and additional rank info to the user details container
-    userDetails.appendChild(usernameSpan);
-    userDetails.appendChild(additionalRankInfoSpan);
-
-    // Append the profile picture and user details to the user-rank section
-    userRankElement.appendChild(profilePicture);
-    userRankElement.appendChild(userDetails);
-    userRankElement.appendChild(additionalTextSpan); // Append the additional "0 xyz" text
-} else {
-    console.error("User rank element not found.");
-}
-
-
-</script>
-</div>
 
 <div id="page5" class="page" style="background: url(assets/img/back.png);color: #ffffff;padding: 20px;border-radius: 0px;width: auto;margin: 0 auto;box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);height: 100%;overflow-y: hidden;">
     <h2 style="text-align: center; color: #402104; font-size: 28px; margin-top: 0; font-family: system-ui;margin-bottom: 15px;">SEEDSALE</h2>
