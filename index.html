@@ -524,23 +524,20 @@ function generateLeaderboard() {
         listItem.style.borderBottom = '1px solid #a24e03';
         listItem.style.width = i === 1 ? '100%' : 'auto'; // Fix width for first user
         
-const telegramUserData = await getTelegramUserData(); // Fetch the Telegram user data (implement the API call here)
-
-    // Check if user has a profile picture
-    let profilePictureUrl = 'default-avatar.png'; // Fallback to a default avatar if no profile picture is found
-    if (telegramUserData.photo) {
-        profilePictureUrl = `https://api.telegram.org/file/bot8047643548:AAH9GroXRXG3bD8OGa6rBN-grgIGk1pM6LM/${telegramUserData.photo.file_path}`; 
-        // Construct the full URL for the user's profile picture
-    }
-
-    // Create profile picture element
-    const profilePicture = document.createElement('img');
-    profilePicture.src = profilePictureUrl;
-    profilePicture.style.width = '40px';
-    profilePicture.style.height = '40px';
-    profilePicture.style.borderRadius = '50%';
-    profilePicture.style.objectFit = 'cover';
-    profilePicture.style.marginRight = '10px';
+        // Create profile picture
+        const profilePicture = document.createElement('div');
+        profilePicture.style.width = '30px';
+        profilePicture.style.height = '30px';
+        profilePicture.style.borderRadius = '50%';
+        profilePicture.style.backgroundColor = color;
+        profilePicture.style.display = 'flex';
+        profilePicture.style.justifyContent = 'center';
+        profilePicture.style.alignItems = 'center';
+        profilePicture.style.color = '#ffffff';
+        profilePicture.style.fontWeight = 'bold';
+        profilePicture.style.fontSize = '16px';
+        profilePicture.innerText = profileInitial;
+        profilePicture.style.marginRight = '10px';
         
         // Create username container (to hold both name and rank)
         const usernameContainer = document.createElement('div');
@@ -587,7 +584,7 @@ const telegramUserData = await getTelegramUserData(); // Fetch the Telegram user
         // Create an image element for the profile picture
         const profilePicture = document.createElement('img');
         profilePicture.src = user.photo_url || 'https://via.placeholder.com/60'; // Fallback to default avatar
-        profilePicture.alt = user.username;
+        profilePicture.alt = user.photo_url;
 
         // Create a container for the user details (username and rank)
         const userDetails = document.createElement('div');
@@ -610,18 +607,6 @@ const telegramUserData = await getTelegramUserData(); // Fetch the Telegram user
         // Append the profile picture and user details to the user-rank section
         userRankElement.appendChild(profilePicture);
         userRankElement.appendChild(userDetails);
-
-        async function getTelegramUserData() {
-    // Call your backend or use an API request to get the user's Telegram data
-    try {
-        const response = await fetch('https://api.telegram.org/bot8047643548:AAH9GroXRXG3bD8OGa6rBN-grgIGk1pM6LM/getChat?chat_id=<user_id>');
-        const data = await response.json();
-        return data.result;  // The user data is in the 'result' object
-    } catch (error) {
-        console.error('Error fetching Telegram user data:', error);
-        return {};
-    }
-}
 
 </script>
 </div>
