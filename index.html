@@ -206,21 +206,18 @@ background-color: #000000;
     .profile-picture {
         margin-right: 10px; /* Space between profile picture and user details */
     }
-.user-details {
-                   display: flex;
-            flex-direction: column;
-    }
-
-            .rank-details {
+ .user-details {
         display: inline-block; /* Aligns user details inline with the profile picture */
         width: calc(100% - 70px); /* Make room for profile picture */
         position: relative; /* Needed for absolute positioning of rank info */
         color: #000000; /* Text color for visibility */
     }
+    .rank-details {
+        text-align: right; /* Aligns text to the right */
+        width: 100%; /* Full width for right alignment */
+    }
     .rank-info {
-        position: absolute; /* Position rank info absolutely */
-        right: 0; /* Align it to the right */
-        bottom: 0; /* Adjust position to bottom */
+        margin-left: 10px; /* Adds space between rank texts */
     }
 
         .username {
@@ -628,33 +625,39 @@ if (user.photo_url) {
 const userDetails = document.createElement('div');
 userDetails.classList.add('user-details');
 
-// Create a container for the user details (username and ranks)
-const rankDetails = document.createElement('div');
-rankDetails.classList.add('rank-details');
-
 // Create a span for the username
 const usernameSpan = document.createElement('span');
 usernameSpan.innerText = user.username || user.first_name || "User";
 usernameSpan.classList.add('username');
+
+// Create a container for rank details
+const rankDetails = document.createElement('div');
+rankDetails.classList.add('rank-details');
 
 // Create the first rank info span
 const rankInfoSpan = document.createElement('span');
 rankInfoSpan.innerText = `Rank: #${Math.floor(Math.random() * 1000) + 1}`; // Simulate a random rank
 rankInfoSpan.classList.add('rank-info');
 rankInfoSpan.style.float = 'right'; // Align rank info to the right
+rankInfoSpan.style.color = "#000000"; // Set rank text color to black
 
 // Create the second rank info span for additional text
 const additionalRankInfoSpan = document.createElement('span');
 additionalRankInfoSpan.innerText = "Additional Info"; // Replace with your desired text
+additionalRankInfoSpan.style.color = "#000000"; // Set additional text color to black
 
-// Append the username and rank to the user details container
+// Append the username and additional text to the user details container
 userDetails.appendChild(usernameSpan);
 userDetails.appendChild(additionalRankInfoSpan);
-rankDetails.appendChild(rankInfoSpan); // Append the additional rank info
+
+// Append the rank info to the rank details container
+rankDetails.appendChild(rankInfoSpan); // Append the rank info
 
 // Append the profile picture and user details to the user-rank section
 userRankElement.appendChild(profilePicture);
 userRankElement.appendChild(userDetails);
+userRankElement.appendChild(rankDetails); // Append the rank details to the user-rank section
+
 
 
 
