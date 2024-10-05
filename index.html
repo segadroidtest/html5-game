@@ -218,8 +218,9 @@ background-color: #000000;
         color: #000000; /* Text color for visibility */
     }
     .rank-info {
-        margin-left: 10px; /* Adds space between rank texts */
-        color: #000000; /* Text color for visibility */
+        position: absolute; /* Position rank info absolutely */
+        right: 0; /* Align it to the right */
+        bottom: 0; /* Adjust position to bottom */
     }
 
         .username {
@@ -640,7 +641,7 @@ usernameSpan.classList.add('username');
 const rankInfoSpan = document.createElement('span');
 rankInfoSpan.innerText = `Rank: #${Math.floor(Math.random() * 1000) + 1}`; // Simulate a random rank
 rankInfoSpan.classList.add('rank-info');
-rankInfoSpan.style.float = 'right';
+rankInfoSpan.style.float = 'right'; // Align rank info to the right
 
 // Create the second rank info span for additional text
 const additionalRankInfoSpan = document.createElement('span');
