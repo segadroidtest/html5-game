@@ -624,6 +624,18 @@ profilePicture.classList.add('profile-picture');
 
 // Check if the user has a profile picture; if not, create one with the first character
 if (user.photo_url) {
+    // Create an image element for the profile picture
+    const imgElement = document.createElement('img');
+    imgElement.src = user.photo_url;
+    imgElement.alt = "Profile Picture"; // Set a default alt text
+    imgElement.style.width = "60px"; // Set width
+    imgElement.style.height = "60px"; // Set height
+    imgElement.style.borderRadius = "50%"; // Make it a circle
+    imgElement.style.objectFit = "cover"; // Ensure the image covers the container
+    profilePicture.appendChild(imgElement);
+}
+ else {
+    // Create a colored circle for the profile picture with the first character
 const profileCharacter = (user.username || user.first_name || "User").charAt(0).toUpperCase();
 profilePicture.innerText = profileCharacter; // Set the text to the first character
 profilePicture.style.width = "60px"; // Set width
@@ -637,6 +649,9 @@ profilePicture.style.color = "#ffffff"; // Text color
 profilePicture.style.backgroundColor = "#4CAF50"; // Background color, can be randomized
 profilePicture.style.lineHeight = "60px"; // Center the text vertically
 profilePicture.style.textAlign = "center"; // Center the text horizontally
+
+
+}
 
 
 }
