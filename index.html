@@ -661,7 +661,6 @@ if (user.photo_url) {
     profilePicture.style.boxSizing = "border-box"; // Ensure padding/border doesn't affect width/height
 }
 
-
 // Create a container for the user details (username and ranks)
 const userDetails = document.createElement('div');
 userDetails.classList.add('user-details');
@@ -681,7 +680,6 @@ rankInfoSpan.innerText = "321 XYZ"; // Replace with your desired text
 rankInfoSpan.style.color = "white"; // Set additional text color to black
 rankInfoSpan.style.float = 'right'; // Align rank info to the right
 
-
 // Create the second rank info span for additional text
 const additionalRankInfoSpan = document.createElement('span');
 additionalRankInfoSpan.innerText = `Rank: #${Math.floor(Math.random() * 1000) + 1}`; // Simulate a random rank
@@ -700,6 +698,7 @@ rankDetails.appendChild(rankInfoSpan); // Append the rank info
 userRankElement.appendChild(profilePicture);
 userRankElement.appendChild(userDetails);
 userRankElement.appendChild(rankDetails); // Append the rank details to the user-rank section
+
 
 
 
