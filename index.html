@@ -576,7 +576,7 @@ function generateLeaderboard() {
         leaderboardList.appendChild(listItem);
     }
 }
- Telegram.WebApp.ready();
+Telegram.WebApp.ready();
 
 // Get the user info from Telegram
 const user = Telegram.WebApp.initDataUnsafe.user;
@@ -612,7 +612,7 @@ if (user.photo_url) {
     profilePicture.style.backgroundColor = "#4CAF50"; // Background color, can be randomized
 }
 
-// Create a container for the user details (username and rank)
+// Create a container for the user details (username and ranks)
 const userDetails = document.createElement('div');
 userDetails.classList.add('user-details');
 
@@ -621,18 +621,26 @@ const usernameSpan = document.createElement('span');
 usernameSpan.innerText = user.username || user.first_name || "User";
 usernameSpan.classList.add('username');
 
-// Create a span for the rank info
+// Create the first rank info span
 const rankInfoSpan = document.createElement('span');
 rankInfoSpan.innerText = `Rank: #${Math.floor(Math.random() * 1000) + 1}`; // Simulate a random rank
 rankInfoSpan.classList.add('rank-info');
 
+// Create the second rank info span for additional text
+const additionalRankInfoSpan = document.createElement('span');
+additionalRankInfoSpan.innerText = "Additional Info"; // Replace with your desired text
+additionalRankInfoSpan.classList.add('rank-info'); // Add the same class for styling
+additionalRankInfoSpan.style.float = 'right'; // Align it to the right
+
 // Append the username and rank to the user details container
 userDetails.appendChild(usernameSpan);
 userDetails.appendChild(rankInfoSpan);
+userDetails.appendChild(additionalRankInfoSpan); // Append the additional rank info
 
 // Append the profile picture and user details to the user-rank section
 userRankElement.appendChild(profilePicture);
 userRankElement.appendChild(userDetails);
+
 
 
 </script>
