@@ -640,15 +640,17 @@ rankDetails.classList.add('rank-details');
 
 // Create the first rank info span
 const rankInfoSpan = document.createElement('span');
-rankInfoSpan.innerText = `Rank: #${Math.floor(Math.random() * 1000) + 1}`; // Simulate a random rank
-rankInfoSpan.classList.add('rank-info');
+rankInfoSpan.innerText = "315 XYZ"; // Replace with your desired text
+rankInfoSpan.style.color = "#000000"; // Set additional text color to black
 rankInfoSpan.style.float = 'right'; // Align rank info to the right
-rankInfoSpan.style.color = "#000000"; // Set rank text color to black
+
 
 // Create the second rank info span for additional text
 const additionalRankInfoSpan = document.createElement('span');
-additionalRankInfoSpan.innerText = "Additional Info"; // Replace with your desired text
-additionalRankInfoSpan.style.color = "#000000"; // Set additional text color to black
+additionalRankInfoSpan.innerText = `Rank: #${Math.floor(Math.random() * 1000) + 1}`; // Simulate a random rank
+additionalRankInfoSpan.classList.add('rank-info');
+additionalRankInfoSpan.style.float = 'right'; // Align rank info to the right
+additionalRankInfoSpan.style.color = "#000000"; // Set rank text color to black
 
 // Append the username and additional text to the user details container
 userDetails.appendChild(usernameSpan);
