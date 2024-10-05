@@ -201,6 +201,7 @@ background-color: #000000;
             border-radius: 50%;
             margin-right: 15px;
             border: 2px solid #ddd;
+            object-fit: cover;
         }
 
         .user-details {
@@ -578,13 +579,19 @@ function generateLeaderboard() {
         // Get the user info from Telegram
         const user = Telegram.WebApp.initDataUnsafe.user;
 
+        // Log the user data to check if it's being received correctly
+        console.log('User Data:', user);
+
         // Select the user-rank element
         const userRankElement = document.getElementById('user-rank');
 
         // Create an image element for the profile picture
         const profilePicture = document.createElement('img');
         profilePicture.src = user.photo_url || 'https://via.placeholder.com/60'; // Fallback to default avatar
-        profilePicture.alt = user.username;
+        profilePicture.alt = 'Profile Picture';
+        profilePicture.onerror = function() { // Handle error if image fails to load
+            profilePicture.src = 'https://via.placeholder.com/60';
+        };
 
         // Create a container for the user details (username and rank)
         const userDetails = document.createElement('div');
@@ -592,12 +599,20 @@ function generateLeaderboard() {
 
         // Create a span for the username
         const usernameSpan = document.createElement('span');
-        usernameSpan.innerText = user.username || user.first_name || "User";
         usernameSpan.classList.add('username');
+
+        // Set the text content to the username or first_name, with a fallback
+        if (user.username) {
+            usernameSpan.textContent = user.username;
+        } else if (user.first_name) {
+            usernameSpan.textContent = user.first_name;
+        } else {
+            usernameSpan.textContent = 'User';
+        }
 
         // Create a span for the rank info
         const rankInfoSpan = document.createElement('span');
-        rankInfoSpan.innerText = `Rank: #${Math.floor(Math.random() * 1000) + 1}`; // Simulate a random rank
+        rankInfoSpan.textContent = `Rank: #${Math.floor(Math.random() * 1000) + 1}`; // Simulate a random rank
         rankInfoSpan.classList.add('rank-info');
 
         // Append the username and rank to the user details container
