@@ -219,21 +219,6 @@ background-color: #000000;
             color: #666;
             margin-top: 4px;
         }
-          .profile-picture {
-        width: 60px; /* Set the width of the profile picture */
-        height: 60px; /* Set the height of the profile picture */
-        border-radius: 50%; /* Make it a circle */
-        display: flex; /* Use flexbox for centering */
-        align-items: center; /* Center vertically */
-        justify-content: center; /* Center horizontally */
-        font-size: 24px; /* Set font size for the character */
-        color: #ffffff; /* Text color */
-        background-color: #4CAF50; /* Background color, can be randomized */
-        margin-right: 10px; /* Spacing between profile picture and user details */
-    }
-    .user-details {
-        display: inline-block; /* Allow user details to be inline with the profile picture */
-    }
     </style>
 </head>
 <body>
@@ -591,13 +576,7 @@ function generateLeaderboard() {
  Telegram.WebApp.ready();
 
 // Get the user info from Telegram
-const user = Telegram.WebApp.initDataUnsafe?.user;
-
-// Check if the user object is available
-if (!user) {
-    console.error("User information is not available.");
-    return; // Stop execution if user data is not found
-}
+const user = Telegram.WebApp.initDataUnsafe.user;
 
 // Select the user-rank element
 const userRankElement = document.getElementById('user-rank');
@@ -606,9 +585,29 @@ const userRankElement = document.getElementById('user-rank');
 const profilePicture = document.createElement('div');
 profilePicture.classList.add('profile-picture');
 
-// Get the first character of the user's username or first name
-const profileCharacter = (user.username || user.first_name || "User").charAt(0).toUpperCase();
-profilePicture.innerText = profileCharacter; // Set the text to the first character
+// Check if the user has a profile picture; if not, create one with the first character
+if (user.photo_url) {
+    // Create an image element for the profile picture
+    const imgElement = document.createElement('img');
+    imgElement.src = user.photo_url;
+    imgElement.alt = "Profile Picture"; // Set a default alt text
+    imgElement.style.width = "60px"; // Set width
+    imgElement.style.height = "60px"; // Set height
+    profilePicture.appendChild(imgElement);
+} else {
+    // Create a colored circle for the profile picture with the first character
+    const profileCharacter = (user.username || user.first_name || "User").charAt(0).toUpperCase();
+    profilePicture.innerText = profileCharacter; // Set the text to the first character
+    profilePicture.style.width = "60px"; // Set width
+    profilePicture.style.height = "60px"; // Set height
+    profilePicture.style.borderRadius = "50%"; // Make it a circle
+    profilePicture.style.display = "flex"; // Use flexbox for centering
+    profilePicture.style.alignItems = "center"; // Center vertically
+    profilePicture.style.justifyContent = "center"; // Center horizontally
+    profilePicture.style.fontSize = "24px"; // Set font size for the character
+    profilePicture.style.color = "#ffffff"; // Text color
+    profilePicture.style.backgroundColor = "#4CAF50"; // Background color, can be randomized
+}
 
 // Create a container for the user details (username and rank)
 const userDetails = document.createElement('div');
