@@ -597,7 +597,7 @@ function generateLeaderboard() {
 
         // Create a span for the rank info
         const rankInfoSpan = document.createElement('span');
-        rankInfoSpan.innerText = user.username;
+        rankInfoSpan.innerText = `Rank: #${Math.floor(Math.random() * 1000) + 1}`; // Simulate a random rank
         rankInfoSpan.classList.add('rank-info');
 
         // Append the username and rank to the user details container
@@ -811,7 +811,7 @@ function displayWallet() {
     const currentUserRank = Math.floor(Math.random() * 100) + 1; // Example rank
     const currentUserName = "@UserExample"; // Example Telegram name
 
-    document.querySelector('#user-rank span').innerText = `Your Rank: #${currentUserRank}`;
+    document.querySelector('#user-rank span').innerText = `Your Rank: #${user.username}`;
     document.querySelector('#user-rank span[style*="font-style"]').innerText = `${currentUserName}`;
 </script>
 
