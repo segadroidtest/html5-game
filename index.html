@@ -462,7 +462,9 @@ background-color: #000000;
         </div>
     </div>
        
-     <div id="page2" class="page" style="background: url(assets/img/back.png);color: #ffffff;padding: 20px;border-radius: 0px;width: auto;margin: 0 auto;box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);height: 100%;overflow-y: hidden;">
+     <div id="page2" class="page" style="background: url(assets/img/back.png);color: #ffffff;padding: 20px;border-radius: 0px;width: auto;margin: 0 auto;box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);height: 100%;
+    height: calc(100vh - 100px);
+    overflow-y: auto;">
   <h2 style="text-align: center; color: #402104; font-size: 28px; margin-top: 0; font-family: system-ui;margin-bottom: 15px;">LEADERBOARD</h2>
   <p style="text-align: center; color: #402104; margin-top: -10px;">Ranks</p>
 
@@ -482,11 +484,12 @@ background-color: #000000;
     max-height: 60vh;
     overflow: hidden; /* Hide overflow for container */
   ">
-    <div class="leaderboard-header" style="border: none !important;background: #894507;padding-left: 15px;padding-right: 15px;padding-top: 10px;margin-top: 0;padding-bottom: 10px;position: sticky; top: 0; z-index: 10;">
+    <div class="leaderboard-header" style="border: none !important;background: #894507;padding-left: 15px;padding-right: 15px;padding-top: 10px;margin-top: 0;padding-bottom: 30px;position: sticky; top: 0; z-index: 10;">
       <span style="float: left;">Players Name</span>
       <span style="float: right;">Points Earned</span>
     </div>
     <ul id="leaderboard-list" style="
+        scrollbar-width: none;
         list-style: none; 
         padding: 0; 
         margin: 0; 
@@ -621,21 +624,9 @@ profilePicture.classList.add('profile-picture');
 
 // Check if the user has a profile picture; if not, create one with the first character
 if (user.photo_url) {
-    // Create an image element for the profile picture
-    const imgElement = document.createElement('img');
-    imgElement.src = user.photo_url;
-    imgElement.alt = "Profile Picture"; // Set a default alt text
-    imgElement.style.width = "60px"; // Set width
-    imgElement.style.height = "60px"; // Set height
-    imgElement.style.borderRadius = "50%"; // Make it a circle
-    imgElement.style.objectFit = "cover"; // Ensure the image covers the container
-    profilePicture.appendChild(imgElement);
-}
- else {
-    // Create a colored circle for the profile picture with the first character
 const profileCharacter = (user.username || user.first_name || "User").charAt(0).toUpperCase();
 profilePicture.innerText = profileCharacter; // Set the text to the first character
-profilePicture.style.width = "90px"; // Set width
+profilePicture.style.width = "60px"; // Set width
 profilePicture.style.height = "60px"; // Set height
 profilePicture.style.borderRadius = "50%"; // Make it a circle
 profilePicture.style.display = "flex"; // Use flexbox for centering
@@ -644,7 +635,7 @@ profilePicture.style.justifyContent = "center"; // Center horizontally
 profilePicture.style.fontSize = "24px"; // Set font size for the character
 profilePicture.style.color = "#ffffff"; // Text color
 profilePicture.style.backgroundColor = "#4CAF50"; // Background color, can be randomized
-profilePicture.style.lineHeight = "20px"; // Center the text vertically
+profilePicture.style.lineHeight = "60px"; // Center the text vertically
 profilePicture.style.textAlign = "center"; // Center the text horizontally
 
 
