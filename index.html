@@ -206,10 +206,16 @@ background-color: #000000;
     .profile-picture {
         margin-right: 10px; /* Space between profile picture and user details */
     }
-        .user-details {
-            display: flex;
-            flex-direction: column;
-        }
+.user-details {
+        display: inline-block; /* Aligns user details inline with the profile picture */
+        width: calc(100% - 70px); /* Make room for profile picture */
+        position: relative; /* Needed for absolute positioning of rank info */
+        color: #000000; /* Text color for visibility */
+    }
+    .rank-info {
+        margin-left: 10px; /* Adds space between rank texts */
+        color: #000000; /* Text color for visibility */
+    }
 
         .username {
             font-size: 18px;
