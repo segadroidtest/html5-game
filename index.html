@@ -496,12 +496,12 @@ background-color: #000000;
                                 ${user.username ? user.username.charAt(0).toUpperCase() : 'U'}
                             </div>
                             <div style="margin-left: 10px;">
-                                <span>${user.username || "User"}</span>
+                                <span style="font-weight: bold;">${user.username || "User"}</span>
                                 <span style="display: block; color: white;">Rank: #${telegramUserRank}</span>
                             </div>
                         </div>
 <span style="color: white; margin-left: auto;">
-  ${telegramUserPoints} <img src="assets/img/littlediamond.png" style="width: 19px; height:19px;border: none !important">
+  ${telegramUserPoints} <img src="assets/img/littlediamond.png" style="width: 19px; height:19px;border: none !important; margin-top:-4px;">
 </span>
                     </div>
                 `;
@@ -549,6 +549,7 @@ background-color: #000000;
             const usernameSpan = document.createElement('span');
             usernameSpan.innerText = username;
             usernameSpan.style.fontSize = '15px';
+            usernameSpan.style.fontWeight = 'bold';
 
             const rankSpan = document.createElement('span');
             rankSpan.innerText = `Rank: #${rank}`;
