@@ -537,6 +537,9 @@ background-color: #000000;
             profilePicture.style.marginRight = '10px';
 
             const usernameContainer = document.createElement('div');
+            usernameContainer.style.display = 'flex';
+            usernameContainer.style.flexDirection = 'column';
+
             const usernameSpan = document.createElement('span');
             usernameSpan.innerText = username;
             usernameSpan.style.fontSize = '15px';
@@ -545,6 +548,7 @@ background-color: #000000;
             rankSpan.innerText = `Rank: #${rank}`;
             rankSpan.style.fontSize = '13px';
             rankSpan.style.color = 'white';
+            rankSpan.style.marginTop = '4px';
 
             usernameContainer.appendChild(usernameSpan);
             usernameContainer.appendChild(rankSpan);
@@ -562,6 +566,7 @@ background-color: #000000;
         }
     }
 </script>
+
 
 </div>
 
