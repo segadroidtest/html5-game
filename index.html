@@ -460,7 +460,7 @@ background-color: #000000;
             <!-- Leaderboard items will be added here -->
         </ul>
     </div>
-    <p id="updated" style="text-align: left; margin-top: 10px; color: #864204;">Updated every 10 mins</p>
+    <p id="updated" style="text-align: left;margin-top: 5px;color: #864204;font-weight: 600;font-size: 15px;">Updated every 10 mins</p>
 
    <script>
     document.addEventListener('DOMContentLoaded', generateLeaderboard);
@@ -500,7 +500,9 @@ background-color: #000000;
                                 <span style="display: block; color: white;">Rank: #${telegramUserRank}</span>
                             </div>
                         </div>
-                        <span style="color: white; margin-left: auto;">${telegramUserPoints} XYZ</span>
+<span style="color: white; margin-left: auto;">
+  ${telegramUserPoints} <img src="assets/img/littlediamond.png" style="height: 15px;">
+</span>
                     </div>
                 `;
             }
@@ -558,9 +560,11 @@ background-color: #000000;
             usernameContainer.appendChild(rankSpan);
 
             const pointsSpan = document.createElement('span');
-            pointsSpan.innerText = `${points} XYZ`;
-            pointsSpan.style.color = 'white';
-            pointsSpan.style.marginLeft = 'auto';
+// Assuming `pointsSpan` is your element for displaying points and currency
+pointsSpan.innerHTML = `${points} <img src="assets/img/littlediamond.png" style="height: 15px;">`;
+pointsSpan.style.color = 'white';
+pointsSpan.style.marginLeft = 'auto';
+
 
             listItem.appendChild(profilePicture);
             listItem.appendChild(usernameContainer);
