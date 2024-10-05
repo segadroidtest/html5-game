@@ -202,7 +202,7 @@ background-color: #000000;
     border: 1px solid #a04e14;
     color: white !important;
         border-radius: 10px; /* Rounded corners */
-    border-bottom: 15px;
+    margin-bottom: 20px;
     
     }
 
@@ -547,7 +547,7 @@ function generateLeaderboard() {
         listItem.style.alignItems = 'center';
         listItem.style.padding = '10px';
         listItem.style.borderBottom = '1px solid #a24e03';
-        listItem.style.width = i === 1 ? '100%' : 'auto'; // Fix width for first user
+        listItem.style.width = 'auto'; // Fix width for first user
         
         // Create profile picture
         const profilePicture = document.createElement('div');
@@ -571,13 +571,13 @@ function generateLeaderboard() {
         const usernameSpan = document.createElement('span');
         usernameSpan.innerText = username;
         usernameSpan.style.display = 'block'; // Force block to stack name and rank
-        usernameSpan.style.fontSize = '14px'; // Adjust font size
+        usernameSpan.style.fontSize = '15px'; // Adjust font size
         
         // Create rank span below the username
         const rankSpan = document.createElement('span');
         rankSpan.innerText = `Rank: #${i}`;
-        rankSpan.style.fontSize = '12px';
-        rankSpan.style.color = '#888888'; // Lighter color for rank
+        rankSpan.style.fontSize = '13px';
+        rankSpan.style.color = 'white'; // Lighter color for rank
 
         // Append username and rank to container
         usernameContainer.appendChild(usernameSpan);
@@ -586,7 +586,7 @@ function generateLeaderboard() {
         // Create points span
         const pointsSpan = document.createElement('span');
         pointsSpan.innerText = `${points} XYZ`;
-        pointsSpan.style.color = '#FFD700'; // Golden color for points
+        pointsSpan.style.color = 'white'; // Golden color for points
         pointsSpan.style.marginLeft = 'auto'; // Push points to the right
 
         // Append elements to list item
@@ -656,7 +656,7 @@ rankDetails.classList.add('rank-details');
 
 // Create the first rank info span
 const rankInfoSpan = document.createElement('span');
-rankInfoSpan.innerText = "315 XYZ"; // Replace with your desired text
+rankInfoSpan.innerText = "${points} XYZ"; // Replace with your desired text
 rankInfoSpan.style.color = "#000000"; // Set additional text color to black
 rankInfoSpan.style.float = 'right'; // Align rank info to the right
 
