@@ -446,9 +446,18 @@ background-color: #000000;
   <p style="text-align: center; color: #402104; margin-top: -10px;">Ranks</p>
 
   <!-- Current User Rank -->
-      <div id="user-rank" class="user-info" style=" width: auto !important;!i;!; background: #bf5d05; color: white !important;!i;!; border: 1px solid #a34e03; ">
-        <!-- User Profile Picture and Username will be inserted here -->
+    <div id="user-rank" class="user-info" style="width: auto !important; background: #bf5d05; color: white !important; border: 1px solid #a34e03; display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+    <!-- User Profile Picture and Username will be inserted here -->
+    <div style="display: flex; align-items: center;">
+        <div class="profile-picture" style="margin-right: 10px;"></div>
+        <div class="user-details">
+            <span id="user-username" class="username"></span>
+            <span id="user-rank-info" class="rank-info" style="color: white;"></span>
+        </div>
     </div>
+    <!-- Points displayed here -->
+    <span id="user-points" style="color: white;">0 XYZ</span>
+</div>
 
 
 
