@@ -602,6 +602,7 @@ if (userRankElement) {
     userRankElement.style.width = "100%"; // Set to 100% or your desired width
     userRankElement.style.display = "flex"; // Use flexbox for alignment
     userRankElement.style.alignItems = "center"; // Center items vertically
+    userRankElement.style.justifyContent = "space-between"; // Space items evenly
 
     // Create a container for the profile picture
     const profilePicture = document.createElement('div');
@@ -651,23 +652,27 @@ if (userRankElement) {
 
     // Create the second rank info span for additional text
     const additionalRankInfoSpan = document.createElement('span');
-    additionalRankInfoSpan.innerText = "0 xyz"; // Set static text to "0 xyz"
+    additionalRankInfoSpan.innerText = `Rank: #${Math.floor(Math.random() * 1000) + 1}`; // Simulate a random rank
     additionalRankInfoSpan.classList.add('rank-info');
     additionalRankInfoSpan.style.color = "white"; // Set rank text color to white
 
-    // Append the username and additional text to the user details container
+    // Create a span for the additional "0 xyz" text
+    const additionalTextSpan = document.createElement('span');
+    additionalTextSpan.innerText = "0 xyz"; // Add static text "0 xyz"
+    additionalTextSpan.style.color = "white"; // Set text color to white
+    additionalTextSpan.style.marginLeft = "auto"; // Push this to the right
+
+    // Append the username and additional rank info to the user details container
     userDetails.appendChild(usernameSpan);
     userDetails.appendChild(additionalRankInfoSpan);
 
     // Append the profile picture and user details to the user-rank section
     userRankElement.appendChild(profilePicture);
     userRankElement.appendChild(userDetails);
+    userRankElement.appendChild(additionalTextSpan); // Append the additional "0 xyz" text
 } else {
     console.error("User rank element not found.");
 }
-
-
-
 
 
 </script>
