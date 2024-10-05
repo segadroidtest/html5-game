@@ -202,11 +202,17 @@ background-color: #000000;
         border-radius: 8px; /* Rounded corners */
     }
 
-    .profile-picture {
-        width: 60px !important; /* Consistent width */
-        height: 60px !important; /* Consistent height */
-        margin-right: 10px; /* Space between picture and text */
-    }
+.profile-picture {
+    width: 60px; /* Consistent width */
+    height: 60px; /* Consistent height */
+    border-radius: 50%; /* Make it a circle */
+    overflow: hidden; /* Ensure anything outside the circle is hidden */
+    display: flex; /* Use flexbox for centering */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+    margin-right: 10px; /* Space between picture and text */
+}
+
 
     .user-details {
         display: flex; /* Use flexbox for layout */
@@ -609,8 +615,10 @@ if (user.photo_url) {
     imgElement.style.width = "60px"; // Set width
     imgElement.style.height = "60px"; // Set height
     imgElement.style.borderRadius = "50%"; // Make it a circle
+    imgElement.style.objectFit = "cover"; // Ensure the image covers the container
     profilePicture.appendChild(imgElement);
-} else {
+}
+ else {
     // Create a colored circle for the profile picture with the first character
     const profileCharacter = (user.username || user.first_name || "User").charAt(0).toUpperCase();
     profilePicture.innerText = profileCharacter; // Set the text to the first character
