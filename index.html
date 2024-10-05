@@ -221,6 +221,7 @@ background-color: #000000;
         display: inline-block; /* Aligns user details inline with the profile picture */
         width: calc(100% - 70px); /* Make room for profile picture */
         position: relative; /* Needed for absolute positioning of rank info */
+        color: #000000; /* Text color for visibility */
     }
     .rank-info {
         position: absolute; /* Position rank info absolutely */
@@ -645,6 +646,7 @@ userDetails.appendChild(rankInfoSpan); // Append rank info after balance
 // Append the profile picture and user details to the user-rank section
 userRankElement.appendChild(profilePicture);
 userRankElement.appendChild(userDetails);
+
 
 
 
