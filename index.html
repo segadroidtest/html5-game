@@ -463,7 +463,7 @@ background-color: #000000;
     <p id="updated" style="text-align: left; margin-top: 10px; color: #864204;">Updated every 10 mins</p>
 
     <script>
-document.addEventListener('DOMContentLoaded', generateLeaderboard);
+ document.addEventListener('DOMContentLoaded', generateLeaderboard);
 
     function generateLeaderboard() {
         const leaderboardList = document.getElementById('leaderboard-list');
@@ -500,7 +500,10 @@ document.addEventListener('DOMContentLoaded', generateLeaderboard);
                                 <span style="display: block; color: white;">Rank: #${telegramUserRank}</span>
                             </div>
                         </div>
-                        <span style="color: white; margin-left: auto;">${telegramUserPoints} XYZ</span>
+                        <div style="display: flex; align-items: center; margin-left: auto;">
+                            <span style="color: white; margin-right: 5px;">${telegramUserPoints}</span>
+                            <img src="assets/img/littlediamond.png" alt="Currency" style="width: 16px; height: 16px;">
+                        </div>
                     </div>
                 `;
             }
