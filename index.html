@@ -214,25 +214,22 @@ background-color: #000000;
             color: #333;
         }
 
-    .profile-picture {
-        margin-right: 10px; /* Space between profile picture and user details */
-    }
-    .user-details {
-        display: inline-block; /* Aligns user details inline with the profile picture */
-        width: calc(100% - 70px); /* Make room for profile picture */
-        position: relative; /* Needed for absolute positioning of rank info */
-        color: #000000; /* Text color for visibility */
-    }
-    .rank-info {
-        position: absolute; /* Position rank info absolutely */
-        right: 0; /* Align it to the right */
-        bottom: 0; /* Adjust position to bottom */
-    }
-                    .balance {
+        .rank-info {
             font-size: 14px;
             color: #666;
             margin-top: 4px;
         }
+                .balance {
+            font-size: 14px;
+            color: #666;
+            margin-top: 4px;
+        }
+            .profile-picture {
+        margin-right: 10px; /* Space between profile picture and user details */
+    }
+    .user-details {
+        display: inline-block; /* Aligns user details inline with the profile picture */
+    }
     </style>
 </head>
 <body>
@@ -587,7 +584,7 @@ function generateLeaderboard() {
         leaderboardList.appendChild(listItem);
     }
 }
-Telegram.WebApp.ready();
+ Telegram.WebApp.ready();
 
 // Get the user info from Telegram
 const user = Telegram.WebApp.initDataUnsafe.user;
@@ -632,27 +629,18 @@ const usernameSpan = document.createElement('span');
 usernameSpan.innerText = user.username || user.first_name || "User";
 usernameSpan.classList.add('username');
 
-// Create a span for the current balance
-const balanceSpan = document.createElement('span');
-balanceSpan.innerText = `Balance: $${(Math.random() * 1000).toFixed(2)}`; // Random balance for demonstration
-balanceSpan.classList.add('balance');
-
 // Create a span for the rank info
 const rankInfoSpan = document.createElement('span');
 rankInfoSpan.innerText = `Rank: #${Math.floor(Math.random() * 1000) + 1}`; // Simulate a random rank
 rankInfoSpan.classList.add('rank-info');
-rankInfoSpan.style.float = 'right'; // Align rank info to the right
 
-// Append the username and balance to the user details container
+// Append the username and rank to the user details container
 userDetails.appendChild(usernameSpan);
-userDetails.appendChild(balanceSpan);
-userDetails.appendChild(rankInfoSpan); // Append rank info after balance
+userDetails.appendChild(rankInfoSpan);
 
 // Append the profile picture and user details to the user-rank section
 userRankElement.appendChild(profilePicture);
 userRankElement.appendChild(userDetails);
-
-
 
 
 </script>
