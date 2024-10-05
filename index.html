@@ -198,8 +198,12 @@ background-color: #000000;
         align-items: center; /* Center items vertically */
         justify-content: space-between; /* Space between items */
         padding: 10px; /* Padding around the element */
-        background-color: #f9f9f9; /* Background color for visibility */
-        border-radius: 8px; /* Rounded corners */
+           background-color: #bd5d1a;
+    border: 1px solid #a04e14;
+    color: white !important;
+        border-radius: 10px; /* Rounded corners */
+    border-bottom: 15px;
+    
     }
 
 .profile-picture {
@@ -622,7 +626,7 @@ if (user.photo_url) {
     // Create a colored circle for the profile picture with the first character
 const profileCharacter = (user.username || user.first_name || "User").charAt(0).toUpperCase();
 profilePicture.innerText = profileCharacter; // Set the text to the first character
-profilePicture.style.width = "80px"; // Set width
+profilePicture.style.width = "90px"; // Set width
 profilePicture.style.height = "60px"; // Set height
 profilePicture.style.borderRadius = "50%"; // Make it a circle
 profilePicture.style.display = "flex"; // Use flexbox for centering
