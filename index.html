@@ -484,113 +484,98 @@ background-color: #000000;
 
 
 <script>
-
-   document.addEventListener('DOMContentLoaded', generateLeaderboard);
+document.addEventListener('DOMContentLoaded', generateLeaderboard);
 
 function generateLeaderboard() {
     const leaderboardList = document.getElementById('leaderboard-list');
-    
-    // Color palette for profile pictures
     const colors = ['#F28B82', '#FBBC05', '#34A853', '#4285F4', '#A142F4', '#FF6D01', '#46BD8B', '#FFBF00', '#FF4500', '#9932CC'];
-    
-    // A list of random, natural usernames
-    const usernames = [
-        'ShadowMaster', 'PixelKnight', 'CryptoWiz', 'StellarBlaze', 'DrakeKing', 'ZaraStorm', 'TigerPaw', 'LunaRider', 
-        'EchoBlade', 'QuantumWolf', 'NebulaSage', 'GalacticHawk', 'VortexDuke', 'VenomRider', 'SilentGhost', 
-        'PhoenixFlame', 'ThunderFox', 'IronDragon', 'AquaNinja', 'MysticLion', 'FlareWizard', 'BlazeStar', 'KnightRogue', 
-        'CosmicRider', 'StealthBlade', 'ViperQueen', 'ShadowHunter', 'BlizzardFox', 'FuryWraith', 'JadePhoenix', 'CrystalTiger',
-        // Add up to 1000 names here...
+    const usernames = ['ShadowMaster', 'PixelKnight', 'CryptoWiz', 'StellarBlaze', 'DrakeKing', 'ZaraStorm', 'TigerPaw', 'LunaRider', 
+        // Add more usernames if needed...
     ];
 
     const userCount = 1000;
-    const maxPoints = 1940;  // Starting points for the top-ranked player
-    const minPoints = 120;   // Minimum points for the lowest-ranked player
-    const pointsStep = 2;    // Decrease points by a consistent value
-    
-    // Function to get a random username
-    function getUniqueUsername(index) {
-        return usernames[index % usernames.length]; // Rotate through usernames
-    }
-    
-    // Function to get a random color for profile
-    function getRandomColor(index) {
-        return colors[index % colors.length]; // Rotate through colors
-    }
-    
-    // Clear previous content if any
-    leaderboardList.innerHTML = '';
+    const maxPoints = 1940; 
+    const minPoints = 120;   
+    const pointsStep = 2;    
 
-    // Generate leaderboard entries
     let currentPoints = maxPoints;
     
+    leaderboardList.innerHTML = '';
+
+    const leaderboardData = [];
+
+    // Fill leaderboard with initial data
     for (let i = 1; i <= userCount; i++) {
-        const username = getUniqueUsername(i);
-        const points = currentPoints > minPoints ? currentPoints : minPoints; // Ensure points don't go below minimum
-        const color = getRandomColor(i);
-        const profileInitial = username.charAt(0).toUpperCase();
-        
-        // Adjust points for the next user
+        leaderboardData.push({
+            rank: i,
+            username: usernames[i % usernames.length],
+            points: currentPoints > minPoints ? currentPoints : minPoints,
+            color: colors[i % colors.length]
+        });
         currentPoints -= pointsStep;
-        
-        // Create list item
+    }
+
+    // Update user rank and points based on Telegram data
+    const user = Telegram.WebApp.initDataUnsafe.user;
+    const userRank = 100; // Example user rank; you can fetch this from actual data
+    const userPoints = 1000; // Example user points
+
+    leaderboardData.splice(userRank - 1, 0, {
+        rank: userRank,
+        username: user.username || user.first_name || "User",
+        points: userPoints,
+        color: "#4CAF50" 
+    });
+
+    leaderboardData.forEach((entry, index) => {
         const listItem = document.createElement('li');
         listItem.style.display = 'flex';
         listItem.style.alignItems = 'center';
         listItem.style.padding = '10px';
         listItem.style.borderBottom = '1px solid #a24e03';
-        listItem.style.width = 'auto'; // Fix width for first user
-        
-        // Create profile picture
+
         const profilePicture = document.createElement('div');
         profilePicture.style.width = '30px';
         profilePicture.style.height = '30px';
         profilePicture.style.borderRadius = '50%';
-        profilePicture.style.backgroundColor = color;
+        profilePicture.style.backgroundColor = entry.color;
         profilePicture.style.display = 'flex';
         profilePicture.style.justifyContent = 'center';
         profilePicture.style.alignItems = 'center';
         profilePicture.style.color = '#ffffff';
         profilePicture.style.fontWeight = 'bold';
         profilePicture.style.fontSize = '16px';
-        profilePicture.innerText = profileInitial;
+        profilePicture.innerText = entry.username.charAt(0).toUpperCase();
         profilePicture.style.marginRight = '10px';
-        
-        // Create username container (to hold both name and rank)
-        const usernameContainer = document.createElement('div');
-        
-        // Create username span
-        const usernameSpan = document.createElement('span');
-        usernameSpan.innerText = username;
-        usernameSpan.style.display = 'block'; // Force block to stack name and rank
-        usernameSpan.style.fontSize = '15px'; // Adjust font size
-        
-        // Create rank span below the username
-        const rankSpan = document.createElement('span');
-        rankSpan.innerText = `Rank: #${i}`;
-        rankSpan.style.fontSize = '13px';
-        rankSpan.style.color = 'white'; // Lighter color for rank
 
-        // Append username and rank to container
+        const usernameContainer = document.createElement('div');
+        const usernameSpan = document.createElement('span');
+        usernameSpan.innerText = entry.username;
+        usernameSpan.style.fontSize = '15px';
+        
+        const rankSpan = document.createElement('span');
+        rankSpan.innerText = `Rank: #${index + 1}`;
+        rankSpan.style.fontSize = '13px';
+        rankSpan.style.color = 'white';
+
         usernameContainer.appendChild(usernameSpan);
         usernameContainer.appendChild(rankSpan);
         
-        // Create points span
         const pointsSpan = document.createElement('span');
-        pointsSpan.innerText = `${points} XYZ`;
-        pointsSpan.style.color = 'white'; // Golden color for points
-        pointsSpan.style.marginLeft = 'auto'; // Push points to the right
+        pointsSpan.innerText = `${entry.points} XYZ`;
+        pointsSpan.style.color = 'white';
+        pointsSpan.style.marginLeft = 'auto';
 
-        // Append elements to list item
         listItem.appendChild(profilePicture);
         listItem.appendChild(usernameContainer);
         listItem.appendChild(pointsSpan);
         
-        // Append list item to leaderboard
         leaderboardList.appendChild(listItem);
-    }
+    });
 }
-// Wait until the WebApp is ready
+
 Telegram.WebApp.ready();
+
 
 // Get the user info from Telegram
 const user = Telegram.WebApp.initDataUnsafe.user;
