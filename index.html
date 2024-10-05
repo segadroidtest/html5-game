@@ -811,7 +811,7 @@ function displayWallet() {
     const currentUserRank = Math.floor(Math.random() * 100) + 1; // Example rank
     const currentUserName = "@UserExample"; // Example Telegram name
 
-    document.querySelector('#user-rank span').innerText = `Your Rank: #${user.username}`;
+    document.querySelector('#user-rank span').innerText = `${user.username}`;
     document.querySelector('#user-rank span[style*="font-style"]').innerText = `${currentUserName}`;
 </script>
 
