@@ -594,9 +594,13 @@ const user = Telegram.WebApp.initDataUnsafe.user;
 // Select the user-rank element
 const userRankElement = document.getElementById('user-rank');
 
+// Set width to match leaderboard list width (example width; adjust as needed)
+userRankElement.style.width = "100%"; // Set to 100% or your desired width
+
 // Create a container for the profile picture
 const profilePicture = document.createElement('div');
 profilePicture.classList.add('profile-picture');
+profilePicture.style.marginRight = "10px"; // Add margin to the right
 
 // Check if the user has a profile picture; if not, create one with the first character
 if (user.photo_url) {
@@ -623,7 +627,7 @@ if (user.photo_url) {
     profilePicture.style.justifyContent = "center"; // Center horizontally
     profilePicture.style.fontSize = "24px"; // Set font size for the character
     profilePicture.style.color = "#ffffff"; // Text color
-    profilePicture.style.backgroundColor = "#4CAF50"; // Background color, can be randomized
+    profilePicture.style.backgroundColor = "#4CAF50"; // Background color
     profilePicture.style.overflow = "hidden"; // Hide any overflow to maintain the circle shape
     profilePicture.style.boxSizing = "border-box"; // Ensure padding/border doesn't affect width/height
 }
@@ -640,19 +644,18 @@ usernameSpan.classList.add('username');
 // Create a container for rank details
 const rankDetails = document.createElement('div');
 rankDetails.classList.add('rank-details');
+rankDetails.style.textAlign = "right"; // Align rank details to the right
 
 // Create the first rank info span
 const rankInfoSpan = document.createElement('span');
 rankInfoSpan.innerText = "321 XYZ"; // Replace with your desired text
-rankInfoSpan.style.color = "white"; // Set additional text color to black
-rankInfoSpan.style.float = 'right'; // Align rank info to the right
+rankInfoSpan.style.color = "white"; // Set additional text color to white
 
 // Create the second rank info span for additional text
 const additionalRankInfoSpan = document.createElement('span');
 additionalRankInfoSpan.innerText = `Rank: #${Math.floor(Math.random() * 1000) + 1}`; // Simulate a random rank
 additionalRankInfoSpan.classList.add('rank-info');
-additionalRankInfoSpan.style.float = 'right'; // Align rank info to the right
-additionalRankInfoSpan.style.color = "white"; // Set rank text color to black
+additionalRankInfoSpan.style.color = "white"; // Set rank text color to white
 
 // Append the username and additional text to the user details container
 userDetails.appendChild(usernameSpan);
@@ -661,11 +664,10 @@ userDetails.appendChild(additionalRankInfoSpan);
 // Append the rank info to the rank details container
 rankDetails.appendChild(rankInfoSpan); // Append the rank info
 
-// Append the profile picture and user details to the user-rank section
+// Append the profile picture, user details, and rank details to the user-rank section
 userRankElement.appendChild(profilePicture);
 userRankElement.appendChild(userDetails);
 userRankElement.appendChild(rankDetails); // Append the rank details to the user-rank section
-
 
 
 
