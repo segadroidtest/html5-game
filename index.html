@@ -207,7 +207,8 @@ background-color: #000000;
         margin-right: 10px; /* Space between profile picture and user details */
     }
 .user-details {
-        display: inline-block; /* Aligns user details inline with the profile picture */
+                   display: flex;
+            flex-direction: column;
         width: calc(100% - 70px); /* Make room for profile picture */
         position: relative; /* Needed for absolute positioning of rank info */
         color: #000000; /* Text color for visibility */
