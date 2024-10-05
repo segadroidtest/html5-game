@@ -183,17 +183,7 @@ background-color: #000000;
     text-align: center;
     opacity: 0.7;
 }
-        #user-rank {
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            width: 100%;
-            max-width: 400px;
-            margin: 20px auto;
-        }
+
 
         .user-info img {
             width: 60px;
@@ -203,17 +193,32 @@ background-color: #000000;
             border: 2px solid #ddd;
         }
 
+#user-rank {
+        display: flex; /* Use flexbox for layout */
+        align-items: center; /* Center items vertically */
+        justify-content: space-between; /* Space between items */
+        padding: 10px; /* Padding around the element */
+        background-color: #f9f9f9; /* Background color for visibility */
+        border-radius: 8px; /* Rounded corners */
+    }
+
     .profile-picture {
-        margin-right: 10px; /* Space between profile picture and user details */
+        width: 60px; /* Consistent width */
+        height: 60px; /* Consistent height */
+        margin-right: 10px; /* Space between picture and text */
     }
- .user-details {
-            display: flex;
-            flex-direction: column;
+
+    .user-details {
+        display: flex; /* Use flexbox for layout */
+        flex-direction: column; /* Arrange children vertically */
+        color: #000000; /* Text color for visibility */
     }
+
     .rank-details {
         text-align: right; /* Aligns text to the right */
         width: 100%; /* Full width for right alignment */
     }
+
     .rank-info {
         margin-left: 10px; /* Adds space between rank texts */
     }
@@ -603,6 +608,7 @@ if (user.photo_url) {
     imgElement.alt = "Profile Picture"; // Set a default alt text
     imgElement.style.width = "60px"; // Set width
     imgElement.style.height = "60px"; // Set height
+    imgElement.style.borderRadius = "50%"; // Make it a circle
     profilePicture.appendChild(imgElement);
 } else {
     // Create a colored circle for the profile picture with the first character
@@ -641,7 +647,7 @@ rankInfoSpan.style.color = "#000000"; // Set rank text color to black
 
 // Create the second rank info span for additional text
 const additionalRankInfoSpan = document.createElement('span');
-additionalRankInfoSpan.innerText = "0 XYZ"; // Replace with your desired text
+additionalRankInfoSpan.innerText = "Additional Info"; // Replace with your desired text
 additionalRankInfoSpan.style.color = "#000000"; // Set additional text color to black
 
 // Append the username and additional text to the user details container
