@@ -446,10 +446,9 @@ background-color: #000000;
   <p style="text-align: center; color: #402104; margin-top: -10px;">Ranks</p>
 
   <!-- Current User Rank -->
-    <div id="user-rank" class="user-info" style="width: auto !important; background: #bf5d05; color: white !important; border: 1px solid #a34e03; display: flex; justify-content: space-between; align-items: center; padding: 10px;">
- <span id="user-points" style="color: white;text-align: right;">0 XYZ</span>
- 
-</div>
+    <div id="user-rank" class="user-info" style=" width: auto !important;!i;!; background: #bf5d05; color: white !important;!i;!; border: 1px solid #a34e03; ">
+        <!-- User Profile Picture and Username will be inserted here -->
+    </div>
 
 
 
@@ -588,6 +587,7 @@ function generateLeaderboard() {
         leaderboardList.appendChild(listItem);
     }
 }
+// Wait until the WebApp is ready
 Telegram.WebApp.ready();
 
 // Get the user info from Telegram
@@ -596,69 +596,76 @@ const user = Telegram.WebApp.initDataUnsafe.user;
 // Select the user-rank element
 const userRankElement = document.getElementById('user-rank');
 
-// Set width to match leaderboard list width (example width; adjust as needed)
-userRankElement.style.width = "100%"; // Set to 100% or your desired width
+// Check if userRankElement exists before proceeding
+if (userRankElement) {
+    // Set width to match leaderboard list width
+    userRankElement.style.width = "100%"; // Set to 100% or your desired width
+    userRankElement.style.display = "flex"; // Use flexbox for alignment
+    userRankElement.style.alignItems = "center"; // Center items vertically
 
-// Create a container for the profile picture
-const profilePicture = document.createElement('div');
-profilePicture.classList.add('profile-picture');
-profilePicture.style.marginRight = "10px"; // Add margin to the right
+    // Create a container for the profile picture
+    const profilePicture = document.createElement('div');
+    profilePicture.classList.add('profile-picture');
+    profilePicture.style.marginRight = "10px"; // Add margin to the right
 
-// Check if the user has a profile picture; if not, create one with the first character
-if (user.photo_url) {
-    // Create an image element for the profile picture
-    const imgElement = document.createElement('img');
-    imgElement.src = user.photo_url;
-    imgElement.alt = "Profile Picture"; // Set a default alt text
-    imgElement.style.width = "60px"; // Set width
-    imgElement.style.height = "60px"; // Set height
-    imgElement.style.borderRadius = "50%"; // Make it a circle
-    imgElement.style.objectFit = "cover"; // Ensure the image covers the container
-    imgElement.style.display = "block"; // Ensure it behaves like a block element
-    imgElement.style.margin = "0 auto"; // Center the image
-    profilePicture.appendChild(imgElement);
+    // Check if the user has a profile picture; if not, create one with the first character
+    if (user.photo_url) {
+        // Create an image element for the profile picture
+        const imgElement = document.createElement('img');
+        imgElement.src = user.photo_url;
+        imgElement.alt = "Profile Picture"; // Set a default alt text
+        imgElement.style.width = "60px"; // Set width
+        imgElement.style.height = "60px"; // Set height
+        imgElement.style.borderRadius = "50%"; // Make it a circle
+        imgElement.style.objectFit = "cover"; // Ensure the image covers the container
+        imgElement.style.display = "block"; // Ensure it behaves like a block element
+        imgElement.style.margin = "0 auto"; // Center the image
+        profilePicture.appendChild(imgElement);
+    } else {
+        // Create a colored circle for the profile picture with the first character
+        const profileCharacter = (user.username || user.first_name || "User").charAt(0).toUpperCase();
+        profilePicture.innerText = profileCharacter; // Set the text to the first character
+        profilePicture.style.width = "60px"; // Set width
+        profilePicture.style.height = "60px"; // Set height
+        profilePicture.style.borderRadius = "50%"; // Make it a circle
+        profilePicture.style.display = "flex"; // Use flexbox for centering
+        profilePicture.style.alignItems = "center"; // Center vertically
+        profilePicture.style.justifyContent = "center"; // Center horizontally
+        profilePicture.style.fontSize = "24px"; // Set font size for the character
+        profilePicture.style.color = "#ffffff"; // Text color
+        profilePicture.style.backgroundColor = "#4CAF50"; // Background color
+        profilePicture.style.overflow = "hidden"; // Hide any overflow to maintain the circle shape
+        profilePicture.style.boxSizing = "border-box"; // Ensure padding/border doesn't affect width/height
+    }
+
+    // Create a container for the user details (username and ranks)
+    const userDetails = document.createElement('div');
+    userDetails.classList.add('user-details');
+    userDetails.style.display = "flex"; // Use flexbox for user details alignment
+    userDetails.style.flexDirection = "column"; // Stack username and rank info vertically
+
+    // Create a span for the username
+    const usernameSpan = document.createElement('span');
+    usernameSpan.innerText = user.username || user.first_name || "User";
+    usernameSpan.classList.add('username');
+
+    // Create the second rank info span for additional text
+    const additionalRankInfoSpan = document.createElement('span');
+    additionalRankInfoSpan.innerText = "0 xyz"; // Set static text to "0 xyz"
+    additionalRankInfoSpan.classList.add('rank-info');
+    additionalRankInfoSpan.style.color = "white"; // Set rank text color to white
+
+    // Append the username and additional text to the user details container
+    userDetails.appendChild(usernameSpan);
+    userDetails.appendChild(additionalRankInfoSpan);
+
+    // Append the profile picture and user details to the user-rank section
+    userRankElement.appendChild(profilePicture);
+    userRankElement.appendChild(userDetails);
 } else {
-    // Create a colored circle for the profile picture with the first character
-    const profileCharacter = (user.username || user.first_name || "User").charAt(0).toUpperCase();
-    profilePicture.innerText = profileCharacter; // Set the text to the first character
-    profilePicture.style.width = "60px"; // Set width
-    profilePicture.style.height = "60px"; // Set height
-    profilePicture.style.borderRadius = "50%"; // Make it a circle
-    profilePicture.style.display = "flex"; // Use flexbox for centering
-    profilePicture.style.alignItems = "center"; // Center vertically
-    profilePicture.style.justifyContent = "center"; // Center horizontally
-    profilePicture.style.fontSize = "24px"; // Set font size for the character
-    profilePicture.style.color = "#ffffff"; // Text color
-    profilePicture.style.backgroundColor = "#4CAF50"; // Background color
-    profilePicture.style.overflow = "hidden"; // Hide any overflow to maintain the circle shape
-    profilePicture.style.boxSizing = "border-box"; // Ensure padding/border doesn't affect width/height
+    console.error("User rank element not found.");
 }
 
-// Create a container for the user details (username and ranks)
-const userDetails = document.createElement('div');
-userDetails.classList.add('user-details');
-
-
-// Create a span for the username
-const usernameSpan = document.createElement('span');
-usernameSpan.innerText = user.username || user.first_name || "User";
-usernameSpan.classList.add('username');
-
-
-// Create the second rank info span for additional text
-const additionalRankInfoSpan = document.createElement('span');
-additionalRankInfoSpan.innerText = `Rank: #${Math.floor(Math.random() * 1000) + 1}`; // Simulate a random rank
-additionalRankInfoSpan.classList.add('rank-info');
-additionalRankInfoSpan.style.color = "white"; // Set rank text color to white
-
-// Append the username and additional text to the user details container
-userDetails.appendChild(usernameSpan);
-userDetails.appendChild(additionalRankInfoSpan);
-
-
-// Append the profile picture, user details, and rank details to the user-rank section
-userRankElement.appendChild(profilePicture);
-userRankElement.appendChild(userDetails);
 
 
 
