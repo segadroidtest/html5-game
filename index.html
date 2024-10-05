@@ -492,13 +492,15 @@ background-color: #000000;
                 userRankElement.innerHTML = `
                     <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; color: white;">
                         <div style="display: flex; align-items: center;">
-                            <span style="margin-left: 10px;">${user.username || "User"}</span>
-                            <span style="display: block; color: white;">Rank: #${telegramUserRank}</span>
+                            <div style="width: 60px; height: 60px; border-radius: 50%; background-color: ${colors[telegramUserRank % colors.length]}; color: #ffffff; text-align: center; line-height: 60px; font-size: 24px;">
+                                ${user.username ? user.username.charAt(0).toUpperCase() : 'U'}
+                            </div>
+                            <div style="margin-left: 10px;">
+                                <span>${user.username || "User"}</span>
+                                <span style="display: block; color: white;">Rank: #${telegramUserRank}</span>
+                            </div>
                         </div>
-                        <div style="display: flex; align-items: center; margin-left: auto;">
-                            <span style="color: white; margin-right: 5px;">${telegramUserPoints}</span>
-                            <img src="assets/img/littlediamond.png" alt="Currency" style="width: 16px; height: 16px;">
-                        </div>
+                        <span style="color: white; margin-left: auto;">${telegramUserPoints} <img src="assets/img/littlediamond.png" style="height: 15px;"></span>
                     </div>
                 `;
             }
@@ -593,7 +595,7 @@ background-color: #000000;
             usernameContainer.appendChild(rankSpan);
 
             const pointsSpan = document.createElement('span');
-            pointsSpan.innerText = `${points} XYZ`;
+            pointsSpan.innerText = `${points} <img src="assets/img/littlediamond.png" style="height: 15px;">`;
             pointsSpan.style.color = 'white';
             pointsSpan.style.marginLeft = 'auto';
 
