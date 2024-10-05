@@ -184,17 +184,19 @@ background-color: #000000;
     opacity: 0.7;
 }
 
-    #user-rank {
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            width: 100%;
-            max-width: 100% !important;
-            margin: 20px auto;
-        }
+   #user-rank {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 100%; /* Ensures the max-width does not exceed the parent container */
+    margin: 20px auto;
+    box-sizing: border-box; /* Ensures padding is included in the width calculation */
+    overflow: hidden; /* Prevents overflow of content */
+}
 
         .user-info img {
             width: 60px;
