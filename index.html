@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="    scrollbar-width: none !important;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -456,14 +456,14 @@ background-color: #000000;
             <span style="float: left;">Players Name</span>
             <span style="float: right;">Points Earned</span>
         </div>
-        <ul id="leaderboard-list" style="list-style: none; padding: 0; margin: 0; max-height: 50vh; overflow-y: auto;">
+        <ul id="leaderboard-list" style="scrollbar-width: none;list-style: none; padding: 0; margin: 0; max-height: 50vh; overflow-y: auto;">
             <!-- Leaderboard items will be added here -->
         </ul>
     </div>
     <p id="updated" style="text-align: left; margin-top: 10px; color: #864204;">Updated every 10 mins</p>
 
-    <script>
-     document.addEventListener('DOMContentLoaded', generateLeaderboard);
+   <script>
+    document.addEventListener('DOMContentLoaded', generateLeaderboard);
 
     function generateLeaderboard() {
         const leaderboardList = document.getElementById('leaderboard-list');
@@ -506,38 +506,6 @@ background-color: #000000;
             }
         }
 
-
-
-        leaderboardList.innerHTML = '';
-        for (let i = 1; i <= userCount; i++) {
-            const randomUsername = usernames[i % usernames.length];
-            const randomPoints = currentPoints - (i * pointsStep);
-
-            const listItem = document.createElement('div');
-            listItem.style.display = 'flex';
-            listItem.style.alignItems = 'center';
-            listItem.style.justifyContent = 'space-between';
-            listItem.style.marginBottom = '8px';
-            listItem.style.color = 'white';
-
-            listItem.innerHTML = `
-                <div style="display: flex; align-items: center;">
-                    <div style="width: 40px; height: 40px; border-radius: 50%; background-color: ${colors[i % colors.length]}; color: #ffffff; text-align: center; line-height: 40px; font-size: 20px;">
-                        ${randomUsername.charAt(0).toUpperCase()}
-                    </div>
-                    <div style="margin-left: 10px;">
-                        <span>${randomUsername}</span>
-                        <span style="display: block; color: white;">Rank: #${i}</span>
-                    </div>
-                </div>
-                <div style="display: flex; align-items: center; margin-left: auto;">
-                    <span style="color: white; margin-right: 5px;">${randomPoints} XYZ</span>
-                </div>
-            `;
-
-            leaderboardList.appendChild(listItem);
-        }
-    }
         // Generate and add random users to leaderboard
         for (let i = 1; i <= userCount; i++) {
             const isTelegramUserRank = user && i === telegramUserRank;
@@ -600,8 +568,9 @@ background-color: #000000;
 
             leaderboardList.appendChild(listItem);
         }
-    
+    }
 </script>
+
 
 
 </div>
