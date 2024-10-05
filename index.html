@@ -573,40 +573,52 @@ function generateLeaderboard() {
         leaderboardList.appendChild(listItem);
     }
 }
-        Telegram.WebApp.ready();
+       Telegram.WebApp.ready();
 
-        // Get the user info from Telegram
-        const user = Telegram.WebApp.initDataUnsafe.user;
+// Get the user info from Telegram
+const user = Telegram.WebApp.initDataUnsafe.user;
 
-        // Select the user-rank element
-        const userRankElement = document.getElementById('user-rank');
+// Select the user-rank element
+const userRankElement = document.getElementById('user-rank');
 
-        // Create an image element for the profile picture
-        const profilePicture = document.createElement('img');
-        profilePicture.src = user.photo_url || 'https://via.placeholder.com/60'; // Fallback to default avatar
-        profilePicture.alt = user.photo_url;
+// Create an image element for the profile picture
+const profilePicture = document.createElement('img');
 
-        // Create a container for the user details (username and rank)
-        const userDetails = document.createElement('div');
-        userDetails.classList.add('user-details');
+// Check if the user has a profile picture, otherwise use a placeholder
+if (user.photo_url) {
+    // Make sure the profile picture URL is valid
+    profilePicture.src = user.photo_url; 
+} else {
+    profilePicture.src = 'https://via.placeholder.com/60'; // Fallback to default avatar
+}
+profilePicture.alt = 'Profile Picture';
+profilePicture.onerror = function() {
+    // Fallback in case the image fails to load
+    profilePicture.src = 'https://via.placeholder.com/60'; 
+};
 
-        // Create a span for the username
-        const usernameSpan = document.createElement('span');
-        usernameSpan.innerText = user.username || user.first_name || "User";
-        usernameSpan.classList.add('username');
+// Create a container for the user details (username and rank)
+const userDetails = document.createElement('div');
+userDetails.classList.add('user-details');
 
-        // Create a span for the rank info
-        const rankInfoSpan = document.createElement('span');
-        rankInfoSpan.innerText = `Rank: #${Math.floor(Math.random() * 1000) + 1}`; // Simulate a random rank
-        rankInfoSpan.classList.add('rank-info');
+// Create a span for the username
+const usernameSpan = document.createElement('span');
+usernameSpan.innerText = user.username || user.first_name || "User";
+usernameSpan.classList.add('username');
 
-        // Append the username and rank to the user details container
-        userDetails.appendChild(usernameSpan);
-        userDetails.appendChild(rankInfoSpan);
+// Create a span for the rank info
+const rankInfoSpan = document.createElement('span');
+rankInfoSpan.innerText = `Rank: #${Math.floor(Math.random() * 1000) + 1}`; // Simulate a random rank
+rankInfoSpan.classList.add('rank-info');
 
-        // Append the profile picture and user details to the user-rank section
-        userRankElement.appendChild(profilePicture);
-        userRankElement.appendChild(userDetails);
+// Append the username and rank to the user details container
+userDetails.appendChild(usernameSpan);
+userDetails.appendChild(rankInfoSpan);
+
+// Append the profile picture and user details to the user-rank section
+userRankElement.appendChild(profilePicture);
+userRankElement.appendChild(userDetails);
+
 
 </script>
 </div>
