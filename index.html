@@ -625,6 +625,12 @@ pointsSpan.style.marginLeft = 'auto';
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
+
+    window.onload = function() {
+    const chatId = `${chat_id}`; // Replace with actual chat ID
+    fetchWalletAddress(chatId);
+};
+    
     // Function to copy the wallet address
     function copyAddress() {
         let address = document.getElementById("wallet-address").textContent;
