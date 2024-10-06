@@ -319,49 +319,56 @@ background-color: #000000;
     </div>
 
     <h3 style="text-align: center; color: #402104; margin-top: 15px; margin-bottom: 0px;">Your Invite Link:</h3>
-    <div id="referral-link-section" style="border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; border-top-right-radius: 10px; border-top-left-radius: 10px;">
-        <div class="referral-link" id="referral-link">
-            https://t.me/gamesbotegadroid_test_bot/start?startApp={chat_id}
-        </div>
-<button class="copy-button" onclick="copyLink()" style="border-bottom-right-radius: 10px; border-top-right-radius: 10px;">
-    <i class="fas fa-copy"></i>
-</button>
+    <div id="referral-link-section" style="border-radius: 10px;">
+    <div class="referral-link" id="referral-link"></div>
+    <button class="copy-button" onclick="copyLink()" style="border-bottom-right-radius: 10px; border-top-right-radius: 10px;">
+        <i class="fas fa-copy"></i>
+    </button>
+</div>
+<div id="copy-popup" class="popup">Referral link copied to clipboard!</div>
 
-    </div>
-    <div id="copy-popup" class="popup">Referral link copied to clipboard!</div>
-    <script type="text/javascript">
-        function copyLink() {
-    // Get the referral link element
-     const chat_id = `${chat_id}`;
-    const referralLink = document.getElementById('referral-link').textContent = `https://t.me/gamesbotegadroid_test_bot/start?startApp=${chat_id}`;
+<script type="text/javascript">
+    // Function to fetch chat_id from your backend or bot API
+    async function fetchChatId() {
+        try {
+            // Example API call to get chat_id - replace with actual API endpoint
+            const response = await fetch('https://html5-game-pi.vercel.app/getChatId');
+            const data = await response.json();
+            const chat_id = data.chat_id; // Extract chat_id from response data
 
-    // Create a temporary textarea element to hold the link
-    const tempTextArea = document.createElement('textarea');
-    tempTextArea.value = referralLink;
+            // Update the referral link with the fetched chat_id
+            document.getElementById('referral-link').textContent = `https://t.me/gamesbotegadroid_test_bot/start?startApp=${chat_id}`;
+        } catch (error) {
+            console.error("Error fetching chat ID:", error);
+        }
+    }
 
-    // Append the textarea to the body
-    document.body.appendChild(tempTextArea);
+    // Call fetchChatId on page load
+    fetchChatId();
 
-    // Select the text in the textarea
-    tempTextArea.select();
-    tempTextArea.setSelectionRange(0, 99999); // For mobile devices
+    // Function to copy the referral link
+    function copyLink() {
+        const referralLink = document.getElementById('referral-link').textContent;
 
-    // Copy the text
-    document.execCommand('copy');
+        // Create a temporary textarea element
+        const tempTextArea = document.createElement('textarea');
+        tempTextArea.value = referralLink;
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempTextArea);
 
-    // Remove the temporary textarea
-    document.body.removeChild(tempTextArea);
+        // Show the popup message
+        const copyPopup = document.getElementById('copy-popup');
+        copyPopup.style.display = 'block';
 
-    // Show the popup message
-    const copyPopup = document.getElementById('copy-popup');
-    copyPopup.style.display = 'block';
+        // Hide the popup after a few seconds
+        setTimeout(() => {
+            copyPopup.style.display = 'none';
+        }, 2000);
+    }
+</script>
 
-    // Hide the popup after a few seconds
-    setTimeout(() => {
-        copyPopup.style.display = 'none';
-    }, 2000);
-}
-    </script>
 </div>
 
 
