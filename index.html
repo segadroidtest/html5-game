@@ -422,7 +422,7 @@ background-color: #000000;
             function dailyCheckin() {
                 document.getElementById('checkin-approved').src = 'assets/img/approved.png';
                 // Update points and leaderboard
-                telegramUserPoints += 100; // Add 100 points
+                $(telegramUserPoints) += 100; // Add 100 points
                 updateLeaderboard(); // Update the leaderboard display
             }
 
