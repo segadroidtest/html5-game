@@ -259,90 +259,52 @@ background-color: #000000;
         </div>
 
 
-<div id="page3" class="page" style="background: linear-gradient(to bottom, #ff9f2f, #f7be5c); color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 100px); overflow-y: auto;">
-
-    <div id="referral-stats">
-        <!-- Referrals Made Section -->
-        <div class="stat" style="border-right: 1px solid #a24e03; padding-right: 10px;">
-            <img src="assets/img/friends.png" style="height: 15px; padding-right: 8px;">
-            <span class="stat-text">Referrals: <span id="referrals-count">0</span></span>
-        </div>
-        <!-- Points Earned Section -->
-        <div class="stat" style="padding-left: 10px;">
-            <img src="assets/img/littlediamond.png" style="height: 15px; padding-right: 8px;">
-            <span class="stat-text">Earned: <span id="points-earned">0</span></span>
-        </div>
-    </div>
-
-    <h3 style="text-align: center; color: #402104; margin-top: 15px; margin-bottom: 10px;">Referrals by Level</h3>
-
-    <!-- Invite Header -->
-    <div class="invite-header" style="background: #894507; padding: 10px 15px; margin: 0; display: flex; justify-content: space-between; border-top-left-radius: 10px; border-top-right-radius: 10px;">
-        <span style="flex: 1; text-align: left; font-weight: bold;">Name</span>
-        <span style="flex: 1; text-align: center; font-weight: bold;">Level</span>
-        <span style="flex: 1; text-align: right; font-weight: bold;">Earned</span>
-    </div>
-
-    <!-- Example Users List -->
-    <div id="example-users" style="background-color: #bf5d05; border: 1px solid #a24e03; padding: 0px; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
-        <ul id="users-list" style="list-style-type: none; padding: 0; margin: 0;">
-            <li style="display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #a24e03;">
-                <span style="flex: 1; text-align: left;">John</span>
-                <span style="flex: 1; text-align: center;">6</span>
-                <span style="flex: 1; text-align: right;">231 <img src="assets/img/littlediamond.png" style="height: 15px;"></span>
-            </li>
-            <!-- Add additional users as needed -->
-        </ul>
-    </div>
+<div id="page3" class="page" style="background: linear-gradient(to bottom, #ff9f2f, #f7be5c) !important; color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 100px); overflow-y: auto;">
+    <!-- Your existing content -->
 
     <h3 style="text-align: center; color: #402104; margin-top: 15px; margin-bottom: 0px;">Your Invite Link:</h3>
-
-    <!-- Referral Link Section -->
     <div id="referral-link-section" style="border-radius: 10px;">
         <div class="referral-link" id="referral-link">
-            <!-- Link will be dynamically populated with chat_id -->
+            <!-- Referral link will be dynamically inserted here -->
         </div>
-        <button class="copy-button" onclick="copyLink()" style="border-radius: 10px;">
-            <i class="fas fa-copy"></i> Copy Link
+        <button class="copy-button" onclick="copyLink()" style="border-bottom-right-radius: 10px; border-top-right-radius: 10px;">
+            <i class="fas fa-copy"></i>
         </button>
     </div>
     <div id="copy-popup" class="popup">Referral link copied to clipboard!</div>
 
-    <!-- JavaScript for Copy and Chat ID Setup -->
     <script type="text/javascript">
-        // Replace this with the actual method to obtain the chat_id, such as from bot data or backend
-        const chat_id = req.body.message.chat.id;
+        // Function to retrieve the 'chat_id' from URL parameters
+        function getChatIdFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('chat_id'); // Returns the 'chat_id' or null if not found
+        }
 
-        // Populate the referral link dynamically
-        document.getElementById('referral-link').textContent = `https://t.me/gamesbotegadroid_test_bot/start?startApp=${chat_id}`;
+        // Generate referral link with chat_id
+        function generateReferralLink(chat_id) {
+            const referralLinkDiv = document.getElementById('referral-link');
+            referralLinkDiv.textContent = `https://t.me/gamesbotegadroid_test_bot/start?startApp=${chat_id}`;
+        }
 
-        // Copy link function
+        // Get chat_id from URL and update referral link
+        const chat_id = getChatIdFromUrl();
+        if (chat_id) {
+            generateReferralLink(chat_id);
+        }
+
+        // Copy referral link to clipboard
         function copyLink() {
-            // Get the referral link element
             const referralLink = document.getElementById('referral-link').textContent;
-
-            // Create a temporary textarea element to hold the link
             const tempTextArea = document.createElement('textarea');
             tempTextArea.value = referralLink;
-
-            // Append the textarea to the body
             document.body.appendChild(tempTextArea);
-
-            // Select the text in the textarea
             tempTextArea.select();
-            tempTextArea.setSelectionRange(0, 99999); // For mobile devices
-
-            // Copy the text
+            tempTextArea.setSelectionRange(0, 99999);
             document.execCommand('copy');
-
-            // Remove the temporary textarea
             document.body.removeChild(tempTextArea);
 
-            // Show the popup message
             const copyPopup = document.getElementById('copy-popup');
             copyPopup.style.display = 'block';
-
-            // Hide the popup after a few seconds
             setTimeout(() => {
                 copyPopup.style.display = 'none';
             }, 2000);
