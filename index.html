@@ -365,87 +365,89 @@ background-color: #000000;
 
 
 
-<div id="page4" class="page" style="background: linear-gradient(to bottom, #ff9f2f, #f7be5c) !important;color: #ffffff;padding: 20px;border-radius: 0px;width: auto;margin: 0 auto;box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);height: 100%;overflow-y: hidden;">
-            
-
-
-
-    <p style="margin-top: 20px;color: #7a3a02;font-size: 18px;font-weight: bold;width: 100%;text-align: left;height: 10px;padding-left: 6px;">Available Tasks:</p>
-
+ <div id="page4" class="page" style="background: linear-gradient(to bottom, #ff9f2f, #f7be5c) !important; color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: 100%; overflow-y: hidden;">
+    <p style="margin-top: 20px; color: #7a3a02; font-size: 18px; font-weight: bold; width: 100%; text-align: left; height: 10px; padding-left: 6px;">Available Tasks:</p>
     <div id="tasks-container" style="height: 400px; overflow-y: auto; border: 0px !important; padding: 5px;">
-<ul id="tasks-list" style="margin-bottom: -5px;margin-top: -5px;list-style-type: none;padding: 0;">
-  <ul style="list-style-type: none;padding-left: 0;">
-  <!-- Share to Telegram Story -->
-  <li id="share-story" style="position: relative; margin-bottom: 10px;background-color: #bf5d05;border: 1px solid #a24e03;color: white;font-weight: 590; font-size: 14px;padding-left: 13px;border-radius: 10px;line-height: 20px;padding-top: 10px;padding-bottom: 10px;cursor: pointer;" onclick="shareToTelegram()">
-    <span style="display: block;font-size: 15px;font-weight: bold;">Share to your Telegram Story</span>
-    <span style="font-weight: bold;">
-      <img src="assets/img/littlediamond.png" style="height: 15px;"> +500 
-    </span>
-    <img id="share-approved" src="" style="height: 20px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
-  </li>
+        <ul id="tasks-list" style="margin-bottom: -5px; margin-top: -5px; list-style-type: none; padding: 0;">
+            <ul style="list-style-type: none; padding-left: 0;">
+                <!-- Share to Telegram Story -->
+                <li id="share-story" style="position: relative; margin-bottom: 10px; background-color: #bf5d05; border: 1px solid #a24e03; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;" onclick="shareToTelegram()">
+                    <span style="display: block; font-size: 15px; font-weight: bold;">Share to your Telegram Story</span>
+                    <span style="font-weight: bold;">
+                        <img src="assets/img/littlediamond.png" style="height: 15px;"> +500 
+                    </span>
+                    <img id="share-approved" src="" style="height: 20px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
+                </li>
+                <!-- Daily Check-In -->
+                <li id="daily-checkin" style="position: relative; margin-bottom: 15px; background-color: #bf5d05; border: 1px solid #a24e03; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;" onclick="dailyCheckin()">
+                    <span style="display: block; font-size: 15px; font-weight: bold;">Daily check-in</span>
+                    <span style="font-weight: bold;">
+                        <img src="assets/img/littlediamond.png" style="height: 15px;"> +100 
+                    </span>
+                    <img id="checkin-approved" src="" style="height: 20px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
+                </li>
+                <!-- Subscribe to Telegram Channel -->
+                <li id="subscribe-channel" style="position: relative; margin-bottom: 10px; background-color: #bf5d05; border: 1px solid #a24e03; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;" onclick="subscribeToChannel()">
+                    <span style="display: block; font-size: 15px; font-weight: bold;">Subscribe to Telegram Channel</span>
+                    <span style="font-weight: bold;">
+                        <img src="assets/img/littlediamond.png" style="height: 15px;"> +500 
+                    </span>
+                    <img id="subscribe-approved" src="" style="height: 20px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
+                </li>
+                <!-- Invite 10 Friends -->
+                <li style="font-weight: 590; font-size: 14px; margin-bottom: 15px; background-color: #bf5d05; border: 1px solid #a24e03; color: white; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <span style="display: block; font-size: 15px; font-weight: bold;">Invite 10 Friends</span>
+                        <span style="font-weight: bold; display: flex; align-items: center;">
+                            <img src="assets/img/littlediamond.png" style="height: 15px; margin-right: 5px;"> +1000 
+                        </span>
+                    </div>
+                    <span style="border: 1px solid #fff; border-radius: 10px; padding: 5px 10px; background-color: rgba(255, 255, 255, 0.2); margin-left: auto;"> 0/10 </span>
+                    <img src="" style="height: 20px; margin-left: 10px;">
+                </li>
+            </ul>
+        </ul>
+        <script>
+            // Assume telegramUserPoints is defined somewhere in your global scope
+            let telegramUserPoints = 0;
 
-  <!-- Daily Check-In -->
-  <li id="daily-checkin" style="position: relative; margin-bottom: 15px;background-color: #bf5d05;border: 1px solid #a24e03;color: white;font-weight: 590; font-size: 14px;padding-left: 13px;border-radius: 10px;line-height: 20px;padding-top: 10px;padding-bottom: 10px;cursor: pointer;" onclick="dailyCheckin()">
-    <span style="display: block;font-size: 15px;font-weight: bold;">Daily check-in</span>
-    <span style="font-weight: bold;">
-      <img src="assets/img/littlediamond.png" style="height: 15px;"> +100 
-    </span>
-    <img id="checkin-approved" src="" style="height: 20px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
-  </li>
+            // Function to share to Telegram Story
+            function shareToTelegram() {
+                const shareLink = "https://google.com";
+                window.open(`https://t.me/share/url?url=${encodeURIComponent(shareLink)}`, '_blank');
+                // Keep the popup open
+            }
 
-  <!-- Subscribe to Telegram Channel -->
-  <li id="subscribe-channel" style="position: relative; margin-bottom: 10px;background-color: #bf5d05;border: 1px solid #a24e03;color: white;font-weight: 590; font-size: 14px;padding-left: 13px;border-radius: 10px;line-height: 20px;padding-top: 10px;padding-bottom: 10px;cursor: pointer;" onclick="subscribeToChannel()">
-    <span style="display: block;font-size: 15px;font-weight: bold;">Subscribe to Telegram Channel</span>
-    <span style="font-weight: bold;">
-      <img src="assets/img/littlediamond.png" style="height: 15px;"> +500 
-    </span>
-    <img id="subscribe-approved" src="" style="height: 20px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
-  </li>
+            // Function for daily check-in
+            function dailyCheckin() {
+                document.getElementById('checkin-approved').src = 'assets/img/approved.png';
+                // Update points and leaderboard
+                telegramUserPoints += 100; // Add 100 points
+                updateLeaderboard();
+            }
 
+            // Function to subscribe to Telegram channel
+            function subscribeToChannel() {
+                const channelLink = "https://t.me/ppkas_space";
+                window.open(channelLink, '_blank');
+                // Keep the popup open
+                setTimeout(function() {
+                    document.getElementById('subscribe-approved').src = 'assets/img/approved.png';
+                }, 3000);
+                // Update points and leaderboard
+                telegramUserPoints += 500; // Add 500 points
+                updateLeaderboard();
+            }
 
-
-
-  <li style="font-weight: 590; font-size: 14px;margin-bottom: 15px; background-color: #bf5d05; border: 1px solid #a24e03; color: white; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
-    <div>
-      <span style="display: block;font-size: 15px;font-weight: bold;">Invite 10 Friends</span>
-      <span style="font-weight: bold; display: flex; align-items: center;">
-        <img src="assets/img/littlediamond.png" style="height: 15px; margin-right: 5px;"> +1000 </span>
+            // Function to update the leaderboard
+            function updateLeaderboard() {
+                // Logic to update the leaderboard with the new points
+                console.log(`Updated Telegram Points: ${telegramUserPoints}`);
+                // Here, you can add code to refresh or update the leaderboard display accordingly.
+            }
+        </script>
     </div>
-    <span style="border: 1px solid #fff; border-radius: 10px; padding: 5px 10px; background-color: rgba(255, 255, 255, 0.2); margin-left: auto;"> 0/10 </span>
-    <img src="" style="height: 20px; margin-left: 10px;">
-  </li>
-</ul>
-<script>
-  // Function to share to Telegram Story
-  function shareToTelegram() {
-    const shareLink = "https://google.com";
-    window.open(https://t.me/share/url?url=${encodeURIComponent(shareLink)}, '_blank');
-    
-    setTimeout(function() {
-      document.getElementById('share-approved').src = 'assets/img/approved.png';
-    }, 3000);
-  }
-
-  // Function for daily check-in
-  function dailyCheckin() {
-    document.getElementById('checkin-approved').src = 'assets/img/approved.png';
-  }
-
-  // Function to subscribe to Telegram channel
-  function subscribeToChannel() {
-    const channelLink = "https://t.me/ppkas_space";
-    window.open(channelLink, '_blank');
-
-    setTimeout(function() {
-      document.getElementById('subscribe-approved').src = 'assets/img/approved.png';
-    }, 3000);
-  }
-</script>
-
-
-
-        </div>
-    </div>
+</div>
 
        
     <div id="page2" class="page" style="background: linear-gradient(to bottom, #ff9f2f, #f7be5c) !important;color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 70px); overflow-y: auto;  padding-top: 7px !important;">
@@ -495,7 +497,7 @@ background-color: #000000;
             // Display Telegram user in the Current User Rank section
             const userRankElement = document.getElementById('user-rank');
             if (userRankElement) {
-                userRankElement.innerHTML = 
+                userRankElement.innerHTML = `
                     <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; color: white;">
                         <div style="display: flex; align-items: center;">
                             <div style="width: 60px; height: 60px; border-radius: 50%; background-color: ${colors[telegramUserRank % colors.length]}; color: #ffffff; text-align: center; line-height: 60px; font-size: 24px;">
@@ -510,7 +512,7 @@ background-color: #000000;
   ${telegramUserPoints} <img src="assets/img/littlediamond.png" style="width: 19px; height:19px;border: none !important; margin-bottom:-4px;">
 </span>
                     </div>
-                ;
+                `;
             }
         }
 
@@ -558,7 +560,7 @@ background-color: #000000;
             usernameSpan.style.fontWeight = 'bold';
 
             const rankSpan = document.createElement('span');
-            rankSpan.innerText = Rank: #${rank};
+            rankSpan.innerText = `Rank: #${rank}`;
             rankSpan.style.fontSize = '13px';
             rankSpan.style.color = 'white';
             rankSpan.style.marginTop = '4px';
@@ -567,8 +569,8 @@ background-color: #000000;
             usernameContainer.appendChild(rankSpan);
 
             const pointsSpan = document.createElement('span');
-// Assuming pointsSpan is your element for displaying points and currency
-pointsSpan.innerHTML = ${points} <img src="assets/img/littlediamond.png" style="height: 15px;">;
+// Assuming `pointsSpan` is your element for displaying points and currency
+pointsSpan.innerHTML = `${points} <img src="assets/img/littlediamond.png" style="height: 15px;">`;
 pointsSpan.style.color = 'white';
 pointsSpan.style.marginLeft = 'auto';
 
