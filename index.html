@@ -332,7 +332,8 @@ background-color: #000000;
     <script type="text/javascript">
         function copyLink() {
     // Get the referral link element
-    const referralLink = document.getElementById('referral-link').textContent;
+     const chat_id = 'YOUR_DYNAMIC_CHAT_ID_HERE';
+    const referralLink = document.getElementById('referral-link').textContent = `https://t.me/gamesbotegadroid_test_bot/start?startApp=${chat_id}`;
 
     // Create a temporary textarea element to hold the link
     const tempTextArea = document.createElement('textarea');
