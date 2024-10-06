@@ -483,11 +483,16 @@ background-color: #000000;
         </ul>
     </div>
     <p id="updated" style="text-align: left;margin-top: 5px;color: #864204;font-weight: 600;font-size: 15px;">Updated every 10 mins</p>
+    
+    <!-- Daily Check-In Button -->
+    <button id="daily-checkin-btn" style="padding: 10px; margin-top: 10px; background-color: #ff8f00; color: white; border: none; border-radius: 5px; cursor: pointer;">Daily Check-In</button>
 
     <script>
         document.addEventListener('DOMContentLoaded', generateLeaderboard);
-
+        const dailyCheckinButton = document.getElementById('daily-checkin-btn');
         let userPoints = 0; // Initialize user points variable
+
+        dailyCheckinButton.addEventListener('click', dailyCheckIn);
 
         function generateLeaderboard() {
             const leaderboardList = document.getElementById('leaderboard-list');
@@ -599,17 +604,39 @@ background-color: #000000;
             }
         }
 
-        // Example function for daily check-in
+        // Daily Check-In Function
         function dailyCheckIn() {
             const checkInPoints = 100; // Points awarded for daily check-in
             userPoints += checkInPoints; // Add points to user points
 
-            // Update leaderboard display
-            generateLeaderboard(); // Call to update leaderboard
+            // Update the user rank display
+            const userRankElement = document.getElementById('user-rank');
+            if (userRankElement) {
+                userRankElement.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; color: white;">
+                        <div style="display: flex; align-items: center;">
+                            <div style="width: 60px; height: 60px; border-radius: 50%; background-color: #bf5d05; color: #ffffff; text-align: center; line-height: 60px; font-size: 24px;">
+                                ${user.username ? user.username.charAt(0).toUpperCase() : 'U'}
+                            </div>
+                            <div style="margin-left: 10px;">
+                                <span style="font-weight: bold;">${user.username || "User"}</span>
+                                <span style="display: block; color: white;">Rank: #${Math.floor(Math.random() * 1000) + 1}</span>
+                            </div>
+                        </div>
+                        <span style="color: white; margin-left: auto;">
+                            ${userPoints} <img src="assets/img/littlediamond.png" style="width: 19px; height:19px;border: none !important; margin-bottom:-4px;">
+                        </span>
+                    </div>
+                `;
+            }
+
+            // Optionally, you can re-generate the leaderboard to reflect the new points
+            document.getElementById('leaderboard-list').innerHTML = ""; // Clear existing entries
+            generateLeaderboard(); // Re-generate leaderboard
         }
     </script>
-
 </div>
+
 
 
 <div id="page5" class="page" style="background: linear-gradient(to bottom, #ff9f2f, #f7be5c) !important;color: #ffffff;padding: 20px;border-radius: 0px;width: auto;margin: 0 auto;box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);height: 100%;overflow-y: hidden;">
