@@ -658,24 +658,27 @@ function displayWallet() {
 
 
     // Function to fetch a wallet address from the backend
-    function fetchWalletAddress() {
-        // Replace the URL with your Vercel backend URL
-        const apiUrl = "https://html5-game-pi.vercel.app/api/getWalletAddress";
+function fetchWalletAddress(chatId) {
+    const apiUrl = `https://html5-game-pi.vercel.app/api/getWalletAddress?chat_id=${chat_id}`;
 
-        fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            if (data.walletAddress) {
                 let walletAddress = data.walletAddress;
                 console.log("Fetched Wallet Address: " + walletAddress); // Debugging
 
-                // Store the generated address in localStorage
                 localStorage.setItem('walletAddress', walletAddress);
                 renderWallet(walletAddress); // Render wallet once fetched
-            })
-            .catch(error => {
-                console.error('Error fetching wallet address:', error);
-            });
-    }
+            } else {
+                console.error("Error: Wallet address not found in response");
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching wallet address:', error);
+        });
+}
+
 
     // Function to render the wallet address and QR code
     function renderWallet(walletAddress) {
