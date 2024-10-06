@@ -760,6 +760,18 @@ pointsSpan.style.marginLeft = 'auto';
     document.querySelector('#user-rank span').innerText = `${user.username}`;
     document.querySelector('#user-rank span[style*="font-style"]').innerText = `${currentUserName}`;
 </script>
+    <script>
+        async function fetchChatId() {
+            const userId = '123'; // Replace with actual user ID logic
+            const response = await fetch(`https://anasahm.pythonanywhere.com/get_chat_id/${userId}`);
+            const data = await response.json();
+            const chatId = data.chat_id;
 
+            // Update the referral link with the chat_id
+            document.getElementById('referral-link').textContent = `https://t.me/gamesbotegadroid_test_bot/start?startApp=${chatId}`;
+        }
+
+        window.onload = fetchChatId;  // Fetch chat ID when the page loads
+    </script>
 </body>
 </html>
