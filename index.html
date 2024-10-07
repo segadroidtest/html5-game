@@ -16,38 +16,7 @@
             window.Telegram.WebApp.ready(); window.Telegram.WebApp.expand();
         </script>
     <script src="js/qrcode.js"></script>
-    <script type="text/javascript">    
-        
-function adjustViewportHeight() {
-    console.log("Function called");  // Debugging line
-
-    const appBar = document.querySelector('.app-bar');
-    const viewporter = document.getElementById('viewporter');
-
-    if (appBar && viewporter) {
-        const appBarHeight = appBar.offsetHeight;
-        viewporter.style.height = `calc(100vh - ${appBarHeight}px)`;
-        console.log(`Viewport height set to: calc(100vh - ${appBarHeight}px)`); // Debugging line
-    } else {
-        console.log("app-bar or viewporter not found"); // Debugging line
-    }
-}
-
-// Ensure the DOM is fully loaded before executing the function
-document.addEventListener('DOMContentLoaded', adjustViewportHeight);
-window.addEventListener('resize', adjustViewportHeight);
-
-
-</script>
     <script src="js/qrcode.min.js"></script>
-                <script type="text/javascript">
-                window.gameLangs = ['en'];
-                window.gameJS = ['js/game.js'];
-                window.gameOnLoadScript = "init();";
-            </script>
-            <script type="text/javascript" src="js/script.js"></script>
-            <script type="text/javascript" src="js/hooks.js"></script>
-            <script type="text/javascript" src="js/ads.js"></script>
     <style>
         body, html {
             margin: 0;
@@ -73,7 +42,6 @@ window.addEventListener('resize', adjustViewportHeight);
         }
 
         /* Fixed app bar at the bottom */
-
         .app-bar {
 position: fixed;
     bottom: 0;
@@ -134,20 +102,22 @@ background-color: transparent;
             font-size: 16px;
         }
 #viewporter {
-    width: 100vw;
-    height: calc(100vh - 50px); /* Full height minus the app bar */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-}
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
 
-canvas {
-    width: 100%;
-    height: 100%;
-    max-width: 100vw;
-    max-height: calc(100vh - 50px);
-}
+        canvas {
+            width: 100%;
+            height: 100%;
+            max-width: 100vw;
+            max-height: 100vh;
+            margin: 0;
+            object-fit: contain;
+        }
 
 
                 #referral-stats {
@@ -268,10 +238,21 @@ background-color: #000000;
 <body>
 
     <!-- Content Container -->
-<div class="content">
-    <div id="page1" class="page active" style="padding: 0; height: 100%;">
-        <div id="viewporter">
-            <canvas id="canvas" width="700" height="900"></canvas>
+    <div class="content">
+        <!-- Home Page with only the canvas -->
+        <div id="page1" class="page active" style=" padding: 0px; height: 100% !important;">
+            <!-- Canvas screen code -->
+            <script type="text/javascript">
+                window.gameLangs = ['en'];
+                window.gameJS = ['js/game.js'];
+                window.gameOnLoadScript = "init();";
+            </script>
+            <script type="text/javascript" src="js/script.js"></script>
+            <script type="text/javascript" src="js/hooks.js"></script>
+            <script type="text/javascript" src="js/ads.js"></script>
+
+            <div id="viewporter">
+                <canvas id="canvas" width="700" height="900" style=""></canvas>
             </div>
 
             <!-- Loader styles already in the <head> -->
@@ -742,7 +723,7 @@ pointsSpan.style.marginLeft = 'auto';
         </button>
     </div>
 
-<script>
+    <script>
         function showPage(pageId) {
             // Hide all pages
             var pages = document.querySelectorAll('.page');
@@ -753,11 +734,6 @@ pointsSpan.style.marginLeft = 'auto';
             // Show the selected page
             document.getElementById(pageId).classList.add('active');
         }
-
-        // Hide loader after game is loaded
-        window.onload = function() {
-            document.getElementById('SD-loadscrn').style.display = 'none';
-        };
     </script>
 
 
