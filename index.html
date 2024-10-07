@@ -319,49 +319,52 @@ background-color: #000000;
     </div>
 
     <h3 style="text-align: center; color: #402104; margin-top: 15px; margin-bottom: 0px;">Your Invite Link:</h3>
-    <div id="referral-link-section" style="border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; border-top-right-radius: 10px; border-top-left-radius: 10px;">
-        <div class="referral-link" id="referral-link">
-            https://t.me/gamesbotegadroid_test_bot/start?startApp={chat_id}
-        </div>
-<button class="copy-button" onclick="copyLink()" style="border-bottom-right-radius: 10px; border-top-right-radius: 10px;">
-    <i class="fas fa-copy"></i>
-</button>
-
+    <div id="referral-link-section" style="border-radius: 10px;">
+    <div class="referral-link" id="referral-link">
+        https://t.me/gamesbotegadroid_test_bot/start?startApp={chat_id}
     </div>
-    <div id="copy-popup" class="popup">Referral link copied to clipboard!</div>
-    <script type="text/javascript">
-        function copyLink() {
-    // Get the referral link element
-     const chat_id = `${chat_id}`;
-    const referralLink = document.getElementById('referral-link').textContent = `https://t.me/gamesbotegadroid_test_bot/start?startApp=${chat_id}`;
+    <button class="copy-button" onclick="copyLink()" style="border-radius: 10px;">
+        <i class="fas fa-copy"></i>
+    </button>
+</div>
+<div id="copy-popup" class="popup">Referral link copied to clipboard!</div>
 
-    // Create a temporary textarea element to hold the link
-    const tempTextArea = document.createElement('textarea');
-    tempTextArea.value = referralLink;
+<script type="text/javascript">
+    // Initialize Telegram Web App
+    const tg = window.Telegram.WebApp;
 
-    // Append the textarea to the body
-    document.body.appendChild(tempTextArea);
+    // Function to set the referral link with the user's chat ID
+    function setReferralLink() {
+        const chatId = tg.initDataUnsafe?.user?.id; // Retrieve the user's chat ID
+        const referralLinkElement = document.getElementById('referral-link');
+        if (chatId) {
+            // Update the link with the chat ID
+            referralLinkElement.textContent = `https://t.me/gamesbotegadroid_test_bot/start?startApp=${chatId}`;
+        }
+    }
 
-    // Select the text in the textarea
-    tempTextArea.select();
-    tempTextArea.setSelectionRange(0, 99999); // For mobile devices
+    // Call setReferralLink on page load
+    window.onload = setReferralLink;
 
-    // Copy the text
-    document.execCommand('copy');
+    // Copy function for the referral link
+    function copyLink() {
+        const referralLink = document.getElementById('referral-link').textContent;
+        const tempTextArea = document.createElement('textarea');
+        tempTextArea.value = referralLink;
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempTextArea);
 
-    // Remove the temporary textarea
-    document.body.removeChild(tempTextArea);
+        // Show popup notification
+        const copyPopup = document.getElementById('copy-popup');
+        copyPopup.style.display = 'block';
+        setTimeout(() => {
+            copyPopup.style.display = 'none';
+        }, 2000);
+    }
+</script>
 
-    // Show the popup message
-    const copyPopup = document.getElementById('copy-popup');
-    copyPopup.style.display = 'block';
-
-    // Hide the popup after a few seconds
-    setTimeout(() => {
-        copyPopup.style.display = 'none';
-    }, 2000);
-}
-    </script>
 </div>
 
 
