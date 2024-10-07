@@ -18,15 +18,24 @@
     <script src="js/qrcode.js"></script>
     <script type="text/javascript">    
         
-function adjustCanvasHeight() {
-    const appBarHeight = document.querySelector('.app-bar').offsetHeight;
-    document.getElementById('viewporter').style.height = `calc(100vh - ${appBarHeight}px)`;
+function adjustViewportHeight() {
+    console.log("Function called");  // Debugging line
+
+    const appBar = document.querySelector('.app-bar');
+    const viewporter = document.getElementById('viewporter');
+
+    if (appBar && viewporter) {
+        const appBarHeight = appBar.offsetHeight;
+        viewporter.style.height = `calc(100vh - ${appBarHeight}px)`;
+        console.log(`Viewport height set to: calc(100vh - ${appBarHeight}px)`); // Debugging line
+    } else {
+        console.log("app-bar or viewporter not found"); // Debugging line
+    }
 }
 
-// Run the function on load and resize
-window.addEventListener('load', adjustCanvasHeight);
-window.addEventListener('resize', adjustCanvasHeight);
-
+// Ensure the DOM is fully loaded before executing the function
+document.addEventListener('DOMContentLoaded', adjustViewportHeight);
+window.addEventListener('resize', adjustViewportHeight);
 
 
 </script>
