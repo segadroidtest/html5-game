@@ -319,8 +319,9 @@ background-color: #000000;
     </div>
 
     <h3 style="text-align: center; color: #402104; margin-top: 15px; margin-bottom: 0px;">Your Invite Link:</h3>
-    <div id="referral-link-section" style="border-radius: 10px;">
+   <div id="referral-link-section" style="border-radius: 10px;">
     <div class="referral-link" id="referral-link">
+        <!-- Placeholder link that will be updated with the chat ID -->
         https://t.me/gamesbotegadroid_test_bot/start?startApp={chat_id}
     </div>
     <button class="copy-button" onclick="copyLink()" style="border-radius: 10px;">
@@ -330,21 +331,21 @@ background-color: #000000;
 <div id="copy-popup" class="popup">Referral link copied to clipboard!</div>
 
 <script type="text/javascript">
-    // Initialize Telegram Web App
-    const tg = window.Telegram.WebApp;
-
-    // Function to set the referral link with the user's chat ID
-    function setReferralLink() {
-        const chatId = tg.initDataUnsafe?.user?.id; // Retrieve the user's chat ID
-        const referralLinkElement = document.getElementById('referral-link');
-        if (chatId) {
-            // Update the link with the chat ID
-            referralLinkElement.textContent = `https://t.me/gamesbotegadroid_test_bot/start?startApp=${chatId}`;
+    // Ensure the Telegram Web App context is available
+    window.onload = function() {
+        const tg = window.Telegram.WebApp;
+        
+        // Check if the Telegram context provides user data
+        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            const chatId = tg.initDataUnsafe.user.id; // Retrieve the user's chat ID
+            
+            // If chatId is available, update the referral link
+            if (chatId) {
+                const referralLinkElement = document.getElementById('referral-link');
+                referralLinkElement.textContent = `https://t.me/gamesbotegadroid_test_bot/start?startApp=${chatId}`;
+            }
         }
-    }
-
-    // Call setReferralLink on page load
-    window.onload = setReferralLink;
+    };
 
     // Copy function for the referral link
     function copyLink() {
@@ -364,6 +365,7 @@ background-color: #000000;
         }, 2000);
     }
 </script>
+
 
 </div>
 
