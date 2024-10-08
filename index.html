@@ -16,6 +16,13 @@
             window.Telegram.WebApp.ready(); window.Telegram.WebApp.expand();
         </script>
     <script src="js/qrcode.js"></script>
+    <script type="text/javascript">
+        const canvas = document.getElementById('canvas');
+canvas.addEventListener('mousedown', function(event) {
+    console.log('Canvas clicked!', event);
+    // Your click handling logic here
+});
+    </script>
     <script src="js/qrcode.min.js"></script>
     <style>
         body, html {
@@ -110,14 +117,13 @@ background-color: transparent;
             overflow: hidden;
         }
 
-        canvas {
-            width: 100%;
-            height: 100%;
-            max-width: 100vw;
-            height: calc(100vh - 70px) !important; margin-top: -70px;
-            margin: 0;
-            object-fit: contain;
-        }
+canvas {
+    width: 100%;
+    height: calc(100vh - 70px);
+    /* Add some border for debugging */
+    border: 1px solid red; 
+}
+
 
 
                 #referral-stats {
