@@ -16,20 +16,12 @@
             window.Telegram.WebApp.ready(); window.Telegram.WebApp.expand();
         </script>
     <script src="js/qrcode.js"></script>
-    <script type="text/javascript">
-        const canvas = document.getElementById('canvas');
-canvas.addEventListener('mousedown', function(event) {
-    console.log('Canvas clicked!', event);
-    // Your click handling logic here
-});
-    </script>
     <script src="js/qrcode.min.js"></script>
     <style>
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
-            font-family: Arial, sans-serif;
         }
 
         /* Container for the page content */
@@ -118,11 +110,12 @@ background-color: transparent;
         }
 
 canvas {
+    position: relative; /* Ensure it has a position */
+    z-index: 1000; /* A high z-index */
     width: 100%;
     height: calc(100vh - 70px);
-    /* Add some border for debugging */
-    border: 1px solid red; 
 }
+
 
 
 
@@ -259,6 +252,15 @@ background-color: #000000;
 
             <div id="viewporter">
                 <canvas id="canvas" width="700" height="900" style=""></canvas>
+                    <script>
+        const canvas = document.getElementById('canvas');
+        canvas.addEventListener('mousedown', function(event) {
+            console.log('Canvas clicked!', event);
+        });
+        canvas.addEventListener('touchstart', function(event) {
+            console.log('Canvas touched!', event);
+        });
+    </script>
             </div>
 
             <!-- Loader styles already in the <head> -->
