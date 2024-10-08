@@ -253,6 +253,7 @@ background-color: #000000;
             <div id="viewporter">
                 <canvas id="canvas" width="700" height="900" style=""></canvas>
                     <script>
+                        window.Telegram.WebApp.ready();
         const canvas = document.getElementById('canvas');
         canvas.addEventListener('mousedown', function(event) {
             console.log('Canvas clicked!', event);
