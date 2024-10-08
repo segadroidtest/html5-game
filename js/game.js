@@ -12050,7 +12050,6 @@ var DNStateManager = (function() {
             switch (m5.type) {
                 case Constants.MOUSE_DOWN:
                     DNSoundManager.g_instance.init();
-                    myAudio.play();
                     if (C7N8y.Z34(this.liveTime, this.lastMouseDownHandlerTime)) {
                         return;
                     }
@@ -12394,7 +12393,6 @@ var DNStateManager = (function() {
                 scaleY: C7N8y.T8U
             }, C7N8y.N7U, createjs.Ease.linear).wait(m5);
             this.findGUIObject(Layouts.NAME_BUTTON_PLAY).setHandler(function() {
-                integration.showInterstitial();
                 return DNStateManager.g_instance.pushState(new CoolTransitionInState(new SelectLevelState()));
             });
             this.title = this.findGUIObject(C7N8y.N12);
@@ -15202,7 +15200,6 @@ var DNStateManager = (function() {
                     return;
                 }
                 createjs.Sound.setMute(h5);
-                myAudio.pause();
             } catch (m5) {}
         };
         r3.prototype.play = function(b5, h5) {
@@ -15211,7 +15208,6 @@ var DNStateManager = (function() {
                     h5 = 1;
                 }
                 if (this.initiliazed && this.soundEnabled) {
-                    myAudio.play();
                     return createjs.Sound.play(b5, createjs.Sound.INTERRUPT_NONE, 0, 0, 0, h5);
                 }
             } catch (m5) {}
@@ -15224,10 +15220,8 @@ var DNStateManager = (function() {
                 }
                 if (this.initiliazed && this.soundEnabled) {
                     if (!this.wasMusicPlay) {
-                        myAudio.play();
                         var h5 = createjs.Sound.play(r3.SOUND_MUSIC, createjs.Sound.INTERRUPT_NONE, 0, 0, -1, b5);
                         if (C7N8y.J0w(h5.playState, "playFailed")) {
-                            myAudio.pause();
                             return null;
                         }
                     }
@@ -15637,7 +15631,6 @@ var DNStateManager = (function() {
     })(),
     GameOverState = (function(u5) {
         function d3(b5, h5, O5) {
-            integration.showInterstitial();
             var W5 = function() {
                 P5.x = -C7N8y.q62;
             };
@@ -15665,7 +15658,6 @@ var DNStateManager = (function() {
             R5(C7N8y.d02);
             P5.scaleX = P5.scaleY = C7N8y.l72;
             var g3 = new DNJellyButton(Images.BUTTON_EXIT, function() {
-                integration.showInterstitial();
                 return K5.onExitTouch();
             });
             this.panel.addChild(g3);
@@ -18964,7 +18956,6 @@ var DNStateManager = (function() {
             h5();
             W5(C7N8y.a52);
             var P5 = new DNJellyButton(Images.BUTTON_EXIT, function() {
-                integration.showInterstitial();
                 return S5.onExitTouch();
             });
             this.panel.addChild(P5);
