@@ -3,22 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Multi-page App with Fixed App Bar</title>
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="js/bootstrap.bundle.min.js"></script>
-        <script src="https://telegram.org/js/telegram-web-app.js"></script>
-        <script type="text/javascript">
-            
-            window.Telegram.WebApp.ready(); window.Telegram.WebApp.expand();
-        </script>
-    <script src="js/qrcode.js"></script>
-    <script src="js/qrcode.min.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+                <script type="text/javascript">
+                window.gameLangs = ['en'];
+                window.gameJS = ['js/game.js'];
+                window.gameOnLoadScript = "init();";
+            </script>
+            <script type="text/javascript" src="js/script.js"></script>
+            <script type="text/javascript" src="js/hooks.js"></script>
+            <script type="text/javascript" src="js/ads.js"></script>
     <style>
+        /* Basic styles */
+        #viewporter {
+            width: 100%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #canvas {
+            display: block;
+        }
+        
+        /* Loading screen styling */
         #SD-loadscrn {
             position: fixed;
             top: 0;
@@ -44,42 +57,36 @@
     </style>
 </head>
 <body>
+    <div id="viewporter">
+        <canvas id="canvas"></canvas>
+    </div>
 
-            <script type="text/javascript">
-                window.gameLangs = ['en'];
-                window.gameJS = ['js/game.js'];
-                window.gameOnLoadScript = "init();";
-            </script>
-            <script type="text/javascript" src="js/script.js"></script>
-            <script type="text/javascript" src="js/hooks.js"></script>
-            <script type="text/javascript" src="js/ads.js"></script>
+    <script>
+        // Initialize Telegram Web App
+        window.Telegram.WebApp.ready(); 
+        window.Telegram.WebApp.expand();
 
-            <div id="viewporter">
-                <canvas id="canvas" width="700" height="900" style=""></canvas>
-            </div>
-<script>function adjustViewport() {
-    const appBarHeight = 70; // or fetch dynamically if needed
-    const viewportHeight = window.innerHeight - appBarHeight;
+        // Adjust viewport and canvas on load and resize
+        function adjustViewport() {
+            const appBarHeight = 70; // Adjust if your app bar height is different
+            const viewporter = document.getElementById("viewporter");
+            const canvas = document.getElementById("canvas");
 
-    const viewporter = document.getElementById("viewporter");
-    viewporter.style.height = `${viewportHeight}px`;
-    const canvas = document.getElementById("canvas");
-    canvas.width = viewporter.clientWidth;
-    canvas.height = viewporter.clientHeight;
-}
+            // Set the viewport height to respect the app bar
+            const viewportHeight = window.innerHeight - appBarHeight;
+            viewporter.style.height = `${viewportHeight}px`;
 
-window.addEventListener("resize", adjustViewport);
-window.addEventListener("load", adjustViewport);
-</script>
+            // Adjust canvas size with respect to device pixel ratio
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = viewporter.clientWidth * dpr;
+            canvas.height = viewportHeight * dpr;
+            const ctx = canvas.getContext("2d");
+            ctx.scale(dpr, dpr);
+        }
 
-    <script>const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-const dpr = window.devicePixelRatio || 1;
-
-canvas.width = canvas.clientWidth * dpr;
-canvas.height = canvas.clientHeight * dpr;
-ctx.scale(dpr, dpr);
-</script>
-    
+        // Event listeners for loading and resizing
+        window.addEventListener("resize", adjustViewport);
+        window.addEventListener("load", adjustViewport);
+    </script>
 </body>
 </html>
