@@ -20782,7 +20782,7 @@ PreloaderState = (function(S5) {
         document.body.appendChild(backgroundDiv); // Add to the document
 
         // Create loading bar
-        this.loadingBar = new DNLoadingBar(C7N8y.C82, C7N8y.Z22, "#ffffff", C7N8y.Z22);
+        this.loadingBar = new DNLoadingBar(C7N8y.C82, C7N8y.Z22, "#613105", C7N8y.Z22);
         new DNAssetsManager(b5, h5, O5, W5, function(m5) {
             return G5.handleProgress(m5);
         });
