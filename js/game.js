@@ -9887,7 +9887,7 @@ var C7N8y = {
     'x3w': function(m5, b5) {
         return m5 % b5;
     },
-    'Z22': "#fd0a02",
+    'Z22': "#613105",
     'W8u': function(m5, b5) {
         return m5 < b5;
     },
