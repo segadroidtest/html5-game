@@ -339,12 +339,13 @@ background-color: #000000;
         
         // Check if the Telegram context provides user data
         if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            const chatId = tg.initDataUnsafe.user.id; // Retrieve the user's chat ID
+            const userId = tg.initDataUnsafe.user.id; // Retrieve the user's ID
             
-            // If chatId is available, update the referral link
-            if (chatId) {
+            // If userId is available, update the referral link
+            if (userId) {
                 const referralLinkElement = document.getElementById('referral-link');
-                referralLinkElement.textContent = `https://t.me/gamesbotegadroid_test_bot/start?startApp=${chatId}`;
+                // Replace 'UserID' with the actual user ID
+                referralLinkElement.textContent = `https://t.me/gamesbotegadroid_test_bot/start?startApp=${userId}`;
             }
         }
     };
