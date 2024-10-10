@@ -323,7 +323,8 @@ background-color: #000000;
     <h3 style="text-align: center; color: #402104; margin-top: 15px; margin-bottom: 0px;">Your Invite Link:</h3>
    <div id="referral-link-section" style="border-radius: 10px;">
     <div class="referral-link" id="referral-link">
-    <!-- Placeholder link that will be updated with the user ID dynamically -->
+    <!-- Placeholder text for debugging -->
+    Loading your referral link...
 </div>
 <button class="copy-button" onclick="copyLink()" style="border-radius: 10px;">
     <i class="fas fa-copy"></i>
@@ -343,7 +344,11 @@ background-color: #000000;
             if (userId) {
                 const referralLinkElement = document.getElementById('referral-link');
                 referralLinkElement.textContent = `https://t.me/gamesbotegadroid_test_bot/start?startApp=${userId}`;
+            } else {
+                document.getElementById('referral-link').textContent = 'Failed to load user ID';
             }
+        } else {
+            document.getElementById('referral-link').textContent = 'Telegram Web App not initialized';
         }
     };
 
@@ -365,6 +370,7 @@ background-color: #000000;
         }, 2000);
     }
 </script>
+
 
 
 
