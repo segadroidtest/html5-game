@@ -323,13 +323,11 @@ background-color: #000000;
     <h3 style="text-align: center; color: #402104; margin-top: 15px; margin-bottom: 0px;">Your Invite Link:</h3>
    <div id="referral-link-section" style="border-radius: 10px;">
     <div class="referral-link" id="referral-link">
-        <!-- Placeholder link that will be updated with the chat ID -->
-        https://t.me/gamesbotegadroid_test_bot/start?startApp=${userId}
-    </div>
-    <button class="copy-button" onclick="copyLink()" style="border-radius: 10px;">
-        <i class="fas fa-copy"></i>
-    </button>
+    <!-- Placeholder link that will be updated with the user ID dynamically -->
 </div>
+<button class="copy-button" onclick="copyLink()" style="border-radius: 10px;">
+    <i class="fas fa-copy"></i>
+</button>
 <div id="copy-popup" class="popup">Referral link copied to clipboard!</div>
 
 <script type="text/javascript">
@@ -344,7 +342,6 @@ background-color: #000000;
             // If userId is available, update the referral link
             if (userId) {
                 const referralLinkElement = document.getElementById('referral-link');
-                // Replace 'UserID' with the actual user ID
                 referralLinkElement.textContent = `https://t.me/gamesbotegadroid_test_bot/start?startApp=${userId}`;
             }
         }
@@ -368,6 +365,7 @@ background-color: #000000;
         }, 2000);
     }
 </script>
+
 
 
 </div>
