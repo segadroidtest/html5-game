@@ -331,24 +331,21 @@ background-color: #000000;
 <div id="copy-popup" class="popup">Referral link copied to clipboard!</div>
 
 <script type="text/javascript">
-    window.onload = function() {
-        const tg = window.Telegram.WebApp;
+    document.addEventListener('DOMContentLoaded', function() {
+        // Wait for Telegram Web App to be ready
+        Telegram.WebApp.ready();
 
-        // Check if the Telegram context provides user data
-        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            const userId = tg.initDataUnsafe.user.id; // Retrieve the user's ID
+        // Get the Telegram user data
+        const user = Telegram.WebApp.initDataUnsafe.user;
 
-            // Update the referral link text only if user ID is available
-            if (userId) {
-                const referralLinkElement = document.getElementById('referral-link');
-                referralLinkElement.textContent = `https://t.me/gamesbotegadroid_test_bot/start?startApp=${userId}`;
-            } else {
-                document.getElementById('referral-link').textContent = 'User ID not available';
-            }
+        if (user && user.id) {
+            // Generate referral link using user ID
+            const referralLinkElement = document.getElementById('referral-link');
+            referralLinkElement.textContent = `https://t.me/gamesbotegadroid_test_bot/start?startApp=${user.id}`;
         } else {
-            document.getElementById('referral-link').textContent = 'Telegram user data unavailable';
+            document.getElementById('referral-link').textContent = 'User data unavailable';
         }
-    };
+    });
 
     // Copy function for the referral link
     function copyLink() {
