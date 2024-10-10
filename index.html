@@ -323,7 +323,6 @@ background-color: #000000;
     <h3 style="text-align: center; color: #402104; margin-top: 15px; margin-bottom: 0px;">Your Invite Link:</h3>
    <div id="referral-link-section" style="border-radius: 10px;">
     <div class="referral-link" id="referral-link">
-    <!-- Placeholder text for debugging -->
     Loading your referral link...
 </div>
 <button class="copy-button" onclick="copyLink()" style="border-radius: 10px;">
@@ -335,19 +334,30 @@ background-color: #000000;
     // Ensure the Telegram Web App context is available
     window.onload = function() {
         const tg = window.Telegram.WebApp;
-        
-        // Check if the Telegram context provides user data
-        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            const userId = tg.initDataUnsafe.user.id; // Retrieve the user's ID
-            
-            // If userId is available, update the referral link
-            if (userId) {
-                const referralLinkElement = document.getElementById('referral-link');
-                referralLinkElement.textContent = `https://t.me/gamesbotegadroid_test_bot/start?startApp=${userId}`;
+
+        // Check if tg is defined
+        if (tg) {
+            console.log("Telegram Web App initialized");
+
+            // Check if the Telegram context provides user data
+            if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                const userId = tg.initDataUnsafe.user.id; // Retrieve the user's ID
+                console.log("User ID found:", userId);
+                
+                // If userId is available, update the referral link
+                if (userId) {
+                    const referralLinkElement = document.getElementById('referral-link');
+                    referralLinkElement.textContent = `https://t.me/gamesbotegadroid_test_bot/start?startApp=${userId}`;
+                } else {
+                    console.log("User ID not found");
+                    document.getElementById('referral-link').textContent = 'Failed to load user ID';
+                }
             } else {
-                document.getElementById('referral-link').textContent = 'Failed to load user ID';
+                console.log("Telegram user data not available");
+                document.getElementById('referral-link').textContent = 'User data unavailable';
             }
         } else {
+            console.log("Telegram Web App not initialized");
             document.getElementById('referral-link').textContent = 'Telegram Web App not initialized';
         }
     };
@@ -370,6 +380,7 @@ background-color: #000000;
         }, 2000);
     }
 </script>
+
 
 
 
