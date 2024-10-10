@@ -331,34 +331,22 @@ background-color: #000000;
 <div id="copy-popup" class="popup">Referral link copied to clipboard!</div>
 
 <script type="text/javascript">
-    // Ensure the Telegram Web App context is available
     window.onload = function() {
         const tg = window.Telegram.WebApp;
 
-        // Check if tg is defined
-        if (tg) {
-            console.log("Telegram Web App initialized");
+        // Check if the Telegram context provides user data
+        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            const userId = tg.initDataUnsafe.user.id; // Retrieve the user's ID
 
-            // Check if the Telegram context provides user data
-            if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-                const userId = tg.initDataUnsafe.user.id; // Retrieve the user's ID
-                console.log("User ID found:", userId);
-                
-                // If userId is available, update the referral link
-                if (userId) {
-                    const referralLinkElement = document.getElementById('referral-link');
-                    referralLinkElement.textContent = `https://t.me/gamesbotegadroid_test_bot/start?startApp=${userId}`;
-                } else {
-                    console.log("User ID not found");
-                    document.getElementById('referral-link').textContent = 'Failed to load user ID';
-                }
+            // Update the referral link text only if user ID is available
+            if (userId) {
+                const referralLinkElement = document.getElementById('referral-link');
+                referralLinkElement.textContent = `https://t.me/gamesbotegadroid_test_bot/start?startApp=${userId}`;
             } else {
-                console.log("Telegram user data not available");
-                document.getElementById('referral-link').textContent = 'User data unavailable';
+                document.getElementById('referral-link').textContent = 'User ID not available';
             }
         } else {
-            console.log("Telegram Web App not initialized");
-            document.getElementById('referral-link').textContent = 'Telegram Web App not initialized';
+            document.getElementById('referral-link').textContent = 'Telegram user data unavailable';
         }
     };
 
@@ -380,9 +368,6 @@ background-color: #000000;
         }, 2000);
     }
 </script>
-
-
-
 
 
 </div>
