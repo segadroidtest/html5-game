@@ -286,49 +286,21 @@ background-color: #000000;
     </div>
 
     <div id="example-users" style="background-color: #bf5d05; border: 1px solid #a24e03; padding: 0px; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
-        <ul id="users-list" style="list-style-type: none; padding: 0; margin: 0;">
-            <li style="display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #a24e03;">
-                <span style="flex: 1; text-align: left;">John</span>
-                <span style="flex: 1; text-align: center;">6</span>
-                <span style="flex: 1; text-align: right;">231 <img src="assets/img/littlediamond.png" style="height: 15px;"></span>
-            </li>
-            <li style="display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #a24e03;">
-                <span style="flex: 1; text-align: left;">Jane</span>
-                <span style="flex: 1; text-align: center;">3</span>
-                <span style="flex: 1; text-align: right;">462 <img src="assets/img/littlediamond.png" style="height: 15px;"></span>
-            </li>
-            <li style="display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #a24e03;">
-                <span style="flex: 1; text-align: left;">Mike</span>
-                <span style="flex: 1; text-align: center;">4</span>
-                <span style="flex: 1; text-align: right;">136 <img src="assets/img/littlediamond.png" style="height: 15px;"></span>
-            </li>
-            <li style="display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #a24e03;">
-                <span style="flex: 1; text-align: left;">Emily</span>
-                <span style="flex: 1; text-align: center;">1</span>
-                <span style="flex: 1; text-align: right;">211 <img src="assets/img/littlediamond.png" style="height: 15px;"></span>
-            </li>
-            <li style="display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #a24e03;">
-                <span style="flex: 1; text-align: left;">Chris</span>
-                <span style="flex: 1; text-align: center;">5</span>
-                <span style="flex: 1; text-align: right;">235 <img src="assets/img/littlediamond.png" style="height: 15px;"></span>
-            </li>
-            <li style="display: flex; justify-content: space-between; padding: 10px;">
-                <span style="flex: 1; text-align: left;">Sarah</span>
-                <span style="flex: 1; text-align: center;">2</span>
-                <span style="flex: 1; text-align: right;">171 <img src="assets/img/littlediamond.png" style="height: 15px;"></span>
-            </li>
+        <ul id="users-list" style="scrollbar-width: none; list-style: none; padding: 0; margin: 0; max-height: 40vh; overflow-y: auto;">
+            <!-- Example user list with random names -->
         </ul>
     </div>
 
     <h3 style="text-align: center; color: #402104; margin-top: 15px; margin-bottom: 0px;">Your Invite Link:</h3>
-   <div id="referral-link-section" style="border-radius: 10px;">
-    <div class="referral-link" id="referral-link">
-    Loading your referral link...
-</div>
-<button class="copy-button" onclick="copyLink()" style="border-radius: 10px;">
-    <i class="fas fa-copy"></i>
-</button>
-<div id="copy-popup" class="popup">Referral link copied to clipboard!</div>
+    <div id="referral-link-section" style="border-radius: 10px;">
+        <div class="referral-link" id="referral-link">
+            Loading your referral link...
+        </div>
+        <button class="copy-button" onclick="copyLink()" style="border-radius: 10px;">
+            <i class="fas fa-copy"></i>
+        </button>
+        <div id="copy-popup" class="popup">Referral link copied to clipboard!</div>
+    </div>
 
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {
@@ -345,6 +317,56 @@ background-color: #000000;
         } else {
             document.getElementById('referral-link').textContent = 'User data unavailable';
         }
+
+        // Array of user names
+        const names = [
+            'John', 'Jane', 'Mike', 'Emily', 'Chris', 'Sarah',
+            'Alice', 'Bob', 'Charlie', 'David', 'Eva', 'Frank',
+            'Grace', 'Hannah', 'Ian', 'Jack', 'Karen', 'Liam',
+            'Mia', 'Noah', 'Olivia', 'Paul', 'Quinn', 'Riley',
+            'Sophia', 'Tyler', 'Uma', 'Victor', 'Wendy', 'Xander',
+            'Yara', 'Zach', 'Aaron', 'Bella', 'Cameron', 'Diana',
+            'Ethan', 'Fiona', 'Gabe', 'Heidi', 'Isaac', 'Jasmine',
+            'Kendall', 'Leo', 'Maya', 'Nina', 'Oscar', 'Piper',
+            'Quincy', 'Ruby', 'Sam', 'Tina', 'Ulysses', 'Violet',
+            'Walter', 'Xena', 'Yosef', 'Zara', 'Abigail', 'Beau',
+            'Cathy', 'Daniel', 'Ella', 'Fred', 'Gianna', 'Henry',
+            'Isla', 'Julian', 'Kylie', 'Landon', 'Marley', 'Nolan',
+            'Ophelia', 'Parker', 'Quinn', 'Ryder', 'Sadie', 'Troy',
+            'Uma', 'Vance', 'Willow', 'Xavier', 'Yvonne', 'Zane'
+        ];
+
+        // Function to generate random users
+        function generateRandomUsers(count) {
+            const userList = document.getElementById('users-list');
+            userList.innerHTML = ''; // Clear existing users
+
+            for (let i = 0; i < count; i++) {
+                const randomName = names[Math.floor(Math.random() * names.length)];
+                const randomLevel = Math.floor(Math.random() * 6) + 1; // Random level between 1 and 6
+                const randomPoints = Math.floor(Math.random() * 500); // Random points between 0 and 500
+
+                // Create user list item
+                const userItem = document.createElement('li');
+                userItem.style.display = 'flex';
+                userItem.style.justifyContent = 'space-between';
+                userItem.style.padding = '10px';
+                userItem.style.borderBottom = '1px solid #a24e03';
+                userItem.innerHTML = `
+                    <span style="flex: 1; text-align: left;">${randomName}</span>
+                    <span style="flex: 1; text-align: center;">${randomLevel}</span>
+                    <span style="flex: 1; text-align: right;">${randomPoints} <img src="assets/img/littlediamond.png" style="height: 15px;"></span>
+                `;
+                userList.appendChild(userItem);
+            }
+        }
+
+        // Generate 100 random users on page load
+        generateRandomUsers(100);
+
+        // Generate random referrals count and points earned
+        document.getElementById('referrals-count').textContent = Math.floor(Math.random() * 100); // Random number between 0 and 99
+        document.getElementById('points-earned').textContent = Math.floor(Math.random() * 1000); // Random number between 0 and 999
     });
 
     // Copy function for the referral link
@@ -366,8 +388,9 @@ background-color: #000000;
     }
 </script>
 
+
 </div>
-</div>
+
 
 
 
