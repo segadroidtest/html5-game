@@ -13798,12 +13798,8 @@ var DNStateManager = (function() {
                 }]
             }];
         };
-// Initialize telegramUserPoints with a default value
-window.telegramUserPoints = 0; 
 
-// Existing W5 function and layout definition
-var W5 = function() {
-    if (typeof telegramUserPoints === 'undefined') {
+         if (typeof telegramUserPoints === 'undefined') {
         // Wait until points are loaded
         setTimeout(W5, 100);  // Retry after 100ms
         return;
@@ -13815,6 +13811,8 @@ var W5 = function() {
         pointsDisplayElement.textContent = telegramUserPoints;
     }
      document.querySelector("#pointsDisplayElement").textContent = telegramUserPoints;
+        
+var W5 = function() {
     m5.SELECT_LEVEL_LAYOUT = [{
         type: Layouts.TYPE_STATIC_PICTURE,
         picture: Images.SELECT_LEVEL_BACK,
