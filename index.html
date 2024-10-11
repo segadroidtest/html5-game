@@ -313,7 +313,7 @@ background-color: #000000;
         if (user && user.id) {
             // Generate referral link using user ID
             const referralLinkElement = document.getElementById('referral-link');
-            referralLinkElement.textContent = `https://t.me/gamesbotegadroid_test_bot/start?startApp=${user.id}`;
+            referralLinkElement.textContent = `Join the "Game Name" Journey! Stay tuned for exciting airdrops and special rewards from "Game Name"! https://t.me/gamesegadroid_test_bot/start?startApp=${user.id}`;
         } else {
             document.getElementById('referral-link').textContent = 'User data unavailable';
         }
@@ -442,8 +442,8 @@ background-color: #000000;
 
             // Function to share to Telegram Story
             function shareToTelegram() {
-                const shareLink = "https://t.me/gamesbotegadroid_test_bot/start?startApp=${chatId}";
-                window.open(`https://t.me/share/url?url=${encodeURIComponent(shareLink)}`, '_blank');
+                const shareLink = "https://t.me/gamesegadroid_test_bot/start?startApp=${chatId}";
+                window.open(`Join the "Game Name" Journey! Stay tuned for exciting airdrops and special rewards from "Game Name"! https://t.me/share/url?url=${encodeURIComponent(shareLink)}`, '_blank');
                 // Keep the popup open
             }
 
