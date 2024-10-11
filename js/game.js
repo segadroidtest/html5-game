@@ -13810,7 +13810,7 @@ var DNStateManager = (function() {
     if (pointsDisplayElement) {
         pointsDisplayElement.textContent = telegramUserPoints;
     }
-     document.querySelector("#pointsDisplayElement").textContent = telegramUserPoints;
+
         
 var W5 = function() {
     m5.SELECT_LEVEL_LAYOUT = [{
