@@ -13798,6 +13798,9 @@ var DNStateManager = (function() {
                 }]
             }];
         };
+// Initialize telegramUserPoints with a default value
+window.telegramUserPoints = 0; 
+
 // Existing W5 function and layout definition
 var W5 = function() {
     m5.SELECT_LEVEL_LAYOUT = [{
@@ -13842,14 +13845,9 @@ var W5 = function() {
     }];
 };
 
-// Place the script below, after W5 is defined
-// Assuming this is the part where `telegramUserPoints` is being set globally
-window.telegramUserPoints = typeof telegramUserPoints !== "undefined" ? telegramUserPoints : 0;
-
+// Define the function to update the gold text
 function updateGoldText() {
-    // Check if SELECT_LEVEL_LAYOUT and telegramUserPoints exist
-    if (m5 && m5.SELECT_LEVEL_LAYOUT && typeof window.telegramUserPoints !== "undefined") {
-        // Locate the NAME_GOLD entry and update the text field
+    if (m5 && m5.SELECT_LEVEL_LAYOUT) {
         m5.SELECT_LEVEL_LAYOUT.forEach(layoutItem => {
             if (layoutItem.name === Layouts.NAME_GOLD) {
                 layoutItem.text = window.telegramUserPoints;
@@ -13858,15 +13856,21 @@ function updateGoldText() {
     }
 }
 
-// Ensure the function runs after W5 and DOM are ready
+// Run after DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
-    if (typeof window.W5 === "function") {
-        W5(); // Initialize SELECT_LEVEL_LAYOUT
-        updateGoldText(); // Update the gold text field with telegramUserPoints
-    } else {
-        console.warn("W5 function is not defined. Ensure game.js is loaded correctly.");
-    }
+    W5(); // Initialize SELECT_LEVEL_LAYOUT
+    updateGoldText(); // Update gold text with current telegramUserPoints
+
+    // After Telegram Web App is ready, update telegramUserPoints and refresh gold text
+    Telegram.WebApp.ready(() => {
+        const user = Telegram.WebApp.initDataUnsafe.user;
+        if (user) {
+            window.telegramUserPoints = /* Your logic to set points, e.g., */ Math.floor(Math.random() * 1000);
+            updateGoldText();
+        }
+    });
 });
+
 
         h5();
         W5();
