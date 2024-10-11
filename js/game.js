@@ -13735,12 +13735,6 @@ var DNStateManager = (function() {
                 y: C7N8y.R14(Constants.ASSETS_HEIGHT, 215 / 2)
             }];
         };
-        if (telegramUserPoints !== undefined) {
-    const pointsDisplay = document.getElementById('telegramUserPointsDisplay');
-    if (pointsDisplay) {
-        pointsDisplay.textContent = telegramUserPoints; // Set the calculated points
-    }
-};
         var O5 = function() {
             m5.PLAYSTATE_LAYOUT = [{
                 type: Layouts.TYPE_STATIC_PICTURE,
@@ -13804,51 +13798,76 @@ var DNStateManager = (function() {
                 }]
             }];
         };
-        var W5 = function() {
-            m5.SELECT_LEVEL_LAYOUT = [{
-                type: Layouts.TYPE_STATIC_PICTURE,
-                picture: Images.SELECT_LEVEL_BACK,
-                x: C7N8y.X94(Constants.ASSETS_WIDTH, 2),
-                y: C7N8y.C94(147, 2),
-                children: [{
-                    type: Layouts.TYPE_TEXT_FIELD,
-                    x: -120,
-                    y: 0,
-                    name: Layouts.NAME_SCORE,
-                    font: DNFontDef.FONT,
-                    text: "000000"
-                }, {
-                    type: Layouts.TYPE_TEXT_FIELD,
-                    x: -120,
-                    y: -53,
-                    name: Layouts.NAME_STARS,
-                    font: DNFontDef.FONT,
-                    text: "180"
-                }, {
+// Existing W5 function and layout definition
+var W5 = function() {
+    m5.SELECT_LEVEL_LAYOUT = [{
+        type: Layouts.TYPE_STATIC_PICTURE,
+        picture: Images.SELECT_LEVEL_BACK,
+        x: C7N8y.X94(Constants.ASSETS_WIDTH, 2),
+        y: C7N8y.C94(147, 2),
+        children: [{
+            type: Layouts.TYPE_TEXT_FIELD,
+            x: -120,
+            y: 0,
+            name: Layouts.NAME_SCORE,
+            font: DNFontDef.FONT,
+            text: "000000"
+        }, {
+            type: Layouts.TYPE_TEXT_FIELD,
+            x: -120,
+            y: -53,
+            name: Layouts.NAME_STARS,
+            font: DNFontDef.FONT,
+            text: "180"
+        }, {
+            type: Layouts.TYPE_TEXT_FIELD,
+            x: 155,
+            y: -29,
+            name: Layouts.NAME_GOLD,
+            font: DNFontDef.FONT,
+            text: ""
+        }, {
+            type: Layouts.TYPE_STATIC_PICTURE,
+            x: 127,
+            y: -12,
+            picture: Images.GOLD_ICON
+        }]
+    }, {
+        type: Layouts.TYPE_JELLY_BUTTON,
+        picture: Images.BUTTON_EXIT,
+        x: 75,
+        y: 65,
+        name: Layouts.NAME_BUTTON_BACK,
+        scale: 1
+    }];
+};
 
-    type: Layouts.TYPE_TEXT_FIELD,
-    x: 155,
-    y: -29,
-    name: Layouts.NAME_GOLD,
-    font: DNFontDef.FONT,
-    text: "",
-    id: "telegramUserPointsDisplay" // Add this ID for targeting
-},
- {
-                    type: Layouts.TYPE_STATIC_PICTURE,
-                    x: 127,
-                    y: -12,
-                    picture: Images.GOLD_ICON
-                }]
-            }, {
-                type: Layouts.TYPE_JELLY_BUTTON,
-                picture: Images.BUTTON_EXIT,
-                x: 75,
-                y: 65,
-                name: Layouts.NAME_BUTTON_BACK,
-                scale: 1
-            }];
-        };
+// Place the script below, after W5 is defined
+// Assuming this is the part where `telegramUserPoints` is being set globally
+window.telegramUserPoints = typeof telegramUserPoints !== "undefined" ? telegramUserPoints : 0;
+
+function updateGoldText() {
+    // Check if SELECT_LEVEL_LAYOUT and telegramUserPoints exist
+    if (m5 && m5.SELECT_LEVEL_LAYOUT && typeof window.telegramUserPoints !== "undefined") {
+        // Locate the NAME_GOLD entry and update the text field
+        m5.SELECT_LEVEL_LAYOUT.forEach(layoutItem => {
+            if (layoutItem.name === Layouts.NAME_GOLD) {
+                layoutItem.text = window.telegramUserPoints;
+            }
+        });
+    }
+}
+
+// Ensure the function runs after W5 and DOM are ready
+document.addEventListener('DOMContentLoaded', () => {
+    if (typeof window.W5 === "function") {
+        W5(); // Initialize SELECT_LEVEL_LAYOUT
+        updateGoldText(); // Update the gold text field with telegramUserPoints
+    } else {
+        console.warn("W5 function is not defined. Ensure game.js is loaded correctly.");
+    }
+});
+
         h5();
         W5();
         O5();
