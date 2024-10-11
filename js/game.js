@@ -13798,21 +13798,37 @@ var DNStateManager = (function() {
                 }]
             }];
         };
+// Global variable for user points
+var telegramUserPoints = 0;
 
-         if (typeof telegramUserPoints === 'undefined') {
-        // Wait until points are loaded
-        setTimeout(W5, 100);  // Retry after 100ms
-        return;
-    }
+// Function to fetch points from the server or your API
+function fetchPoints() {
+    return new Promise((resolve) => {
+        // Simulating a fetch request to get points (replace this with your actual fetch logic)
+        setTimeout(() => {
+            // Simulated fetched points (replace this with the actual fetched value)
+            const fetchedPoints = 1830;  // Example value
+            resolve(fetchedPoints);
+        }, 1000);  // Simulate network delay
+    });
+}
 
-    // Render the screen with the correct points
-    const pointsDisplayElement = document.querySelector("#pointsDisplayElement");
-    if (pointsDisplayElement) {
-        pointsDisplayElement.textContent = telegramUserPoints;
-    }
+// Function to fetch and display points
+function fetchAndDisplayPoints() {
+    fetchPoints().then(points => {
+        telegramUserPoints = points;  // Update the global variable
+        console.log("Fetched Points:", telegramUserPoints); // Debug: Check fetched points
 
-        
+        const pointsDisplayElements = document.querySelectorAll(".pointsDisplay");  // Use a shared class for all points display areas
+        pointsDisplayElements.forEach(element => {
+            element.textContent = telegramUserPoints;  // Update all elements with pointsDisplay class
+        });
+    });
+}
+
+// Example of your W5 function
 var W5 = function() {
+    fetchAndDisplayPoints();  // Fetch and display points on screen load
     m5.SELECT_LEVEL_LAYOUT = [{
         type: Layouts.TYPE_STATIC_PICTURE,
         picture: Images.SELECT_LEVEL_BACK,
@@ -13855,32 +13871,18 @@ var W5 = function() {
     }];
 };
 
-// Define the function to update the gold text
-function updateGoldText() {
-    if (m5 && m5.SELECT_LEVEL_LAYOUT) {
-        m5.SELECT_LEVEL_LAYOUT.forEach(layoutItem => {
-            if (layoutItem.name === Layouts.NAME_GOLD) {
-                layoutItem.text = window.telegramUserPoints;
-            }
-        });
-    }
+// Example of screen navigation function
+function navigateToLeaderboard() {
+    W5();  // Call W5 when navigating to the leaderboard
 }
 
-// Run after DOMContentLoaded
-document.addEventListener('DOMContentLoaded', () => {
-    W5(); // Initialize SELECT_LEVEL_LAYOUT
-    updateGoldText(); // Update gold text with current telegramUserPoints
+// Example HTML structure for displaying points
+// <span class="pointsDisplay">0</span>  // Place this wherever you want to show points
 
-    // After Telegram Web App is ready, update telegramUserPoints and refresh gold text
-    Telegram.WebApp.ready(() => {
-        const user = Telegram.WebApp.initDataUnsafe.user;
-        if (user) {
-            window.telegramUserPoints = /* Your logic to set points, e.g., */ Math.floor(Math.random() * 1000);
-            updateGoldText();
-        }
-    });
-});
-
+// Optionally, you can also call fetchAndDisplayPoints when the page loads
+window.onload = function() {
+    fetchAndDisplayPoints();  // Fetch points when the page loads
+};
 
         h5();
         W5();
