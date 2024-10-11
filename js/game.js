@@ -13803,6 +13803,7 @@ window.telegramUserPoints = 0;
 
 // Existing W5 function and layout definition
 var W5 = function() {
+     document.querySelector("#pointsDisplayElement").textContent = telegramUserPoints;
     m5.SELECT_LEVEL_LAYOUT = [{
         type: Layouts.TYPE_STATIC_PICTURE,
         picture: Images.SELECT_LEVEL_BACK,
