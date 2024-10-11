@@ -13803,6 +13803,17 @@ window.telegramUserPoints = 0;
 
 // Existing W5 function and layout definition
 var W5 = function() {
+    if (typeof telegramUserPoints === 'undefined') {
+        // Wait until points are loaded
+        setTimeout(W5, 100);  // Retry after 100ms
+        return;
+    }
+
+    // Render the screen with the correct points
+    const pointsDisplayElement = document.querySelector("#pointsDisplayElement");
+    if (pointsDisplayElement) {
+        pointsDisplayElement.textContent = telegramUserPoints;
+    }
      document.querySelector("#pointsDisplayElement").textContent = telegramUserPoints;
     m5.SELECT_LEVEL_LAYOUT = [{
         type: Layouts.TYPE_STATIC_PICTURE,
