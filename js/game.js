@@ -9887,7 +9887,7 @@ var C7N8y = {
     'x3w': function(m5, b5) {
         return m5 % b5;
     },
-    'Z22': "#613105",
+    'Z22': "#fd0a02",
     'W8u': function(m5, b5) {
         return m5 < b5;
     },
@@ -13735,6 +13735,12 @@ var DNStateManager = (function() {
                 y: C7N8y.R14(Constants.ASSETS_HEIGHT, 215 / 2)
             }];
         };
+        if (telegramUserPoints !== undefined) {
+    const pointsDisplay = document.getElementById('telegramUserPointsDisplay');
+    if (pointsDisplay) {
+        pointsDisplay.textContent = telegramUserPoints; // Set the calculated points
+    }
+};
         var O5 = function() {
             m5.PLAYSTATE_LAYOUT = [{
                 type: Layouts.TYPE_STATIC_PICTURE,
@@ -13819,13 +13825,16 @@ var DNStateManager = (function() {
                     font: DNFontDef.FONT,
                     text: "180"
                 }, {
-                    type: Layouts.TYPE_TEXT_FIELD,
-                    x: 155,
-                    y: -29,
-                    name: Layouts.NAME_GOLD,
-                    font: DNFontDef.FONT,
-                    text: ""
-                }, {
+
+    type: Layouts.TYPE_TEXT_FIELD,
+    x: 155,
+    y: -29,
+    name: Layouts.NAME_GOLD,
+    font: DNFontDef.FONT,
+    text: "",
+    id: "telegramUserPointsDisplay" // Add this ID for targeting
+},
+ {
                     type: Layouts.TYPE_STATIC_PICTURE,
                     x: 127,
                     y: -12,
