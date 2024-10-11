@@ -13798,92 +13798,48 @@ var DNStateManager = (function() {
                 }]
             }];
         };
-// Global variable for user points
-var telegramUserPoints = 0;
-
-// Function to fetch points from the server or your API
-function fetchPoints() {
-    return new Promise((resolve) => {
-        // Simulating a fetch request to get points (replace this with your actual fetch logic)
-        setTimeout(() => {
-            // Simulated fetched points (replace this with the actual fetched value)
-            const fetchedPoints = 1830;  // Example value
-            resolve(fetchedPoints);
-        }, 1000);  // Simulate network delay
-    });
-}
-
-// Function to fetch and display points
-function fetchAndDisplayPoints() {
-    fetchPoints().then(points => {
-        telegramUserPoints = points;  // Update the global variable
-        console.log("Fetched Points:", telegramUserPoints); // Debug: Check fetched points
-
-        const pointsDisplayElements = document.querySelectorAll(".pointsDisplay");  // Use a shared class for all points display areas
-        pointsDisplayElements.forEach(element => {
-            element.textContent = telegramUserPoints;  // Update all elements with pointsDisplay class
-        });
-    });
-}
-
-// Example of your W5 function
-var W5 = function() {
-    fetchAndDisplayPoints();  // Fetch and display points on screen load
-    m5.SELECT_LEVEL_LAYOUT = [{
-        type: Layouts.TYPE_STATIC_PICTURE,
-        picture: Images.SELECT_LEVEL_BACK,
-        x: C7N8y.X94(Constants.ASSETS_WIDTH, 2),
-        y: C7N8y.C94(147, 2),
-        children: [{
-            type: Layouts.TYPE_TEXT_FIELD,
-            x: -120,
-            y: 0,
-            name: Layouts.NAME_SCORE,
-            font: DNFontDef.FONT,
-            text: "000000"
-        }, {
-            type: Layouts.TYPE_TEXT_FIELD,
-            x: -120,
-            y: -53,
-            name: Layouts.NAME_STARS,
-            font: DNFontDef.FONT,
-            text: "180"
-        }, {
-            type: Layouts.TYPE_TEXT_FIELD,
-            x: 155,
-            y: -29,
-            name: Layouts.NAME_GOLD,
-            font: DNFontDef.FONT,
-            text: ""
-        }, {
-            type: Layouts.TYPE_STATIC_PICTURE,
-            x: 127,
-            y: -12,
-            picture: Images.GOLD_ICON
-        }]
-    }, {
-        type: Layouts.TYPE_JELLY_BUTTON,
-        picture: Images.BUTTON_EXIT,
-        x: 75,
-        y: 65,
-        name: Layouts.NAME_BUTTON_BACK,
-        scale: 1
-    }];
-};
-
-// Example of screen navigation function
-function navigateToLeaderboard() {
-    W5();  // Call W5 when navigating to the leaderboard
-}
-
-// Example HTML structure for displaying points
-// <span class="pointsDisplay">0</span>  // Place this wherever you want to show points
-
-// Optionally, you can also call fetchAndDisplayPoints when the page loads
-window.onload = function() {
-    fetchAndDisplayPoints();  // Fetch points when the page loads
-};
-
+        var W5 = function() {
+            m5.SELECT_LEVEL_LAYOUT = [{
+                type: Layouts.TYPE_STATIC_PICTURE,
+                picture: Images.SELECT_LEVEL_BACK,
+                x: C7N8y.X94(Constants.ASSETS_WIDTH, 2),
+                y: C7N8y.C94(147, 2),
+                children: [{
+                    type: Layouts.TYPE_TEXT_FIELD,
+                    x: -120,
+                    y: 0,
+                    name: Layouts.NAME_SCORE,
+                    font: DNFontDef.FONT,
+                    text: "000000"
+                }, {
+                    type: Layouts.TYPE_TEXT_FIELD,
+                    x: -120,
+                    y: -53,
+                    name: Layouts.NAME_STARS,
+                    font: DNFontDef.FONT,
+                    text: "180"
+                }, {
+                    type: Layouts.TYPE_TEXT_FIELD,
+                    x: 155,
+                    y: -29,
+                    name: Layouts.NAME_GOLD,
+                    font: DNFontDef.FONT,
+                    text: "233"
+                }, {
+                    type: Layouts.TYPE_STATIC_PICTURE,
+                    x: 127,
+                    y: -12,
+                    picture: Images.GOLD_ICON
+                }]
+            }, {
+                type: Layouts.TYPE_JELLY_BUTTON,
+                picture: Images.BUTTON_EXIT,
+                x: 75,
+                y: 65,
+                name: Layouts.NAME_BUTTON_BACK,
+                scale: 1
+            }];
+        };
         h5();
         W5();
         O5();
