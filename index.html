@@ -445,25 +445,9 @@ background-color: #000000;
             let telegramUserPoints = 0;
 
 
-Telegram.WebApp.ready();
-
-// Get the Telegram user data
-const user = Telegram.WebApp.initDataUnsafe.user;
-
-// Initialize the referral link
-let referralLink = '';
-
-if (user && user.id) {
-    // Generate referral link using user ID
-    referralLink = `https://t.me/gamesegadroid_test_bot/start?startApp=${user.id}`;
-    document.getElementById('referral-link').textContent = referralLink;
-} else {
-    document.getElementById('referral-link').textContent = 'User data unavailable';
-}
-
-// Function to share to Telegram Story
 function shareToTelegramStory() {
-    const storyText = "Check out this amazing game! Join us now!";
+    document.getElementById('share-approved').src = 'assets/img/approved.png';
+    const storyText = "Join the "Game Name" Journey! Stay tuned for exciting airdrops and special rewards from "Game Name"!";
     const storyLink = referralLink || "https://example.com"; // Fallback in case referralLink is empty
 
     // Construct the story sharing link
