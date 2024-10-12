@@ -461,7 +461,7 @@ background-color: #000000;
                 // Keep the popup open
                 setTimeout(function() {
                     document.getElementById('subscribe-approved').src = 'assets/img/approved.png';
-                }, 3000);
+                }, 2000);
                 // Update points and leaderboard
                 telegramUserPoints += 500; // Add 500 points
                 updateLeaderboard();
@@ -473,37 +473,6 @@ background-color: #000000;
                 console.log(`Updated Telegram Points: ${telegramUserPoints}`);
                 // Here, you can add code to refresh or update the leaderboard display accordingly.
             }
-
-            
-
-Telegram.WebApp.ready();
-
-// Get the Telegram user data
-const user = Telegram.WebApp.initDataUnsafe.user;
-
-// Initialize the referral link
-let referralLink = '';
-
-if (user && user.id) {
-    // Generate referral link using user ID
-    referralLink = `https://t.me/gamesegadroid_test_bot/start?startApp=${user.id}`;
-    document.getElementById('referral-link').textContent = referralLink;
-} else {
-    document.getElementById('referral-link').textContent = 'User data unavailable';
-}
-
-// Function to share to Telegram Story
-function shareToTelegramStory() {
-    document.getElementById('share-approved').src = 'assets/img/approved.png';
-    const storyText = "Join the "Game Name" Journey! Stay tuned for exciting airdrops and special rewards from "Game Name"!";
-    const storyLink = referralLink || "https://example.com"; // Fallback in case referralLink is empty
-
-    // Construct the story sharing link
-    const storyUrl = `https://t.me/share/url?url=${encodeURIComponent(storyLink)}&text=${encodeURIComponent(storyText)}`;
-
-    // Open the link in Telegram's story sharing
-    Telegram.WebApp.openTelegramLink(storyUrl);
-}
         </script>
     </div>
 </div>
@@ -817,6 +786,36 @@ pointsSpan.style.marginLeft = 'auto';
     document.querySelector('#user-rank span').innerText = `${user.username}`;
     document.querySelector('#user-rank span[style*="font-style"]').innerText = `${currentUserName}`;
 </script>
+<script type="text/javascript">
+Telegram.WebApp.ready();
 
+// Get the Telegram user data
+const user = Telegram.WebApp.initDataUnsafe.user;
+
+// Initialize the referral link
+let referralLink = '';
+
+if (user && user.id) {
+    // Generate referral link using user ID
+    referralLink = `https://t.me/gamesegadroid_test_bot/start?startApp=${user.id}`;
+    document.getElementById('referral-link').textContent = referralLink;
+} else {
+    document.getElementById('referral-link').textContent = 'User data unavailable';
+}
+
+// Function to share to Telegram Story
+function shareToTelegramStory() {
+                    setTimeout(function() {
+                    document.getElementById('share-approved').src = 'assets/img/approved.png';
+                }, 2000);
+    const storyText = "Join the Game Name Journey! Stay tuned for exciting airdrops and special rewards from Game Name!";
+    const storyLink = referralLink || "https://example.com"; // Fallback in case referralLink is empty
+
+    // Construct the story sharing link
+    const storyUrl = `https://t.me/share/url?url=${encodeURIComponent(storyLink)}&text=${encodeURIComponent(storyText)}`;
+
+    // Open the link in Telegram's story sharing
+    Telegram.WebApp.openTelegramLink(storyUrl);
+}</script>
 </body>
 </html>
