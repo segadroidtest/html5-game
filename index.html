@@ -445,14 +445,21 @@ background-color: #000000;
             let telegramUserPoints = 0;
 
             // Function to share to Telegram Story
-           function shareToTelegram() {
-    const chatId = "<YOUR_CHAT_ID>"; // Replace with dynamic ID if available
+          function shareToTelegram() {
+    const chatId = "<YOUR_CHAT_ID>"; // Replace with the actual or dynamic chat ID
     const shareLink = `https://t.me/gamesegadroid_test_bot/start?startApp=${chatId}`;
     const message = `Join the "Game Name" Journey! Stay tuned for exciting airdrops and special rewards from "Game Name"! ${shareLink}`;
 
-    // Encode the message and open the Telegram share URL
-    window.open(`tg://msg_url?text=${encodeURIComponent(message)}`, '_blank');
+    Telegram.WebApp.showPopup({
+        title: "Share",
+        message: `Copy this message to share:\n\n${message}`,
+        buttons: [
+            { text: "Copy to Clipboard", type: "copy" },
+            { text: "Close", type: "close" }
+        ]
+    });
 }
+
 
             // Function for daily check-in
             function dailyCheckin() {
