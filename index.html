@@ -404,7 +404,7 @@ background-color: #000000;
         <ul id="tasks-list" style="margin-bottom: -5px; margin-top: -5px; list-style-type: none; padding: 0;">
             <ul style="list-style-type: none; padding-left: 0;">
                 <!-- Share to Telegram Story -->
-                <li id="share-story" style="position: relative; margin-bottom: 10px; background-color: #bf5d05; border: 1px solid #a24e03; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;" onclick="shareToTelegram()">
+                <li id="share-story" style="position: relative; margin-bottom: 10px; background-color: #bf5d05; border: 1px solid #a24e03; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;" onclick="shareToTelegramStory()">
                     <span style="display: block; font-size: 15px; font-weight: bold;">Share to your Telegram Story</span>
                     <span style="font-weight: bold;">
                         <img src="assets/img/littlediamond.png" style="height: 15px;"> +500 
@@ -444,20 +444,33 @@ background-color: #000000;
             // Assume telegramUserPoints is defined somewhere in your global scope
             let telegramUserPoints = 0;
 
-            // Function to share to Telegram Story
-          function shareToTelegram() {
-    const chatId = "<YOUR_CHAT_ID>"; // Replace with the actual or dynamic chat ID
-    const shareLink = `https://t.me/gamesegadroid_test_bot/start?startApp=${chatId}`;
-    const message = `Join the "Game Name" Journey! Stay tuned for exciting airdrops and special rewards from "Game Name"! ${shareLink}`;
 
-    Telegram.WebApp.showPopup({
-        title: "Share",
-        message: `Copy this message to share:\n\n${message}`,
-        buttons: [
-            { text: "Copy to Clipboard", type: "copy" },
-            { text: "Close", type: "close" }
-        ]
-    });
+Telegram.WebApp.ready();
+
+// Get the Telegram user data
+const user = Telegram.WebApp.initDataUnsafe.user;
+
+// Initialize the referral link
+let referralLink = '';
+
+if (user && user.id) {
+    // Generate referral link using user ID
+    referralLink = `https://t.me/gamesegadroid_test_bot/start?startApp=${user.id}`;
+    document.getElementById('referral-link').textContent = referralLink;
+} else {
+    document.getElementById('referral-link').textContent = 'User data unavailable';
+}
+
+// Function to share to Telegram Story
+function shareToTelegramStory() {
+    const storyText = "Check out this amazing game! Join us now!";
+    const storyLink = referralLink || "https://example.com"; // Fallback in case referralLink is empty
+
+    // Construct the story sharing link
+    const storyUrl = `https://t.me/share/url?url=${encodeURIComponent(storyLink)}&text=${encodeURIComponent(storyText)}`;
+
+    // Open the link in Telegram's story sharing
+    Telegram.WebApp.openTelegramLink(storyUrl);
 }
 
 
