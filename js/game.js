@@ -10208,7 +10208,7 @@ var C7N8y = {
     'K84': function(m5, b5) {
         return m5 == b5;
     },
-    'y5m': "#934007",
+    'y5m': "#1e4366",
     'b24': function(m5, b5) {
         return m5 < b5;
     },
