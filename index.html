@@ -264,21 +264,28 @@ background-color: #000000;
 <div id="page3" class="page" style="background: linear-gradient(to bottom, #ff9f2f, #f7be5c) !important; color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 100px); overflow-y: auto;">
     <h1>Welcome to the Referral Program</h1>
     <p>Invite your friends and earn rewards!</p>
-    <div id="referrals-container">
-        <p>Total Referrals: <span id="referrals-count">0</span></p>
-        <p>Points Earned: <span id="points-earned">0</span></p>
-        <h2>Your Referrals:</h2>
-        <table id="referral-table">
+<div id="referrals-container" style="border: none !important; background: #894507; padding: 10px 15px; margin-top: 0; margin-bottom: 0px; border-radius: 10px;">
+    <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #a24e03; padding-bottom: 5px;">
+        <span style="flex: 1; text-align: left; font-weight: bold;">Total Referrals: <span id="referrals-count">0</span></span>
+        <span style="flex: 1; text-align: center; font-weight: bold;">Points Earned: <span id="points-earned">0</span></span>
+    </div>
+    <h2 style="color: #fff;">Your Referrals:</h2>
+    <div style="background-color: #bf5d05; border: 1px solid #a24e03; padding: 0px; border-radius: 10px;">
+        <table id="referral-table" style="width: 100%; border-collapse: collapse;">
             <thead>
                 <tr>
-                    <th>Referral Username</th>
-                    <th>Level</th>
-                    <th>Points</th>
+                    <th style="padding: 10px; color: #fff; text-align: left;">Referral Username</th>
+                    <th style="padding: 10px; color: #fff; text-align: center;">Level</th>
+                    <th style="padding: 10px; color: #fff; text-align: right;">Points</th>
                 </tr>
             </thead>
-            <tbody id="referral-list"></tbody> <!-- List to display referrals -->
+            <tbody id="referral-list" style="scrollbar-width: none; max-height: 40vh; overflow-y: auto;">
+                <!-- List to display referrals -->
+            </tbody>
         </table>
     </div>
+</div>
+
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
