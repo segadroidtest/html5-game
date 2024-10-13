@@ -271,9 +271,8 @@ background-color: #000000;
     </div>
 </body>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script>
 
-
+    <script>
 document.addEventListener("DOMContentLoaded", async function() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id;
 
@@ -288,13 +287,12 @@ document.addEventListener("DOMContentLoaded", async function() {
             document.getElementById("points-earned").textContent = userData.totalPoints || 0;
         } catch (error) {
             console.error("Failed to fetch referral data:", error);
+            document.getElementById("referrals-container").innerHTML += "<p style='color:red;'>Failed to load referral data. Please try again later.</p>";
         }
     }
 
     await fetchReferralData(userId);
 });
-
-    
 </script>
 
 
