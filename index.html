@@ -318,26 +318,19 @@ document.addEventListener("DOMContentLoaded", async function() {
             document.getElementById("points-earned").textContent = userData.totalPoints || 0;
 
             // Display referral details in table
-            const referralList = document.getElementById("referral-list");
-             userData.referrals.forEach(referral => {
-                const listItem = document.createElement("tr");
-
-                // Create table cells for username, level, and points
-                const usernameCell = document.createElement("td");
-                const levelCell = document.createElement("td");
-                const pointsCell = document.createElement("td");
-
-                // Set the content for the cells
-                usernameCell.textContent = referral.username;
-                levelCell.textContent = getReferralLevel(referral.totalReferrals); // Determine level
-                pointsCell.textContent = referral.totalPoints;
-
-                // Append cells to the table row
-                listItem.appendChild(usernameCell);
-                listItem.appendChild(levelCell);
-                listItem.appendChild(pointsCell);
-
-                // Append the row to the table body
+            const referralList = document.getElementById('referral-list');
+            referralList.innerHTML = ''; // Clear existing items
+            data.referrals.forEach(referral => {
+                const listItem = document.createElement('li');
+                listItem.style.display = 'flex';
+                listItem.style.justifyContent = 'space-between';
+                listItem.style.padding = '10px';
+                listItem.style.borderBottom = '1px solid #a24e03';
+                listItem.innerHTML = `
+                    <span style="flex: 1; text-align: left;">${referral.name}</span>
+                    <span style="flex: 1; text-align: center;">${referral.level}</span>
+                    <span style="flex: 1; text-align: right;">${referral.earned} <img src="assets/img/littlediamond.png" style="height: 15px;"></span>
+                `;
                 referralList.appendChild(listItem);
             });
 
