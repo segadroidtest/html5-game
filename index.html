@@ -262,7 +262,6 @@ background-color: #000000;
 
 
 <div id="page3" class="page" style="background: linear-gradient(to bottom, #ff9f2f, #f7be5c) !important; color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 100px); overflow-y: auto;">
-
     <div id="referral-stats" style="display: flex; justify-content: space-between; padding: 10px 15px; margin-top: 0; margin-bottom: 0px; border-radius: 10px; background-color: #bf5d05; border: 1px solid #a24e03;">
         <div class="stat" style="flex: 1; text-align: left; font-weight: bold; border-right: 1px solid #a24e03; padding-right: 10px;">
             <img src="assets/img/friends.png" style="height: 15px; padding-right: 8px;">
@@ -334,38 +333,36 @@ background-color: #000000;
                     referralList.appendChild(listItem);
                 });
 
-                // Set the referral link
-                document.getElementById('referral-link').textContent = userData.referralLink || 'Referral link not available';
+                // Ensure you set the referral link correctly
+                const referralLink = `https://t.me/gamesegadroid_test_bot?start=${userData.referralCode}`; // Replace with the correct code
+                document.getElementById('referral-link').textContent = referralLink;
 
             } catch (error) {
                 console.error("Failed to fetch referral data:", error);
+                document.getElementById('referral-link').textContent = "Referral link not available"; // Show default message on error
             }
         }
 
-        await fetchReferralData(userId);
+        fetchReferralData(userId);
     });
 
-    // Function to get the referral level
-    function getReferralLevel(totalReferrals) {
-        if (totalReferrals >= 50) return 6;
-        if (totalReferrals >= 20) return 5;
-        if (totalReferrals >= 15) return 4;
-        if (totalReferrals >= 10) return 3;
-        if (totalReferrals >= 4) return 2;
-        if (totalReferrals >= 1) return 1;
-        return 0; // Level 0 if no referrals
-    }
-
-    // Copy function for the referral link
     function copyLink() {
         const referralLink = document.getElementById('referral-link').textContent;
+
         navigator.clipboard.writeText(referralLink).then(() => {
-            const popup = document.getElementById('copy-popup');
-            popup.style.display = 'block';
-            setTimeout(() => {
-                popup.style.display = 'none';
-            }, 2000);
-        }).catch(err => console.error('Could not copy text: ', err));
+            showCopyPopup();
+        }).catch(err => {
+            console.error('Failed to copy text: ', err);
+        });
+    }
+
+    function showCopyPopup() {
+        const popup = document.getElementById('copy-popup');
+        popup.style.display = 'block';
+
+        setTimeout(() => {
+            popup.style.display = 'none';
+        }, 2000); // Hide popup after 2 seconds
     }
     </script>
 </div>
