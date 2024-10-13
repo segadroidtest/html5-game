@@ -279,16 +279,14 @@ background-color: #000000;
 
 <div id="page3" class="page" style="background: rgba(46, 44, 55, 0.7);color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 100px); overflow-y: auto;">
 
-
-    
     <div id="referral-stats" style="display: flex; justify-content: space-between; padding: 10px 15px; margin-top: 0; margin-bottom: 0px; border-radius: 10px; background: #1e1d22; color: white !important; border: 1px solid #101013;">
         <div class="stat" style="justify-content: space-evenly;flex: 1; text-align: left; font-weight: bold; border-right: 1px solid #4a4855; padding-right: 10px;">
             <img src="assets/img/friends.png" style="height: 15px; padding-right: 0px;">
-            Referrals:  <span id="referrals-count"> 0</span>
+            Referrals: <span id="referrals-count">0</span>
         </div>
         <div class="stat" style="justify-content: space-evenly;padding-left: 15px;flex: 1; text-align: center; font-weight: bold;">
             <img src="assets/img/littlediamond.png" style="height: 15px; padding-right: 0px;">
-            Earned:  <span id="points-earned"> 0</span>
+            Earned: <span id="points-earned">0</span>
         </div>
     </div>
 
@@ -301,7 +299,7 @@ background-color: #000000;
             <span style="flex: 1; text-align: right; font-weight: bold;">Earned</span>
         </div>
         <ul id="referral-list" style="scrollbar-width: none;list-style: none;padding: 0;margin: 0;max-height: 14vh;overflow-y: auto;padding-left: 5px;padding-right: 5px;">
-            <!-- List to display referrals -->
+            <!-- List to display referrals or "No Referrals Available" message -->
         </ul>
     </div>
 
@@ -333,29 +331,35 @@ document.addEventListener("DOMContentLoaded", async function() {
             document.getElementById("referrals-count").textContent = userData.totalReferrals || 0;
             document.getElementById("points-earned").textContent = userData.totalPoints || 0;
 
-            // Display referral details in table
-             const referralList = document.getElementById("referral-list");
-             userData.referrals.forEach(referral => {
-                const listItem = document.createElement("tr");
+            const referralList = document.getElementById("referral-list");
 
-                // Create table cells for username, level, and points
-                const usernameCell = document.createElement("td");
-                const levelCell = document.createElement("td");
-                const pointsCell = document.createElement("td");
+            if (userData.referrals.length === 0) {
+                // Display "No Referrals Available" message
+                const noReferralsMessage = document.createElement("li");
+                noReferralsMessage.textContent = "No Referrals Available";
+                noReferralsMessage.style.textAlign = "center";
+                noReferralsMessage.style.padding = "10px";
+                referralList.appendChild(noReferralsMessage);
+            } else {
+                // Display referral details in table
+                userData.referrals.forEach(referral => {
+                    const listItem = document.createElement("tr");
 
-                // Set the content for the cells
-                usernameCell.textContent = referral.username;
-                levelCell.textContent = getReferralLevel(referral.totalReferrals); // Determine level
-                pointsCell.textContent = referral.totalPoints;
+                    const usernameCell = document.createElement("td");
+                    const levelCell = document.createElement("td");
+                    const pointsCell = document.createElement("td");
 
-                // Append cells to the table row
-                listItem.appendChild(usernameCell);
-                listItem.appendChild(levelCell);
-                listItem.appendChild(pointsCell);
+                    usernameCell.textContent = referral.username;
+                    levelCell.textContent = getReferralLevel(referral.totalReferrals);
+                    pointsCell.textContent = referral.totalPoints;
 
-                // Append the row to the table body
-                referralList.appendChild(listItem);
-            });
+                    listItem.appendChild(usernameCell);
+                    listItem.appendChild(levelCell);
+                    listItem.appendChild(pointsCell);
+
+                    referralList.appendChild(listItem);
+                });
+            }
 
         } catch (error) {
             console.error("Failed to fetch referral data:", error);
@@ -376,7 +380,6 @@ function getReferralLevel(totalReferrals) {
     return 0; // Level 0 if no referrals
 }
 
-
 // Copy function for the referral link
 function copyLink() {
     const referralLink = document.getElementById('referral-link').textContent;
@@ -390,6 +393,7 @@ function copyLink() {
 }
 </script>
 </div>
+
 
 
 
