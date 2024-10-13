@@ -59,7 +59,7 @@ position: fixed;
         .app-bar button {
 background-color: transparent;
     border: none;
-    color: #613106;
+    color: #d6d5da;
     font-size: 14px;
     cursor: pointer;
     outline: none;
@@ -76,7 +76,7 @@ background-color: transparent;
         }
 
         .app-bar button:hover {
-            color: #613105;
+            color: #d6d5da;
         }
 
         /* Styles for the canvas loader */
@@ -144,29 +144,32 @@ display: block;
             font-weight: bold;
         }
         #referral-link-section {
-            background-color: #bf5d05;
-            border: 1px solid #a24e03;
-            padding: 0px;
-            text-align: left;
-            margin-top: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-left: 0px;
+    background-color: rgba(46, 44, 55, 0.95);
+    border: 1px solid #1e1d22;
+    padding: 0px;
+    text-align: left;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 0px;
         }
         .copy-button {
-            background-color: #894507;
-            color: white;
-            border: none;
-            padding: 15px;
-            cursor: pointer;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            font-size: 15px;
+background-color: #111013;
+    color: white;
+    border: none;
+    padding: 15px;
+    cursor: pointer;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    border-top-right-radius: 0px !important;
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
         }
         .copy-button:hover {
-            background-color: #894507;
+            background-color: #111013;
         }
         .referral-link {
             flex-grow: 1;
@@ -261,12 +264,12 @@ background-color: #000000;
         </div>
 
 
-<div id="page3" class="page" style="background: linear-gradient(to bottom, #ff9f2f, #f7be5c) !important; color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 100px); overflow-y: auto;">
+<div id="page3" class="page" style="background: rgba(46, 44, 55, 0.5);color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 100px); overflow-y: auto;">
 
 
     
-    <div id="referral-stats" style="display: flex; justify-content: space-between; padding: 10px 15px; margin-top: 0; margin-bottom: 0px; border-radius: 10px; background-color: #bf5d05; border: 1px solid #a24e03;">
-        <div class="stat" style="flex: 1; text-align: left; font-weight: bold; border-right: 1px solid #a24e03; padding-right: 10px;">
+    <div id="referral-stats" style="display: flex; justify-content: space-between; padding: 10px 15px; margin-top: 0; margin-bottom: 0px; border-radius: 10px; background: #1e1d22; color: white !important; border: 1px solid #101013;">
+        <div class="stat" style="flex: 1; text-align: left; font-weight: bold; border-right: 1px solid #4a4855; padding-right: 10px;">
             <img src="assets/img/friends.png" style="height: 15px; padding-right: 8px;">
             Referrals:  <span id="referrals-count"> 0</span>
         </div>
@@ -276,10 +279,10 @@ background-color: #000000;
         </div>
     </div>
 
-    <h3 style="text-align: center; color: #402104; margin: 20px 0;">Referrals by Level</h3>
+    <h3 style="text-align: center; color: #402104; margin: 20px 0;"></h3>
 
-    <div id="example-users" style="background-color: #bf5d05; border: 1px solid #a24e03; padding: 0px; border-radius: 10px;">
-        <div class="invite-header" style="border: none !important; background: #894507; padding: 10px 15px; display: flex; justify-content: space-between; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+    <div id="example-users" style="background-color: rgba(46, 44, 55, 0.95); padding: 0px; border-radius: 10px;">
+        <div class="invite-header" style="border: none !important; background: #1e1d22; padding: 10px 15px; display: flex; justify-content: space-between; border-top-left-radius: 10px; border-top-right-radius: 10px;">
             <span style="flex: 1; text-align: left; font-weight: bold;">Name</span>
             <span style="flex: 1; text-align: center; font-weight: bold;">Level</span>
             <span style="flex: 1; text-align: right; font-weight: bold;">Earned</span>
@@ -289,15 +292,15 @@ background-color: #000000;
         </ul>
     </div>
 
-    <h3 style="text-align: center; color: #402104; margin-top: 15px; margin-bottom: 0px;">Your Invite Link:</h3>
-    <div id="referral-link-section" style="border-radius: 10px; text-align: center; margin-top: 10px;">
-        <div class="referral-link" id="referral-link" style="    padding-left: 0px !important; padding: 10px; border-radius: 10px; margin: 0 auto; display: inline-block; max-width: 80%;">
+    <h3 style="text-align: center;margin-top: 10px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;margin-bottom: 0px;">Your Invite Link:</h3>
+    <div id="referral-link-section" style="border-radius: 10px;text-align: center;margin-top: 0px;border-top-right-radius: 0px !important;border-top-left-radius: 0px !important;">
+        <div class="referral-link" id="referral-link" style="padding-left: 0px !important;padding: 10px;border-radius: 10px;margin: 0 auto;display: inline-block;max-width: 80%;border-top-left-radius: 0px !important;">
             Loading your referral link...
         </div>
         <button class="copy-button" onclick="copyLink()">
             <i class="fas fa-copy"></i>
         </button>
-        <div id="copy-popup" class="popup" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #402104; color: white; padding: 10px; border-radius: 5px;">
+        <div id="copy-popup" class="popup" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 10px; border-radius: 5px;">
             Referral link copied to clipboard!
         </div>
     </div>
@@ -380,13 +383,13 @@ function copyLink() {
 
 
 
- <div id="page4" class="page" style="background: linear-gradient(to bottom, #ff9f2f, #f7be5c) !important; color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: 100%; overflow-y: auto;">
-    <p style="margin-top: 20px; color: #7a3a02; font-size: 18px; font-weight: bold; width: 100%; text-align: left; height: 10px; padding-left: 6px;">Available Tasks:</p>
+ <div id="page4" class="page" style="background: rgba(46, 44, 55, 0.5); color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: 100%; overflow-y: auto;">
+    <p style="margin-top: 20px; color: white; font-size: 18px; font-weight: bold; width: 100%; text-align: left; height: 10px; padding-left: 6px;">Available Tasks:</p>
     <div id="tasks-container" style="height: 400px; overflow-y: auto; border: 0px !important; padding: 5px;">
         <ul id="tasks-list" style="margin-bottom: -5px; margin-top: -5px; list-style-type: none; padding: 0;">
             <ul style="list-style-type: none; padding-left: 0;">
                 <!-- Share to Telegram Story -->
-                <li id="share-story" style="position: relative; margin-bottom: 10px; background-color: #bf5d05; border: 1px solid #a24e03; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;" onclick="shareToTelegramStory()">
+                <li id="share-story" style="position: relative; margin-bottom: 10px; background-color: #1e1d22; border: 1px solid #101013; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;" onclick="shareToTelegramStory()">
                     <span style="display: block; font-size: 15px; font-weight: bold;">Share to your Telegram Story</span>
                     <span style="font-weight: bold;">
                         <img src="assets/img/littlediamond.png" style="height: 15px;"> +500 
@@ -394,7 +397,7 @@ function copyLink() {
                     <img id="share-approved" src="" style="height: 20px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
                 </li>
                 <!-- Daily Check-In -->
-                <li id="daily-checkin" style="position: relative; margin-bottom: 15px; background-color: #bf5d05; border: 1px solid #a24e03; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;" onclick="dailyCheckin()">
+                <li id="daily-checkin" style="position: relative; margin-bottom: 15px; background-color: #1e1d22; border: 1px solid #101013; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;" onclick="dailyCheckin()">
                     <span style="display: block; font-size: 15px; font-weight: bold;">Daily check-in</span>
                     <span style="font-weight: bold;">
                         <img src="assets/img/littlediamond.png" style="height: 15px;"> +100 
@@ -402,7 +405,7 @@ function copyLink() {
                     <img id="checkin-approved" src="" style="height: 20px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
                 </li>
                 <!-- Subscribe to Telegram Channel -->
-                <li id="subscribe-channel" style="position: relative; margin-bottom: 10px; background-color: #bf5d05; border: 1px solid #a24e03; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;" onclick="subscribeToChannel()">
+                <li id="subscribe-channel" style="position: relative; margin-bottom: 10px; background-color: #1e1d22; border: 1px solid #101013; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;" onclick="subscribeToChannel()">
                     <span style="display: block; font-size: 15px; font-weight: bold;">Subscribe to Telegram Channel</span>
                     <span style="font-weight: bold;">
                         <img src="assets/img/littlediamond.png" style="height: 15px;"> +500 
@@ -410,7 +413,7 @@ function copyLink() {
                     <img id="subscribe-approved" src="" style="height: 20px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
                 </li>
                 <!-- Invite 10 Friends -->
-                <li style="font-weight: 590; font-size: 14px; margin-bottom: 15px; background-color: #bf5d05; border: 1px solid #a24e03; color: white; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                <li style="font-weight: 590; font-size: 14px; margin-bottom: 15px; background-color: #1e1d22; border: 1px solid #101013; color: white; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
                     <div>
                         <span style="display: block; font-size: 15px; font-weight: bold;">Invite 10 Friends</span>
                         <span style="font-weight: bold; display: flex; align-items: center;">
@@ -460,25 +463,24 @@ function copyLink() {
 </div>
 
        
-    <div id="page2" class="page" style="background: linear-gradient(to bottom, #ff9f2f, #f7be5c) !important;color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 70px); overflow-y: auto;  padding-top: 7px !important;">
+    <div id="page2" class="page" style="background: rgba(46, 44, 55, 0.5);color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 70px); overflow-y: auto;  padding-top: 7px !important;">
 
     <!-- Current User Rank -->
-    <div id="user-rank" class="user-info" style="width: auto !important; background: #bf5d05; color: white !important; border: 1px solid #a34e03;">
+    <div id="user-rank" class="user-info" style="width: auto !important; background: #1e1d22; color: white !important; border: 1px solid #101013;">
         <!-- User Profile Picture and Username will be inserted here -->
     </div>
 
     <!-- Leaderboard Container -->
-    <div id="leaderboard-container" style="border-radius: 10px;background-color: #bf5d05; border: 1px solid #a24e03; padding: 0; max-height: 60vh; overflow: hidden;">
+    <div id="leaderboard-container" style="border-radius: 10px;background-color: rgba(46, 44, 55, 0.95); padding: 0; max-height: 60vh; overflow: hidden;">
         <div class="leaderboard-header" style="border-top-left-radius: 10px;
-    border-top-right-radius: 10px;padding-top: 10px !important;padding-bottom: 30px !important;background: #894507; padding: 15px; position: sticky; top: 0; z-index: 10;">
+    border-top-right-radius: 10px;padding-top: 10px !important;padding-bottom: 30px !important;background: #1e1d22; padding: 15px; position: sticky; top: 0; z-index: 10;">
             <span style="float: left;font-weight: bold;">Players Name</span>
             <span style="float: right;font-weight: bold;">Points Earned</span>
         </div>
-        <ul id="leaderboard-list" style="scrollbar-width: none;list-style: none; padding: 0; margin: 0; max-height: 50vh; overflow-y: auto;">
+        <ul id="leaderboard-list" style="padding-left: 10px !important; padding-right: 10px !important;scrollbar-width: none;list-style: none; padding: 0; margin: 0; max-height: 50vh; overflow-y: auto;">
             <!-- Leaderboard items will be added here -->
         </ul>
     </div>
-    <p id="updated" style="text-align: left;margin-top: 5px;color: #864204;font-weight: 600;font-size: 15px;">Updated every 10 mins</p>
 
    <script>
     document.addEventListener('DOMContentLoaded', generateLeaderboard);
@@ -546,7 +548,7 @@ function copyLink() {
             listItem.style.display = 'flex';
             listItem.style.alignItems = 'center';
             listItem.style.padding = '10px';
-            listItem.style.borderBottom = '1px solid #a24e03';
+            listItem.style.borderBottom = '1px solid #4a4855';
 
             const profilePicture = document.createElement('div');
             profilePicture.style.width = '30px';
@@ -599,27 +601,27 @@ pointsSpan.style.marginLeft = 'auto';
 </div>
 
 
-<div id="page5" class="page" style="background: linear-gradient(to bottom, #ff9f2f, #f7be5c) !important;color: #ffffff;padding: 20px;border-radius: 0px;width: auto;margin: 0 auto;box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);height: 100%;overflow-y: auto;padding-top: 5px !important;">
-    <h2 style="text-align: center; color: #402104; font-size: 28px; margin-top: 0; font-family: system-ui;margin-bottom: 0px;">SEEDSALE</h2>
-    <p style="text-align: center; color: #402104; margin-top: 0px;">Stage 1</p>
+<div id="page5" class="page" style="background: rgba(46, 44, 55, 0.5);color: #ffffff;padding: 20px;border-radius: 0px;width: auto;margin: 0 auto;box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);height: 100%;overflow-y: auto;padding-top: 5px !important;">
+    <h2 style="text-align: center; color: white; font-size: 28px; margin-top: 0; font-family: system-ui;margin-bottom: 0px;">SEEDSALE</h2>
+    <p style="text-align: center; color: white; margin-top: 0px;">Stage 1</p>
 
     <div style="text-align: center;">
         <div id="qrcode" style="margin: 20px auto; width: 228px; height: 228px; background-color: #ffffff; padding: 10px; border-radius: 10px;"></div>
-        <p style="text-align: center;margin-top: 10px;color: #ffffff;font-size: 17px;font-weight: 600;background: #894507;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #a24e03;border-left: 1px solid #a24e03;border-right: 1px solid #a24e03;padding-bottom: 14px;">Send funds only to this wallet</p>
+        <p style="text-align: center;margin-top: 10px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;">Send funds only to this wallet</p>
         
-        <div style="display: flex;justify-content: center;align-items: center;gap: 0px;margin-top: -20px;background: #bf5d05;border-bottom-right-radius: 10px;border-bottom-left-radius: 10px;border-bottom: 1px solid #a24e03;border-left: 1px solid #a24e03;border-right:1px solid #a24e03">
-            <p id="wallet-address" style="font-size: 16px; background-color: #ffffff; color: #1e2739; padding: 10px 15px; width: 230px; text-align: left; white-space: nowrap; overflow: hidden; display: inline-block; border: 1px solid #ccc; border: 1px solid #a24e03; border-top-left-radius: 10px; border-bottom-left-radius: 10px;">
+        <div style="display: flex;justify-content: center;align-items: center;gap: 0px;margin-top: -20px;background: rgba(46, 44, 55, 0.65);border-bottom-right-radius: 10px;border-bottom-left-radius: 10px;border-bottom: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;">
+            <p id="wallet-address" style="font-size: 16px;background-color: #ffffff;color: #1e2739;padding: 10px 15px;width: 230px;text-align: left;white-space: nowrap;overflow: hidden;display: inline-block;border-top-left-radius: 10px;border-bottom-left-radius: 10px;">
                 <!-- Address will be dynamically updated -->
             </p>
 
-            <button onclick="copyAddress()" style="background-color: #894507;border: none;cursor: pointer;padding: 0;padding: 6px;border-top-right-radius: 10px;border-bottom-right-radius: 10px;">
+            <button onclick="copyAddress()" style="background-color: #1e1d22;border: none;cursor: pointer;padding: 0;padding: 6px;border-top-right-radius: 10px;border-bottom-right-radius: 10px;">
                 <img src="https://img.icons8.com/ios-glyphs/30/ffffff/copy.png" alt="Copy Icon" style="width: 24px; height: 24px;">
             </button>
         </div>
     </div>
 
     <div style="margin: 20px 0; text-align: center;">
-        <p style="color: #4c2604; font-size: 16px; margin-top: -10px; font-weight: 590;">
+        <p style="color: white;font-size: 16px;margin-top: -10px;font-weight: bold;background: rgba(46, 44, 55, 0.7);padding: 10px;border-radius: 10px;">
             <i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right: 8px; vertical-align: middle;"></i>
             Minimum purchase is 10 TON. Any smaller transactions will be refunded.
         </p>
