@@ -262,37 +262,36 @@ background-color: #000000;
 
 
 <div id="page3" class="page" style="background: linear-gradient(to bottom, #ff9f2f, #f7be5c) !important; color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 100px); overflow-y: auto;">
-
-     <h1>Welcome to the Referral Program</h1>
+    <h1>Welcome to the Referral Program</h1>
     <p>Invite your friends and earn rewards!</p>
     <div id="referrals-container">
         <p>Total Referrals: <span id="referrals-count">0</span></p>
         <p>Points Earned: <span id="points-earned">0</span></p>
     </div>
-</body>
+</div>
+
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", async function() {
+        const userId = Telegram.WebApp.initDataUnsafe.user.id;
 
-    <script>
-document.addEventListener("DOMContentLoaded", async function() {
-    const userId = Telegram.WebApp.initDataUnsafe.user.id;
+        // Fetch user referral data from the API
+        async function fetchReferralData(userId) {
+            try {
+                const response = await fetch(`https://5abb532c-94ee-42f4-ab19-d689d0bf9814-00-3e4khnjfr7x68.picard.replit.dev/api/user/referrals/${userId}`);
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
-    // Fetch user referral data from the API
-    async function fetchReferralData(userId) {
-        try {
-            const response = await fetch(`https://5abb532c-94ee-42f4-ab19-d689d0bf9814-00-3e4khnjfr7x68.picard.replit.dev/api/user/referrals/${userId}`);
-            if (!response.ok) throw new Error("Error fetching data");
-
-            const userData = await response.json();
-            document.getElementById("referrals-count").textContent = userData.totalReferrals || 0;
-            document.getElementById("points-earned").textContent = userData.totalPoints || 0;
-        } catch (error) {
-            console.error("Failed to fetch referral data:", error);
-            document.getElementById("referrals-container").innerHTML += "<p style='color:red;'>Failed to load referral data. Please try again later.</p>";
+                const userData = await response.json();
+                document.getElementById("referrals-count").textContent = userData.totalReferrals || 0;
+                document.getElementById("points-earned").textContent = userData.totalPoints || 0;
+            } catch (error) {
+                console.error("Failed to fetch referral data:", error);
+                document.getElementById("referrals-container").innerHTML += "<p style='color:red;'>Failed to load referral data. Please try again later.</p>";
+            }
         }
-    }
 
-    await fetchReferralData(userId);
-});
+        await fetchReferralData(userId);
+    });
 </script>
 
 
@@ -675,9 +674,7 @@ pointsSpan.style.marginLeft = 'auto';
                 popup.style.display = 'none'; // Hide after 3 seconds
             }, 3000);
         }
-    // Placeholder for the user's referrals and points
-    const referralsCount = 50; // Example number of referrals made
-    const pointsEarned = 150; // Example points earned from referrals
+
 
     document.getElementById('referrals-count').innerText = referralsCount;
     document.getElementById('points-earned').innerText = pointsEarned;
