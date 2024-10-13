@@ -152,7 +152,7 @@ display: block;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding-left: 20px;
+            padding-left: 0px;
         }
         .copy-button {
             background-color: #894507;
@@ -160,7 +160,7 @@ display: block;
             border: none;
             padding: 15px;
             cursor: pointer;
-            border-radius: 0px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             font-size: 15px;
@@ -263,21 +263,20 @@ background-color: #000000;
 
 <div id="page3" class="page" style="background: linear-gradient(to bottom, #ff9f2f, #f7be5c) !important; color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 100px); overflow-y: auto;">
 
-    <h1 style="text-align: center; margin-bottom: 20px;">Welcome to the Referral Program</h1>
-    <p style="text-align: center;">Invite your friends and earn rewards!</p>
+
     
     <div id="referral-stats" style="display: flex; justify-content: space-between; padding: 10px 15px; margin-top: 0; margin-bottom: 0px; border-radius: 10px; background-color: #bf5d05; border: 1px solid #a24e03;">
         <div class="stat" style="flex: 1; text-align: left; font-weight: bold; border-right: 1px solid #a24e03; padding-right: 10px;">
             <img src="assets/img/friends.png" style="height: 15px; padding-right: 8px;">
-            Referrals: <span id="referrals-count">0</span>
+            Referrals:  <span id="referrals-count">0</span>
         </div>
-        <div class="stat" style="flex: 1; text-align: center; font-weight: bold;">
+        <div class="stat" style="padding-left: 15px;flex: 1; text-align: center; font-weight: bold;">
             <img src="assets/img/littlediamond.png" style="height: 15px; padding-right: 8px;">
-            Earned: <span id="points-earned">0</span>
+            Earned:  <span id="points-earned">0</span>
         </div>
     </div>
 
-    <h2 style="text-align: center; color: #fff; margin: 20px 0;">Your Referrals:</h2>
+    <h2 style="text-align: center; color: #fff; margin: 20px 0;">Referrals by Level</h2>
 
     <div id="example-users" style="background-color: #bf5d05; border: 1px solid #a24e03; padding: 0px; border-radius: 10px;">
         <div class="invite-header" style="border: none !important; background: #894507; padding: 10px 15px; display: flex; justify-content: space-between; border-top-left-radius: 10px; border-top-right-radius: 10px;">
@@ -292,7 +291,7 @@ background-color: #000000;
 
     <h3 style="text-align: center; color: #402104; margin-top: 15px; margin-bottom: 0px;">Your Invite Link:</h3>
     <div id="referral-link-section" style="border-radius: 10px; text-align: center; margin-top: 10px;">
-        <div class="referral-link" id="referral-link" style="background: #f7be5c; padding: 10px; border-radius: 10px; margin: 0 auto; display: inline-block; max-width: 80%;">
+        <div class="referral-link" id="referral-link" style="    padding-left: 0px !important; padding: 10px; border-radius: 10px; margin: 0 auto; display: inline-block; max-width: 80%;">
             Loading your referral link...
         </div>
         <button class="copy-button" onclick="copyLink()" style="border-radius: 10px; margin-left: 10px; padding: 10px; background-color: #402104; color: white; border: none;">
@@ -754,7 +753,7 @@ pointsSpan.style.marginLeft = 'auto';
 
     // Update the user's rank and name
     const currentUserRank = Math.floor(Math.random() * 100) + 1; // Example rank
-    const currentUserName = "@UserExample"; // Example Telegram name
+    const currentUserName = "UserExample"; // Example Telegram name
 
     document.querySelector('#user-rank span').innerText = `${user.username}`;
     document.querySelector('#user-rank span[style*="font-style"]').innerText = `${currentUserName}`;
