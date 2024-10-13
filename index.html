@@ -375,10 +375,10 @@ function getReferralLevel(totalReferrals) {
     if (totalReferrals >= 20) return 5;
     if (totalReferrals >= 15) return 4;
     if (totalReferrals >= 10) return 3;
-    if (totalReferrals >= 4) return 2;
-    if (totalReferrals >= 1) return 1;
-    if (totalReferrals >= 0) return 1;
+    if (totalReferrals >= 3) return 2;
+    return 1; // Level 1 for 0 to 2 referrals
 }
+
 
 // Copy function for the referral link
 function copyLink() {
