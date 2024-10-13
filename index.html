@@ -285,17 +285,26 @@ document.addEventListener("DOMContentLoaded", async function() {
             if (!response.ok) throw new Error("Error fetching data");
 
             const userData = await response.json();
+
+            // Update the referral counts
             document.getElementById("referrals-count").textContent = userData.totalReferrals || 0;
             document.getElementById("points-earned").textContent = userData.totalPoints || 0;
 
             // Display referral details
             const referralList = document.getElementById("referral-list");
             referralList.innerHTML = ""; // Clear existing list
-            userData.referrals.forEach(referral => {
-                const listItem = document.createElement("li");
-                listItem.textContent = `${referral.username}: ${referral.totalPoints} points`;
-                referralList.appendChild(listItem);
-            });
+
+            // Check if referrals exist
+            if (userData.referrals && userData.referrals.length > 0) {
+                userData.referrals.forEach(referral => {
+                    const listItem = document.createElement("li");
+                    listItem.textContent = `${referral.username || "Unknown"}: ${referral.totalPoints || 0} points`;
+                    referralList.appendChild(listItem);
+                });
+            } else {
+                // Display message if no referrals
+                referralList.innerHTML = "<li>No referrals found.</li>";
+            }
 
         } catch (error) {
             console.error("Failed to fetch referral data:", error);
