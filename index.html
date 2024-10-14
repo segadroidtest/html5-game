@@ -287,7 +287,6 @@ background-color: #000000;
     </div>
 
     <ul id="tasks-list" style="margin-bottom: -5px; margin-top: -5px; list-style-type: none; padding: 0;">
-       <div id="overlay" style="display: block; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); border-radius: 10px; z-index: 1;"></div>
         <li id="daily-checkin" style="position: relative; margin-bottom: 15px; background-color: #1e1d22; border: 1px solid #101013; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;">
             <span style="display: block; font-size: 15px; font-weight: bold;">Daily check-in</span>
             <span><img src="assets/img/littlediamond.png" style="height: 15px;"> +100</span>
@@ -303,11 +302,11 @@ background-color: #000000;
     <script>
         const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Ensure userId is a string
         const dailyCheckinElement = document.getElementById('daily-checkin');
-        const overlay = document.getElementById('overlay'); // Overlay element
         let timerInterval; // Variable to hold the timer interval
 
         document.addEventListener("DOMContentLoaded", function() {
-            checkDailyCheckinStatus(); // Check the status on page load
+            // Check if user has already checked in today
+            checkDailyCheckinStatus();
 
             // Event binding for daily check-in
             dailyCheckinElement.addEventListener('click', dailyCheckin);
@@ -315,20 +314,17 @@ background-color: #000000;
 
         function checkDailyCheckinStatus() {
             const lastCheckinTime = localStorage.getItem('lastCheckinTime');
-            const currentTime = new Date().getTime(); // Current time in milliseconds
-
             if (lastCheckinTime) {
-                const elapsedTime = currentTime - lastCheckinTime; // Calculate elapsed time
-                const remainingTime = (24 * 60 * 60 * 1000) - elapsedTime; // 24 hours in milliseconds
+                const currentTime = new Date().getTime();
+                const elapsedTime = currentTime - lastCheckinTime;
+                const remainingTime = 24 * 60 * 60 * 1000 - elapsedTime; // 24 hours in milliseconds
 
                 if (remainingTime > 0) {
-                    disableDailyCheckin(remainingTime); // Disable check-in if still within the 24-hour window
+                    disableDailyCheckin();
                     startTimer(Math.floor(remainingTime / 1000)); // Start timer with remaining seconds
                 } else {
-                    enableDailyCheckin(); // Enable check-in if 24 hours has passed
+                    enableDailyCheckin(); // Allow check-in again
                 }
-            } else {
-                enableDailyCheckin(); // If no last check-in time, enable check-in
             }
         }
 
@@ -352,8 +348,7 @@ background-color: #000000;
                     popup.style.display = 'none';
                 }, 2000);
 
-                // Store the current time only if check-in was successful
-                localStorage.setItem('lastCheckinTime', new Date().getTime());
+                localStorage.setItem('lastCheckinTime', new Date().getTime()); // Store the current time
                 disableDailyCheckin(); // Disable further clicks
                 startTimer(24 * 60 * 60); // Start 24-hour timer (in seconds)
             } else {
@@ -361,19 +356,16 @@ background-color: #000000;
             }
         }
 
-        function disableDailyCheckin(remainingTime) {
+        function disableDailyCheckin() {
             dailyCheckinElement.style.cursor = 'not-allowed'; // Change cursor to indicate it's unclickable
-            overlay.style.display = 'block'; // Show overlay to block interaction
             dailyCheckinElement.removeEventListener('click', dailyCheckin); // Remove click event
-            dailyCheckinElement.classList.add("disabled"); // Add a disabled class if needed
+            dailyCheckinElement.onclick = null; // Remove onclick attribute
         }
 
         function enableDailyCheckin() {
             dailyCheckinElement.style.cursor = 'pointer'; // Change cursor to indicate it's clickable
             dailyCheckinElement.addEventListener('click', dailyCheckin); // Reassign the click event
-            overlay.style.display = 'none'; // Hide overlay
             document.getElementById('timer').innerText = ""; // Clear the timer display
-            dailyCheckinElement.classList.remove("disabled"); // Remove disabled class if it exists
         }
 
         function startTimer(duration) {
@@ -396,25 +388,16 @@ background-color: #000000;
         }
 
         function showPopup(message) {
-            const popup = document.createElement('div');
-            popup.innerText = message;
-            popup.style.position = 'fixed';
-            popup.style.top = '50%';
-            popup.style.left = '50%';
-            popup.style.transform = 'translate(-50%, -50%)';
-            popup.style.background = '#1e1d22';
-            popup.style.color = 'white';
-            popup.style.padding = '20px';
-            popup.style.borderRadius = '10px';
-            popup.style.zIndex = '1000';
-            document.body.appendChild(popup);
+            document.getElementById('popup-message').innerText = message; // Set the message
+            document.getElementById('popup').style.display = 'block'; // Show the popup
+        }
 
-            setTimeout(() => {
-                document.body.removeChild(popup);
-            }, 2000);
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none'; // Hide the popup
         }
     </script>
 </div>
+
 
 
 
