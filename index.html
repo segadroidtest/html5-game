@@ -491,23 +491,33 @@ function copyLink() {
             </ul>
         </ul>
         <script>
-            function dailyCheckin() {
-            }
+            // Add this to your script.js
+function dailyCheckin() {
+    const userId = Telegram.WebApp.initDataUnsafe.user.id; // Get the user ID
 
-            function shareToTelegramlink() {
-            }
+    fetch("https://5abb532c-94ee-42f4-ab19-d689d0bf9814-00-3e4khnjfr7x68.picard.replit.dev/api/user/daily-checkin", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId }), // Send the userId in the body
+    })
+    .then(response => {
+        if (!response.ok) throw new Error("Failed to check in");
+        return response.json();
+    })
+    .then(data => {
+        alert(data.message); // Show success message
+        document.getElementById("points-earned").textContent = data.totalPoints; // Update points display
+    })
+    .catch(error => {
+        console.error("Error during daily check-in:", error);
+        alert("An error occurred during the daily check-in. Please try again later.");
+    });
+}
 
-            function subscribeToChannel() {
-            }
+// Don't forget to attach dailyCheckin to the onclick in the HTML
 
-            function Invite3Friends() {
-            }
-
-            function Invite10Friends() {
-            }
-
-            function Invite50Friends() {
-            }
 
         </script>
     </div>
