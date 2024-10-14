@@ -305,8 +305,7 @@ background-color: #000000;
         let timerInterval; // Variable to hold the timer interval
 
         document.addEventListener("DOMContentLoaded", function() {
-            // Check if user has already checked in today
-            checkDailyCheckinStatus();
+            checkDailyCheckinStatus(); // Check the status on page load
 
             // Event binding for daily check-in
             dailyCheckinElement.addEventListener('click', dailyCheckin);
@@ -314,17 +313,20 @@ background-color: #000000;
 
         function checkDailyCheckinStatus() {
             const lastCheckinTime = localStorage.getItem('lastCheckinTime');
+            const currentTime = new Date().getTime(); // Current time in milliseconds
+
             if (lastCheckinTime) {
-                const currentTime = new Date().getTime();
-                const elapsedTime = currentTime - lastCheckinTime;
-                const remainingTime = 24 * 60 * 60 * 1000 - elapsedTime; // 24 hours in milliseconds
+                const elapsedTime = currentTime - lastCheckinTime; // Calculate elapsed time
+                const remainingTime = (24 * 60 * 60 * 1000) - elapsedTime; // 24 hours in milliseconds
 
                 if (remainingTime > 0) {
-                    disableDailyCheckin();
+                    disableDailyCheckin(); // Disable check-in if still within the 24-hour window
                     startTimer(Math.floor(remainingTime / 1000)); // Start timer with remaining seconds
                 } else {
-                    enableDailyCheckin(); // Allow check-in again
+                    enableDailyCheckin(); // Enable check-in if 24 hours has passed
                 }
+            } else {
+                enableDailyCheckin(); // If no last check-in time, enable check-in
             }
         }
 
@@ -349,7 +351,7 @@ background-color: #000000;
                 }, 2000);
 
                 // Store the current time only if check-in was successful
-                localStorage.setItem('lastCheckinTime', new Date().getTime()); 
+                localStorage.setItem('lastCheckinTime', new Date().getTime());
                 disableDailyCheckin(); // Disable further clicks
                 startTimer(24 * 60 * 60); // Start 24-hour timer (in seconds)
             } else {
@@ -360,12 +362,14 @@ background-color: #000000;
         function disableDailyCheckin() {
             dailyCheckinElement.style.cursor = 'not-allowed'; // Change cursor to indicate it's unclickable
             dailyCheckinElement.removeEventListener('click', dailyCheckin); // Remove click event
+            dailyCheckinElement.classList.add("disabled"); // Add a disabled class if needed
         }
 
         function enableDailyCheckin() {
             dailyCheckinElement.style.cursor = 'pointer'; // Change cursor to indicate it's clickable
             dailyCheckinElement.addEventListener('click', dailyCheckin); // Reassign the click event
             document.getElementById('timer').innerText = ""; // Clear the timer display
+            dailyCheckinElement.classList.remove("disabled"); // Remove disabled class if it exists
         }
 
         function startTimer(duration) {
@@ -405,16 +409,8 @@ background-color: #000000;
                 document.body.removeChild(popup);
             }, 2000);
         }
-
-        // Check initial state on page load
-        checkDailyCheckinStatus();
     </script>
 </div>
-
-
-
-
-
 
 
         
