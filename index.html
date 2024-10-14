@@ -432,7 +432,9 @@ function copyLink() {
 
 
 
-                <li id="dailyCheckInBtn" style="position: relative; margin-bottom: 15px; background-color: #1e1d22; border: 1px solid #101013; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;" onclick="handleDailyCheckIn()">
+                <li id="dailyCheckInBtn" style="position: relative; margin-bottom: 15px; background-color: #1e1d22; border: 1px 
+                    solid #101013; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; 
+                    line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;">
                     <span style="display: block; font-size: 15px; font-weight: bold;">Daily check-in</span>
                     <span style="font-weight: bold;">
                         <img src="assets/img/littlediamond.png" style="height: 15px;"> +100 
@@ -490,70 +492,42 @@ function copyLink() {
 
             </ul>
         </ul>
-        <script src="https://telegram.org/js/telegram-web-app.js"></script>
-        <script>
-async function handleDailyCheckIn() {
-    const userId = /* Get user ID from session or state */;
-    
-    try {
-        const response = await fetch("/api/daily-checkin", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ userId }),
-        });
+            <script>
+        // Function to handle Daily Check-In
+        async function handleDailyCheckIn() {
+            // Replace this with actual logic to retrieve the user ID
+            const userId = localStorage.getItem('userId'); // Example of retrieving from localStorage
+            
+            if (!userId) {
+                alert("User not logged in. Please start the bot first.");
+                return;
+            }
+            
+            try {
+                const response = await fetch("/api/daily-checkin", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ userId }),
+                });
 
-        const data = await response.json();
+                const data = await response.json();
 
-        if (data.success) {
-            alert(data.message);
-        } else {
-            alert(data.message);
+                if (data.success) {
+                    alert(data.message);
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                console.error("Error during daily check-in:", error);
+                alert("An error occurred. Please try again later.");
+            }
         }
-    } catch (error) {
-        console.error("Error during daily check-in:", error);
-        alert("An error occurred. Please try again later.");
-    }
-}
 
-// Add event listener to the Daily Check-In button
-document.getElementById("dailyCheckInBtn").addEventListener("click", handleDailyCheckIn);
-
-function completeTask(taskType) {
-    let reward = 0;
-    // Determine reward based on task
-    switch (taskType) {
-        case 'shareLink':
-            reward = 500;
-            break;
-        // Other cases...
-    }
-
-    // Send request to backend to process task completion
-    fetch('/api/complete-task', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ taskType, reward }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            updateBalance(reward);
-            alert('Task completed! You earned ' + reward + ' points.');
-        } else {
-            alert('Task completion failed. Please try again later.');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred. Please try again later.');
-    });
-}
-
-        </script>
+        // Add event listener to the Daily Check-In button
+        document.getElementById("dailyCheckInBtn").addEventListener("click", handleDailyCheckIn);
+    </script>
     </div>
 </div>
 
