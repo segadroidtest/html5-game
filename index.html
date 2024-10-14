@@ -490,24 +490,66 @@ function copyLink() {
 
             </ul>
         </ul>
+        <script src="https://telegram.org/js/telegram-web-app.js"></script>
         <script>
-            function dailyCheckin() {
-            }
+function dailyCheckin() {
+    const checkinReward = 100;
 
-            function shareToTelegramlink() {
-            }
+    // Send request to backend to process daily check-in
+    fetch('/api/daily-checkin', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ reward: checkinReward }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            updateBalance(checkinReward);
+            alert('Daily check-in successful! You earned ' + checkinReward + ' points.');
+        } else {
+            alert('Daily check-in failed. Please try again later.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again later.');
+    });
+}
 
-            function subscribeToChannel() {
-            }
+function completeTask(taskType) {
+    let reward = 0;
+    // Determine reward based on task
+    switch (taskType) {
+        case 'shareLink':
+            reward = 500;
+            break;
+        // Other cases...
+    }
 
-            function Invite3Friends() {
-            }
-
-            function Invite10Friends() {
-            }
-
-            function Invite50Friends() {
-            }
+    // Send request to backend to process task completion
+    fetch('/api/complete-task', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ taskType, reward }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            updateBalance(reward);
+            alert('Task completed! You earned ' + reward + ' points.');
+        } else {
+            alert('Task completion failed. Please try again later.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again later.');
+    });
+}
 
         </script>
     </div>
