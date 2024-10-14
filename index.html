@@ -16,7 +16,75 @@
             window.Telegram.WebApp.ready(); window.Telegram.WebApp.expand();
         </script>
     <script src="js/qrcode.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", async function() {
+    const userId = Telegram.WebApp.initDataUnsafe.user.id;
 
+    // Fetch user referral data from the API
+    async function fetchReferralData(userId) {
+        try {
+            const response = await fetch(`https://telegram-bot-1-segadroidstudio.replit.app/api/user/referrals/${userId}`);
+            if (!response.ok) throw new Error("Error fetching data");
+
+            const userData = await response.json();
+            document.getElementById("referrals-count").textContent = userData.totalReferrals || 0;
+            document.getElementById("points-earned").textContent = userData.totalPoints || 0;
+
+            const referralList = document.getElementById("referral-list");
+
+            if (userData.referrals.length === 0) {
+                // Display "No Referrals Available" message
+                const noReferralsMessage = document.createElement("li");
+                noReferralsMessage.textContent = "No Referrals Available";
+                noReferralsMessage.style.textAlign = "center";
+                noReferralsMessage.style.padding = "10px";
+                referralList.appendChild(noReferralsMessage);
+            } else {
+                // Display referral details in table
+                userData.referrals.forEach(referral => {
+                    const listItem = document.createElement("tr");
+
+                    const usernameCell = document.createElement("td");
+                    const levelCell = document.createElement("td");
+                    const pointsCell = document.createElement("td");
+
+                    usernameCell.textContent = referral.username;
+                    levelCell.textContent = getReferralLevel(referral.totalReferrals);
+                    pointsCell.textContent = referral.totalPoints;
+
+                    listItem.appendChild(usernameCell);
+                    listItem.appendChild(levelCell);
+                    listItem.appendChild(pointsCell);
+
+                    referralList.appendChild(listItem);
+                });
+            }
+
+        } catch (error) {
+            console.error("Failed to fetch referral data:", error);
+        }
+    }
+
+    await fetchReferralData(userId);
+});
+
+// Function to get the referral level
+function getReferralLevel(totalReferrals) {
+    if (totalReferrals >= 50) return 6;
+    if (totalReferrals >= 20) return 5;
+    if (totalReferrals >= 15) return 4;
+    if (totalReferrals >= 10) return 3;
+    if (totalReferrals >= 3) return 2;
+    return 1; // Level 1 for 0 to 2 referrals
+}
+
+
+// Copy function for the referral link
+function copyLink() {
+    const referralLink = document.getElementById('referral-link').textContent;
+    navigator.clipboard.writeText(referralLink).then(() => {}).catch(err => console.error('Could not copy text: ', err));
+}
+</script>
     <script src="js/qrcode.min.js"></script>
     <style>
         body, html {
@@ -270,75 +338,6 @@ background-color: #000000;
             <script type="text/javascript" src="js/script.js"></script>
             <script type="text/javascript" src="js/hooks.js"></script>
             <script type="text/javascript" src="js/ads.js"></script>
-<script>
-document.addEventListener("DOMContentLoaded", async function() {
-    const userId = Telegram.WebApp.initDataUnsafe.user.id;
-
-    // Fetch user referral data from the API
-    async function fetchReferralData(userId) {
-        try {
-            const response = await fetch(`https://telegram-bot-1-segadroidstudio.replit.app/api/user/referrals/${userId}`);
-            if (!response.ok) throw new Error("Error fetching data");
-
-            const userData = await response.json();
-            document.getElementById("referrals-count").textContent = userData.totalReferrals || 0;
-            document.getElementById("points-earned").textContent = userData.totalPoints || 0;
-
-            const referralList = document.getElementById("referral-list");
-
-            if (userData.referrals.length === 0) {
-                // Display "No Referrals Available" message
-                const noReferralsMessage = document.createElement("li");
-                noReferralsMessage.textContent = "No Referrals Available";
-                noReferralsMessage.style.textAlign = "center";
-                noReferralsMessage.style.padding = "10px";
-                referralList.appendChild(noReferralsMessage);
-            } else {
-                // Display referral details in table
-                userData.referrals.forEach(referral => {
-                    const listItem = document.createElement("tr");
-
-                    const usernameCell = document.createElement("td");
-                    const levelCell = document.createElement("td");
-                    const pointsCell = document.createElement("td");
-
-                    usernameCell.textContent = referral.username;
-                    levelCell.textContent = getReferralLevel(referral.totalReferrals);
-                    pointsCell.textContent = referral.totalPoints;
-
-                    listItem.appendChild(usernameCell);
-                    listItem.appendChild(levelCell);
-                    listItem.appendChild(pointsCell);
-
-                    referralList.appendChild(listItem);
-                });
-            }
-
-        } catch (error) {
-            console.error("Failed to fetch referral data:", error);
-        }
-    }
-
-    await fetchReferralData(userId);
-});
-
-// Function to get the referral level
-function getReferralLevel(totalReferrals) {
-    if (totalReferrals >= 50) return 6;
-    if (totalReferrals >= 20) return 5;
-    if (totalReferrals >= 15) return 4;
-    if (totalReferrals >= 10) return 3;
-    if (totalReferrals >= 3) return 2;
-    return 1; // Level 1 for 0 to 2 referrals
-}
-
-
-// Copy function for the referral link
-function copyLink() {
-    const referralLink = document.getElementById('referral-link').textContent;
-    navigator.clipboard.writeText(referralLink).then(() => {}).catch(err => console.error('Could not copy text: ', err));
-}
-</script>
             <div id="viewporter">
                 <canvas id="canvas" width="700" height="900" style=""></canvas>
             </div>
