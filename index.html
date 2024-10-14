@@ -576,11 +576,11 @@ background-color: #000000;
         <div class="referral-link" id="referral-link" style="padding-left: 0px !important;padding: 10px;border-radius: 10px;margin: 0 auto;display: inline-block;max-width: 80%;border-top-left-radius: 0px !important;padding-left: 15px !important;">
             Loading your referral link...
         </div>
-        <button class="copy-button" onclick="copyLink()">
+        <button class="copy-button-referral" onclick="copyLink()">
             <i class="fas fa-copy"></i>
         </button>
     </div>
-    <div id="copy-popup" class="popup" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.9; border-radius: 10px; width: 70%; font-weight: 600;">
+    <div id="copy-popup-referral" class="popupreferral" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.9; border-radius: 10px; width: 70%; font-weight: 600;">
         Copied in co
     </div>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -625,7 +625,7 @@ function getReferralLevel(totalReferrals) {
 
 
 // Copy function for the referral link
-function copyLink() {
+function copyLinkreferral() {
     const referralLinkElement = document.getElementById('referral-link');
     const referralLink = referralLinkElement.textContent;
 
@@ -637,7 +637,7 @@ function copyLink() {
         document.execCommand("copy");
         document.body.removeChild(textArea);
 
-        const popup = document.getElementById('copy-popup');
+        const popup = document.getElementById('copy-popup-referral');
         popup.style.display = 'block';
         setTimeout(() => {
             popup.style.display = 'none';
