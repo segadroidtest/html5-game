@@ -286,7 +286,7 @@ background-color: #000000;
         </div>
         <div class="stat" style="justify-content: space-evenly;padding-left: 15px;flex: 1; text-align: center; font-weight: bold;">
             <img src="assets/img/littlediamond.png" style="height: 15px; padding-right: 0px;">
-            Balance: <span id="points-earned">0</span>
+            Earned: <span id="points-earned">0</span>
         </div>
     </div>
 
@@ -402,11 +402,11 @@ function copyLink() {
 
  <div id="page4" class="page" style="background: rgba(46, 44, 55, 0.7); color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: 100%; overflow-y: auto;">
 
-    <div id="earning-stats" style="display: flex;padding: 10px 15px;margin-top: 0;margin-bottom: 0px;border-radius: 10px;background: #1e1d22;color: white !important;border: 1px solid #101013;margin-right: 5px;margin-left: 5px;">
+    <div id="earning-stats" style="display: flex; justify-content: space-between; padding: 10px 15px; margin-top: 0; margin-bottom: 0px; border-radius: 10px; background: #1e1d22; color: white !important; border: 1px solid #101013;">
 
-        <div class="stat" style="padding-left: 0px;flex: 1;text-align: center;font-weight: bold;">
-            <img src="assets/img/littlediamond.png" style="height: 15px;padding-right: 10px;">
-            Balance: <span id="points-earned" style=" margin-left: 5px; ">0</span>
+        <div class="stat" style="justify-content: space-evenly;padding-left: 15px;flex: 1; text-align: center; font-weight: bold;">
+            <img src="assets/img/littlediamond.png" style="height: 15px; padding-right: 0px;">
+            Earned: <span id="points-earned">0</span>
         </div>
         
     </div>
@@ -415,7 +415,7 @@ function copyLink() {
     <p style="margin-top: 20px; color: white; font-size: 18px; font-weight: bold; width: 100%; text-align: left; height: 10px; padding-left: 6px;">Available Tasks:</p>
 
 
-    <div id="tasks-container" style="height: 500px;overflow-y: auto;border: 0px !important;padding: 5px;overflow-y: auto;scrollbar-width: none;">
+    <div id="tasks-container" style="height: 400px; overflow-y: auto; border: 0px !important; padding: 5px;">
 
 
         <ul id="tasks-list" style="margin-bottom: -5px; margin-top: -5px; list-style-type: none; padding: 0;">
@@ -432,9 +432,7 @@ function copyLink() {
 
 
 
-                <li id="dailyCheckInBtn" style="position: relative; margin-bottom: 15px; background-color: #1e1d22; border: 1px 
-                    solid #101013; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; 
-                    line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;">
+                <li id="daily-checkin" style="position: relative; margin-bottom: 15px; background-color: #1e1d22; border: 1px solid #101013; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;" onclick="dailyCheckin()">
                     <span style="display: block; font-size: 15px; font-weight: bold;">Daily check-in</span>
                     <span style="font-weight: bold;">
                         <img src="assets/img/littlediamond.png" style="height: 15px;"> +100 
@@ -492,44 +490,26 @@ function copyLink() {
 
             </ul>
         </ul>
-            <script>
-       // Assuming you already have user ID stored in localStorage when the bot starts
+        <script>
+            function dailyCheckin() {
+            }
 
-// Function to handle Daily Check-In
-async function handleDailyCheckIn() {
-    const userId = localStorage.getItem('userId'); // Get user ID from localStorage
+            function shareToTelegramlink() {
+            }
 
-    if (!userId) {
-        alert("User not logged in. Please start the bot first.");
-        return; // Exit if user ID is not found
-    }
+            function subscribeToChannel() {
+            }
 
-    try {
-        const response = await fetch("/api/daily-checkin", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ userId }),
-        });
+            function Invite3Friends() {
+            }
 
-        const data = await response.json();
+            function Invite10Friends() {
+            }
 
-        if (data.success) {
-            alert(data.message); // Display success message
-        } else {
-            alert(data.message); // Display error message
-        }
-    } catch (error) {
-        console.error("Error during daily check-in:", error);
-        alert("An error occurred. Please try again later."); // Handle fetch errors
-    }
-}
+            function Invite50Friends() {
+            }
 
-// Add event listener for the Daily Check-In button
-document.getElementById("dailyCheckInBtn").addEventListener("click", handleDailyCheckIn);
-
-    </script>
+        </script>
     </div>
 </div>
 
