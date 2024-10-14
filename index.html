@@ -293,12 +293,11 @@ background-color: #000000;
         </li>
     </ul>
 
-    <div id="popup" class="popup">
-        <div class="popup-content">
-            <span class="close" onclick="closePopup()">&times;</span>
-            <p id="popup-message">Daily check-in successful, 100 points added!</p>
+        <div id="copy-popup" class="popup" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 10px; border-radius: 5px;">
+            Daily check-in successful, 100 points added!
         </div>
-    </div>
+
+
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
@@ -323,8 +322,12 @@ background-color: #000000;
 
             const data = await response.json();
             if (response.ok) {
-                showPopup(data.message); // Show popup with success message
-            } else {
+        const popup = document.getElementById('copy-popup');
+        popup.style.display = 'block';
+        setTimeout(() => {
+            popup.style.display = 'none';
+        }, 2000);
+    } else {
                 showPopup(`Daily check-in failed: ${data.error}`); // Show popup with error message
             }
         }
@@ -376,9 +379,6 @@ background-color: #000000;
         <button class="copy-button" onclick="copyLink()">
             <i class="fas fa-copy"></i>
         </button>
-        <div id="copy-popup" class="popup" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 10px; border-radius: 5px;">
-            Referral link copied to clipboard!
-        </div>
     </div>
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -448,13 +448,7 @@ function getReferralLevel(totalReferrals) {
 // Copy function for the referral link
 function copyLink() {
     const referralLink = document.getElementById('referral-link').textContent;
-    navigator.clipboard.writeText(referralLink).then(() => {
-        const popup = document.getElementById('copy-popup');
-        popup.style.display = 'block';
-        setTimeout(() => {
-            popup.style.display = 'none';
-        }, 2000);
-    }).catch(err => console.error('Could not copy text: ', err));
+    navigator.clipboard.writeText(referralLink).then(() => {}).catch(err => console.error('Could not copy text: ', err));
 }
 </script>
 </div>
