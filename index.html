@@ -280,18 +280,69 @@ background-color: #000000;
 
 <div id="page4" class="page">
     <div id="earning-stats">
-        <div class="stat">
+        <div class="stat" style="     font-weight: bold;background-color: #1e1d22; border: 1px solid #101013; padding: 10px; margin-bottom: 20px; border-radius: 10px; color: white !important; ">
             <img src="assets/img/littlediamond.png" style="height: 15px;">
-            Earned: <span id="points-earned">0</span>
+            Balance: <span id="points-earned" style=" margin-left: 10px;font-weight: 200; ">0</span>
         </div>
     </div>
 
     <ul id="tasks-list" style="margin-bottom: -5px; margin-top: -5px; list-style-type: none; padding: 0;">
-        <li id="daily-checkin" style="position: relative; margin-bottom: 15px; background-color: #1e1d22; border: 1px solid #101013; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;">
+        <li id="daily-checkin" style="position: relative; margin-bottom: 15px; background-color: #2c2a34; border: 1px solid #101013; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;">
             <span style="display: block; font-size: 15px; font-weight: bold;">Daily check-in</span>
             <span><img src="assets/img/littlediamond.png" style="height: 15px;"> +100</span>
-            <span id="timer" style="float: right; font-size: 14px;"></span> <!-- Timer display -->
+            <span id="timer" style="float: right;font-size: 14px;background: #18171d;padding: 10px;border-radius: 10px;margin-top: -19px;margin-right: 10px;"></span> <!-- Timer display -->
         </li>
+                        <li id="subscribe-channel" style="position: relative; margin-bottom: 10px; background-color: #2c2a34; border: 1px solid #101013; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;" onclick="subscribeToChannel()">
+                    <span style="display: block; font-size: 15px; font-weight: bold;">Subscribe to Telegram Channel</span>
+                    <span style="font-weight: bold;">
+                        <img src="assets/img/littlediamond.png" style="height: 15px;"> +500 
+                    </span>
+                </li>
+
+                <li id="share-link" style="position: relative; margin-bottom: 10px; background-color: #2c2a34; border: 1px solid #101013; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;" onclick="shareToTelegramlink()">
+                    <span style="display: block; font-size: 15px; font-weight: bold;">Share Link to your Telegram</span>
+                    <span style="">
+                        <img src="assets/img/littlediamond.png" style="height: 15px;"> +500 
+                    </span>
+                </li>
+
+                <li style="font-weight: 590; font-size: 14px; margin-bottom: 15px; background-color: #2c2a34; border: 1px solid #101013; color: white; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;" onclick="Invite3Friends()">
+                    <div>
+                        <span style="display: block; font-size: 15px; font-weight: bold;">Invite 3 Friends</span>
+                        <span style=" display: flex; align-items: center;">
+                            <img src="assets/img/littlediamond.png" style="height: 15px; margin-right: 5px;"> +300 
+                        </span>
+                    </div>
+                    <span style="border: 1px solid #fff; border-radius: 10px; padding: 5px 10px; background-color: rgba(255, 255, 255, 0.2); margin-left: auto;"> 0/3 </span>
+                    <img src="" style="height: 20px; margin-left: 10px;">
+                </li>
+
+
+
+                <li style="font-weight: 590; font-size: 14px; margin-bottom: 15px; background-color: #2c2a34; border: 1px solid #101013; color: white; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;" onclick="Invite10Friends()">
+                    <div>
+                        <span style="display: block; font-size: 15px; font-weight: bold;">Invite 10 Friends</span>
+                        <span style=" display: flex; align-items: center;">
+                            <img src="assets/img/littlediamond.png" style="height: 15px; margin-right: 5px;"> +1000 
+                        </span>
+                    </div>
+                    <span style="border: 1px solid #fff; border-radius: 10px; padding: 5px 10px; background-color: rgba(255, 255, 255, 0.2); margin-left: auto;"> 0/10 </span>
+                    <img src="" style="height: 20px; margin-left: 10px;">
+                </li>
+
+
+
+                <li style="font-weight: 590; font-size: 14px; margin-bottom: 15px; background-color: #2c2a34; border: 1px solid #101013; color: white; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;" onclick="Invite50Friends()">
+                    <div>
+                        <span style="display: block; font-size: 15px; font-weight: bold;">Invite 50 Friends</span>
+                        <span style=" display: flex; align-items: center;">
+                            <img src="assets/img/littlediamond.png" style="height: 15px; margin-right: 5px;"> +5000 
+                        </span>
+                    </div>
+                    <span style="border: 1px solid #fff; border-radius: 10px; padding: 5px 10px; background-color: rgba(255, 255, 255, 0.2); margin-left: auto;"> 0/50 </span>
+                    <img src="" style="height: 20px; margin-left: 10px;">
+                </li>
+
     </ul>
 
     <div id="copy-popup" class="popup" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.9; border-radius: 10px; width: 70%; font-weight: 600;">
@@ -369,15 +420,14 @@ background-color: #000000;
         }
 
         function startTimer(duration) {
-            let timer = duration, hours, minutes, seconds;
+            let timer = duration, hours, minutes;
 
             timerInterval = setInterval(() => {
                 hours = parseInt(timer / 3600, 10);
                 minutes = parseInt((timer % 3600) / 60, 10);
-                seconds = parseInt(timer % 60, 10);
 
                 // Format timer as HH:MM:SS
-                document.getElementById('timer').innerText = `${(hours < 10 ? "0" : "")}${hours}:${(minutes < 10 ? "0" : "")}${minutes}:${(seconds < 10 ? "0" : "")}${seconds}`;
+                document.getElementById('timer').innerText = `${(hours < 10 ? "0" : "")}${hours}:${(minutes < 10 ? "0" : "")}${minutes}`;
 
                 if (--timer < 0) {
                     clearInterval(timerInterval);
@@ -395,6 +445,21 @@ background-color: #000000;
         function closePopup() {
             document.getElementById('popup').style.display = 'none'; // Hide the popup
         }
+
+                    function shareToTelegramlink() {
+            }
+
+            function subscribeToChannel() {
+            }
+
+            function Invite3Friends() {
+            }
+
+            function Invite10Friends() {
+            }
+
+            function Invite50Friends() {
+            }
     </script>
 </div>
 
