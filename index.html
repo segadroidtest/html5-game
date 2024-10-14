@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="mobile-web-app-capable" content="yes">
+<meta http-equiv="Permissions-Policy" content="clipboard-write=(self)">
 <meta name="apple-mobile-web-app-capable" content="yes">
     <title></title>
     <!-- Font Awesome for Icons -->
@@ -625,15 +626,27 @@ function getReferralLevel(totalReferrals) {
 
 // Copy function for the referral link
 function copyLink() {
-    const referralLink = document.getElementById('referral-link').textContent;
-    navigator.clipboard.writeText(referralLink).then(() => {
+    const referralLinkElement = document.getElementById('referral-link');
+    const referralLink = referralLinkElement.textContent;
+
+    if (referralLink && referralLink !== "Loading your referral link...") {
+        const textArea = document.createElement("textarea");
+        textArea.value = referralLink;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+
         const popup = document.getElementById('copy-popup');
         popup.style.display = 'block';
         setTimeout(() => {
             popup.style.display = 'none';
         }, 2000);
-    }).catch(err => console.error('Could not copy text: ', err));
+    } else {
+        console.error("Referral link is empty or not ready.");
+    }
 }
+
 </script>
 </div>
 
