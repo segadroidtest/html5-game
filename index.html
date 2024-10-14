@@ -400,154 +400,47 @@ function copyLink() {
 
 
 
- <div id="page4" class="page" style="background: rgba(46, 44, 55, 0.7); color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: 100%; overflow-y: auto;">
-
-    <div id="earning-stats" style="display: flex; justify-content: space-between; padding: 10px 15px; margin-top: 0; margin-bottom: 0px; border-radius: 10px; background: #1e1d22; color: white !important; border: 1px solid #101013;">
-
-        <div class="stat" style="justify-content: space-evenly; padding-left: 15px; flex: 1; text-align: center; font-weight: bold;">
-            <img src="assets/img/littlediamond.png" style="height: 15px; padding-right: 0px;">
+ <div id="page4" class="page">
+    <div id="earning-stats">
+        <div class="stat">
+            <img src="assets/img/littlediamond.png" style="height: 15px;">
             Earned: <span id="points-earned">0</span>
         </div>
-        
     </div>
 
-    <p style="margin-top: 20px; color: white; font-size: 18px; font-weight: bold; width: 100%; text-align: left; height: 10px; padding-left: 6px;">Available Tasks:</p>
+    <ul id="tasks-list">
+        <li id="daily-checkin" onclick="dailyCheckin()">
+            <span>Daily check-in</span>
+            <span><img src="assets/img/littlediamond.png" style="height: 15px;"> +100</span>
+        </li>
+    </ul>
 
-    <div id="tasks-container" style="height: 400px; overflow-y: auto; border: 0px !important; padding: 5px;">
+    <script>
+        async function dailyCheckin() {
+            const userId = Telegram.WebApp.initDataUnsafe.user.id; // Get the user ID
 
-        <ul id="tasks-list" style="margin-bottom: -5px; margin-top: -5px; list-style-type: none; padding: 0;">
-        <ul id="tasks-list" style="margin-bottom: -5px; margin-top: -5px; list-style-type: none; padding: 0;">
-            <ul style="list-style-type: none; padding-left: 0;">
+            try {
+                const response = await fetch("/api/user/dailycheckin", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ userId })
+                });
+                const result = await response.json();
 
-
-
-                <li id="share-link" style="position: relative; margin-bottom: 10px; background-color: #1e1d22; border: 1px solid #101013; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;" onclick="shareToTelegramlink()">
-                    <span style="display: block; font-size: 15px; font-weight: bold;">Share Link to your Telegram</span>
-                    <span style="font-weight: bold;">
-                        <img src="assets/img/littlediamond.png" style="height: 15px;"> +500 
-                    </span>
-                </li>
-
-
-
-                <li id="daily-checkin" style="position: relative; margin-bottom: 15px; background-color: #1e1d22; border: 1px solid #101013; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;" onclick="claimDailyCheckin()">
-                    <span style="display: block; font-size: 15px; font-weight: bold;">Daily check-in</span>
-                    <span style="font-weight: bold;">
-                        <img src="assets/img/littlediamond.png" style="height: 15px;"> +100 
-                    </span>
-                </li>
-
-
-
-                <li id="subscribe-channel" style="position: relative; margin-bottom: 10px; background-color: #1e1d22; border: 1px solid #101013; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;" onclick="subscribeToChannel()">
-                    <span style="display: block; font-size: 15px; font-weight: bold;">Subscribe to Telegram Channel</span>
-                    <span style="font-weight: bold;">
-                        <img src="assets/img/littlediamond.png" style="height: 15px;"> +500 
-                    </span>
-                </li>
-
-
-
-                <li style="font-weight: 590; font-size: 14px; margin-bottom: 15px; background-color: #1e1d22; border: 1px solid #101013; color: white; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;" onclick="claimInvite3Friends()">
-                    <div>
-                        <span style="display: block; font-size: 15px; font-weight: bold;">Invite 3 Friends</span>
-                        <span style="font-weight: bold; display: flex; align-items: center;">
-                            <img src="assets/img/littlediamond.png" style="height: 15px; margin-right: 5px;"> +300 
-                        </span>
-                    </div>
-                    <span style="border: 1px solid #fff; border-radius: 10px; padding: 5px 10px; background-color: rgba(255, 255, 255, 0.2); margin-left: auto;"> 0/3 </span>
-                    <img src="" style="height: 20px; margin-left: 10px;">
-                </li>
-
-
-
-                <li style="font-weight: 590; font-size: 14px; margin-bottom: 15px; background-color: #1e1d22; border: 1px solid #101013; color: white; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;" onclick="claimInvite10Friends()">
-                    <div>
-                        <span style="display: block; font-size: 15px; font-weight: bold;">Invite 10 Friends</span>
-                        <span style="font-weight: bold; display: flex; align-items: center;">
-                            <img src="assets/img/littlediamond.png" style="height: 15px; margin-right: 5px;"> +1000 
-                        </span>
-                    </div>
-                    <span style="border: 1px solid #fff; border-radius: 10px; padding: 5px 10px; background-color: rgba(255, 255, 255, 0.2); margin-left: auto;"> 0/10 </span>
-                    <img src="" style="height: 20px; margin-left: 10px;">
-                </li>
-
-
-
-                <li style="font-weight: 590; font-size: 14px; margin-bottom: 15px; background-color: #1e1d22; border: 1px solid #101013; color: white; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;" onclick="claimInvite50Friends()">
-                    <div>
-                        <span style="display: block; font-size: 15px; font-weight: bold;">Invite 50 Friends</span>
-                        <span style="font-weight: bold; display: flex; align-items: center;">
-                            <img src="assets/img/littlediamond.png" style="height: 15px; margin-right: 5px;"> +5000 
-                        </span>
-                    </div>
-                    <span style="border: 1px solid #fff; border-radius: 10px; padding: 5px 10px; background-color: rgba(255, 255, 255, 0.2); margin-left: auto;"> 0/50 </span>
-                    <img src="" style="height: 20px; margin-left: 10px;">
-                </li>
-
-
-            </ul>
-        </ul>
-        </ul>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script>
-let userId; // Declare userId in the global scope
-
-// Functions moved outside DOMContentLoaded for global scope
-async function fetchUserData(userId) {
-    try {
-        const response = await fetch(`https://5d4d5bcc-e6a0-47da-9f5a-9dd61a0282fb-00-3ulqtxjt3k7ap.worf.replit.dev/api/user/${userId}`);
-        if (!response.ok) throw new Error("Error fetching user data");
-        
-        const userData = await response.json();
-        document.getElementById("points-earned").textContent = userData.totalPoints || 0;
-        document.getElementById("invite-3-count").textContent = `${userData.invitedFriendsCount || 0}/3`;
-        document.getElementById("invite-50-count").textContent = `${userData.invitedFriendsCount50 || 0}/50`;
-    } catch (error) {
-        console.error("Failed to fetch user data:", error);
-    }
-}
-
-async function claimDailyCheckin() {
-    try {
-        const response = await fetch(`https://5d4d5bcc-e6a0-47da-9f5a-9dd61a0282fb-00-3ulqtxjt3k7ap.worf.replit.dev/api/user/checkin`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ userId }),
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            document.getElementById("points-earned").textContent = data.totalPoints;
-            alert("Check-in successful! You earned 100 points.");
-        } else {
-            const errorMessage = await response.text();
-            alert("Failed to claim daily check-in: " + errorMessage);
+                if (response.ok) {
+                    alert(result.message);
+                    // Update the points-earned display
+                    document.getElementById("points-earned").textContent = parseInt(document.getElementById("points-earned").textContent) + 100;
+                } else {
+                    console.error("Daily check-in failed:", result.error);
+                }
+            } catch (error) {
+                console.error("Request failed:", error);
+            }
         }
-    } catch (error) {
-        console.error("Error in claimDailyCheckin:", error);
-    }
-}
-
-document.addEventListener("DOMContentLoaded", async function () {
-    // Initialize userId from Telegram Web App
-    userId = Telegram.WebApp.initDataUnsafe.user.id;
-
-    // Fetch user data
-    await fetchUserData(userId);
-
-    // Add event listeners
-    document.getElementById("daily-checkin").addEventListener("click", claimDailyCheckin);
-    document.getElementById("invite-3-friends").addEventListener("click", claimInvite3Friends);
-    document.getElementById("invite-10-friends").addEventListener("click", claimInvite10Friends);
-    document.getElementById("invite-50-friends").addEventListener("click", claimInvite50Friends);
-    document.getElementById("subscribe-channel").addEventListener("click", subscribeToChannel);
-});
-</script>
-
-
-    </div>
+    </script>
 </div>
+
 
 
        
