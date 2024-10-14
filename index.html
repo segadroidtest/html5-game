@@ -423,7 +423,6 @@ async function checkDailyCheckinStatus() {
         
         if (data.remainingTime > 0) {
             disableDailyCheckin();
-            startTimer(data.remainingTime);
         } else {
             enableDailyCheckin();
         }
@@ -467,12 +466,13 @@ async function checkDailyCheckinStatus() {
     function disableDailyCheckin() {
         dailyCheckinElement.style.cursor = 'not-allowed';
         dailyCheckinElement.removeEventListener('click', dailyCheckin);
+        dailyCheckinElement.style.display = "none";
     }
 
     function enableDailyCheckin() {
         dailyCheckinElement.style.cursor = 'pointer';
         dailyCheckinElement.addEventListener('click', dailyCheckin);
-        document.getElementById('timer').innerText = "";
+        dailyCheckinElement.style.display = "block";
     }
 
     function startTimer(duration) {
