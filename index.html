@@ -629,9 +629,14 @@ function copyLinkreferral() {
     const referralLinkElement = document.getElementById('referral-link');
     const referralLink = referralLinkElement.textContent;
 
+    // Text to include with the referral link
+    const additionalText = "Join Degen Town Journey! Stay tuned for exciting airdrops and special rewards from Degen Town! ";
+
     if (referralLink && referralLink !== "Loading your referral link...") {
+        const fullTextToCopy = `${additionalText}${referralLink}`; // Combine the text and referral link
+
         const textArea = document.createElement("textarea");
-        textArea.value = referralLink;
+        textArea.value = fullTextToCopy; // Set the full text to copy
         document.body.appendChild(textArea);
         textArea.select();
         document.execCommand("copy");
