@@ -388,18 +388,29 @@ background-color: #000000;
         }
 
         function showPopup(message) {
-            document.getElementById('popup-message').innerText = message; // Set the message
-            document.getElementById('popup').style.display = 'block'; // Show the popup
-        }
+            const popup = document.createElement('div');
+            popup.innerText = message;
+            popup.style.position = 'fixed';
+            popup.style.top = '50%';
+            popup.style.left = '50%';
+            popup.style.transform = 'translate(-50%, -50%)';
+            popup.style.background = '#1e1d22';
+            popup.style.color = 'white';
+            popup.style.padding = '20px';
+            popup.style.borderRadius = '10px';
+            popup.style.zIndex = '1000';
+            document.body.appendChild(popup);
 
-        function closePopup() {
-            document.getElementById('popup').style.display = 'none'; // Hide the popup
+            setTimeout(() => {
+                document.body.removeChild(popup);
+            }, 2000);
         }
 
         // Check initial state on page load
         checkDailyCheckinStatus();
     </script>
 </div>
+
 
 
 
