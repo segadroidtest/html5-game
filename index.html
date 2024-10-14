@@ -405,33 +405,39 @@ function copyLink() {
     const dailyCheckinElement = document.getElementById('daily-checkin');
     let timerInterval;
 
+    // Key for localStorage to store the check-in state
+    const checkinStateKey = `dailyCheckinState_${userId}`;
+
     document.addEventListener("DOMContentLoaded", function() {
+        // Check the check-in status on load
         checkDailyCheckinStatus();
 
+        // Add event listener for daily check-in
         dailyCheckinElement.addEventListener('click', dailyCheckin);
     });
 
-async function checkDailyCheckinStatus() {
-    try {
-        const response = await fetch(`https://telegram-bot-1-segadroidstudio.replit.app/api/user/referrals/${userId}`);
-        
-        if (!response.ok) {
-            throw new Error(`Server returned status ${response.status}`);
-        }
-        
-        const data = await response.json();
-        
-        if (data.remainingTime > 0) {
-            disableDailyCheckin();
-        } else {
+    async function checkDailyCheckinStatus() {
+        try {
+            const response = await fetch(`https://telegram-bot-1-segadroidstudio.replit.app/api/user/referrals/${userId}`);
+            
+            if (!response.ok) {
+                throw new Error(`Server returned status ${response.status}`);
+            }
+            
+            const data = await response.json();
+
+            // Check if the user is eligible for a daily check-in
+            if (data.remainingTime > 0) {
+                disableDailyCheckin();
+            } else {
+                enableDailyCheckin();
+            }
+        } catch (error) {
+            console.error("Failed to check daily check-in status:", error);
+            // Optionally enable if the status check fails
             enableDailyCheckin();
         }
-    } catch (error) {
-        console.error("Failed to check daily check-in status:", error);
     }
-}
-
-
 
     async function dailyCheckin() {
         try {
@@ -467,12 +473,18 @@ async function checkDailyCheckinStatus() {
         dailyCheckinElement.style.cursor = 'not-allowed';
         dailyCheckinElement.removeEventListener('click', dailyCheckin);
         dailyCheckinElement.style.display = "none";
+
+        // Store the state in localStorage
+        localStorage.setItem(checkinStateKey, "disabled");
     }
 
     function enableDailyCheckin() {
         dailyCheckinElement.style.cursor = 'pointer';
         dailyCheckinElement.addEventListener('click', dailyCheckin);
         dailyCheckinElement.style.display = "block";
+
+        // Store the state in localStorage
+        localStorage.setItem(checkinStateKey, "enabled");
     }
 
     function startTimer(duration) {
@@ -503,6 +515,17 @@ async function checkDailyCheckinStatus() {
     function closePopup() {
         document.getElementById('popup').style.display = 'none';
     }
+
+    // On page load, check the stored state
+    window.addEventListener("load", function() {
+        const checkinState = localStorage.getItem(checkinStateKey);
+        
+        if (checkinState === "disabled") {
+            disableDailyCheckin();
+        } else {
+            enableDailyCheckin();
+        }
+    });
 </script>
 
 
