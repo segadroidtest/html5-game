@@ -432,7 +432,7 @@ function copyLink() {
 
 
 
-                <li id="daily-checkin" style="position: relative; margin-bottom: 15px; background-color: #1e1d22; border: 1px solid #101013; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;" onclick="dailyCheckin()">
+                <li id="dailyCheckInBtn" style="position: relative; margin-bottom: 15px; background-color: #1e1d22; border: 1px solid #101013; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;" onclick="dailyCheckin()">
                     <span style="display: block; font-size: 15px; font-weight: bold;">Daily check-in</span>
                     <span style="font-weight: bold;">
                         <img src="assets/img/littlediamond.png" style="height: 15px;"> +100 
@@ -492,31 +492,33 @@ function copyLink() {
         </ul>
         <script src="https://telegram.org/js/telegram-web-app.js"></script>
         <script>
-function dailyCheckin() {
-    const checkinReward = 100;
+async function handleDailyCheckIn() {
+    const userId = /* Get user ID from session or state */;
+    
+    try {
+        const response = await fetch("/api/daily-checkin", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ userId }),
+        });
 
-    // Send request to backend to process daily check-in
-    fetch('/api/daily-checkin', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ reward: checkinReward }),
-    })
-    .then(response => response.json())
-    .then(data => {
+        const data = await response.json();
+
         if (data.success) {
-            updateBalance(checkinReward);
-            alert('Daily check-in successful! You earned ' + checkinReward + ' points.');
+            alert(data.message);
         } else {
-            alert('Daily check-in failed. Please try again later.');
+            alert(data.message);
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred. Please try again later.');
-    });
+    } catch (error) {
+        console.error("Error during daily check-in:", error);
+        alert("An error occurred. Please try again later.");
+    }
 }
+
+// Add event listener to the Daily Check-In button
+document.getElementById("dailyCheckInBtn").addEventListener("click", handleDailyCheckIn);
 
 function completeTask(taskType) {
     let reward = 0;
