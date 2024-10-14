@@ -290,22 +290,23 @@ background-color: #000000;
         <li id="daily-checkin" style="position: relative; margin-bottom: 15px; background-color: #1e1d22; border: 1px solid #101013; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;">
             <span style="display: block; font-size: 15px; font-weight: bold;">Daily check-in</span>
             <span><img src="assets/img/littlediamond.png" style="height: 15px;"> +100</span>
+            <span id="timer" style="float: right; font-size: 14px;"></span> <!-- Timer display -->
         </li>
     </ul>
 
-        <div id="copy-popup" class="popup" style="display: none; position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);background: rgb(30, 29, 34);color: white;padding: 20px;opacity: 0.9;border-radius: 10px;width: 70%;font-weight: 600;">
-            Hooray! 🎉 Daily check-in successful! You've earned 100 points! Keep it up!
-        </div>
-
-
+    <div id="copy-popup" class="popup" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.9; border-radius: 10px; width: 70%; font-weight: 600;">
+        Hooray! 🎉 Daily check-in successful! You've earned 100 points! Keep it up!
+    </div>
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Ensure userId is a string
+        const dailyCheckinElement = document.getElementById('daily-checkin');
+        let timerInterval; // Variable to hold the timer interval
 
         document.addEventListener("DOMContentLoaded", function() {
             // Event binding for daily check-in
-            document.getElementById('daily-checkin').addEventListener('click', dailyCheckin);
+            dailyCheckinElement.addEventListener('click', dailyCheckin);
         });
 
         async function dailyCheckin() {
@@ -322,14 +323,47 @@ background-color: #000000;
 
             const data = await response.json();
             if (response.ok) {
-        const popup = document.getElementById('copy-popup');
-        popup.style.display = 'block';
-        setTimeout(() => {
-            popup.style.display = 'none';
-        }, 2000);
-    } else {
+                const popup = document.getElementById('copy-popup');
+                popup.style.display = 'block';
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                }, 2000);
+
+                disableDailyCheckin(); // Disable further clicks
+                startTimer(24 * 60 * 60); // Start 24-hour timer (in seconds)
+            } else {
                 showPopup(`Daily check-in failed: ${data.error}`); // Show popup with error message
             }
+        }
+
+        function disableDailyCheckin() {
+            dailyCheckinElement.style.cursor = 'not-allowed'; // Change cursor to indicate it's unclickable
+            dailyCheckinElement.onclick = null; // Remove click event
+        }
+
+        function enableDailyCheckin() {
+            dailyCheckinElement.style.cursor = 'pointer'; // Change cursor to indicate it's clickable
+            dailyCheckinElement.onclick = dailyCheckin; // Reassign the click event
+            document.getElementById('timer').innerText = ""; // Clear the timer display
+        }
+
+        function startTimer(duration) {
+            let timer = duration, hours, minutes, seconds;
+
+            timerInterval = setInterval(() => {
+                hours = parseInt(timer / 3600, 10);
+                minutes = parseInt((timer % 3600) / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                // Format timer as HH:MM:SS
+                document.getElementById('timer').innerText = `${(hours < 10 ? "0" : "")}${hours}:${(minutes < 10 ? "0" : "")}${minutes}:${(seconds < 10 ? "0" : "")}${seconds}`;
+
+                if (--timer < 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('timer').innerText = "Ready for check-in!"; // Optional: display a message when timer ends
+                    enableDailyCheckin(); // Re-enable the check-in
+                }
+            }, 1000);
         }
 
         function showPopup(message) {
@@ -342,6 +376,7 @@ background-color: #000000;
         }
     </script>
 </div>
+
 
 
         
