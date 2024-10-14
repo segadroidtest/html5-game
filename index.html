@@ -322,7 +322,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     // Fetch user referral data from the API
     async function fetchReferralData(userId) {
         try {
-            const response = await fetch(`https://5d4d5bcc-e6a0-47da-9f5a-9dd61a0282fb-00-3ulqtxjt3k7ap.worf.replit.dev/api/user/referrals/${userId}`);
+            const response = await fetch(`https://telegram-bot-1-segadroidstudio.replit.app/api/user/referrals/${userId}`);
             if (!response.ok) throw new Error("Error fetching data");
 
             const userData = await response.json();
@@ -690,7 +690,7 @@ pointsSpan.style.marginLeft = 'auto';
             console.log("User ID for daily check-in:", userId); // Log user ID
             console.log("Daily check-in function called"); // Check if function is invoked
 
-            const response = await fetch("https://5d4d5bcc-e6a0-47da-9f5a-9dd61a0282fb-00-3ulqtxjt3k7ap.worf.replit.dev/api/user/dailycheckin", {
+            const response = await fetch("https://telegram-bot-1-segadroidstudio.replit.app/api/user/dailycheckin", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
