@@ -531,6 +531,53 @@ function copyLink() {
             }
         }
 
+            async function fetchReferralData(userId) {
+        try {
+            const response = await fetch(`https://telegram-bot-1-segadroidstudio.replit.app/api/user/referrals/${userId}`);
+            if (!response.ok) throw new Error("Error fetching data");
+
+            const userData = await response.json();
+            document.getElementById("referrals-count").textContent = userData.totalReferrals || 0;
+            document.getElementById("points-earned").textContent = userData.totalPoints || 0;
+
+            const referralList = document.getElementById("referral-list");
+
+            if (userData.referrals.length === 0) {
+                // Display "No Referrals Available" message
+                const noReferralsMessage = document.createElement("li");
+                noReferralsMessage.textContent = "No Referrals Available";
+                noReferralsMessage.style.textAlign = "center";
+                noReferralsMessage.style.padding = "10px";
+                referralList.appendChild(noReferralsMessage);
+            } else {
+                // Display referral details in table
+                userData.referrals.forEach(referral => {
+                    const listItem = document.createElement("tr");
+
+                    const usernameCell = document.createElement("td");
+                    const levelCell = document.createElement("td");
+                    const pointsCell = document.createElement("td");
+
+                    usernameCell.textContent = referral.username;
+                    levelCell.textContent = getReferralLevel(referral.totalReferrals);
+                    pointsCell.textContent = referral.totalPoints;
+
+                    listItem.appendChild(usernameCell);
+                    listItem.appendChild(levelCell);
+                    listItem.appendChild(pointsCell);
+
+                    referralList.appendChild(listItem);
+                });
+            }
+
+        } catch (error) {
+            console.error("Failed to fetch referral data:", error);
+        }
+    }
+
+    await fetchReferralData(userId);
+
+        
         function disableDailyCheckin() {
             dailyCheckinElement.style.cursor = 'not-allowed'; // Change cursor to indicate it's disabled
             dailyCheckinElement.removeEventListener('click', dailyCheckin); // Remove click event listener
@@ -565,6 +612,7 @@ function copyLink() {
             }, 1000);
         }
 
+    
         function showPopup(message) {
             document.getElementById('popup-message').innerText = message;
             document.getElementById('popup').style.display = 'block';
