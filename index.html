@@ -292,6 +292,7 @@ background-color: #000000;
             <span><img src="assets/img/littlediamond.png" style="height: 15px;"> +100</span>
             <span id="timer" style="float: right; font-size: 14px;"></span> <!-- Timer display -->
         </li>
+        <div id="overlay" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); border-radius: 10px; z-index: 1;"></div> <!-- Overlay div -->
     </ul>
 
     <div id="copy-popup" class="popup" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.9; border-radius: 10px; width: 70%; font-weight: 600;">
@@ -302,6 +303,7 @@ background-color: #000000;
     <script>
         const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Ensure userId is a string
         const dailyCheckinElement = document.getElementById('daily-checkin');
+        const overlay = document.getElementById('overlay'); // Overlay element
         let timerInterval; // Variable to hold the timer interval
 
         document.addEventListener("DOMContentLoaded", function() {
@@ -320,7 +322,7 @@ background-color: #000000;
                 const remainingTime = (24 * 60 * 60 * 1000) - elapsedTime; // 24 hours in milliseconds
 
                 if (remainingTime > 0) {
-                    disableDailyCheckin(); // Disable check-in if still within the 24-hour window
+                    disableDailyCheckin(remainingTime); // Disable check-in if still within the 24-hour window
                     startTimer(Math.floor(remainingTime / 1000)); // Start timer with remaining seconds
                 } else {
                     enableDailyCheckin(); // Enable check-in if 24 hours has passed
@@ -359,8 +361,9 @@ background-color: #000000;
             }
         }
 
-        function disableDailyCheckin() {
+        function disableDailyCheckin(remainingTime) {
             dailyCheckinElement.style.cursor = 'not-allowed'; // Change cursor to indicate it's unclickable
+            overlay.style.display = 'block'; // Show overlay to block interaction
             dailyCheckinElement.removeEventListener('click', dailyCheckin); // Remove click event
             dailyCheckinElement.classList.add("disabled"); // Add a disabled class if needed
         }
@@ -368,6 +371,7 @@ background-color: #000000;
         function enableDailyCheckin() {
             dailyCheckinElement.style.cursor = 'pointer'; // Change cursor to indicate it's clickable
             dailyCheckinElement.addEventListener('click', dailyCheckin); // Reassign the click event
+            overlay.style.display = 'none'; // Hide overlay
             document.getElementById('timer').innerText = ""; // Clear the timer display
             dailyCheckinElement.classList.remove("disabled"); // Remove disabled class if it exists
         }
