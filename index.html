@@ -491,36 +491,32 @@ function copyLink() {
             </ul>
         </ul>
         <script>
-            // Add this to your script.js
-function dailyCheckin() {
-    const userId = Telegram.WebApp.initDataUnsafe.user.id; // Get the user ID
+            document.addEventListener("DOMContentLoaded", async function() {
+    const userId = Telegram.WebApp.initDataUnsafe.user.id;
 
-    fetch("https://5d4d5bcc-e6a0-47da-9f5a-9dd61a0282fb-00-3ulqtxjt3k7ap.worf.replit.dev/api/user/daily-checkin", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId }), // Send the userId in the body
-    })
-    .then(response => {
-        if (!response.ok) {
-            console.error("Response status:", response.status); // Log the response status
-            return response.json().then(errData => {
-                throw new Error(errData.message || "Failed to check in");
-            });
-        }
-        return response.json();
-    })
-    .then(data => {
-        alert(data.message); // Show success message
-        document.getElementById("points-earned").textContent = data.totalPoints; // Update points display
-    })
-    .catch(error => {
-        console.error("Error during daily check-in:", error); // Log the error
+async function dailyCheckin() {
+    const userId = Telegram.WebApp.initDataUnsafe.user.id; // Ensure this is correct
+
+    try {
+        const response = await fetch("https://your-server-url/api/user/daily-checkin", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ userId }) // Correctly include userId in the body
+        });
+
+        if (!response.ok) throw new Error("Error during daily check-in");
+
+        const data = await response.json();
+        console.log("Check-in successful:", data);
+        alert("Check-in successful!");
+    } catch (error) {
+        console.error("Error during daily check-in:", error);
         alert("An error occurred during the daily check-in. Please try again later.");
-    });
+    }
 }
-
+}
         </script>
     </div>
 </div>
