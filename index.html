@@ -503,7 +503,12 @@ function dailyCheckin() {
         body: JSON.stringify({ userId }), // Send the userId in the body
     })
     .then(response => {
-        if (!response.ok) throw new Error("Failed to check in");
+        if (!response.ok) {
+            console.error("Response status:", response.status); // Log the response status
+            return response.json().then(errData => {
+                throw new Error(errData.message || "Failed to check in");
+            });
+        }
         return response.json();
     })
     .then(data => {
@@ -511,13 +516,10 @@ function dailyCheckin() {
         document.getElementById("points-earned").textContent = data.totalPoints; // Update points display
     })
     .catch(error => {
-        console.error("Error during daily check-in:", error);
+        console.error("Error during daily check-in:", error); // Log the error
         alert("An error occurred during the daily check-in. Please try again later.");
     });
 }
-
-// Don't forget to attach dailyCheckin to the onclick in the HTML
-
 
         </script>
     </div>
