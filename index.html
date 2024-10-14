@@ -405,8 +405,9 @@ function copyLink() {
     const dailyCheckinElement = document.getElementById('daily-checkin');
     let timerInterval;
 
-    // Key for localStorage to store the check-in state
-    const checkinStateKey = `dailyCheckinState_${userId}`;
+    // Key for localStorage to store the last check-in time
+    const lastCheckinKey = `lastCheckin_${userId}`;
+    const checkinInterval = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
     document.addEventListener("DOMContentLoaded", function() {
         // Check the check-in status on load
@@ -417,24 +418,13 @@ function copyLink() {
     });
 
     async function checkDailyCheckinStatus() {
-        try {
-            const response = await fetch(`https://telegram-bot-1-segadroidstudio.replit.app/api/user/referrals/${userId}`);
-            
-            if (!response.ok) {
-                throw new Error(`Server returned status ${response.status}`);
-            }
-            
-            const data = await response.json();
+        const lastCheckin = localStorage.getItem(lastCheckinKey);
+        const currentTime = Date.now();
 
-            // Check if the user is eligible for a daily check-in
-            if (data.remainingTime > 0) {
-                disableDailyCheckin();
-            } else {
-                enableDailyCheckin();
-            }
-        } catch (error) {
-            console.error("Failed to check daily check-in status:", error);
-            // Optionally enable if the status check fails
+        // Check if 24 hours have passed since last check-in
+        if (lastCheckin && (currentTime - lastCheckin < checkinInterval)) {
+            disableDailyCheckin();
+        } else {
             enableDailyCheckin();
         }
     }
@@ -459,6 +449,8 @@ function copyLink() {
                 }, 2000);
 
                 disableDailyCheckin();
+                // Store the current time as the last check-in time
+                localStorage.setItem(lastCheckinKey, Date.now());
                 startTimer(24 * 60 * 60); // Start 24-hour timer (in seconds)
             } else {
                 showPopup(`Daily check-in failed: ${data.error}`);
@@ -472,19 +464,13 @@ function copyLink() {
     function disableDailyCheckin() {
         dailyCheckinElement.style.cursor = 'not-allowed';
         dailyCheckinElement.removeEventListener('click', dailyCheckin);
-        dailyCheckinElement.style.display = "none";
-
-        // Store the state in localStorage
-        localStorage.setItem(checkinStateKey, "disabled");
+        dailyCheckinElement.style.display = "none"; // Hide the element
     }
 
     function enableDailyCheckin() {
         dailyCheckinElement.style.cursor = 'pointer';
         dailyCheckinElement.addEventListener('click', dailyCheckin);
-        dailyCheckinElement.style.display = "block";
-
-        // Store the state in localStorage
-        localStorage.setItem(checkinStateKey, "enabled");
+        dailyCheckinElement.style.display = "block"; // Show the element
     }
 
     function startTimer(duration) {
@@ -515,18 +501,8 @@ function copyLink() {
     function closePopup() {
         document.getElementById('popup').style.display = 'none';
     }
-
-    // On page load, check the stored state
-    window.addEventListener("load", function() {
-        const checkinState = localStorage.getItem(checkinStateKey);
-        
-        if (checkinState === "disabled") {
-            disableDailyCheckin();
-        } else {
-            enableDailyCheckin();
-        }
-    });
 </script>
+
 
 
 </div>
