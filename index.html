@@ -358,12 +358,13 @@ background-color: #000000;
 
         function disableDailyCheckin() {
             dailyCheckinElement.style.cursor = 'not-allowed'; // Change cursor to indicate it's unclickable
-            dailyCheckinElement.onclick = null; // Remove click event
+            dailyCheckinElement.removeEventListener('click', dailyCheckin); // Remove click event
+            dailyCheckinElement.onclick = null; // Remove onclick attribute
         }
 
         function enableDailyCheckin() {
             dailyCheckinElement.style.cursor = 'pointer'; // Change cursor to indicate it's clickable
-            dailyCheckinElement.onclick = dailyCheckin; // Reassign the click event
+            dailyCheckinElement.addEventListener('click', dailyCheckin); // Reassign the click event
             document.getElementById('timer').innerText = ""; // Clear the timer display
         }
 
@@ -396,6 +397,7 @@ background-color: #000000;
         }
     </script>
 </div>
+
 
 
 
