@@ -493,40 +493,42 @@ function copyLink() {
             </ul>
         </ul>
             <script>
-        // Function to handle Daily Check-In
-        async function handleDailyCheckIn() {
-            // Replace this with actual logic to retrieve the user ID
-            const userId = localStorage.getItem('userId'); // Example of retrieving from localStorage
-            
-            if (!userId) {
-                alert("User not logged in. Please start the bot first.");
-                return;
-            }
-            
-            try {
-                const response = await fetch("/api/daily-checkin", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ userId }),
-                });
+       // Assuming you already have user ID stored in localStorage when the bot starts
 
-                const data = await response.json();
+// Function to handle Daily Check-In
+async function handleDailyCheckIn() {
+    const userId = localStorage.getItem('userId'); // Get user ID from localStorage
 
-                if (data.success) {
-                    alert(data.message);
-                } else {
-                    alert(data.message);
-                }
-            } catch (error) {
-                console.error("Error during daily check-in:", error);
-                alert("An error occurred. Please try again later.");
-            }
+    if (!userId) {
+        alert("User not logged in. Please start the bot first.");
+        return; // Exit if user ID is not found
+    }
+
+    try {
+        const response = await fetch("/api/daily-checkin", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ userId }),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert(data.message); // Display success message
+        } else {
+            alert(data.message); // Display error message
         }
+    } catch (error) {
+        console.error("Error during daily check-in:", error);
+        alert("An error occurred. Please try again later."); // Handle fetch errors
+    }
+}
 
-        // Add event listener to the Daily Check-In button
-        document.getElementById("dailyCheckInBtn").addEventListener("click", handleDailyCheckIn);
+// Add event listener for the Daily Check-In button
+document.getElementById("dailyCheckInBtn").addEventListener("click", handleDailyCheckIn);
+
     </script>
     </div>
 </div>
