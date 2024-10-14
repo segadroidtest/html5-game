@@ -407,7 +407,7 @@ function copyLink() {
 
     // Key for localStorage to store the last check-in time
     const lastCheckinKey = `lastCheckin_${userId}`;
-    const checkinInterval = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+    const checkinInterval = 60 * 1000; // 1 minute in milliseconds for testing
 
     document.addEventListener("DOMContentLoaded", function() {
         // Check the check-in status on load
@@ -421,7 +421,7 @@ function copyLink() {
         const lastCheckin = localStorage.getItem(lastCheckinKey);
         const currentTime = Date.now();
 
-        // Check if 24 hours have passed since last check-in
+        // Check if 1 minute has passed since last check-in
         if (lastCheckin && (currentTime - lastCheckin < checkinInterval)) {
             disableDailyCheckin();
         } else {
@@ -451,7 +451,7 @@ function copyLink() {
                 disableDailyCheckin();
                 // Store the current time as the last check-in time
                 localStorage.setItem(lastCheckinKey, Date.now());
-                startTimer(24 * 60 * 60); // Start 24-hour timer (in seconds)
+                startTimer(60); // Start 1-minute timer (in seconds)
             } else {
                 showPopup(`Daily check-in failed: ${data.error}`);
                 if (data.remainingTime) startTimer(data.remainingTime); // Start timer based on remaining time if provided
@@ -475,20 +475,19 @@ function copyLink() {
 
     function startTimer(duration) {
         clearInterval(timerInterval); // Clear any existing timer
-        let timer = duration, hours, minutes, seconds;
+        let timer = duration, minutes, seconds;
 
         timerInterval = setInterval(() => {
-            hours = parseInt(timer / 3600, 10);
-            minutes = parseInt((timer % 3600) / 60, 10);
+            minutes = parseInt(timer / 60, 10);
             seconds = parseInt(timer % 60, 10);
 
             document.getElementById('timer').innerText = 
-                `${(hours < 10 ? "0" : "")}${hours}:${(minutes < 10 ? "0" : "")}${minutes}:${(seconds < 10 ? "0" : "")}${seconds}`;
+                `${(minutes < 10 ? "0" : "")}${minutes}:${(seconds < 10 ? "0" : "")}${seconds}`;
 
             if (--timer < 0) {
                 clearInterval(timerInterval);
                 document.getElementById('timer').innerText = "Ready for check-in!";
-                enableDailyCheckin();
+                enableDailyCheckin(); // Re-enable the button
             }
         }, 1000);
     }
@@ -502,6 +501,7 @@ function copyLink() {
         document.getElementById('popup').style.display = 'none';
     }
 </script>
+
 
 
 
