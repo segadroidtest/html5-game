@@ -251,6 +251,41 @@ background-color: #000000;
                 td { 
                     font-weight: bold;
         }
+        .popup {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.7); /* Black w/ opacity */
+}
+
+.popup-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    text-align: center; /* Center the text */
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
     </style>
 </head>
 <body>
@@ -416,6 +451,13 @@ function copyLink() {
             </li>
         </ul>
     </ul>
+
+     <div id="popup" class="popup">
+    <div class="popup-content">
+        <span class="close" onclick="closePopup()">&times;</span>
+        <p id="popup-message">Daily check-in successful, 100 points added!</p>
+    </div>
+</div>
     
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
@@ -434,10 +476,18 @@ async function dailyCheckin() {
 
     const data = await response.json();
     if (response.ok) {
-        alert(data.message);
+        showPopup(data.message); // Show popup with success message
     } else {
-        alert(`Daily check-in failed: ${data.error}`);
+        showPopup(`Daily check-in failed: ${data.error}`); // Show popup with error message
     }
+}
+function showPopup(message) {
+    document.getElementById('popup-message').innerText = message; // Set the message
+    document.getElementById('popup').style.display = 'block'; // Show the popup
+}
+
+function closePopup() {
+    document.getElementById('popup').style.display = 'none'; // Hide the popup
 }
 
     </script>
