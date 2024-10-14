@@ -491,89 +491,52 @@ function copyLink() {
         </ul>
 
 <script>
-    document.addEventListener("DOMContentLoaded", async function () {
-        const userId = Telegram.WebApp.initDataUnsafe?.user?.id;
+// Functions moved outside DOMContentLoaded for global scope
+async function fetchUserData(userId) {
+    try {
+        const response = await fetch(`https://5d4d5bcc-e6a0-47da-9f5a-9dd61a0282fb-00-3ulqtxjt3k7ap.worf.replit.dev/api/user/${userId}`);
+        if (!response.ok) throw new Error("Error fetching user data");
+        
+        const userData = await response.json();
+        document.getElementById("points-earned").textContent = userData.totalPoints || 0;
+        document.getElementById("invite-3-count").textContent = `${userData.invitedFriendsCount || 0}/3`;
+        document.getElementById("invite-50-count").textContent = `${userData.invitedFriendsCount50 || 0}/50`;
+    } catch (error) {
+        console.error("Failed to fetch user data:", error);
+    }
+}
 
-        if (!userId) {
-            console.error("User ID not found.");
-            return;
-        }
-
-        // Fetch user data on load
-        await fetchUserData(userId);
-
-        // Fetch user data function
-        async function fetchUserData(userId) {
-            try {
-                const response = await fetch(`https://5d4d5bcc-e6a0-47da-9f5a-9dd61a0282fb-00-3ulqtxjt3k7ap.worf.replit.dev/api/user/${userId}`);
-                if (!response.ok) throw new Error("Error fetching user data");
-
-                const userData = await response.json();
-                document.getElementById("points-earned").textContent = userData.totalPoints || 0;
-                document.getElementById("invite-3-count").textContent = `${userData.invitedFriendsCount || 0}/3`;
-                document.getElementById("invite-50-count").textContent = `${userData.invitedFriendsCount50 || 0}/50`;
-            } catch (error) {
-                console.error("Failed to fetch user data:", error);
-            }
-        }
-
-        // Claim daily check-in function
-        async function claimDailyCheckin() {
-            try {
-                const response = await fetch(`https://5d4d5bcc-e6a0-47da-9f5a-9dd61a0282fb-00-3ulqtxjt3k7ap.worf.replit.dev/api/user/checkin`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ userId }),
-                });
-
-                if (!response.ok) throw new Error("Failed to claim daily check-in.");
-
-                const data = await response.json();
-                document.getElementById("points-earned").textContent = data.totalPoints;
-                alert("Check-in successful! You earned 100 points.");
-                document.getElementById("daily-checkin").onclick = null;
-            } catch (error) {
-                console.error(error);
-                alert("An error occurred while claiming daily check-in.");
-            }
-        }
-
-        // Subscribe to channel
-        function subscribeToChannel() {
-            window.open('https://t.me/degentown_news', '_blank');
-            alert("Please subscribe to the channel to claim your 500 points.");
-            document.getElementById("subscribe-channel").onclick = null;
-        }
-
-        // Claim invite functions
-        async function claimInviteFriends(target, inviteBtnId, approvedImgId, points) {
-            try {
-                const response = await fetch(`https://5d4d5bcc-e6a0-47da-9f5a-9dd61a0282fb-00-3ulqtxjt3k7ap.worf.replit.dev/api/user/invite-friends`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ userId, target }),
-                });
-
-                if (!response.ok) throw new Error(`Failed to claim invite reward for ${target} friends`);
-
-                const data = await response.json();
-                document.getElementById("points-earned").textContent = data.totalPoints;
-                alert(`You claimed ${points} points for inviting ${target} friends!`);
-                document.getElementById(approvedImgId).src = 'assets/img/approved.png';
-                document.getElementById(inviteBtnId).onclick = null;
-            } catch (error) {
-                console.error(error);
-                alert("An error occurred while claiming invite reward.");
-            }
-        }
-
-        // Event listeners for claiming points
-        document.getElementById("daily-checkin").addEventListener("click", claimDailyCheckin);
-        document.getElementById("subscribe-channel").addEventListener("click", subscribeToChannel);
-        document.getElementById("invite-3-friends").addEventListener("click", () => claimInviteFriends(3, "invite-3-friends", "invite-3-approved", 300));
-        document.getElementById("invite-10-friends").addEventListener("click", () => claimInviteFriends(10, "invite-10-friends", "invite-10-approved", 1000));
-        document.getElementById("invite-50-friends").addEventListener("click", () => claimInviteFriends(50, "invite-50-friends", "invite-50-approved", 5000));
+async function claimDailyCheckin() {
+    const response = await fetch(`https://5d4d5bcc-e6a0-47da-9f5a-9dd61a0282fb-00-3ulqtxjt3k7ap.worf.replit.dev/api/user/checkin`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }),
     });
+
+    if (response.ok) {
+        const data = await response.json();
+        document.getElementById("points-earned").textContent = data.totalPoints;
+        alert("Check-in successful! You earned 100 points.");
+    } else {
+        const errorMessage = await response.text();
+        alert("Failed to claim daily check-in: " + errorMessage);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", async function () {
+    const userId = Telegram.WebApp.initDataUnsafe.user.id;
+
+    // Fetch user data
+    await fetchUserData(userId);
+
+    // Add event listeners
+    document.getElementById("daily-checkin").addEventListener("click", claimDailyCheckin);
+    document.getElementById("invite-3-friends").addEventListener("click", claimInvite3Friends);
+    document.getElementById("invite-10-friends").addEventListener("click", claimInvite10Friends);
+    document.getElementById("invite-50-friends").addEventListener("click", claimInvite50Friends);
+    document.getElementById("subscribe-channel").addEventListener("click", subscribeToChannel);
+});
+
 </script>
 
 
