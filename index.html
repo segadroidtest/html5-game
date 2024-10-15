@@ -432,7 +432,7 @@ background-color: #000000;
         let timerInterval;
 
         // Key for localStorage to store the last check-in time
-        const lastCheckinKey = lastCheckin_${userId};
+        const lastCheckinKey = `lastCheckin_${userId}`;
         const checkinInterval = 60 * 1000; // 1 minute in milliseconds (for testing)
 
         document.addEventListener("DOMContentLoaded", function() {
