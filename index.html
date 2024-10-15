@@ -492,6 +492,19 @@ async function dailyCheckin() {
     }
 }
 
+function startTimer(seconds) {
+    const checkinButton = document.getElementById('daily-checkin'); // Replace with your actual button ID
+    let remainingTime = seconds;
+
+    const timer = setInterval(() => {
+        remainingTime--;
+        if (remainingTime <= 0) {
+            clearInterval(timer);
+            checkinButton.disabled = false; // Re-enable the button after the timer ends
+            showPopup("You can check in again!");
+        }
+    }, 1000);
+}
 
 
     function disableDailyCheckin() {
