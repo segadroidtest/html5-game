@@ -456,19 +456,16 @@ background-color: #000000;
     }
 
 const COOLDOWN_TIME = 60 * 1000; // 60 seconds in milliseconds
+let cooldownInterval; // Store the interval for the cooldown timer
 
 // Function to check the cooldown state on page load
-function checkCooldown() {
-    const lastCheckinTime = localStorage.getItem('lastCheckinTime');
-    const currentTime = Date.now();
+async function checkCooldown() {
+    const response = await fetch("/api/check-cooldown", { method: "GET" });
+    const data = await response.json();
 
-    if (lastCheckinTime) {
-        const timeSinceLastCheckin = currentTime - lastCheckinTime;
-
-        if (timeSinceLastCheckin < COOLDOWN_TIME) {
-            const remainingTime = Math.ceil((COOLDOWN_TIME - timeSinceLastCheckin) / 1000);
-            startCooldown(remainingTime); // Start cooldown with remaining time
-        }
+    if (data.cooldownActive) {
+        const remainingTime = Math.ceil(data.remainingTime / 1000);
+        startCooldown(remainingTime);
     }
 }
 
@@ -476,7 +473,6 @@ function checkCooldown() {
 async function dailyCheckin() {
     const checkinButton = document.getElementById('daily-checkin');
     const approvedIcon = document.getElementById('approved-icon');
-    checkinButton.disabled = true; // Disable the button immediately
     approvedIcon.style.display = 'none'; // Hide the approved icon initially
 
     try {
@@ -503,14 +499,13 @@ async function dailyCheckin() {
             // Handle the error and display remaining time if provided
             showPopup(`Daily check-in failed: ${data.error}`);
             if (data.remainingTime) {
-                startCooldown(data.remainingTime); // Start timer with remaining time if provided
+                startCooldown(Math.ceil(data.remainingTime / 1000)); // Start timer with remaining time
             }
         }
     } catch (error) {
         console.error("Failed to complete daily check-in:", error);
     } finally {
         // Ensure the button state is handled based on the server response
-        // Button already disabled on check-in success
     }
 }
 
@@ -520,9 +515,10 @@ function startCooldown(duration) {
     checkinButton.disabled = true; // Disable button
     checkinButton.style.pointerEvents = 'none'; // Prevent further clicks
 
-    const interval = setInterval(() => {
+    clearInterval(cooldownInterval); // Clear any existing interval
+    cooldownInterval = setInterval(() => {
         if (duration <= 0) {
-            clearInterval(interval);
+            clearInterval(cooldownInterval);
             checkinButton.disabled = false; // Re-enable button after cooldown
             checkinButton.style.pointerEvents = 'auto'; // Allow clicks again
             return;
