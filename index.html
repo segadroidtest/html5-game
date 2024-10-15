@@ -505,25 +505,6 @@ background-color: #000000;
         document.getElementById('approved-icon').style.display = 'none';
     }
 
-    function startTimer(duration) {
-        clearInterval(timerInterval);
-        let timer = duration;
-
-        timerInterval = setInterval(() => {
-            let minutes = Math.floor(timer / 60);
-            let seconds = timer % 60;
-
-            document.getElementById('timer').innerText = 
-                `${(minutes < 10 ? "0" : "")}${minutes}:${(seconds < 10 ? "0" : "")}${seconds}`;
-
-            if (--timer < 0) {
-                clearInterval(timerInterval);
-                document.getElementById('timer').innerText = "Ready for check-in!";
-                enableDailyCheckin(); // Re-enable the button
-            }
-        }, 1000);
-    }
-
     function showPopup(message) {
         document.getElementById('popup-message').innerText = message;
         document.getElementById('popup').style.display = 'block';
