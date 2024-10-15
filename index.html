@@ -425,16 +425,19 @@ background-color: #000000;
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-   const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
+ const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
 const dailyCheckinElement = document.getElementById('daily-checkin');
 let timerInterval;
 
 // Key for localStorage to store the last check-in time
 const lastCheckinKey = `lastCheckin_${userId}`;
-const checkinInterval = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+const checkinInterval = 60 * 1000; // 1 minute in milliseconds (for testing)
 
 document.addEventListener("DOMContentLoaded", function() {
+    // Check the check-in status on load
     checkDailyCheckinStatus();
+
+    // Add event listener for daily check-in
     dailyCheckinElement.addEventListener('click', dailyCheckin);
 });
 
@@ -442,58 +445,74 @@ async function checkDailyCheckinStatus() {
     const lastCheckin = localStorage.getItem(lastCheckinKey);
     const currentTime = Date.now();
 
-    if (lastCheckin && (currentTime - lastCheckin < checkinInterval)) {
+    console.log('Last Check-in:', lastCheckin);
+    console.log('Current Time:', currentTime);
+
+    if (lastCheckin) {
+        const lastCheckinTime = parseInt(lastCheckin);
+        console.log('Time since last check-in:', currentTime - lastCheckinTime);
+    } else {
+        console.log('No previous check-in found.');
+    }
+
+    // Enable check-in if there's no last check-in or 24 hours have passed
+    const canCheckIn = !lastCheckin || (currentTime - lastCheckin >= checkinInterval);
+
+    if (canCheckIn) {
         enableDailyCheckin();
     } else {
-        enableDailyCheckin();
+        disableDailyCheckin();
     }
 }
 
 async function dailyCheckin() {
-    enableDailyCheckin(); // Disable button immediately
-    showLoading(); // Show loading indicator
     try {
         const response = await fetch("https://telegram-bot-1-segadroidstudio.replit.app/api/user/dailycheckin", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json"
+            },
             body: JSON.stringify({ userId })
         });
 
         const data = await response.json();
-        console.log("API Response:", data);
+        console.log("API Response:", data); // Log the API response for debugging
 
         if (response.ok) {
+            const popup = document.getElementById('copy-popup');
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 2000);
+
             document.getElementById('approved-icon').style.display = 'block';
+            disableDailyCheckin();
             localStorage.setItem(lastCheckinKey, Date.now());
-            startTimer(60); // Start 1-minute timer
-            showPopup("Daily check-in successful, 100 points added!");
+            startTimer(60); // Start 1-minute timer (in seconds for testing)
         } else {
             showPopup(`Daily check-in failed: ${data.error}`);
         }
     } catch (error) {
         console.error("Failed to complete daily check-in:", error);
-        showPopup("Something went wrong. Please try again later.");
-    } finally {
-        hideLoading(); // Hide loading indicator in both success and error cases
-        enableDailyCheckin(); // Re-enable button in all cases
     }
 }
 
 function disableDailyCheckin() {
-    dailyCheckinElement.style.cursor = 'not-allowed';
-    dailyCheckinElement.removeEventListener('click', dailyCheckin);
-    dailyCheckinElement.classList.add('blocked');
+    dailyCheckinElement.style.cursor = 'not-allowed'; // Change cursor to indicate it's disabled
+    dailyCheckinElement.removeEventListener('click', dailyCheckin); // Remove click event listener
+    dailyCheckinElement.classList.add('blocked'); // Add a class to style the blocked state
 }
 
 function enableDailyCheckin() {
-    dailyCheckinElement.style.cursor = 'pointer';
-    dailyCheckinElement.addEventListener('click', dailyCheckin);
-    dailyCheckinElement.classList.remove('blocked');
+    dailyCheckinElement.style.cursor = 'pointer'; // Change cursor to indicate it's clickable
+    dailyCheckinElement.addEventListener('click', dailyCheckin); // Re-add click event listener
+    dailyCheckinElement.classList.remove('blocked'); // Remove the blocked class
+    // Hide the approved icon
     document.getElementById('approved-icon').style.display = 'none';
 }
 
 function startTimer(duration) {
-    clearInterval(timerInterval);
+    clearInterval(timerInterval); // Clear any existing timer
     let timer = duration, hours, minutes, seconds;
 
     timerInterval = setInterval(() => {
@@ -501,13 +520,13 @@ function startTimer(duration) {
         minutes = parseInt((timer % 3600) / 60, 10);
         seconds = parseInt(timer % 60, 10);
 
-        document.getElementById('timer').innerText =
+        document.getElementById('timer').innerText = 
             `${(hours < 10 ? "0" : "")}${hours}:${(minutes < 10 ? "0" : "")}${minutes}:${(seconds < 10 ? "0" : "")}${seconds}`;
 
         if (--timer < 0) {
             clearInterval(timerInterval);
             document.getElementById('timer').innerText = "Ready for check-in!";
-            enableDailyCheckin();
+            enableDailyCheckin(); // Re-enable the button
         }
     }, 1000);
 }
@@ -519,14 +538,6 @@ function showPopup(message) {
 
 function closePopup() {
     document.getElementById('popup').style.display = 'none';
-}
-
-function showLoading() {
-    document.getElementById('loading').style.display = 'block';
-}
-
-function hideLoading() {
-    document.getElementById('loading').style.display = 'none';
 }
 
 </script>
