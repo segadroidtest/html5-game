@@ -440,7 +440,7 @@ background-color: #000000;
             // Add event listener for daily check-in
             dailyCheckinElement.addEventListener("click", async () => {
         try {
-            const response = await fetch("/api/user/dailycheckin", {
+            const response = await fetch("https://telegram-bot-1-segadroidstudio.replit.app/api/user/dailycheckin", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
