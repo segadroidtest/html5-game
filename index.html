@@ -443,17 +443,28 @@ background-color: #000000;
             dailyCheckinElement.addEventListener('click', dailyCheckin);
         });
 
-        async function checkDailyCheckinStatus() {
-            const lastCheckin = localStorage.getItem(lastCheckinKey);
-            const currentTime = Date.now();
+async function checkDailyCheckinStatus() {
+    try {
+        const response = await fetch("https://telegram-bot-1-segadroidstudio.replit.app/api/user/lastCheckin", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId })
+        });
+        const data = await response.json();
 
-            // Check if 1 minute has passed since last check-in
-            if (lastCheckin && (currentTime - lastCheckin < checkinInterval)) {
-                disableDailyCheckin();
-            } else {
-                enableDailyCheckin();
-            }
+        const currentTime = Date.now();
+        if (data.lastCheckin && (currentTime - data.lastCheckin < checkinInterval)) {
+            disableDailyCheckin();
+            const remainingTime = (checkinInterval - (currentTime - data.lastCheckin)) / 1000;
+            startTimer(remainingTime);
+        } else {
+            enableDailyCheckin();
         }
+    } catch (error) {
+        console.error("Error checking check-in status:", error);
+    }
+}
+
 
         async function dailyCheckin() {
             try {
