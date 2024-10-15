@@ -430,13 +430,13 @@ background-color: #000000;
 </div>
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script>
+   <script>
         const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
         const dailyCheckinElement = document.getElementById('daily-checkin');
         let timerInterval;
 
         // Key for localStorage to store the last check-in time
-        const lastCheckinKey = `lastCheckin_${userId}`;
+        const lastCheckinKey = lastCheckin_${userId};
         const checkinInterval = 60 * 1000; // 1 minute in milliseconds (for testing)
 
         document.addEventListener("DOMContentLoaded", function() {
@@ -488,7 +488,7 @@ async function dailyCheckin() {
             // Optionally, you can also store the last check-in time for local use here
         } else {
             // Show an error popup for already claimed points
-            showPopup(`Daily check-in failed: ${data.error}`);
+            showPopup(Daily check-in failed: ${data.error});
         }
     } catch (error) {
         console.error("Failed to complete daily check-in:", error);
