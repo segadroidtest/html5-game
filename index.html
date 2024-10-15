@@ -455,6 +455,24 @@ background-color: #000000;
         }
     }
 
+const COOLDOWN_TIME = 60 * 1000; // 60 seconds in milliseconds
+
+// Function to check the cooldown state on page load
+function checkCooldown() {
+    const lastCheckinTime = localStorage.getItem('lastCheckinTime');
+    const currentTime = Date.now();
+
+    if (lastCheckinTime) {
+        const timeSinceLastCheckin = currentTime - lastCheckinTime;
+
+        if (timeSinceLastCheckin < COOLDOWN_TIME) {
+            const remainingTime = Math.ceil((COOLDOWN_TIME - timeSinceLastCheckin) / 1000);
+            startCooldown(remainingTime); // Start cooldown with remaining time
+        }
+    }
+}
+
+// Function to handle daily check-in
 async function dailyCheckin() {
     const checkinButton = document.getElementById('daily-checkin');
     const approvedIcon = document.getElementById('approved-icon');
@@ -478,6 +496,7 @@ async function dailyCheckin() {
             setTimeout(() => {
                 approvedIcon.style.display = 'none'; // Hide it after a few seconds
             }, 2000);
+            localStorage.setItem('lastCheckinTime', Date.now()); // Update last check-in time
             startCooldown(60); // Start cooldown for 60 seconds
 
         } else {
@@ -491,10 +510,11 @@ async function dailyCheckin() {
         console.error("Failed to complete daily check-in:", error);
     } finally {
         // Ensure the button state is handled based on the server response
-        checkinButton.disabled = false; // Re-enable button if not in cooldown
+        // Button already disabled on check-in success
     }
 }
 
+// Function to start the cooldown timer
 function startCooldown(duration) {
     const checkinButton = document.getElementById('daily-checkin');
     checkinButton.disabled = true; // Disable button
@@ -510,6 +530,9 @@ function startCooldown(duration) {
         duration--; // Decrement the duration each second
     }, 1000);
 }
+
+// Check cooldown state on page load
+window.onload = checkCooldown;
 
 
     function disableDailyCheckin() {
