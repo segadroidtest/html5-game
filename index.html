@@ -457,6 +457,10 @@ background-color: #111013;
 <div id="checkin-popup" style="display: none; z-index: 1000; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.88; border-radius: 10px; width: 70%; font-weight: 600;">
     You have already claimed your points in the last 24 hours.
 </div>
+<div id="approved-icon" style="display:none;">
+    <!-- Your approved icon content here -->
+    ✔️ Task Completed!
+</div>
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
@@ -518,7 +522,8 @@ async function dailyCheckin() {
                 popup.style.display = 'none';
             }, 2000);
 
-            document.getElementById('approved-icon').style.display = 'block';
+            // Keep the approved icon visible to inform the user that the task is done
+            document.getElementById('approved-icon').style.display = 'block'; 
             disableDailyCheckin();
             localStorage.setItem(lastCheckinKey, Date.now());
             startTimer(60); // Start 1-minute timer (in seconds for testing)
@@ -540,7 +545,7 @@ function enableDailyCheckin() {
     dailyCheckinElement.style.cursor = 'pointer'; // Change cursor to indicate it's clickable
     dailyCheckinElement.addEventListener('click', dailyCheckin); // Re-add click event listener
     dailyCheckinElement.classList.remove('blocked'); // Remove the blocked class
-    // Hide the approved icon
+    // Hide the approved icon only when the daily check-in is available again
     document.getElementById('approved-icon').style.display = 'none';
 }
 
@@ -582,7 +587,6 @@ function showCheckinPopup() {
         checkinPopup.style.display = 'none';
     }, 2000);
 }
-
 
 </script>
 
