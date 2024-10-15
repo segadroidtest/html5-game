@@ -466,7 +466,9 @@ async function dailyCheckin() {
         });
 
         const data = await response.json();
-        console.log("Response from check-in:", data); // Add this line
+        console.log("Response from check-in:", data);
+
+        const checkinButton = document.getElementById('daily-checkin'); // Replace with your actual button ID
 
         if (response.ok) {
             const popup = document.getElementById('copy-popup');
@@ -476,19 +478,20 @@ async function dailyCheckin() {
             }, 2000);
 
             document.getElementById('approved-icon').style.display = 'block';
-            disableDailyCheckin();
+            checkinButton.disabled = true; // Disable the button immediately
             localStorage.setItem(lastCheckinKey, Date.now());
-            startTimer(60);
+            startTimer(60); // Start the timer for 60 seconds
         } else {
             showPopup(`Daily check-in failed: ${data.error}`);
             if (data.remainingTime) {
-                startTimer(data.remainingTime);
+                startTimer(data.remainingTime); // Start timer with remaining time if provided
             }
         }
     } catch (error) {
         console.error("Failed to complete daily check-in:", error);
     }
 }
+
 
 
     function disableDailyCheckin() {
