@@ -352,9 +352,7 @@ background-color: #000000;
         
         <div class="stat" style="justify-content: center;padding-left: 0px;flex: 1;text-align: center;font-weight: bold;">
             <img src="assets/img/littlediamond.png" style="height: 15px;padding-right: 7px;">
-            Balance: <span id="points-earned" style="
-    margin-left: 7px;
-">0</span>
+            Balance: <span id="points-earned" style="margin-left: 7px;">0</span> 
         </div>
     </div>
        <p style=" font-weight: bold; ">Available Tasks:</p>
@@ -440,7 +438,29 @@ background-color: #000000;
             checkDailyCheckinStatus();
 
             // Add event listener for daily check-in
-            dailyCheckinElement.addEventListener('click', dailyCheckin);
+            dailyCheckinElement.addEventListener("click", async () => {
+        try {
+            const response = await fetch("/api/user/dailycheckin", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ userId }),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                document.getElementById("copy-popup").style.display = "block"; // Show success popup
+                document.getElementById("points-earned").innerText = parseInt(document.getElementById("points-earned").innerText) + 100; // Update points
+                setTimeout(() => { document.getElementById("copy-popup").style.display = "none"; }, 3000); // Hide popup after 3 seconds
+            } else {
+                alert(data.error || "An error occurred during the check-in.");
+            }
+        } catch (error) {
+            console.error("Error during daily check-in:", error);
+            alert("Failed to check in. Please try again.");
+        }
+    });
         });
 
         async function checkDailyCheckinStatus() {
