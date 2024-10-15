@@ -455,40 +455,42 @@ background-color: #000000;
             }
         }
 
-        async function dailyCheckin() {
-            try {
-                const response = await fetch("https://telegram-bot-1-segadroidstudio.replit.app/api/user/dailycheckin", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ userId })
-                });
+async function dailyCheckin() {
+    try {
+        const response = await fetch("https://telegram-bot-1-segadroidstudio.replit.app/api/user/dailycheckin", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ userId })
+        });
 
-                const data = await response.json();
+        const data = await response.json();
+        console.log("API Response:", data); // Log the API response for debugging
 
-                if (response.ok) {
-                    const popup = document.getElementById('copy-popup');
-                    popup.style.display = 'block';
-                    setTimeout(() => {
-                        popup.style.display = 'none';
-                    }, 2000);
+        if (response.ok) {
+            const popup = document.getElementById('copy-popup');
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 2000);
 
-                    // Show approved icon
-                    document.getElementById('approved-icon').style.display = 'block';
+            // Show approved icon
+            document.getElementById('approved-icon').style.display = 'block';
 
-                    disableDailyCheckin();
-                    // Store the current time as the last check-in time
-                    localStorage.setItem(lastCheckinKey, Date.now());
-                    startTimer(60); // Start 1-minute timer (in seconds for testing)
-                } else {
-                    showPopup(`Daily check-in failed: ${data.error}`);
-                    if (data.remainingTime) startTimer(data.remainingTime); // Start timer based on remaining time if provided
-                }
-            } catch (error) {
-                console.error("Failed to complete daily check-in:", error);
-            }
+            disableDailyCheckin();
+            // Store the current time as the last check-in time
+            localStorage.setItem(lastCheckinKey, Date.now());
+            startTimer(60); // Start 1-minute timer (in seconds for testing)
+        } else {
+            showPopup(`Daily check-in failed: ${data.error}`);
+            if (data.remainingTime) startTimer(Math.ceil(data.remainingTime / 1000)); // Start timer based on remaining time if provided
         }
+    } catch (error) {
+        console.error("Failed to complete daily check-in:", error);
+    }
+}
+
 
         function disableDailyCheckin() {
             dailyCheckinElement.style.cursor = 'not-allowed'; // Change cursor to indicate it's disabled
@@ -504,25 +506,6 @@ background-color: #000000;
             document.getElementById('approved-icon').style.display = 'none';
         }
 
-        function startTimer(duration) {
-            clearInterval(timerInterval); // Clear any existing timer
-            let timer = duration, hours, minutes, seconds;
-
-            timerInterval = setInterval(() => {
-                hours = parseInt(timer / 3600, 10);
-                minutes = parseInt((timer % 3600) / 60, 10);
-                seconds = parseInt(timer % 60, 10);
-
-                document.getElementById('timer').innerText = 
-                    `${(hours < 10 ? "0" : "")}${hours}:${(minutes < 10 ? "0" : "")}${minutes}:${(seconds < 10 ? "0" : "")}${seconds}`;
-
-                if (--timer < 0) {
-                    clearInterval(timerInterval);
-                    document.getElementById('timer').innerText = "Ready for check-in!";
-                    enableDailyCheckin(); // Re-enable the button
-                }
-            }, 1000);
-        }
 
     
         function showPopup(message) {
