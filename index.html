@@ -424,6 +424,9 @@ background-color: #000000;
     <div id="copy-popup" class="popup" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.9; border-radius: 10px; width: 70%; font-weight: 600;">
         Hooray! 🎉 Daily check-in successful! You've earned 100 points! Keep it up!
     </div>
+<div id="popup" class="popup" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.9; border-radius: 10px; width: 70%; font-weight: 600;">
+    <span id="popup-message"></span>
+</div>
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
@@ -475,13 +478,16 @@ async function dailyCheckin() {
                 popup.style.display = 'none';
             }, 2000);
 
+            // Show approved icon and update points display
             document.getElementById('approved-icon').style.display = 'block';
-            disableDailyCheckin();
+            document.getElementById('points-earned').innerText = data.totalPoints; // Update the points display
+
+            disableDailyCheckin(); // Disable the check-in option
             localStorage.setItem(lastCheckinKey, Date.now());
-            startTimer(60); // Start 1-minute timer (in seconds for testing)
+            // Optionally, you can also store the last check-in time for local use here
         } else {
+            // Show an error popup for already claimed points
             showPopup(`Daily check-in failed: ${data.error}`);
-            if (data.remainingTime) startTimer(Math.ceil(data.remainingTime / 1000));
         }
     } catch (error) {
         console.error("Failed to complete daily check-in:", error);
@@ -489,6 +495,19 @@ async function dailyCheckin() {
 }
 
 
+
+function showPopup(message) {
+    const popupMessage = document.getElementById('popup-message');
+    popupMessage.innerText = message;
+
+    const popup = document.getElementById('popup');
+    popup.style.display = 'block';
+
+    // Optional: Close popup after a few seconds
+    setTimeout(() => {
+        popup.style.display = 'none';
+    }, 3000);
+}
 
 
 
