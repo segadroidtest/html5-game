@@ -350,7 +350,7 @@ background-color: #000000;
     <ul id="tasks-list" style="margin-bottom: -5px; margin-top: -5px; list-style-type: none; padding: 0;">
         <div id="referral-stats" style="display: flex;justify-content: space-between;padding: 10px 15px;margin-top: 0;margin-bottom: 0px;border-radius: 10px;background: #1e1d22;color: white !important;border: 1px solid #101013;margin-top: 20px;">
         
-        <div class="stat" style="justify-content: center;padding-left: 0px;flex: 1;text-align: center;font-weight: bold;">
+        <div class="stat" style="justify-content: center;padding-left: 15px;flex: 1;text-align: center;font-weight: bold;">
             <img src="assets/img/littlediamond.png" style="height: 15px;padding-right: 7px;">
             Balance: <span id="points-earned" style="
     margin-left: 7px;
@@ -427,133 +427,113 @@ background-color: #000000;
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-    const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
-    const dailyCheckinElement = document.getElementById('daily-checkin');
-    let timerInterval;
+        const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
+        const dailyCheckinElement = document.getElementById('daily-checkin');
+        let timerInterval;
 
-    // Key for localStorage to store the last check-in time
-    const lastCheckinKey = `lastCheckin_${userId}`;
-    const checkinInterval = 60 * 1000; // 1 minute in milliseconds
+        // Key for localStorage to store the last check-in time
+        const lastCheckinKey = `lastCheckin_${userId}`;
+        const checkinInterval = 60 * 1000; // 1 minute in milliseconds (for testing)
 
-    document.addEventListener("DOMContentLoaded", function() {
-        // Check the check-in status on load
-        checkDailyCheckinStatus();
+        document.addEventListener("DOMContentLoaded", function() {
+            // Check the check-in status on load
+            checkDailyCheckinStatus();
 
-        // Add event listener for daily check-in
-        dailyCheckinElement.addEventListener('click', dailyCheckin);
-    });
-
-    async function checkDailyCheckinStatus() {
-        const lastCheckin = localStorage.getItem(lastCheckinKey);
-        const currentTime = Date.now();
-
-        // Check if 1 minute has passed since last check-in
-        if (lastCheckin && (currentTime - lastCheckin < checkinInterval)) {
-            disableDailyCheckin();
-        } else {
-            enableDailyCheckin();
-        }
-    }
-
-const COOLDOWN_TIME = 60 * 1000; // 60 seconds in milliseconds
-let cooldownInterval; // Store the interval for the cooldown timer
-
-// Function to check the cooldown state on page load
-async function checkCooldown() {
-    const response = await fetch("/api/check-cooldown", { method: "GET" });
-    const data = await response.json();
-
-    if (data.cooldownActive) {
-        const remainingTime = Math.ceil(data.remainingTime / 1000);
-        startCooldown(remainingTime);
-    }
-}
-
-// Function to handle daily check-in
-async function dailyCheckin() {
-    const checkinButton = document.getElementById('daily-checkin');
-    const approvedIcon = document.getElementById('approved-icon');
-    approvedIcon.style.display = 'none'; // Hide the approved icon initially
-
-    try {
-        const response = await fetch("https://telegram-bot-1-segadroidstudio.replit.app/api/user/dailycheckin", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ userId })
+            // Add event listener for daily check-in
+            dailyCheckinElement.addEventListener('click', dailyCheckin);
         });
 
-        const data = await response.json();
-        console.log("Response from check-in:", data);
+        async function checkDailyCheckinStatus() {
+            const lastCheckin = localStorage.getItem(lastCheckinKey);
+            const currentTime = Date.now();
 
-        if (response.ok) {
-            approvedIcon.style.display = 'block'; // Show the approved icon
-            setTimeout(() => {
-                approvedIcon.style.display = 'none'; // Hide it after a few seconds
-            }, 2000);
-            localStorage.setItem('lastCheckinTime', Date.now()); // Update last check-in time
-            startCooldown(60); // Start cooldown for 60 seconds
-
-        } else {
-            // Handle the error and display remaining time if provided
-            showPopup(`Daily check-in failed: ${data.error}`);
-            if (data.remainingTime) {
-                startCooldown(Math.ceil(data.remainingTime / 1000)); // Start timer with remaining time
+            // Check if 1 minute has passed since last check-in
+            if (lastCheckin && (currentTime - lastCheckin < checkinInterval)) {
+                disableDailyCheckin();
+            } else {
+                enableDailyCheckin();
             }
         }
-    } catch (error) {
-        console.error("Failed to complete daily check-in:", error);
-    } finally {
-        // Ensure the button state is handled based on the server response
-    }
-}
 
-// Function to start the cooldown timer
-function startCooldown(duration) {
-    const checkinButton = document.getElementById('daily-checkin');
-    checkinButton.disabled = true; // Disable button
-    checkinButton.style.pointerEvents = 'none'; // Prevent further clicks
+        async function dailyCheckin() {
+            try {
+                const response = await fetch("https://telegram-bot-1-segadroidstudio.replit.app/api/user/dailycheckin", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ userId })
+                });
 
-    clearInterval(cooldownInterval); // Clear any existing interval
-    cooldownInterval = setInterval(() => {
-        if (duration <= 0) {
-            clearInterval(cooldownInterval);
-            checkinButton.disabled = false; // Re-enable button after cooldown
-            checkinButton.style.pointerEvents = 'auto'; // Allow clicks again
-            return;
+                const data = await response.json();
+
+                if (response.ok) {
+                    const popup = document.getElementById('copy-popup');
+                    popup.style.display = 'block';
+                    setTimeout(() => {
+                        popup.style.display = 'none';
+                    }, 2000);
+
+                    // Show approved icon
+                    document.getElementById('approved-icon').style.display = 'block';
+
+                    disableDailyCheckin();
+                    // Store the current time as the last check-in time
+                    localStorage.setItem(lastCheckinKey, Date.now());
+                    startTimer(60); // Start 1-minute timer (in seconds for testing)
+                } else {
+                    showPopup(`Daily check-in failed: ${data.error}`);
+                    if (data.remainingTime) startTimer(data.remainingTime); // Start timer based on remaining time if provided
+                }
+            } catch (error) {
+                console.error("Failed to complete daily check-in:", error);
+            }
         }
-        duration--; // Decrement the duration each second
-    }, 1000);
-}
 
-// Check cooldown state on page load
-window.onload = checkCooldown;
+        function disableDailyCheckin() {
+            dailyCheckinElement.style.cursor = 'not-allowed'; // Change cursor to indicate it's disabled
+            dailyCheckinElement.removeEventListener('click', dailyCheckin); // Remove click event listener
+            dailyCheckinElement.classList.add('blocked'); // Add a class to style the blocked state
+        }
 
+        function enableDailyCheckin() {
+            dailyCheckinElement.style.cursor = 'pointer'; // Change cursor to indicate it's clickable
+            dailyCheckinElement.addEventListener('click', dailyCheckin); // Re-add click event listener
+            dailyCheckinElement.classList.remove('blocked'); // Remove the blocked class
+            // Hide the approved icon
+            document.getElementById('approved-icon').style.display = 'none';
+        }
 
-    function disableDailyCheckin() {
-        dailyCheckinElement.style.cursor = 'not-allowed';
-        dailyCheckinElement.removeEventListener('click', dailyCheckin);
-        dailyCheckinElement.classList.add('blocked');
-    }
+        function startTimer(duration) {
+            clearInterval(timerInterval); // Clear any existing timer
+            let timer = duration, hours, minutes, seconds;
 
-    function enableDailyCheckin() {
-        dailyCheckinElement.style.cursor = 'pointer';
-        dailyCheckinElement.addEventListener('click', dailyCheckin);
-        dailyCheckinElement.classList.remove('blocked');
-        document.getElementById('approved-icon').style.display = 'none';
-    }
+            timerInterval = setInterval(() => {
+                hours = parseInt(timer / 3600, 10);
+                minutes = parseInt((timer % 3600) / 60, 10);
+                seconds = parseInt(timer % 60, 10);
 
-    function showPopup(message) {
-        document.getElementById('popup-message').innerText = message;
-        document.getElementById('popup').style.display = 'block';
-    }
+                document.getElementById('timer').innerText = 
+                    `${(hours < 10 ? "0" : "")}${hours}:${(minutes < 10 ? "0" : "")}${minutes}:${(seconds < 10 ? "0" : "")}${seconds}`;
 
-    function closePopup() {
-        document.getElementById('popup').style.display = 'none';
-    }
-</script>
+                if (--timer < 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('timer').innerText = "Ready for check-in!";
+                    enableDailyCheckin(); // Re-enable the button
+                }
+            }, 1000);
+        }
 
+    
+        function showPopup(message) {
+            document.getElementById('popup-message').innerText = message;
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+    </script>
 
     <style>
         /* Add CSS for the blocked state */
