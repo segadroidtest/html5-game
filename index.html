@@ -439,28 +439,53 @@ background-color: #000000;
 
             // Add event listener for daily check-in
             dailyCheckinElement.addEventListener("click", async () => {
-        try {
-            const response = await fetch("https://telegram-bot-1-segadroidstudio.replit.app/api/user/dailycheckin", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ userId }),
-            });
+    try {
+        const response = await fetch("https://telegram-bot-1-segadroidstudio.replit.app/api/user/dailycheckin", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ userId }),
+        });
 
-            const data = await response.json();
-            if (response.ok) {
-                document.getElementById("copy-popup").style.display = "block"; // Show success popup
-                document.getElementById("points-earned").innerText = parseInt(document.getElementById("points-earned").innerText) + 100; // Update points
-                setTimeout(() => { document.getElementById("copy-popup").style.display = "none"; }, 3000); // Hide popup after 3 seconds
-            } else {
-                alert(data.error || "An error occurred during the check-in.");
-            }
-        } catch (error) {
-            console.error("Error during daily check-in:", error);
-            alert("Failed to check in. Please try again.");
+        const data = await response.json();
+        if (response.ok) {
+            // Handle successful response
+            alert(data.message); // Show success message
+            // Update local storage with new last check-in time
+            localStorage.setItem('lastCheckIn', Date.now());
+            // Disable the button for 1 minute
+            disableCheckinButton();
+        } else {
+            // Handle error response
+            alert(data.error || "An error occurred during the check-in.");
         }
-    });
+    } catch (error) {
+        console.error("Error during daily check-in:", error);
+        alert("Failed to check in. Please try again.");
+    }
+});
+
+function disableCheckinButton() {
+    dailyCheckinElement.disabled = true; // Disable the button
+    setTimeout(() => {
+        dailyCheckinElement.disabled = false; // Enable after 1 minute
+    }, 60000); // 60000 milliseconds = 1 minute
+}
+
+// Check local storage when the page loads to see if the user can check in
+window.onload = () => {
+    const lastCheckIn = localStorage.getItem('lastCheckIn');
+    if (lastCheckIn) {
+        const lastCheckInTime = new Date(parseInt(lastCheckIn));
+        const currentTime = new Date();
+        const oneMinuteAgo = new Date(currentTime.getTime() - 60 * 1000);
+
+        if (lastCheckInTime > oneMinuteAgo) {
+            disableCheckinButton(); // Disable the button if within the 1-minute limit
+        }
+    }
+};
         });
 
         async function checkDailyCheckinStatus() {
