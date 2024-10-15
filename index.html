@@ -482,8 +482,7 @@ async function dailyCheckin() {
             document.getElementById('approved-icon').style.display = 'block';
 
             disableDailyCheckin();
-            // Store the current time as the last check-in time
-            localStorage.setItem(lastCheckinKey, Date.now());
+            // Start a timer (1 minute) for UI purposes
             startTimer(60); // Start 1-minute timer (in seconds for testing)
         } else {
             showPopup(`Daily check-in failed: ${data.error}`);
@@ -493,6 +492,8 @@ async function dailyCheckin() {
         console.error("Failed to complete daily check-in:", error);
     }
 }
+
+
 
 
 
