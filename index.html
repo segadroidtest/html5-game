@@ -432,7 +432,7 @@ background-color: #000000;
         let timerInterval;
 
         // Key for localStorage to store the last check-in time
-        const lastCheckinKey = `lastCheckin_${userId}`;
+        const lastCheckinKey = lastCheckin_${userId};
         const checkinInterval = 60 * 1000; // 1 minute in milliseconds (for testing)
 
         document.addEventListener("DOMContentLoaded", function() {
@@ -482,7 +482,7 @@ background-color: #000000;
                     localStorage.setItem(lastCheckinKey, Date.now());
                     startTimer(60); // Start 1-minute timer (in seconds for testing)
                 } else {
-                    showPopup(`Daily check-in failed: ${data.error}`);
+                    showPopup(Daily check-in failed: ${data.error});
                     if (data.remainingTime) startTimer(data.remainingTime); // Start timer based on remaining time if provided
                 }
             } catch (error) {
@@ -514,7 +514,7 @@ background-color: #000000;
                 seconds = parseInt(timer % 60, 10);
 
                 document.getElementById('timer').innerText = 
-                    `${(hours < 10 ? "0" : "")}${hours}:${(minutes < 10 ? "0" : "")}${minutes}:${(seconds < 10 ? "0" : "")}${seconds}`;
+                    ${(hours < 10 ? "0" : "")}${hours}:${(minutes < 10 ? "0" : "")}${minutes}:${(seconds < 10 ? "0" : "")}${seconds};
 
                 if (--timer < 0) {
                     clearInterval(timerInterval);
@@ -534,7 +534,6 @@ background-color: #000000;
             document.getElementById('popup').style.display = 'none';
         }
     </script>
-
     <style>
         /* Add CSS for the blocked state */
         #daily-checkin.blocked {
