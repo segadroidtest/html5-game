@@ -451,7 +451,7 @@ async function handleDailyCheckin() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ userId: "user123" }), // Replace "user123" with dynamic user ID as needed
+            body: JSON.stringify({ userId }), // Replace "user123" with dynamic user ID as needed
         });
 
         if (!response.ok) {
