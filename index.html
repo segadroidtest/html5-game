@@ -253,20 +253,7 @@ background-color: #111013;
             margin-right: 5px;
         }
         /* Popup styles */
-.popup {
-    position: fixed;
-    top: 50%; /* Center vertically */
-    left: 50%; /* Center horizontally */
-    transform: translate(-50%, -50%); /* Offset by half the width and height */
-background-color: #000000;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 5px;
-    display: none;
-    z-index: 1000;
-    text-align: center;
-    opacity: 0.7;
-}
+
 
    #user-rank {
     background-color: #fff;
@@ -354,6 +341,17 @@ background-color: #000000;
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+#checkin-popup {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
 }
 
     </style>
@@ -456,12 +454,10 @@ background-color: #000000;
     <div id="copy-popup" class="popup" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.9; border-radius: 10px; width: 70%; font-weight: 600;">
         Hooray! 🎉 Daily check-in successful! You've earned 100 points! Keep it up!
     </div>
-<div id="checkin-popup" class="popup">
-    <div class="popup-content">
-        <span class="close-popup" onclick="closeCheckinPopup()">&times;</span>
-        <p>You have already claimed your points in the last 24 hours.</p>
-    </div>
+<div id="checkin-popup" style="display:none; position:fixed; top:20%; left:50%; transform:translate(-50%, -50%); background-color:red; color:white; padding:10px 20px; border-radius:5px; z-index:1000;">
+    You have already claimed your points in the last 24 hours.
 </div>
+
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
 const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
@@ -578,12 +574,15 @@ function closePopup() {
 }
 
 function showCheckinPopup() {
-    document.getElementById('checkin-popup').style.display = 'block';
+    const checkinPopup = document.getElementById('checkin-popup');
+    checkinPopup.style.display = 'block';
+
+    // Hide the popup after 2 seconds
+    setTimeout(() => {
+        checkinPopup.style.display = 'none';
+    }, 2000);
 }
 
-function closeCheckinPopup() {
-    document.getElementById('checkin-popup').style.display = 'none';
-}
 
 </script>
 
