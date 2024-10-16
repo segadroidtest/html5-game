@@ -710,12 +710,12 @@ async function Invite3Friends() {
         if (response.ok) {
             const data = await response.json();
             // Show success message with points claimed
-            alert(`You have successfully claimed ${data.points} points!`); 
+            alert(`You have successfully claimed broo points!`); 
         } else {
             // Parse error message if the response is not OK
             const errorData = await response.json();
-            if (errorData.message === "You have already claimed this reward.") {
-                alert("You have already claimed your points."); // Alert for already claimed points
+            if (errorData.message === "You have already claimed this broo reward.") {
+                alert("You have already claimed your broo points."); // Alert for already claimed points
             } else {
                 alert(errorData.message || 'An error occurred. Please try again.'); // Fallback for other errors
             }
