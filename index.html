@@ -600,7 +600,7 @@ function closePopup() {
 function showCheckinPopup() {
     const checkinPopup = document.getElementById('checkin-popup');
     checkinPopup.style.display = 'block';
-
+document.getElementById('daily-checkin').style.opacity = '0.68';
     // Hide the popup after 2 seconds
     setTimeout(() => {
         checkinPopup.style.display = 'none';
