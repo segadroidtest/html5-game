@@ -707,37 +707,23 @@ async function Invite3Friends() {
         console.log('Response status:', response.status);
 
         // Check if response is OK (status code 200-299)
-        if (!response.ok) {
-            const errorData = await response.json();
-            alert(errorData.message || 'An error occurred. Please try again.'); // Show error message from response
-            return;
-        }
-
-        const data = await response.json();
-
-        // Check if points were successfully claimed or already claimed
-        if (data.status === 'success') {
-            alert(`You have successfully claimed ${data.points} points!`); // Alert with points claimed
-        } else if (data.status === 'error') {
-            document.getElementById('invite-3-friends-section').style.opacity = '0.68';
-                    const popup = document.getElementById('error-popup');
-            popup.style.display = 'block';
-            setTimeout(() => {
-                popup.style.display = 'none';
-            }, 3500);
+        if (response.ok) {
+            const data = await response.json();
+            // Show success message with points claimed
+            alert(`You have successfully claimed ${data.points} points!`); 
         } else {
-            document.getElementById('invite-3-friends-section').style.opacity = '0.68';
-                    const popup = document.getElementById('success-popup');
-            popup.style.display = 'block';
-            setTimeout(() => {
-                popup.style.display = 'none';
-            }, 3500);
+            // Parse error message if the response is not OK
+            const errorData = await response.json();
+            if (errorData.message === "You have already claimed this reward.") {
+                alert("You have already claimed your points."); // Alert for already claimed points
+            } else {
+                alert(errorData.message || 'An error occurred. Please try again.'); // Fallback for other errors
+            }
         }
     } catch (error) {
         console.error('Error in Invite3Friends:', error);
         alert('An unexpected error occurred. Please try again later.');
     }
-}
 
 
 
