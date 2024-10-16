@@ -719,9 +719,19 @@ async function Invite3Friends() {
         if (data.status === 'success') {
             alert(`You have successfully claimed ${data.points} points!`); // Alert with points claimed
         } else if (data.status === 'error') {
-            alert('You have already claimed your points.'); // Alert for already claimed points
+            document.getElementById('invite-3-friends-section').style.opacity = '0.68';
+                    const popup = document.getElementById('error-popup');
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 3500);
         } else {
-            alert('An unexpected response was received. Please try again.'); // Fallback alert
+            document.getElementById('invite-3-friends-section').style.opacity = '0.68';
+                    const popup = document.getElementById('success-popup');
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 3500);
         }
     } catch (error) {
         console.error('Error in Invite3Friends:', error);
