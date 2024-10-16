@@ -632,23 +632,36 @@ function showCheckinPopup() {
 
         const data = await response.json();
         if (data.success) {
-                    const popup = document.getElementById('success-popup');
-        popup.style.display = 'block';
-        setTimeout(() => {
-            popup.style.display = 'none';
-        }, 2000);
-        }
-            document.getElementById('subscribe-channel').style.pointerEvents = 'none'; // Disable clicking again
-            document.getElementById('subscribe-channel').style.opacity = '0.5'; // Optional: visually indicate it's disabled
+              successSubscribe();
         } else {
-        const popup = document.getElementById('error-popup');
-        popup.style.display = 'block';
-        setTimeout(() => {
-            popup.style.display = 'none';
-        }, 2000);
-        }
+       errorSubscribe();
     }
 
+        function successSubscribe() {
+
+                const successSubscribe = document.getElementById('success-popup');
+    successSubscribe.style.display = 'block';
+
+    // Hide the popup after 2 seconds
+    setTimeout(() => {
+        successSubscribe.style.display = 'none';
+    }, 2000);
+            
+            document.getElementById('subscribe-channel').style.pointerEvents = 'none'; // Disable clicking again
+            document.getElementById('subscribe-channel').style.opacity = '0.5'; // Optional: visually indicate it's disabled
+}
+
+function errorSubscribe() {
+
+        const errorSubscribe = document.getElementById('error-popup');
+    errorSubscribe.style.display = 'block';
+
+    // Hide the popup after 2 seconds
+    setTimeout(() => {
+        errorSubscribe.style.display = 'none';
+    }, 2000);
+    
+}
 </script>
 
 
