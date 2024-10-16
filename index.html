@@ -667,28 +667,19 @@ document.addEventListener("DOMContentLoaded", async function() {
       document.getElementById("invite-points-earned").textContent = userData.referralPoints || 0;
       document.getElementById("points-balance").textContent = userData.totalPoints || 0;
 
-      const referralList = document.getElementById("referral-list");
+            const referralList = document.getElementById("referral-list");
 
-      if (userData.referrals.length === 0) {
-        referralList.textContent = "No referrals yet!";
-      } else {
-        userData.referrals.forEach(referral => {
-          const referralRow = document.createElement("tr");
-          referralRow.innerHTML = `
-            <td>${referral.username}</td>
-            <td>${referral.totalPoints}</td>
-            <td>${referral.referralPoints}</td>
-          `;
-          referralList.appendChild(referralRow);
-        });
-      }
+            if (userData.referrals.length === 0) {} else {
+                // Display referral details in table
+                userData.referrals.forEach(referral => {});
+            }
 
-    } catch (error) {
-      console.error("Failed to fetch referral data:", error);
+        } catch (error) {
+            console.error("Failed to fetch referral data:", error);
+        }
     }
-  }
 
-  await fetchReferralData(userId);
+    await fetchReferralData(userId);
 
 });
 
