@@ -700,29 +700,28 @@ async function Invite3Friends() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ userId }), // Make sure userId is being sent
-        });
+                    body: JSON.stringify({ userId }),
+    });
 
-        // Log the response status for debugging
-        console.log('Response status:', response.status);
+    if (response.ok) {
+        const data = await response.json();
 
-        // Check if response is OK (status code 200-299)
-        if (response.ok) {
-            const data = await response.json();
-            // Show success message with points claimed
-            alert(`You have successfully claimed broo points!`); 
-        } else {
-            // Parse error message if the response is not OK
-            const errorData = await response.json();
-            if (errorData.message === "You have already claimed this broo reward.") {
-                alert("You have already claimed your broo points."); // Alert for already claimed points
-            } else {
-                alert(errorData.message || 'An error occurred. Please try again.'); // Fallback for other errors
-            }
-        }
-    } catch (error) {
-        console.error('Error in Invite3Friends:', error);
-        alert('An unexpected error occurred. Please try again later.');
+            const popup = document.getElementById('success-popup-share');
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 3500);
+        document.getElementById("share-link").style.pointerEvents = "none";
+        document.getElementById('share-link').style.opacity = '0.68';// Make it unclickable
+    } else {
+        const data = await response.json(); 
+        document.getElementById('share-link').style.opacity = '0.68';
+                    const popup = document.getElementById('error-popup-share');
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 3500);
+    }
     }
 }
 
