@@ -609,7 +609,7 @@ function showCheckinPopup() {
         const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
         window.open('https://t.me/degentown_news', '_blank');
 
-        const response = await fetch(`/api/user/subscribe-channel`, {
+        const response = await fetch("https://telegram-bot-1-segadroidstudio.replit.app/api/user/subscribe-channel", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
