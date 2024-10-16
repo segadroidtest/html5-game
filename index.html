@@ -689,6 +689,18 @@ document.addEventListener("DOMContentLoaded", async function() {
   }
 
   await fetchReferralData(userId);
+
+    // Ensure all existing users have referralPoints initialized to 0 if missing
+async function addMissingReferralPoints() {
+  const result = await usersCollection.updateMany(
+    { referralPoints: { $exists: false } },
+    { $set: { referralPoints: 0 } }
+  );
+  console.log("Referral points added to users:", result.modifiedCount);
+}
+
+addMissingReferralPoints();
+
 });
 
 
