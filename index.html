@@ -709,24 +709,26 @@ async function Invite3Friends() {
         // Check if response is OK (status code 200-299)
         if (!response.ok) {
             const errorData = await response.json();
-            console.error('Error details:', errorData); // Log the error details for debugging
-            alert('An error occurred. Please try again.'); // General error alert
+            alert(errorData.message || 'An error occurred. Please try again.'); // Show error message from response
             return;
         }
 
         const data = await response.json();
 
-        // Log the received data for debugging
-        console.log('Response data:', data);
-
-        // Show alerts based on the API response
+        // Check if points were successfully claimed or already claimed
         if (data.status === 'success') {
-            alert(`You have successfully claimed 3000 points`); // Replace with the actual points value
+            alert(`You have successfully claimed ${data.points} points!`); // Alert with points claimed
         } else if (data.status === 'error') {
-            alert('You have already claimed your points');
+            alert('You have already claimed your points.'); // Alert for already claimed points
+        } else {
+            alert('An unexpected response was received. Please try again.'); // Fallback alert
         }
-    
-}};
+    } catch (error) {
+        console.error('Error in Invite3Friends:', error);
+        alert('An unexpected error occurred. Please try again later.');
+    }
+}
+
 
 
 
