@@ -690,20 +690,18 @@ function getReferralLevel(totalReferrals) {
     return 1; // Level 1 for 0 to 2 referrals
 }
 
-
 // Copy function for the referral link
 function copyLinkreferral() {
     const referralLinkElement = document.getElementById('referral-link');
     const referralLink = referralLinkElement.textContent;
 
-    // Text to include with the referral link
     const additionalText = "Join Degen Town Journey! Stay tuned for exciting airdrops and special rewards from Degen Town! ";
 
     if (referralLink && referralLink !== "Loading your referral link...") {
-        const fullTextToCopy = `${additionalText}${referralLink}`; // Combine the text and referral link
+        const fullTextToCopy = `${additionalText}${referralLink}`;
 
         const textArea = document.createElement("textarea");
-        textArea.value = fullTextToCopy; // Set the full text to copy
+        textArea.value = fullTextToCopy;
         document.body.appendChild(textArea);
         textArea.select();
         document.execCommand("copy");
@@ -718,8 +716,8 @@ function copyLinkreferral() {
         console.error("Referral link is empty or not ready.");
     }
 }
-
 </script>
+
 </div>
 
 
