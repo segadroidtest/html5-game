@@ -704,13 +704,22 @@ async function Invite3Friends() {
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            const errorData = await response.json();
+            alert('An error occurred. Please try again.'); // General error alert
+            return;
         }
 
         const data = await response.json();
-        console.log(data.message); // Handle success message
+
+        // Show alerts based on the API response
+        if (data.status === 'success') {
+            alert(`You have successfully claimed ${data.points} points`); // Replace with the actual points value
+        } else if (data.status === 'error') {
+            alert('You have already claimed your points');
+        }
     } catch (error) {
-        console.error("Error in Invite3Friends:", error);
+        console.error('Error in Invite3Friends:', error);
+        alert('An unexpected error occurred. Please try again later.');
     }
 }
 
