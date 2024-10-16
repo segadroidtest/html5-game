@@ -728,173 +728,171 @@ function showPopup(message) {
 
 async function Invite3Friends() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
-        const response = await fetch('https://telegram-bot-1-segadroidstudio.replit.app/api/user/invite-three-friends', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-                    body: JSON.stringify({ userId }),
+    const response = await fetch('https://telegram-bot-1-segadroidstudio.replit.app/api/user/invite-three-friends', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId }),
     });
 
-
     const data = await response.json();
+    const inviteSection = document.getElementById('invite-3-friends-section');
+
     if (data.success) {
-        document.getElementById('invite-3-friends-section').style.opacity = '0.68';
-            const popup = document.getElementById('success-popup-3friends');
-            popup.style.display = 'block';
-            setTimeout(() => {
-                popup.style.display = 'none';
-            }, 3500);
+        inviteSection.style.opacity = '0.68';
+        const popup = document.getElementById('success-popup-3friends');
+        popup.style.display = 'block';
+        setTimeout(() => {
+            popup.style.display = 'none';
+        }, 3500);
     } else {
-document.getElementById('invite-3-friends-section').style.opacity = '0.68';
-                    const popup = document.getElementById('error-popup-3friends');
-            popup.style.display = 'block';
-            setTimeout(() => {
-                popup.style.display = 'none';
-            }, 3500);
+        inviteSection.style.opacity = '0.68';
+        const popup = document.getElementById('error-popup-3friends');
+        popup.style.display = 'block';
+        setTimeout(() => {
+            popup.style.display = 'none';
+        }, 3500);
     }
 }
 
+async function updateInvite3FriendsSection(userId) {
+    try {
+        const response = await fetch(`https://telegram-bot-1-segadroidstudio.replit.app/api/user/referrals/${userId}?t=${new Date().getTime()}`);
+        const data = await response.json();
+        console.log("Fetched Data:", data); // Debugging log
 
+        const referralsCount = data.totalReferrals || 0;
+        document.getElementById("referral-status-3-friends").textContent = `${referralsCount}/3`;
 
-
-
-    async function updateInvite3FriendsSection(userId) {
-        try {
-            const response = await fetch(`https://telegram-bot-1-segadroidstudio.replit.app/api/user/referrals/${userId}?t=${new Date().getTime()}`);
-            const data = await response.json();
-            console.log("Fetched Data:", data); // Debugging log
-
-            const referralsCount = data.totalReferrals || 0;
-            document.getElementById("referral-status-3-friends").textContent = ${referralsCount}/3;
-            
-            if (referralsCount >= 3 && !data.invite3FriendsClaimed) {
-                document.getElementById("invite-3-friends-section").style.opacity = "1";
-                document.getElementById("invite-3-friends-section").style.pointerEvents = "auto";
-            }
-        } catch (error) {
-            console.error("Error fetching referral data:", error);
+        const inviteSection = document.getElementById("invite-3-friends-section");
+        if (referralsCount >= 3 && !data.invite3FriendsClaimed) {
+            inviteSection.style.opacity = "1"; // Fully opaque
+            inviteSection.style.pointerEvents = "auto"; // Enable clicks
+        } else {
+            inviteSection.style.opacity = "0.5"; // Semi-transparent or greyed out
+            inviteSection.style.pointerEvents = "none"; // Disable clicks
         }
+    } catch (error) {
+        console.error("Error fetching referral data:", error);
     }
+}
 
-    window.addEventListener("load", () => {
-        updateInvite3FriendsSection(userId);
-    });
-
-
-
-           async function Invite10Friends() {
+async function Invite10Friends() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
-        const response = await fetch('https://telegram-bot-1-segadroidstudio.replit.app/api/user/invite-ten-friends', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-                    body: JSON.stringify({ userId }),
+    const response = await fetch('https://telegram-bot-1-segadroidstudio.replit.app/api/user/invite-ten-friends', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId }),
     });
 
-
     const data = await response.json();
+    const inviteSection = document.getElementById('invite-10-friends-section');
+
     if (data.success) {
-        document.getElementById('invite-10-friends-section').style.opacity = '0.68';
-            const popup = document.getElementById('success-popup-10friends');
-            popup.style.display = 'block';
-            setTimeout(() => {
-                popup.style.display = 'none';
-            }, 3500);
+        inviteSection.style.opacity = '0.68';
+        const popup = document.getElementById('success-popup-10friends');
+        popup.style.display = 'block';
+        setTimeout(() => {
+            popup.style.display = 'none';
+        }, 3500);
     } else {
-document.getElementById('invite-10-friends-section').style.opacity = '0.68';
-                    const popup = document.getElementById('error-popup-10friends');
-            popup.style.display = 'block';
-            setTimeout(() => {
-                popup.style.display = 'none';
-            }, 3500);
+        inviteSection.style.opacity = '0.68';
+        const popup = document.getElementById('error-popup-10friends');
+        popup.style.display = 'block';
+        setTimeout(() => {
+            popup.style.display = 'none';
+        }, 3500);
     }
 }
 
+async function updateInvite10FriendsSection(userId) {
+    try {
+        const response = await fetch(`https://telegram-bot-1-segadroidstudio.replit.app/api/user/referrals/${userId}?t=${new Date().getTime()}`);
+        const data = await response.json();
+        console.log("Fetched Data:", data); // Debugging log
 
+        const referralsCount = data.totalReferrals || 0;
+        document.getElementById("referral-status-10-friends").textContent = `${referralsCount}/10`;
 
-
-
-    async function updateInvite10FriendsSection(userId) {
-        try {
-            const response = await fetch(`https://telegram-bot-1-segadroidstudio.replit.app/api/user/referrals/${userId}?t=${new Date().getTime()}`);
-            const data = await response.json();
-            console.log("Fetched Data:", data); // Debugging log
-
-            const referralsCount = data.totalReferrals || 0;
-            document.getElementById("referral-status-10-friends").textContent = ${referralsCount}/10;
-            
-            if (referralsCount >= 10 && !data.invite10FriendsClaimed) {
-                document.getElementById("invite-10-friends-section").style.opacity = "1";
-                document.getElementById("invite-10-friends-section").style.pointerEvents = "auto";
-            }
-        } catch (error) {
-            console.error("Error fetching referral data:", error);
+        const inviteSection = document.getElementById("invite-10-friends-section");
+        if (referralsCount >= 10 && !data.invite10FriendsClaimed) {
+            inviteSection.style.opacity = "1"; // Fully opaque
+            inviteSection.style.pointerEvents = "auto"; // Enable clicks
+        } else {
+            inviteSection.style.opacity = "0.5"; // Semi-transparent or greyed out
+            inviteSection.style.pointerEvents = "none"; // Disable clicks
         }
+    } catch (error) {
+        console.error("Error fetching referral data:", error);
     }
+}
 
-    window.addEventListener("load", () => {
-        updateInvite10FriendsSection(userId);
-    });
-
-
-
-
-           async function Invite50Friends() {
+async function Invite50Friends() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
-        const response = await fetch('https://telegram-bot-1-segadroidstudio.replit.app/api/user/invite-fifty-friends', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-                    body: JSON.stringify({ userId }),
+    const response = await fetch('https://telegram-bot-1-segadroidstudio.replit.app/api/user/invite-fifty-friends', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId }),
     });
 
-
     const data = await response.json();
+    const inviteSection = document.getElementById('invite-50-friends-section');
+
     if (data.success) {
-        document.getElementById('invite-50-friends-section').style.opacity = '0.68';
-            const popup = document.getElementById('success-popup-50friends');
-            popup.style.display = 'block';
-            setTimeout(() => {
-                popup.style.display = 'none';
-            }, 3500);
+        inviteSection.style.opacity = '0.68';
+        const popup = document.getElementById('success-popup-50friends');
+        popup.style.display = 'block';
+        setTimeout(() => {
+            popup.style.display = 'none';
+        }, 3500);
     } else {
-document.getElementById('invite-50-friends-section').style.opacity = '0.68';
-                    const popup = document.getElementById('error-popup-50friends');
-            popup.style.display = 'block';
-            setTimeout(() => {
-                popup.style.display = 'none';
-            }, 3500);
+        inviteSection.style.opacity = '0.68';
+        const popup = document.getElementById('error-popup-50friends');
+        popup.style.display = 'block';
+        setTimeout(() => {
+            popup.style.display = 'none';
+        }, 3500);
     }
 }
 
+async function updateInvite50FriendsSection(userId) {
+    try {
+        const response = await fetch(`https://telegram-bot-1-segadroidstudio.replit.app/api/user/referrals/${userId}?t=${new Date().getTime()}`);
+        const data = await response.json();
+        console.log("Fetched Data:", data); // Debugging log
 
+        const referralsCount = data.totalReferrals || 0;
+        document.getElementById("referral-status-50-friends").textContent = `${referralsCount}/50`;
 
-
-
-    async function updateInvite50FriendsSection(userId) {
-        try {
-            const response = await fetch(`https://telegram-bot-1-segadroidstudio.replit.app/api/user/referrals/${userId}?t=${new Date().getTime()}`);
-            const data = await response.json();
-            console.log("Fetched Data:", data); // Debugging log
-
-            const referralsCount = data.totalReferrals || 0;
-            document.getElementById("referral-status-50-friends").textContent = ${referralsCount}/50;
-            
-            if (referralsCount >= 50 && !data.invite3FriendsClaimed) {
-                document.getElementById("invite-50-friends-section").style.opacity = "1";
-                document.getElementById("invite-50-friends-section").style.pointerEvents = "auto";
-            }
-        } catch (error) {
-            console.error("Error fetching referral data:", error);
+        const inviteSection = document.getElementById("invite-50-friends-section");
+        if (referralsCount >= 50 && !data.invite50FriendsClaimed) {
+            inviteSection.style.opacity = "1"; // Fully opaque
+            inviteSection.style.pointerEvents = "auto"; // Enable clicks
+        } else {
+            inviteSection.style.opacity = "0.5"; // Semi-transparent or greyed out
+            inviteSection.style.pointerEvents = "none"; // Disable clicks
         }
+    } catch (error) {
+        console.error("Error fetching referral data:", error);
     }
+}
 
-    window.addEventListener("load", () => {
-        updateInvite50FriendsSection(userId);
-    });
+window.addEventListener("load", () => {
+    const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
+    updateInvite3FriendsSection(userId);
+    updateInvite10FriendsSection(userId);
+    updateInvite50FriendsSection(userId);
+
+    document.getElementById('invite-3-friends-section').addEventListener('click', Invite3Friends);
+    document.getElementById('invite-10-friends-section').addEventListener('click', Invite10Friends);
+    document.getElementById('invite-50-friends-section').addEventListener('click', Invite50Friends);
+});
+
 </script>
 
 
