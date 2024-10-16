@@ -457,8 +457,7 @@ background-color: #111013;
 </div>
     
 <div id="approved-icon" style="display:none;">
-    <!-- Your approved icon content here -->
-    ✔️ Task Completed!
+<img src="assets/img/approved.png" style="display: block;height: 20px;position: absolute;right: 15px;top: 20px;">
 </div>
 <!-- Popup for success message -->
 <div id="success-popup" class="popup" style="display: none; z-index: 1000; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.88; border-radius: 10px; width: 70%; font-weight: 600;height: auto;">
@@ -621,12 +620,14 @@ function showCheckinPopup() {
 
     const data = await response.json();
     if (data.success) {
+        document.getElementById('approved-icon').style.display = 'block'; 
             const popup = document.getElementById('success-popup');
             popup.style.display = 'block';
             setTimeout(() => {
                 popup.style.display = 'none';
             }, 2000);
     } else {
+        document.getElementById('approved-icon').style.display = 'block'; 
                     const popup = document.getElementById('error-popup');
             popup.style.display = 'block';
             setTimeout(() => {
@@ -664,6 +665,7 @@ async function shareToTelegramlink() {
 
     if (response.ok) {
         const data = await response.json();
+        document.getElementById('approved-icon').style.display = 'block'; 
             const popup = document.getElementById('success-popup-share');
             popup.style.display = 'block';
             setTimeout(() => {
@@ -672,6 +674,7 @@ async function shareToTelegramlink() {
         document.getElementById("share-link").style.pointerEvents = "none"; // Make it unclickable
     } else {
         const data = await response.json();
+        document.getElementById('approved-icon').style.display = 'block'; 
                     const popup = document.getElementById('error-popup-share');
             popup.style.display = 'block';
             setTimeout(() => {
