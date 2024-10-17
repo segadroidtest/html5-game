@@ -1209,6 +1209,7 @@ async function generateLeaderboard() {
 <script>
     // Initialize user ID from Telegram
     const userId = Telegram.WebApp.initDataUnsafe.user?.id?.toString() || null;
+
     console.log("Retrieved user ID:", userId);
 
     let fullWalletAddress = "";
