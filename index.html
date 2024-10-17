@@ -1226,8 +1226,12 @@ async function displayWallet() {
 
         // Check if the response is okay
         if (!response.ok) {
+            fullWalletAddress = data.walletAddress;
             console.error("Network response was not ok:", response.statusText);
-            document.getElementById("wallet-address").textContent = "Error fetching address.";
+            // Update the wallet address display
+            document.getElementById("wallet-address").textContent = truncateAddress(fullWalletAddress);
+            // Generate QR code
+            new QRCode(document.getElementById("qrcode"), { text: fullWalletAddress, width: 228, height: 228 });
             return;
         }
 
