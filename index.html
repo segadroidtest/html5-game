@@ -565,7 +565,7 @@ async function dailyCheckin() {
     }
 
     try {
-        ("https://telegram-bot-1-segadroidstudio.replit.app/api/user/dailycheckin", {
+        const response = await fetch("https://telegram-bot-1-segadroidstudio.replit.app/api/user/dailycheckin", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -656,7 +656,7 @@ document.getElementById('daily-checkin').style.opacity = '0.68';
     const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
     window.open('https://t.me/degentown_news', '_blank');
 
-    ("https://telegram-bot-1-segadroidstudio.replit.app/api/user/subscribe-channel", {
+    const response = await fetch("https://telegram-bot-1-segadroidstudio.replit.app/api/user/subscribe-channel", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -693,7 +693,7 @@ function closePopup(popupId) {
 
 async function shareToTelegramlink() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
-    const message = `Join Degen Town Journey! Stay tuned for exciting airdrops and special rewards from Degen Town! https://t.me/degentown_bot?start=${userId}`;
+    const message = `https://t.me/degentown_bot?start=${userId}    Join Degen Town Journey! Stay tuned for exciting airdrops and special rewards from Degen Town!`;
     
     // Create a share link
     const shareUrl = `https://telegram.me/share/url?url=${encodeURIComponent(message)}`;
@@ -1205,89 +1205,82 @@ async function generateLeaderboard() {
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script>
-const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
-        fullWalletAddress = data.walletAddress;
-console.log("Fetched Wallet Address:", fullWalletAddress); // Debugging line
-   
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+    const userId = Telegram.WebApp.initDataUnsafe.user?.id?.toString() || null;
 
-        // Function to copy the wallet address
-        function copyAddress() {
+    if (!userId) {
+        console.error("User ID not found. Please make sure the Telegram WebApp is configured correctly.");
+    }
+
+    let fullWalletAddress = ""; // Declare the wallet address variable
+
+    // Function to copy the wallet address
+    function copyAddress() {
+        if (fullWalletAddress) {
             navigator.clipboard.writeText(fullWalletAddress).then(() => {
                 showCopyPopup(); // Show the popup message
                 console.log("Address copied: " + fullWalletAddress); // Debugging
             }).catch(err => {
                 console.error("Error copying address: ", err); // Error handling
             });
+        } else {
+            console.error("No wallet address to copy.");
         }
-
-async function getTonWalletAddress(userId) {
-    // Generate or fetch the wallet address for the user
-    const wallet = new Wallet(); // Ensure you have the necessary parameters to instantiate it
-    const address = await wallet.getAddress(); // This might differ based on the SDK
-    await usersCollection.updateOne({ userId }, { $set: { walletAddress: address } });
-    return address;
-}
-
-        // Function to display the wallet address and QR code
-const API_URL = "https://telegram-bot-1-segadroidstudio.replit.app/api/getWalletAddress";
-
-async function displayWallet() {
-        try {
-        const response = await fetch("https://telegram-bot-1-segadroidstudio.replit.app/api/getWalletAddress", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ userId })
-        });
-        if (!response.ok) throw new Error('Network response was not ok');
-        const data = await response.json();
-        console.log("Data received from API:", data); // Debugging line
-        fullWalletAddress = data.walletAddress;
-        if (!fullWalletAddress) {
-            throw new Error("Wallet address is null or undefined.");
-        }
-        if (document.getElementById("wallet-address")) {
-    document.getElementById("wallet-address").textContent = truncateAddress(fullWalletAddress);
-} else {
-    console.error("Element with ID 'wallet-address' not found");
-}
-
-        if (fullWalletAddress) {
-    new QRCode(document.getElementById("qrcode"), { text: fullWalletAddress, width: 228, height: 228 });
-}
-
-    } catch (error) {
-        console.error("Error fetching wallet address:", error);
-        document.getElementById("wallet-address").textContent = "Error fetching address.";
     }
-}
 
+    // Function to display the wallet address and QR code
+    async function displayWallet() {
+        if (!userId) return;
 
-
-        // Function to truncate the address for display
-        function truncateAddress(address) {
-            const start = address.slice(0, 10);
-            const end = address.slice(-10);
-            return `${start}...${end}`;
+        try {
+            const response = await fetch("https://telegram-bot-1-segadroidstudio.replit.app/api/getWalletAddress", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ userId })
+            });
+            
+            if (!response.ok) throw new Error('Network response was not ok');
+            
+            const data = await response.json();
+            console.log("Data received from API:", data); // Debugging line
+            
+            if (data.walletAddress) {
+                fullWalletAddress = data.walletAddress;
+                document.getElementById("wallet-address").textContent = truncateAddress(fullWalletAddress);
+                new QRCode(document.getElementById("qrcode"), { text: fullWalletAddress, width: 228, height: 228 });
+            } else {
+                console.error("Wallet address is null or undefined in response.");
+                document.getElementById("wallet-address").textContent = "Error fetching address.";
+            }
+        } catch (error) {
+            console.error("Error fetching wallet address:", error);
+            document.getElementById("wallet-address").textContent = "Error fetching address.";
         }
+    }
 
-        // Function to show the in-page popup message
-        function showCopyPopup() {
-            const popup = document.getElementById("copy-popup");
-            popup.style.display = "block";
+    // Function to truncate the address for display
+    function truncateAddress(address) {
+        const start = address.slice(0, 10);
+        const end = address.slice(-10);
+        return `${start}...${end}`;
+    }
 
-            // Hide the popup after 2 seconds
-            setTimeout(() => {
-                popup.style.display = "none";
-            }, 2000);
-        }
+    // Function to show the in-page popup message
+    function showCopyPopup() {
+        const popup = document.getElementById("copy-popup");
+        popup.style.display = "block";
+        setTimeout(() => {
+            popup.style.display = "none";
+        }, 2000);
+    }
 
-        // Call the display function on window load
-        window.onload = displayWallet;
-    </script>
+    // Call the display function on window load
+    window.onload = displayWallet;
+</script>
+
     </div>
 
 
