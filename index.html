@@ -565,7 +565,7 @@ async function dailyCheckin() {
     }
 
     try {
-        page5("https://telegram-bot-1-segadroidstudio.replit.app/api/user/dailycheckin", {
+        ("https://telegram-bot-1-segadroidstudio.replit.app/api/user/dailycheckin", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -656,7 +656,7 @@ document.getElementById('daily-checkin').style.opacity = '0.68';
     const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
     window.open('https://t.me/degentown_news', '_blank');
 
-    page5("https://telegram-bot-1-segadroidstudio.replit.app/api/user/subscribe-channel", {
+    ("https://telegram-bot-1-segadroidstudio.replit.app/api/user/subscribe-channel", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -1208,7 +1208,9 @@ async function generateLeaderboard() {
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
 const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
-        let fullWalletAddress = ""; // Variable to store the full wallet address
+        fullWalletAddress = data.walletAddress;
+console.log("Fetched Wallet Address:", fullWalletAddress); // Debugging line
+   
 
         // Function to copy the wallet address
         function copyAddress() {
@@ -1220,11 +1222,14 @@ const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
             });
         }
 
-          async function getTonWalletAddress() {
-    // Replace with actual call to TON API/SDK for wallet generation or retrieval
-    const walletAddress = await ton.getWalletAddress(); 
-    return walletAddress;
-  }
+async function getTonWalletAddress(userId) {
+    // Generate or fetch the wallet address for the user
+    const wallet = new Wallet(); // Ensure you have the necessary parameters to instantiate it
+    const address = await wallet.getAddress(); // This might differ based on the SDK
+    await usersCollection.updateOne({ userId }, { $set: { walletAddress: address } });
+    return address;
+}
+
         // Function to display the wallet address and QR code
 const API_URL = "https://telegram-bot-1-segadroidstudio.replit.app/api/getWalletAddress";
 
@@ -1244,8 +1249,16 @@ async function displayWallet() {
         if (!fullWalletAddress) {
             throw new Error("Wallet address is null or undefined.");
         }
-        document.getElementById("wallet-address").textContent = truncateAddress(fullWalletAddress);
-        new QRCode(document.getElementById("qrcode"), { text: fullWalletAddress, width: 228, height: 228 });
+        if (document.getElementById("wallet-address")) {
+    document.getElementById("wallet-address").textContent = truncateAddress(fullWalletAddress);
+} else {
+    console.error("Element with ID 'wallet-address' not found");
+}
+
+        if (fullWalletAddress) {
+    new QRCode(document.getElementById("qrcode"), { text: fullWalletAddress, width: 228, height: 228 });
+}
+
     } catch (error) {
         console.error("Error fetching wallet address:", error);
         document.getElementById("wallet-address").textContent = "Error fetching address.";
