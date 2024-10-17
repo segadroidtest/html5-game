@@ -1236,19 +1236,32 @@ try {
     document.getElementById("wallet-address").textContent = "Failed to fetch address.";
 }
     }
+
+async function getWalletKeys(mnemonic) {
+    try {
+        const walletKeys = await mnemonicToWalletKey(mnemonic);
+        return walletKeys;
+    } catch (error) {
+        console.error("Failed to generate wallet keys:", error);
+    }
+}
+    
 async function getUniqueAddressForUser(userId) {
     try {
-        // Logic to create or fetch the user's TON address
-        // For example, based on their mnemonic or user ID.
-        const mnemonic = "used sweet wisdom coin luxury attack chef razor true relief naive estate swear bamboo obscure peace rapid panda path comic race boat topic image"; // Replace with actual mnemonic logic
-        const walletKey = await mnemonicToWalletKey(mnemonic);
-        const wallet = WalletContractV3R2.create({ ... });
-        const address = wallet.getAddress();
-        
-        return address.toString();
+        const mnemonic = process.env.MNEMONIC || ["used", "sweet", "wisdom", "coin", "luxury", "attack", "chef", "razor", "true", "relief", "naive", "estate", "swear", "bamboo", "obscure", "peace", "rapid", "panda", "path", "comic", "race", "boat", "topic", "image"];  // Use actual mnemonic
+        const walletKeys = await mnemonicToWalletKey(mnemonic);  // Derive wallet keys
+
+        const wallet = new WalletContractV3R2({
+            publicKey: walletKeys.publicKey, // Use the generated publicKey
+            workchain: 0
+        });
+
+        const walletAddress = wallet.address.toString(true, true, true);
+        console.log(`Generated Wallet Address for ${userId}: ${walletAddress}`);
+        return walletAddress;
     } catch (error) {
-        console.error("Error fetching unique address:", error);
-        throw error;
+        console.error("Error generating wallet for user:", error);
+        return null;
     }
 }
 
