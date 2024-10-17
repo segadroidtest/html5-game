@@ -1220,6 +1220,11 @@ const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
             });
         }
 
+          async function getTonWalletAddress() {
+    // Replace with actual call to TON API/SDK for wallet generation or retrieval
+    const walletAddress = await ton.getWalletAddress(); 
+    return walletAddress;
+  }
         // Function to display the wallet address and QR code
 const API_URL = "https://telegram-bot-1-segadroidstudio.replit.app/api/getWalletAddress";
 
