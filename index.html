@@ -1182,13 +1182,10 @@ async function generateLeaderboard() {
         <p style="text-align: center;margin-top: 10px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;">Send funds only to this wallet</p>
         
         <div style="display: flex;justify-content: center;align-items: center;gap: 0px;margin-top: -20px;background: rgba(46, 44, 55, 0.65);border-bottom-right-radius: 10px;border-bottom-left-radius: 10px;border-bottom: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;">
-            <p id="wallet-addressess" style="font-size: 16px;background-color: #ffffff;color: #1e2739;padding: 10px 15px;width: 230px;text-align: left;white-space: nowrap;overflow: hidden;display: inline-block;border-top-left-radius: 10px;border-bottom-left-radius: 10px;">
-                <!-- Address will be dynamically updated -->
+            <p id="wallet-address" style="font-size: 16px;background-color: #ffffff;color: #1e2739;padding: 10px 15px;width: 230px;text-align: left;white-space: nowrap;overflow: hidden;display: inline-block;border-top-left-radius: 10px;border-bottom-left-radius: 10px;">
+               Fetching address...
             </p>
-<div>
-    <h2>Your Wallet Address:</h2>
-    <p id="wallet-address">Fetching address...</p>
-</div>
+
             <button onclick="copyAddress()" style="background-color: #1e1d22;border: none;cursor: pointer;padding: 0;padding: 6px;border-top-right-radius: 10px;border-bottom-right-radius: 10px;">
                 <img src="https://img.icons8.com/ios-glyphs/30/ffffff/copy.png" alt="Copy Icon" style="width: 24px; height: 24px;">
             </button>
@@ -1213,7 +1210,7 @@ async function generateLeaderboard() {
      async function fetchWalletAddress() {
         const userId = Telegram.WebApp.initDataUnsafe.user.id; // Get user ID from Telegram Mini App
 try {
-    const response = await fetch(`https://your-server/api/getWalletAddress/${userId}`, {
+    const response = await fetch(`https://telegram-bot-1-segadroidstudio.replit.app/api/getWalletAddress/${userId}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
@@ -1243,7 +1240,7 @@ async function getUniqueAddressForUser(userId) {
     try {
         // Logic to create or fetch the user's TON address
         // For example, based on their mnemonic or user ID.
-        const mnemonic = "your_mnemonic_here"; // Replace with actual mnemonic logic
+        const mnemonic = "used sweet wisdom coin luxury attack chef razor true relief naive estate swear bamboo obscure peace rapid panda path comic race boat topic image"; // Replace with actual mnemonic logic
         const walletKey = await mnemonicToWalletKey(mnemonic);
         const wallet = WalletContractV3R2.create({ ... });
         const address = wallet.getAddress();
