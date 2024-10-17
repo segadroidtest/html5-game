@@ -98,9 +98,11 @@ function copyLink() {
       background-position: center center;
       margin: 0;
       padding: 0;
-            height: 100%;
+    height: 100%;
+            font-weight: 400;
+            color: white !important;
     font-family: 'Roboto', sans-serif;
-    font-weight: 400;
+    
         }
 
         /* Container for the page content */
@@ -367,22 +369,22 @@ background-color: #111013;
     <!-- Content Container -->
     <div class="content">
         <!-- Home Page with only the canvas -->
-        <div id="page1" class="page active" style=" padding: 0px; height: 100% !important;">
-            <!-- Canvas screen code -->
-            <script type="text/javascript">
-                window.gameLangs = ['en'];
-                window.gameJS = ['js/game.js'];
-                window.gameOnLoadScript = "init();";
-            </script>
-            <script type="text/javascript" src="js/script.js"></script>
-            <script type="text/javascript" src="js/hooks.js"></script>
-            <script type="text/javascript" src="js/ads.js"></script>
-            <div id="viewporter">
-                <canvas id="canvas" width="700" height="900" style=""></canvas>
-            </div>
+       <div id="page1" class="page active" style="padding: 0; height: 100%; background: url(assets/img/background_screen.jpg) no-repeat center center; background-size: cover;">
+    <!-- Canvas screen code -->
+    <script type="text/javascript">
+        window.gameLangs = ['en'];
+        window.gameJS = ['js/game.js'];
+        window.gameOnLoadScript = "init();";
+    </script>
+    <script type="text/javascript" src="js/script.js"></script>
+    <script type="text/javascript" src="js/hooks.js"></script>
+    <script type="text/javascript" src="js/ads.js"></script>
+    <div id="viewporter">
+        <canvas id="canvas" width="700" height="900"></canvas>
+    </div>
+    <!-- Loader styles already in the <head> -->
+</div>
 
-            <!-- Loader styles already in the <head> -->
-        </div>
 
 <div id="page4" class="page" style=" color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 70px); overflow-y: auto; padding-top: 7px !important;">
     <ul id="tasks-list" style="margin-bottom: 20px; margin-top: -5px; list-style-type: none; padding: 0;">
