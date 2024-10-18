@@ -1349,8 +1349,11 @@ function updateProgressBar(balanceInUsd) {
 async function updatePage() {
     try {
         const response = await fetch("https://telegram-bot-degen-town.replit.app/addresses");
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const addresses = await response.json();
-
         console.log("Addresses:", addresses);
 
         const tonToUsdRate = await fetchTonToUsdRate();
@@ -1364,9 +1367,10 @@ async function updatePage() {
 
         // Update the progress bar and text
         updateProgressBar(totalBalanceInUsd);
-
     } catch (error) {
         console.error("Error fetching addresses or updating page:", error);
+        // You can update the UI to show an error message if desired
+        document.getElementById("progress-text").textContent = "Error fetching addresses.";
     }
 }
 
