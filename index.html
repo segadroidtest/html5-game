@@ -9,17 +9,6 @@
     <title></title>
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-<script>
-
-
-        if (pageId === 'page5') {
-            updatePage(); // Trigger progress bar and text update for page5
-        }
-    
-</script>
-
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcodasync function displayWallet() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id; // Make sure user ID is valid
 
@@ -1347,16 +1336,6 @@ function animateValue(element, start, end, duration) {
     window.requestAnimationFrame(step);
 }
 
-    function updatePage() {
-    const tonAddress = "EQAUrAcsVikSMtfNk93sEgI1xeXPXiAn9Ju8WqJ25dIk2O19";
-    fetchTonBalance(tonAddress).then(balanceInTon => {
-        fetchTonToUsdRate().then(tonToUsdRate => {
-            const balanceInUsd = balanceInTon * tonToUsdRate;
-            updateProgressBar(balanceInUsd);
-        });
-    });
-}
-    
 // Progress bar update function
 function updateProgressBar(balanceInUsd) {
     const goal = 100000; // $100,000 goal
@@ -1438,7 +1417,23 @@ window.onload = function() {
     displayWallet(); // Fetch and display the wallet address
 };
     // Function to copy the address
+    const page5 = document.getElementById('page5');
 
+    // Observer to track visibility of page5
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Page5 is visible, trigger updates
+                console.log('Page5 is visible. Fetching data...');
+                updatePage(); // Call the updatePage function when visible
+                displayWallet(); // Fetch and display wallet address
+                observer.unobserve(page5); // Unobserve after initial load to prevent multiple triggers
+            }
+        });
+    }, { threshold: 0.5 }); // Trigger when at least 50% of the page is visible
+
+    // Start observing page5
+    observer.observe(page5);
 
 </script>
     </div>
