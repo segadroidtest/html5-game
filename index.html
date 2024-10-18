@@ -1362,7 +1362,7 @@ async function updatePage() {
     const balanceInUsd = balanceInTon * tonToUsdRate; // Convert balance to USD
 
     // Update progress bar and text with counting animation
-    updateProgressBar(balanceInUsd);
+
 }
 
 // Trigger the main function when the page loads
@@ -1426,7 +1426,6 @@ window.onload = function() {
                 // Page5 is visible, trigger updates
                 console.log('Page5 is visible. Fetching data...');
                 updatePage();
-                updateProgressBar(balanceInUsd);// Call the updatePage function when visible
                 displayWallet(); // Fetch and display wallet address
                 observer.unobserve(page5); // Unobserve after initial load to prevent multiple triggers
             }
