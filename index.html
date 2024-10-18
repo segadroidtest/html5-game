@@ -1217,45 +1217,16 @@ async function fetchWalletAddress(userId) {
     }
     
     const data = await response.json();
+    document.getElementById("wallet-address").innerText = data.walletAddress || "Address not found"; // Display the address
     console.log("Wallet Address: ", data.walletAddress);
   } catch (error) {
     console.error("Error fetching wallet address:", error);
-
+    document.getElementById("wallet-address").innerText = "Error fetching address"; // Show error on the UI
   }
 }
 
-fetchWalletAddress(229351215);  // Example call with userId
-
-
-async function getWalletKeys(mnemonic) {
-    try {
-        const walletKeys = await mnemonicToWalletKey(mnemonic);
-        return walletKeys;
-    } catch (error) {
-        console.error("Failed to generate wallet keys:", error);
-    }
-}
-    
-async function getUniqueAddressForUser(userId) {
-    try {
-        const mnemonic = process.env.MNEMONIC || ["used", "sweet", "wisdom", "coin", "luxury", "attack", "chef", "razor", "true", "relief", "naive", "estate", "swear", "bamboo", "obscure", "peace", "rapid", "panda", "path", "comic", "race", "boat", "topic", "image"];  // Use actual mnemonic
-        const walletKeys = await mnemonicToWalletKey(mnemonic);  // Derive wallet keys
-
-        const wallet = new WalletContractV3R2({
-            publicKey: walletKeys.publicKey, // Use the generated publicKey
-            workchain: 0
-        });
-
-        const walletAddress = wallet.address.toString(true, true, true);
-        console.log(`Generated Wallet Address for ${userId}: ${walletAddress}`);
-        return walletAddress;
-    } catch (error) {
-        console.error("Error generating wallet for user:", error);
-        return null;
-    }
-}
-
-    window.onload = fetchWalletAddress;
+// Call the function with a specific userId (you may need to retrieve it dynamically)
+fetchWalletAddress(telegram.web_app.user.id); // Example: using Telegram user ID
 </script>
 
     </div>
