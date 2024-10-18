@@ -1290,10 +1290,8 @@ async function fetchTonBalance(address) {
     try {
         const response = await fetch(`https://toncenter.com/api/v2/getAddressBalance?address=${address}`);
         const data = await response.json();
-
         if (data && data.result) {
-            // Convert nanoTONs to TONs (1 TON = 1e9 nanoTONs)
-            return parseFloat(data.result) / 1e9;
+            return parseFloat(data.result) / 1e9; // Convert nanoTON to TON
         } else {
             console.error("Failed to fetch balance:", data);
             return 0;
@@ -1304,11 +1302,11 @@ async function fetchTonBalance(address) {
     }
 }
 
+// Utility function for fetching TON to USD rate
 async function fetchTonToUsdRate() {
     try {
         const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd');
         const data = await response.json();
-
         if (data && data['the-open-network'] && data['the-open-network'].usd) {
             return data['the-open-network'].usd; // TON to USD exchange rate
         } else {
@@ -1321,28 +1319,55 @@ async function fetchTonToUsdRate() {
     }
 }
 
-async function updateProgressBar() {
-    const tonAddress = "EQAifriPVAoJ_uOPFOGUU3nNcKRYFXk7qdmQTf1ekIRK1xqD"; // Replace with the actual TON address
-    const balanceInTon = await fetchTonBalance(tonAddress);
-    const tonToUsdRate = await fetchTonToUsdRate();
+// Counting animation function
+function animateValue(element, start, end, duration) {
+    let startTime = null;
+    
+    function step(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1); // Normalize progress
+        const currentValue = start + progress * (end - start);
+        element.textContent = `$${currentValue.toFixed(2)} / $100,000`; // Update the text
+        if (progress < 1) {
+            window.requestAnimationFrame(step);
+        }
+    }
 
-    // Convert balance to USD
-    const balanceInUsd = balanceInTon * tonToUsdRate;
+    window.requestAnimationFrame(step);
+}
 
-    // Update progress bar and text
-    const goal = 100000; // $100,000
+// Progress bar update function
+function updateProgressBar(balanceInUsd) {
+    const goal = 100000; // $100,000 goal
     const progressBar = document.getElementById("progress-bar");
     const progressText = document.getElementById("progress-text");
 
-    // Calculate percentage of the goal achieved
+    const duration = 2000; // Animation duration in milliseconds
+
+    // Animate counting up from $0 to balanceInUsd
+    animateValue(progressText, 0, balanceInUsd, duration);
+
+    // Animate progress bar width
     const percentage = (balanceInUsd / goal) * 100;
+    progressBar.style.transition = `width ${duration}ms ease-in-out`;
     progressBar.style.width = Math.min(percentage, 100) + "%"; // Ensure it doesn't exceed 100%
-    progressText.textContent = `$${balanceInUsd.toFixed(2)} / $${goal.toFixed(2)}`;
 }
 
-// Call this function when the page loads
+// Main function to fetch data and update the page
+async function updatePage() {
+    const tonAddress = "EQAUrAcsVikSMtfNk93sEgI1xeXPXiAn9Ju8WqJ25dIk2O19"; // Replace with the actual TON address
+    const balanceInTon = await fetchTonBalance(tonAddress);
+    const tonToUsdRate = await fetchTonToUsdRate();
+
+    const balanceInUsd = balanceInTon * tonToUsdRate; // Convert balance to USD
+
+    // Update progress bar and text with counting animation
+    updateProgressBar(balanceInUsd);
+}
+
+// Trigger the main function when the page loads
 document.addEventListener("DOMContentLoaded", () => {
-    updateProgressBar();
+    updatePage();
 });
     
 
