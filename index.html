@@ -141,7 +141,21 @@ function copyLink() {
             display: block;
 
         }
+#progress-bar-container {
+    width: 100%; /* Full width container */
+    background-color: #e0e0e0;
+    border-radius: 25px; /* Rounded corners */
+    height: 30px;
+    overflow: hidden; /* Ensures the bar does not overflow */
+}
 
+#progress-bar {
+    background: linear-gradient(to right, #fd8e0b, #ffc30f);
+    border-radius: 25px;
+    height: 100%;
+    width: 0%; /* Start at 0, will be animated */
+    transition: width 2s ease; /* Smooth width animation */
+}
         /* Fixed app bar at the bottom */
         .app-bar {
 position: fixed;
@@ -1416,22 +1430,60 @@ function showCopyPopup() {
 window.onload = function() {
     displayWallet(); // Fetch and display the wallet address
 };
-    // Function to copy the address
-    const page5 = document.getElementById('page5');
+   
+document.addEventListener("DOMContentLoaded", () => {
+    // Ensure that page5's display is monitored and updates on visibility
+    const page5Element = document.getElementById("page5");
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                console.log('Page5 is visible. Fetching data...');
-                updatePage();
-                displayWallet();
-                observer.unobserve(page5); 
+    if (page5Element) {
+        const observer = new MutationObserver(function (mutationsList, observer) {
+            if (getComputedStyle(page5Element).display !== "none") {
+                console.log("Page5 is visible, updating balance and progress bar.");
+                updatePage(); // Call the update function when page5 becomes visible
             }
         });
-    }, { threshold: 0.5 });
 
-    // Start observing page5
-    observer.observe(page5);
+        observer.observe(page5Element, { attributes: true, attributeFilter: ['style'] });
+    }
+});
+
+function updatePage() {
+    const balanceInUsd = getBalanceInUsd(); // Assuming this function retrieves the balance
+    updateProgressBar(balanceInUsd); // Update progress bar
+}
+
+function updateProgressBar(balanceInUsd) {
+    const goal = 100000; // Example goal
+    const progressBar = document.getElementById("progress-bar");
+    const progressText = document.getElementById("progress-text");
+
+    // Calculate the percentage of the goal
+    const percentage = (balanceInUsd / goal) * 100;
+    
+    // Set the width with animation
+    progressBar.style.width = Math.min(percentage, 100) + "%"; // Animate to the correct percentage
+
+    // Update text value with animation
+    animateValue(progressText, 0, balanceInUsd, 2000); // 2 seconds duration for smooth text animation
+}
+
+// Dummy function to simulate balance retrieval
+function getBalanceInUsd() {
+    return 50000; // Example balance, adjust this with real data
+}
+
+function animateValue(element, start, end, duration) {
+    let startTime = null;
+    const step = (timestamp) => {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
+        element.innerText = Math.floor(progress * (end - start) + start);
+        if (progress < 1) {
+            window.requestAnimationFrame(step);
+        }
+    };
+    window.requestAnimationFrame(step);
+}
 
 </script>
     </div>
