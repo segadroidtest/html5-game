@@ -1360,7 +1360,7 @@ async function updatePage() {
     const tonToUsdRate = await fetchTonToUsdRate();
 
     const balanceInUsd = balanceInTon * tonToUsdRate; // Convert balance to USD
-
+    updateProgressBar(balanceInUsd);
     // Update progress bar and text with counting animation
 
 }
@@ -1419,19 +1419,16 @@ window.onload = function() {
     // Function to copy the address
     const page5 = document.getElementById('page5');
 
-    // Observer to track visibility of page5
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // Page5 is visible, trigger updates
                 console.log('Page5 is visible. Fetching data...');
                 updatePage();
                 displayWallet();
-                updateProgressBar(balanceInUsd);// Fetch and display wallet address
-                observer.unobserve(page5); // Unobserve after initial load to prevent multiple triggers
+                observer.unobserve(page5); 
             }
         });
-    }, { threshold: 0.5 }); // Trigger when at least 50% of the page is visible
+    }, { threshold: 0.5 });
 
     // Start observing page5
     observer.observe(page5);
