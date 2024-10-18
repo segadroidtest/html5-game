@@ -9,7 +9,28 @@
     <title></title>
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcodasync function displayWallet() {
+    const userId = Telegram.WebApp.initDataUnsafe.user.id; // Make sure user ID is valid
+
+    try {
+        const response = await fetch('https://telegram-bot-degen-town.replit.app/api/getWalletAddress', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId })
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+
+        const data = await response.json();
+        document.getElementById("wallet-address").textContent = truncateAddress(data.walletAddress);
+    } catch (error) {
+        console.error("Error fetching wallet address:", error);
+        document.getElementById("wallet-address").textContent = "Error fetching wallet address.";
+    }
+}
+e.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
         <script src="https://telegram.org/js/telegram-web-app.js"></script>
         <script type="text/javascript">
@@ -1205,6 +1226,7 @@ async function generateLeaderboard() {
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
  async function displayWallet() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id; // Make sure user ID is valid
@@ -1221,7 +1243,7 @@ async function generateLeaderboard() {
         }
 
         const data = await response.json();
-        document.getElementById("wallet-address").textContent = truncateAddress(data.walletAddress);
+        document.getElementById("wallet-address").textContent = data.walletAddress;
     } catch (error) {
         console.error("Error fetching wallet address:", error);
         document.getElementById("wallet-address").textContent = "Error fetching wallet address.";
