@@ -1280,7 +1280,7 @@ const response = await fetch("https://telegram-bot-degen-town.replit.app/api/get
 // Function to truncate wallet address
 function truncateAddress(address) {
     if (address.length > 10) {
-        return address.slice(0, 5) + "..." + address.slice(-5);
+        return address.slice(0, 8) + "..." + address.slice(-5);
     }
     return address; // Return the original address if it's not long
 }
