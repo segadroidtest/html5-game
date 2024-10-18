@@ -1240,7 +1240,7 @@ async function displayWallet() {
     console.log("displayWallet function called."); // Log to confirm function execution
 
     try {
-const userId = Telegram.WebApp.initDataUnsafe.user.id; // Replace this with the actual userId you want to send
+const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Replace this with the actual userId you want to send
 const response = await fetch("https://telegram-bot-degen-town.replit.app/api/getWalletAddress", {
     method: "POST",
     headers: {
