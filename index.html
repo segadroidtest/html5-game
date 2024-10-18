@@ -1224,7 +1224,7 @@ async function generateLeaderboard() {
         </p>
     </div>
 
-    <div id="copy-popupss" style="display: none;font-size: 17px;z-index: 999;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);background: rgb(30, 29, 34);color: white;padding: 20px;opacity: 0.88;border-radius: 10px;width: 40%;font-weight: 600;text-align: center;">
+    <div id="copy-popupss" style="display: none;font-size: 17px;z-index: 999;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);background: rgb(30, 29, 34);color: white;padding: 20px;opacity: 0.88;border-radius: 10px;width: 60%;font-weight: 600;text-align: center;">
         Wallet Address copied to clipboard!
     </div>
 </div>
@@ -1232,58 +1232,41 @@ async function generateLeaderboard() {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
-    // Declare fullWalletAddress at a higher scope for visibility
-let fullWalletAddress = "";
+    let fullWalletAddress = "";
 
 // Function to display the wallet address
 async function displayWallet() {
-    console.log("displayWallet function called."); // Log to confirm function execution
-
     try {
-const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Replace this with the actual userId you want to send
-const response = await fetch("https://telegram-bot-degen-town.replit.app/api/getWalletAddress", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ userId }) // Send userId in the body
-});
+        const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); 
+        const response = await fetch("https://telegram-bot-degen-town.replit.app/api/getWalletAddress", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId })
+        });
 
-        // Log the response status
-        console.log("API response status:", response.status);
-
-        // Check if the response is okay
         if (!response.ok) {
-            console.error("Network response was not ok:", response.statusText);
             document.getElementById("wallet-address").textContent = "Error fetching address.";
             return;
         }
 
         const data = await response.json();
-        console.log("Data received from API:", data); // Log the received data
-
-        // Check if walletAddress exists in the data
         if (data.walletAddress) {
-        fullWalletAddress = data.walletAddress;
-        document.getElementById("wallet-address").textContent = truncateAddress(fullWalletAddress);
-        new QRCode(document.getElementById("qrcode"), { text: fullWalletAddress, width: 170, height: 170 });
+            fullWalletAddress = data.walletAddress;
+            document.getElementById("wallet-address").textContent = truncateAddress(fullWalletAddress);
+            new QRCode(document.getElementById("qrcode"), { text: fullWalletAddress, width: 170, height: 170 });
         } else {
-            console.error("No wallet address found in API response.");
             document.getElementById("wallet-address").textContent = "No address found.";
         }
     } catch (error) {
-        console.error("Error fetching wallet address:", error);
         document.getElementById("wallet-address").textContent = "Error fetching address.";
     }
 }
 
-
-// Function to truncate wallet address
 function truncateAddress(address) {
     if (address.length > 10) {
         return address.slice(0, 10) + "..." + address.slice(-10);
     }
-    return address; // Return the original address if it's not long
+    return address;
 }
 
 async function fetchTonBalance(address) {
@@ -1291,43 +1274,37 @@ async function fetchTonBalance(address) {
         const response = await fetch(`https://toncenter.com/api/v2/getAddressBalance?address=${address}`);
         const data = await response.json();
         if (data && data.result) {
-            return parseFloat(data.result) / 1e9; // Convert nanoTON to TON
+            return parseFloat(data.result) / 1e9;
         } else {
-            console.error("Failed to fetch balance:", data);
             return 0;
         }
     } catch (error) {
-        console.error("Error fetching balance:", error);
         return 0;
     }
 }
 
-// Utility function for fetching TON to USD rate
 async function fetchTonToUsdRate() {
     try {
         const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd');
         const data = await response.json();
-        if (data && data['the-open-network'] && data['the-open-network'].usd) {
-            return data['the-open-network'].usd; // TON to USD exchange rate
+        if (data['the-open-network'] && data['the-open-network'].usd) {
+            return data['the-open-network'].usd;
         } else {
-            console.error("Failed to fetch TON to USD rate");
             return 0;
         }
     } catch (error) {
-        console.error("Error fetching TON to USD rate:", error);
         return 0;
     }
 }
 
-// Counting animation function
 function animateValue(element, start, end, duration) {
     let startTime = null;
     
     function step(timestamp) {
         if (!startTime) startTime = timestamp;
-        const progress = Math.min((timestamp - startTime) / duration, 1); // Normalize progress
+        const progress = Math.min((timestamp - startTime) / duration, 1);
         const currentValue = start + progress * (end - start);
-        element.textContent = `$${currentValue.toFixed(2)} / $100,000`; // Update the text
+        element.textContent = `$${currentValue.toFixed(2)} / $100,000`;
         if (progress < 1) {
             window.requestAnimationFrame(step);
         }
@@ -1336,72 +1313,45 @@ function animateValue(element, start, end, duration) {
     window.requestAnimationFrame(step);
 }
 
-// Progress bar update function
 function updateProgressBar(balanceInUsd) {
-    const goal = 100000; // $100,000 goal
+    const goal = 100000;
     const progressBar = document.getElementById("progress-bar");
     const progressText = document.getElementById("progress-text");
 
-    const duration = 2000; // Animation duration in milliseconds
-
-    // Animate counting up from $0 to balanceInUsd
+    const duration = 2000;
     animateValue(progressText, 0, balanceInUsd, duration);
 
-    // Animate progress bar width
     const percentage = (balanceInUsd / goal) * 100;
     progressBar.style.transition = `width ${duration}ms ease-in-out`;
-    progressBar.style.width = Math.min(percentage, 100) + "%"; // Ensure it doesn't exceed 100%
+    progressBar.style.width = Math.min(percentage, 100) + "%";
 }
 
-// Main function to fetch data and update the page
 async function updatePage() {
-    const tonAddress = "EQAUrAcsVikSMtfNk93sEgI1xeXPXiAn9Ju8WqJ25dIk2O19"; // Replace with the actual TON address
+    const tonAddress = "EQAUrAcsVikSMtfNk93sEgI1xeXPXiAn9Ju8WqJ25dIk2O19";
     const balanceInTon = await fetchTonBalance(tonAddress);
     const tonToUsdRate = await fetchTonToUsdRate();
 
-    const balanceInUsd = balanceInTon * tonToUsdRate; // Convert balance to USD
-
-    // Update progress bar and text with counting animation
+    const balanceInUsd = balanceInTon * tonToUsdRate;
     updateProgressBar(balanceInUsd);
 }
 
-// Trigger the main function when the page loads
 document.addEventListener("DOMContentLoaded", () => {
-    updatePage();
+    displayWallet();
 });
 
-
 function copyAddress() {
-    const walletAddress = fullWalletAddress; // Get the full wallet address
-
-    // Try the Clipboard API
+    const walletAddress = fullWalletAddress;
     if (navigator.clipboard) {
-        navigator.clipboard.writeText(walletAddress)
-            .then(() => {
-                showCopyPopup(); // Display confirmation popup
-            })
-            .catch(err => {
-                console.error("Failed to copy using Clipboard API: ", err);
-                fallbackCopyText(walletAddress); // Use fallback if Clipboard API fails
-            });
+        navigator.clipboard.writeText(walletAddress).then(() => showCopyPopup());
     } else {
-        fallbackCopyText(walletAddress); // Use fallback for unsupported browsers
+        const textarea = document.createElement('textarea');
+        textarea.value = walletAddress;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        showCopyPopup();
     }
-}
-
-function fallbackCopyText(text) {
-    // Create a temporary textarea to hold the text
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    document.body.appendChild(textarea);
-    textarea.select(); // Select the text in the textarea
-    try {
-        document.execCommand('copy'); // Execute the 'copy' command
-        showCopyPopup(); // Display confirmation popup
-    } catch (err) {
-        console.error('Fallback copy failed: ', err);
-    }
-    document.body.removeChild(textarea); // Remove the textarea after copying
 }
 
 function showCopyPopup() {
@@ -1409,16 +1359,13 @@ function showCopyPopup() {
     popup.style.display = "block";
     setTimeout(() => {
         popup.style.display = "none";
-    }, 2000); // Hide popup after 2 seconds
+    }, 2000);
 }
 
-// Call the displayWallet function when the page loads
-window.onload = function() {
-    displayWallet(); // Fetch and display the wallet address
-};
-    // Function to copy the address
-
-
+// Trigger the progress bar update only when "page5" is clicked
+document.getElementById("page5").addEventListener("click", () => {
+    updatePage();
+});
 </script>
     </div>
 
