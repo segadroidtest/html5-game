@@ -1260,6 +1260,15 @@ async function displayWallet() {
     }
 }
 
+    async function getWalletAddressFromDatabase(userId) {
+    // Replace with your actual database call logic
+    const user = await User.findOne({ userId: userId }); // Adjust to your schema
+    if (user) {
+        return user.walletAddress; // Make sure walletAddress is the correct field
+    }
+    throw new Error("User not found");
+}
+
 
 
 // Truncate wallet address for display
