@@ -1426,7 +1426,8 @@ window.onload = function() {
                 // Page5 is visible, trigger updates
                 console.log('Page5 is visible. Fetching data...');
                 updatePage();
-                displayWallet(); // Fetch and display wallet address
+                displayWallet();
+                updateProgressBar(balanceInUsd);// Fetch and display wallet address
                 observer.unobserve(page5); // Unobserve after initial load to prevent multiple triggers
             }
         });
