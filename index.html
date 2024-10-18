@@ -1342,7 +1342,7 @@ function updateProgressBar(balanceInUsd) {
     const progressBar = document.getElementById("progress-bar");
     const progressText = document.getElementById("progress-text");
 
-    const duration = 2000; // Animation duration in milliseconds
+    const duration = 7000; // Animation duration in milliseconds
 
     // Animate counting up from $0 to balanceInUsd
     animateValue(progressText, 0, balanceInUsd, duration);
@@ -1428,7 +1428,7 @@ window.onload = function() {
                 observer.unobserve(page5); 
             }
         });
-    }, { threshold: 0.5 });
+    }, { threshold: 0.9 });
 
     // Start observing page5
     observer.observe(page5);
