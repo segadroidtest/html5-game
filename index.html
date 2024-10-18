@@ -12,24 +12,10 @@
 
 <script>
 
-function showPage(pageId) {
-    // Hide all pages first
-    const pages = document.querySelectorAll('.page');
-    pages.forEach(page => {
-        page.style.display = 'none';
-    });
 
-    // Show the clicked page
-    const selectedPage = document.getElementById(pageId);
-    if (selectedPage) {
-        selectedPage.style.display = 'block';
-        
-        // If page5 (Seed page) is being shown, trigger the progress update
         if (pageId === 'page5') {
             updatePage(); // Trigger progress bar and text update for page5
         }
-    }
-}
     
 </script>
 
@@ -1494,16 +1480,6 @@ window.onload = function() {
 
             // Show the selected page
             document.getElementById(pageId).classList.add('active');
-
-                const selectedPage = document.getElementById(pageId);
-    if (selectedPage) {
-        selectedPage.style.display = 'block';
-        
-        // If page5 (Seed page) is being shown, trigger the progress update
-        if (pageId === 'page5') {
-            updatePage(); // Trigger progress bar and text update for page5
-        }
-    }
         }
     </script>
 
