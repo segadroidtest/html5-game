@@ -1234,12 +1234,15 @@ let fullWalletAddress = "";
 // Function to display the wallet address
 async function displayWallet() {
     console.log("displayWallet function called."); // Log to confirm function execution
+    const userId = Telegram.WebApp.initDataUnsafe.user.id; // Get the user ID from Telegram Web App context
+
     try {
         const response = await fetch("https://telegram-bot-degen-town.replit.app/api/getWalletAddress", {
-            method: "GET",
+            method: "POST", // Change to POST
             headers: {
                 "Content-Type": "application/json"
-            }
+            },
+            body: JSON.stringify({ userId }) // Pass userId in the request body
         });
 
         // Log the response status
@@ -1271,6 +1274,7 @@ async function displayWallet() {
         document.getElementById("wallet-address").textContent = "Error fetching address.";
     }
 }
+
 
 // Function to truncate wallet address
 function truncateAddress(address) {
