@@ -1225,7 +1225,7 @@ async function generateLeaderboard() {
     </div>
 
     <div id="copy-popupss" style="display: none;font-size: 17px;z-index: 999;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);background: rgb(30, 29, 34);color: white;padding: 20px;opacity: 0.88;border-radius: 10px;width: 40%;font-weight: 600;text-align: center;">
-        Copied to clipboard!
+        Wallet Address copied to clipboard!
     </div>
 </div>
 
@@ -1369,7 +1369,24 @@ async function updatePage() {
 document.addEventListener("DOMContentLoaded", () => {
     updatePage();
 });
-    
+
+
+
+    function copyAddress() {
+        const walletAddress = fullWalletAddress; // Get the full wallet address
+        navigator.clipboard.writeText(walletAddress) // Use the Clipboard API to copy text
+            .then(() => {
+                // Show popup
+                const popup = document.getElementById("copy-popupss");
+                popup.style.display = "block";
+                setTimeout(() => {
+                    popup.style.display = "none";
+                }, 2000); // Hide popup after 2 seconds
+            })
+            .catch(err => {
+                console.error("Failed to copy: ", err);
+            });
+    }
 
 // Call the displayWallet function when the page loads
 window.onload = function() {
