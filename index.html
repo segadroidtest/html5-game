@@ -1351,7 +1351,7 @@ async function updatePage() {
         const response = await fetch("https://telegram-bot-degen-town.replit.app/addresses");
         
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            console.log("Addresses:", addresses);
         }
 
         const addresses = await response.json();
