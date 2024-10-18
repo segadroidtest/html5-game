@@ -1206,8 +1206,8 @@ async function generateLeaderboard() {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-    async function displayWallet() {
-    const userId = Telegram.WebApp.initDataUnsafe.user.id; // Get Telegram user ID from the web app context
+ async function displayWallet() {
+    const userId = Telegram.WebApp.initDataUnsafe.user.id; // Make sure user ID is valid
 
     try {
         const response = await fetch('https://telegram-bot-degen-town.replit.app/api/getWalletAddress', {
@@ -1221,23 +1221,13 @@ async function generateLeaderboard() {
         }
 
         const data = await response.json();
-        const fullWalletAddress = data.walletAddress;  // Get the unique address
-        document.getElementById("wallet-address").textContent = truncateAddress(fullWalletAddress);
-
-        // Generate QR code
-        let qrElement = document.getElementById("qrcode");
-        qrElement.innerHTML = "";  // Clear any previous QR code
-        new QRCode(qrElement, {
-            text: fullWalletAddress,
-            width: 228,
-            height: 228
-        });
-
+        document.getElementById("wallet-address").textContent = truncateAddress(data.walletAddress);
     } catch (error) {
         console.error("Error fetching wallet address:", error);
         document.getElementById("wallet-address").textContent = "Error fetching wallet address.";
     }
 }
+
 
 // Truncate wallet address for display
 function truncateAddress(address) {
