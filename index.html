@@ -1195,11 +1195,15 @@ async function generateLeaderboard() {
 
 
 <div id="page5" class="page" style="color: #ffffff;padding: 20px;border-radius: 0px;width: auto;margin: 0 auto;box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);height: 100%;overflow-y: auto;padding-top: 5px !important;">
-    <h2 style="text-align: center; color: white; font-size: 28px; margin-top: 0; font-family: system-ui;margin-bottom: 0px;">SEEDSALE</h2>
+    <h2 style="text-align: center;color: white;font-size: 28px;margin-top: 10px;font-family: system-ui;margin-bottom: 0px;">SEEDSALE</h2>
     <p style="text-align: center; color: white; margin-top: 0px;">Stage 1</p>
-
+    <p id="progress-text" style="color: white;font-size: 20px;font-weight: bold;text-align: left;margin-top: 40px; font-family: system-ui;">DEGEN TOWN ALREADY RAISED:</p>
+    <p id="progress-text" style="text-align: left;color: white;font-size: 24px;margin-top: -17px !important;!i;!;margin-bottom: 10px;">$0 / $100,000</p>
+<div id="progress-container" style="margin-bottom: 20px; background-color: #e0e0e0; border-radius: 10px; height: 30px; width: 100%;">
+    <div id="progress-bar" style="margin-bottom: 20px; background-color: #e0e0e0; border-radius: 10px; height: 30px; width: 100%;"></div>
+</div>
     <div style="text-align: center;">
-        <div id="qrcode" style="margin: 20px auto; width: 228px; height: 228px; background-color: #ffffff; padding: 10px; border-radius: 10px;"></div>
+        <div id="qrcode" style="margin-top: 40px !important;margin: 20px auto; width: 228px; height: 228px; background-color: #ffffff; padding: 10px; border-radius: 10px;"></div>
         <p style="text-align: center;margin-top: 10px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;">Send funds only to this wallet</p>
         
         <div style="display: flex;justify-content: center;align-items: center;gap: 0px;margin-top: -20px;background: rgba(46, 44, 55, 0.65);border-bottom-right-radius: 10px;border-bottom-left-radius: 10px;border-bottom: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;">
@@ -1261,11 +1265,11 @@ const response = await fetch("https://telegram-bot-degen-town.replit.app/api/get
 
         // Check if walletAddress exists in the data
         if (data.walletAddress) {
-            fullWalletAddress = data.walletAddress;
-            // Update the wallet address display
-            document.getElementById("wallet-address").textContent = truncateAddress(fullWalletAddress);
-            // Generate QR code
-            new QRCode(document.getElementById("qrcode"), { text: fullWalletAddress, width: 228, height: 228 });
+        fullWalletAddress = data.walletAddress;
+        document.getElementById("wallet-address").textContent = truncateAddress(fullWalletAddress);
+        new QRCode(document.getElementById("qrcode"), { text: fullWalletAddress, width: 228, height: 228 });
+        const balance = await fetchBalance(fullWalletAddress);
+        updateProgressBar(balance);
         } else {
             console.error("No wallet address found in API response.");
             document.getElementById("wallet-address").textContent = "No address found.";
@@ -1283,6 +1287,28 @@ function truncateAddress(address) {
         return address.slice(0, 8) + "..." + address.slice(-5);
     }
     return address; // Return the original address if it's not long
+}
+
+function updateProgressBar(balance) {
+    const goal = 100000; // $100,000
+    const progressBar = document.getElementById("progress-bar");
+    const progressText = document.getElementById("progress-text");
+
+    // Calculate percentage of the goal achieved
+    const percentage = (balance / goal) * 100;
+    progressBar.style.width = Math.min(percentage, 100) + "%"; // Ensure it doesn't exceed 100%
+    progressText.textContent = `Current Balance: $${balance.toFixed(2)} / Goal: $${goal.toFixed(2)}`;
+}
+
+async function fetchBalance(walletAddress) {
+    // Replace this URL with your actual API endpoint to fetch balance
+    const response = await fetch(`https://telegram-bot-degen-town.replit.app/getBalance?address=${walletAddress}`);
+    if (!response.ok) {
+        console.error("Failed to fetch balance:", response.statusText);
+        return 0; // Return 0 if there's an error
+    }
+    const data = await response.json();
+    return data.balance || 0; // Adjust based on the actual structure of your API response
 }
 
 // Call the displayWallet function when the page loads
