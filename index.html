@@ -1244,7 +1244,7 @@ async function displayWallet() {
 
         const data = await response.json();
         const fullWalletAddress = data.walletAddress; // Get the unique address
-        document.getElementById("wallet-address").textContent = truncateAddress(fullWalletAddress);
+        document.getElementById("wallet-address").textContent = data.walletAddress;
 
         // Generate QR code
         let qrElement = document.getElementById("qrcode");
@@ -1260,6 +1260,12 @@ async function displayWallet() {
         document.getElementById("wallet-address").textContent = "Error fetching wallet address.";
     }
 }
+
+            function truncateAddress(address) {
+            const start = address.slice(0, 10);
+            const end = address.slice(-10);
+            return `${start}...${end}`;
+        }
 
 // Call displayWallet when the page loads
 window.onload = displayWallet;
