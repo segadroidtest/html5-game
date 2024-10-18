@@ -1376,46 +1376,7 @@ window.onload = function() {
     displayWallet(); // Fetch and display the wallet address
 };
     // Function to copy the address
-function copyAddress() {
-    const walletAddress = fullWalletAddress; // Get the full wallet address
 
-    // Try the Clipboard API
-    if (navigator.clipboard) {
-        navigator.clipboard.writeText(walletAddress)
-            .then(() => {
-                showCopyPopup(); // Display confirmation popup
-            })
-            .catch(err => {
-                console.error("Failed to copy using Clipboard API: ", err);
-                fallbackCopyText(walletAddress); // Use fallback if Clipboard API fails
-            });
-    } else {
-        fallbackCopyText(walletAddress); // Use fallback for unsupported browsers
-    }
-}
-
-function fallbackCopyText(text) {
-    // Create a temporary textarea to hold the text
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    document.body.appendChild(textarea);
-    textarea.select(); // Select the text in the textarea
-    try {
-        document.execCommand('copy'); // Execute the 'copy' command
-        showCopyPopup(); // Display confirmation popup
-    } catch (err) {
-        console.error('Fallback copy failed: ', err);
-    }
-    document.body.removeChild(textarea); // Remove the textarea after copying
-}
-
-function showCopyPopup() {
-    const popup = document.getElementById("copy-popupss");
-    popup.style.display = "block";
-    setTimeout(() => {
-        popup.style.display = "none";
-    }, 2000); // Hide popup after 2 seconds
-}
 
 </script>
     </div>
