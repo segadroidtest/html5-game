@@ -1234,32 +1234,58 @@ async function generateLeaderboard() {
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <script>
-    // Function to display the wallet address
-    async function displayWallet() {
-        try {
-            const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
-            const response = await fetch("https://telegram-bot-degen-town.replit.app/api/getWalletAddress", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userId })
-            });
+    let fullWalletAddress = "";
 
-            if (!response.ok) throw new Error("Error fetching wallet address");
+// Function to display the wallet address
+async function displayWallet() {
+    console.log("displayWallet function called."); // Log to confirm function execution
 
-            const data = await response.json();
-            const walletAddress = data.walletAddress || "No address found.";
-            document.getElementById("wallet-address").textContent = truncateAddress(walletAddress);
-            new QRCode(document.getElementById("qrcode"), { text: walletAddress, width: 170, height: 170 });
-        } catch (error) {
-            console.error("Failed to display wallet:", error);
+    try {
+const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Replace this with the actual userId you want to send
+const response = await fetch("https://telegram-bot-degen-town.replit.app/api/getWalletAddress", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ userId }) // Send userId in the body
+});
+
+        // Log the response status
+        console.log("API response status:", response.status);
+
+        // Check if the response is okay
+        if (!response.ok) {
+            console.error("Network response was not ok:", response.statusText);
             document.getElementById("wallet-address").textContent = "Error fetching address.";
+            return;
         }
-    }
 
-    // Truncate wallet address for display
-    function truncateAddress(address) {
-        return address.length > 10 ? address.slice(0, 10) + "..." + address.slice(-10) : address;
+        const data = await response.json();
+        console.log("Data received from API:", data); // Log the received data
+
+        // Check if walletAddress exists in the data
+        if (data.walletAddress) {
+        fullWalletAddress = data.walletAddress;
+        document.getElementById("wallet-address").textContent = truncateAddress(fullWalletAddress);
+        new QRCode(document.getElementById("qrcode"), { text: fullWalletAddress, width: 170, height: 170 });
+        } else {
+            console.error("No wallet address found in API response.");
+            document.getElementById("wallet-address").textContent = "No address found.";
+        }
+    } catch (error) {
+        console.error("Error fetching wallet address:", error);
+        document.getElementById("wallet-address").textContent = "Error fetching address.";
     }
+}
+
+
+// Function to truncate wallet address
+function truncateAddress(address) {
+    if (address.length > 10) {
+        return address.slice(0, 10) + "..." + address.slice(-10);
+    }
+    return address; // Return the original address if it's not long
+}
 
     // Fetch balance for an address
     async function fetchBalance(address) {
