@@ -1254,15 +1254,21 @@ async function generateLeaderboard() {
    Please enter your withdrawal address to proceed!
 </div>
   <div style="
- margin-right: 10px; /* Add margin between the divs */
+    display: flex; /* Use flexbox layout */
+    justify-content: space-between; /* Space between the items */
+    margin-bottom: 20px; /* Adjust the margin as needed */
+">
+
+    <div style="
         text-align: center;
-        background: #3a394a;
+        background: rgba(46, 44, 55, 0.65);
         height: auto;
         border-radius: 10px;
         border: 1px solid #101013;
-        flex: 1;
+        flex: 1; /* Allow the divs to grow and take equal space */
+        margin-right: 10px; /* Add margin between the divs */
     ">
-        <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 10px;padding-left: 5px;padding-right: 5px;">
+        <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;padding-left: 15px;padding-right: 15px;">
             Top Referred so far
         </p>
         <p style="">0 TON</p>
@@ -1270,17 +1276,19 @@ async function generateLeaderboard() {
 
     <div style="
         text-align: center;
-        background: #3a394a;
+        background: rgba(46, 44, 55, 0.65);
         height: auto;
         border-radius: 10px;
         border: 1px solid #101013;
         flex: 1; /* Allow the divs to grow and take equal space */
     ">
-        <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 10px;padding-left: 5px;padding-right: 5px;">
+        <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;padding-left: 15px;padding-right: 15px;">
             Commissions Earned
         </p>
-        <p style="">0 TON</p>
+        <p style="margin-bottom: 0px !important;">0 TON</p>
     </div>
+
+</div>
 
 <button id="openPopupButton" style="
     background-color: #48a34c; /* Green */
@@ -1299,12 +1307,11 @@ async function generateLeaderboard() {
 ">Add Withdrawal Wallet</button>
 
 <!-- Popup Structure -->
-<div id="popup" style="display: none; position: fixed; z-index: 1; left: 0px; top: 0px; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.5);">
+<div id="popup" style="display: block;position: fixed;z-index: 1;left: 0px;top: 0px;width: 100%;height: 100%;overflow: auto;background-color: rgba(0, 0, 0, 0.6);">
 
     <div style="
         margin: 50% auto; /* 15% from the top and centered */
         padding: 0px;
-        border: 1px solid #888;
         width: 80%; /* Could be more or less, depending on screen size */
         max-width: 480px; /* Maximum width for the popup */
         border-radius: 10px; /* Rounded corners */
@@ -1317,9 +1324,11 @@ async function generateLeaderboard() {
             font-weight: bold;
             cursor: pointer;
             background: #c02b2b;
-            padding-bottom: 14px;
-            padding-left: 24px;
+            padding-bottom: 7px;
+            padding-left: 10px;
             border-top-right-radius: 10px;
+            padding-top: 7px;
+            padding-right: 10px;
         ">×</span>
 <div style="
     text-align: center;
