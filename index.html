@@ -693,7 +693,7 @@ document.getElementById('daily-checkin').style.opacity = '0.68';
     // Hide the popup after 2 seconds
     setTimeout(() => {
         checkinPopup.style.display = 'none';
-    }, 2500);
+    }, 2000);
 }
 
 
@@ -1549,7 +1549,7 @@ document.getElementById('daily-checkin').style.opacity = '0.68';
     // Hide the popup after 2 seconds
     setTimeout(() => {
         checkinPopup.style.display = 'none';
-    }, 2500);
+    }, 2000);
 }
 
            function showNoWithdrawaddressPopup() {
@@ -1559,7 +1559,7 @@ document.getElementById('daily-checkin').style.opacity = '0.68';
     // Hide the popup after 2 seconds
     setTimeout(() => {
         checkinPopup.style.display = 'none';
-    }, 2500);
+    }, 2000);
 }
            
 // Attach the event listener to the button
@@ -1601,7 +1601,7 @@ document.getElementById('setAddressButton').addEventListener('click', setWithdra
     loadWithdrawAddress();
 </script>
 
-    <div id="copy-popupss" style="display: none;font-size: 17px;z-index: 999;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);background: rgb(30, 29, 34);color: white;padding: 20px;opacity: 0.88;border-radius: 10px;width: 60%;font-weight: 600;text-align: center;">
+    <div id="copy-popupss" style="display: none; font-size: 17px; z-index: 999; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.88; border-radius: 10px; width: 60%; font-weight: 600; text-align: center;">
         Wallet Address copied to clipboard!
     </div>
 </div>
