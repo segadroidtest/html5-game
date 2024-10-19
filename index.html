@@ -1645,7 +1645,7 @@ async function displayWallet() {
             const fullWalletAddress = data.walletAddress;
             document.getElementById("wallet-address").textContent = truncateAddress(fullWalletAddress);
 
-            // Generate QR code with TON logo in the center
+            // Generate QR code without clearing its container
             const qrElement = document.getElementById("qrcode");
             qrElement.innerHTML = ""; // Clear any previous QR code
             const qrCode = new QRCode(qrElement, {
@@ -1657,19 +1657,23 @@ async function displayWallet() {
                 correctLevel: QRCode.CorrectLevel.H // High error correction level to allow for a logo overlay
             });
 
-            // Add TON logo in the center after QR code is generated
-            const qrCanvas = document.querySelector("#qrcode canvas");
-            const ctx = qrCanvas.getContext("2d");
+            // Ensure QR code is drawn first
+            setTimeout(() => {
+                // Draw TON logo in the center
+                const qrCanvas = document.querySelector("#qrcode canvas");
+                const ctx = qrCanvas.getContext("2d");
 
-            const logo = new Image();
-            logo.src = "https://upload.wikimedia.org/wikipedia/commons/8/87/TON_symbol.svg"; // URL to TON logo
-            logo.onload = function () {
-                const logoSize = 40; // Adjust logo size as needed
-                const centerX = (qrCanvas.width - logoSize) / 2;
-                const centerY = (qrCanvas.height - logoSize) / 2;
-                ctx.drawImage(logo, centerX, centerY, logoSize, logoSize);
-            };
+                const logo = new Image();
+                logo.src = "https://upload.wikimedia.org/wikipedia/commons/8/87/TON_symbol.svg"; // URL to TON logo
 
+                logo.onload = function () {
+                    const logoSize = 40; // Adjust logo size as needed
+                    const centerX = (qrCanvas.width - logoSize) / 2;
+                    const centerY = (qrCanvas.height - logoSize) / 2;
+                    ctx.clearRect(centerX, centerY, logoSize, logoSize); // Clear QR area for logo
+                    ctx.drawImage(logo, centerX, centerY, logoSize, logoSize);
+                };
+            }, 100); // Give QR code some time to render
         } else {
             console.error("No wallet address found in API response.");
             document.getElementById("wallet-address").textContent = "No address found.";
