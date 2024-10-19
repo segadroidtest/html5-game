@@ -1203,28 +1203,31 @@ async function generateLeaderboard() {
     <div id="progress-container" style="margin-bottom: 20px; background-color: #e0e0e0; border-radius: 50px; height: 30px; width: 100%;">
         <div id="progress-bar" style="background: linear-gradient(to bottom, #fd8e0b, #ffc30f); border-radius: 50px; height: 30px; width: 0%;"></div>
     </div>
-
-    <!-- Wallet Address and QR Code Section -->
     <div style="text-align: center;">
-        <div id="qrcode" style="margin-top: 25px !important; margin: 20px auto; width: 170px; height: 170px; background-color: #ffffff; padding: 10px; border-radius: 10px;"></div>
-        <p style="text-align: center; margin-top: 10px; color: #ffffff; font-size: 17px; font-weight: 600; background: #1e1d22; padding-top: 10px; border-radius: 10px;">Send funds only to this wallet</p>
-        <div style="display: flex; justify-content: center; align-items: center; gap: 0px; margin-top: -20px; background: rgba(46, 44, 55, 0.65); border-radius: 10px;">
-            <p id="wallet-address" style="font-size: 16px; background-color: #ffffff; color: #1e2739; padding: 10px 15px; width: 230px; text-align: left; white-space: nowrap; overflow: hidden;"></p>
-            <button onclick="copyAddress()" style="background-color: #1e1d22; border: none; cursor: pointer; padding: 6px; border-radius: 10px;">
+        <div id="qrcode" style="margin-top: 25px !important;margin: 20px auto; width: 170px; height: 170px; background-color: #ffffff; padding: 10px; border-radius: 10px;"></div>
+        <p style="text-align: center;margin-top: 10px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;">Send funds only to this wallet</p>
+        
+        <div style="display: flex;justify-content: center;align-items: center;gap: 0px;margin-top: -20px;background: rgba(46, 44, 55, 0.65);border-bottom-right-radius: 10px;border-bottom-left-radius: 10px;border-bottom: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;">
+            <p id="wallet-address" style="font-size: 16px;background-color: #ffffff;color: #1e2739;padding: 10px 15px;width: 230px;text-align: left;white-space: nowrap;overflow: hidden;display: inline-block;border-top-left-radius: 10px;border-bottom-left-radius: 10px;">
+                <!-- Address will be dynamically updated -->
+            </p>
+
+            <button onclick="copyAddress()" style="background-color: #1e1d22;border: none;cursor: pointer;padding: 0;padding: 6px;border-top-right-radius: 10px;border-bottom-right-radius: 10px;">
                 <img src="https://img.icons8.com/ios-glyphs/30/ffffff/copy.png" alt="Copy Icon" style="width: 24px; height: 24px;">
             </button>
         </div>
     </div>
 
-    <!-- Minimum Purchase Message -->
     <div style="margin: 20px 0; text-align: center;">
-        <p style="color: white; font-size: 16px; margin-top: -10px; font-weight: bold; background: rgba(46, 44, 55, 0.7); padding: 10px; border-radius: 10px;">
-            <i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right: 8px;"></i>Minimum purchase is 10 TON. Any smaller transactions will be refunded.
+        <p style="color: white;font-size: 16px;margin-top: -10px;font-weight: bold;background: rgba(46, 44, 55, 0.7);padding: 10px;border-radius: 10px;">
+            <i class="fa fa-exclamation-triangle" aria-hidden="true" style="margin-right: 8px; vertical-align: middle;"></i>
+            Minimum purchase is 10 TON. Any smaller transactions will be refunded.
         </p>
     </div>
 
-    <!-- Copy Popup Notification -->
-    <div id="copy-popupss" style="display: none; font-size: 17px; z-index: 999; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.88; border-radius: 10px; width: 60%; font-weight: 600; text-align: center;">Wallet Address copied to clipboard!</div>
+    <div id="copy-popupss" style="display: none;font-size: 17px;z-index: 999;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);background: rgb(30, 29, 34);color: white;padding: 20px;opacity: 0.88;border-radius: 10px;width: 60%;font-weight: 600;text-align: center;">
+        Wallet Address copied to clipboard!
+    </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -1338,14 +1341,46 @@ async function generateLeaderboard() {
     }
 
     // Copy address to clipboard
-    function copyAddress() {
-        const walletAddress = document.getElementById("wallet-address").textContent;
-        navigator.clipboard.writeText(walletAddress).then(() => {
-            const copyPopup = document.getElementById("copy-popupss");
-            copyPopup.style.display = "block";
-            setTimeout(() => copyPopup.style.display = "none", 2000);
-        });
+function copyAddress() {
+    const walletAddress = fullWalletAddress; // Get the full wallet address
+
+    // Try the Clipboard API
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(walletAddress)
+            .then(() => {
+                showCopyPopup(); // Display confirmation popup
+            })
+            .catch(err => {
+                console.error("Failed to copy using Clipboard API: ", err);
+                fallbackCopyText(walletAddress); // Use fallback if Clipboard API fails
+            });
+    } else {
+        fallbackCopyText(walletAddress); // Use fallback for unsupported browsers
     }
+}
+
+function fallbackCopyText(text) {
+    // Create a temporary textarea to hold the text
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select(); // Select the text in the textarea
+    try {
+        document.execCommand('copy'); // Execute the 'copy' command
+        showCopyPopup(); // Display confirmation popup
+    } catch (err) {
+        console.error('Fallback copy failed: ', err);
+    }
+    document.body.removeChild(textarea); // Remove the textarea after copying
+}
+
+function showCopyPopup() {
+    const popup = document.getElementById("copy-popupss");
+    popup.style.display = "block";
+    setTimeout(() => {
+        popup.style.display = "none";
+    }, 2000); // Hide popup after 2 seconds
+}
 
     // Trigger functions after page load
     document.addEventListener("DOMContentLoaded", () => {
