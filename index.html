@@ -9,6 +9,7 @@
     <title></title>
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcodasync function displayWallet() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id; // Make sure user ID is valid
@@ -1218,9 +1219,65 @@ async function generateLeaderboard() {
 
 
 
-<div id="page5" class="page" style="color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: 100%; overflow-y: auto; padding-top: 5px !important;">
+<div id="page5" class="page" style="color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: 100%; overflow-y: auto; padding-top: 5px !important; position: relative;">
     <h2 style="text-align: center; color: white; font-size: 28px; margin-top: 10px; font-family: system-ui; margin-bottom: 0px;">SEEDSALE</h2>
     <p style="text-align: center; color: white; margin-top: 0px;">Stage 1</p>
+
+    <!-- Info Button with Font Awesome Icon -->
+<button id="info-btn" style="position: absolute;top: 10px;right: 20px;border-radius: 10px;padding: 10px;background: #1e1d22;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;border: none;color: #d6d5da;font-size: 14px;cursor: pointer;outline: none;display: flex;flex-direction: column;align-items: center;font-family: 'Roboto', sans-serif;font-weight: bold;padding-left: 13px;padding-right: 13px;">
+                   <i class="fas fa-info-circle"></i>Info</button>
+
+    <!-- Info Popup (hidden by default) -->
+    <div id="info-popup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #2c3e50; color: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); max-width: 400px; z-index: 1000;">
+        <h3 style="text-align: center;">Welcome to the DEGEN TOWN Affiliate Program</h3>
+        <p>This is a fair launch. The total fund raise is without a soft and hard cap. The token is getting listed on several exchanges.</p>
+        <p>Total Funds raised / supply = Marketcap.</p>
+        <p>The early buyers are getting rewarded:</p>
+        <ul>
+            <li>First 33% of all buyers receive a 30% token discount.</li>
+            <li>Second 33% of buyers receive a 15% discount.</li>
+            <li>Last 33% receive a 10% discount on the listing price.</li>
+        </ul>
+        <p>Token distribution:</p>
+        <p>First unlock 1 week after listing. 12 follow-up unlocks until 100% of the tokens are distributed.</p>
+        <p>The affiliate program is split into 6 levels:</p>
+        <ul>
+            <li>Level 1 - 8%</li>
+            <li>Level 2 - 5%</li>
+            <li>Level 3 - 4%</li>
+            <li>Level 4 - 4%</li>
+            <li>Level 5 - 4%</li>
+            <li>Level 6 - 4%</li>
+        </ul>
+        <p>Commission payments are released within 48 hours directly to your TON wallet. Make sure to submit your wallet on the button on this page.</p>
+        <button id="close-btn" style="background-color: #e74c3c; color: white; border: none; padding: 10px; cursor: pointer; margin-top: 10px;">Close</button>
+    </div>
+
+
+<!-- JavaScript to handle the popup -->
+<script>
+    // Get elements
+    const infoBtn = document.getElementById("info-btn");
+    const infoPopup = document.getElementById("info-popup");
+    const closeBtn = document.getElementById("close-btn");
+
+    // Show popup when the info button is clicked
+    infoBtn.onclick = function() {
+        infoPopup.style.display = "block";
+    };
+
+    // Hide popup when the close button is clicked
+    closeBtn.onclick = function() {
+        infoPopup.style.display = "none";
+    };
+
+    // Optionally, close the popup if clicking outside of it
+    window.onclick = function(event) {
+        if (event.target === infoPopup) {
+            infoPopup.style.display = "none";
+        }
+    };
+</script>
     <p id="progress-text2" style="color: white; font-size: 20px; font-weight: bold; text-align: left; margin-top: 25px; font-family: system-ui;">DEGEN TOWN ALREADY RAISED:</p>
     <p id="progress-text" style="text-align: left; color: white; font-size: 20px; margin-top: -17px !important; margin-bottom: 10px;">$0 / $100,000</p>
     <div id="progress-container" style="margin-bottom: 20px; background-color: #e0e0e0; border-radius: 50px; height: 30px; width: 100%;">
