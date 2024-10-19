@@ -1547,41 +1547,46 @@ function truncateAddress(address) {
             return null; // Return null if there's an error
         }
     }
+    
+// Function to format the number with commas
+function formatWithCommas(number) {
+    return number.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+// Function to animate the progress value
+function animateValue(element, start, end, duration) {
+    let startTime = null;
 
-    // Function to animate the progress value
-    function animateValue(element, start, end, duration) {
-        let startTime = null;
+    function step(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
+        const currentValue = start + progress * (end - start);
 
-        function step(timestamp) {
-            if (!startTime) startTime = timestamp;
-            const progress = Math.min((timestamp - startTime) / duration, 1);
-            const currentValue = start + progress * (end - start);
+        // Use formatWithCommas to format the value with commas
+        element.textContent = `$${formatWithCommas(currentValue)} / $100,000`;
 
-            element.textContent = `$${currentValue.toFixed(2)} / $100,000`;
-
-            if (progress < 1) {
-                window.requestAnimationFrame(step);
-            }
-        }
-
-        window.requestAnimationFrame(step);
-    }
-
-    // Function to update the progress bar
-    function updateProgressBar(balanceInUsd) {
-        const goal = 100000;
-        const progressBar = document.getElementById("progress-bar");
-        const progressText = document.getElementById("progress-text");
-
-        if (balanceInUsd !== lastBalanceInUsd && balanceInUsd !== null) {
-            lastBalanceInUsd = balanceInUsd;
-
-            // Animate value and update the progress bar
-            animateValue(progressText, 0, balanceInUsd, 2000);
-            progressBar.style.transition = "width 2000ms ease-in-out";
-            progressBar.style.width = `${Math.min((balanceInUsd / goal) * 100, 100)}%`;
+        if (progress < 1) {
+            window.requestAnimationFrame(step);
         }
     }
+
+    window.requestAnimationFrame(step);
+}
+
+// Function to update the progress bar
+function updateProgressBar(balanceInUsd) {
+    const goal = 100000;
+    const progressBar = document.getElementById("progress-bar");
+    const progressText = document.getElementById("progress-text");
+
+    if (balanceInUsd !== lastBalanceInUsd && balanceInUsd !== null) {
+        lastBalanceInUsd = balanceInUsd;
+
+        // Animate value and update the progress bar
+        animateValue(progressText, 0, balanceInUsd, 2000);
+        progressBar.style.transition = "width 2000ms ease-in-out";
+        progressBar.style.width = `${Math.min((balanceInUsd / goal) * 100, 100)}%`;
+    }
+}
 
     // Main function to fetch data and update the page
     async function updatePage() {
