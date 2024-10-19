@@ -390,6 +390,17 @@ background-color: #111013;
     border-radius: 5px;
     z-index: 1000;
 }
+                #nowithdrawaddress-popup {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+}
 .invite-section {
     cursor: pointer; /* Change cursor to pointer */
 }
@@ -1239,6 +1250,9 @@ async function generateLeaderboard() {
 <div id="withdrawaddress-popup" style="display: none; z-index: 1000; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.88; border-radius: 10px; width: 70%; font-weight: 600;">
     You have successfully changed your withdraw address!
 </div>
+    <div id="nowithdrawaddress-popup" style="display: none; z-index: 1000; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.88; border-radius: 10px; width: 70%; font-weight: 600;">
+    You need to type your withdraw address!
+</div>
 <div style="
     text-align: center;
     background: rgba(46, 44, 55, 0.65);
@@ -1259,7 +1273,7 @@ async function setWithdrawAddress() {
     const withdrawAddress = document.getElementById('withdrawAddress').value; // Get value from the input field
 
     if (!withdrawAddress) {
-        showWithdrawaddressPopup(); // Show the popup instead of returning an error
+        showNoWithdrawaddressPopup(); // Show the popup instead of returning an error
         return;
     }
 
@@ -1274,7 +1288,8 @@ async function setWithdrawAddress() {
 
         const data = await response.json();
         if (response.ok) {
-            alert(data.message); // Success message
+        showWithdrawaddressPopup(); // Show the popup instead of returning an error
+        return;
         } else {
             console.error(data.error || 'Failed to update withdraw address'); // Error handling
             alert(data.error || 'Failed to update withdraw address');
@@ -1287,6 +1302,16 @@ async function setWithdrawAddress() {
 
 function showWithdrawaddressPopup() {
 const checkinPopup = document.getElementById('withdrawaddress-popup');
+checkinPopup.style.display = 'block';
+document.getElementById('daily-checkin').style.opacity = '0.68';
+    // Hide the popup after 2 seconds
+    setTimeout(() => {
+        checkinPopup.style.display = 'none';
+    }, 2500);
+}
+
+           function showNoWithdrawaddressPopup() {
+const checkinPopup = document.getElementById('nowithdrawaddress-popup');
 checkinPopup.style.display = 'block';
 document.getElementById('daily-checkin').style.opacity = '0.68';
     // Hide the popup after 2 seconds
