@@ -1281,6 +1281,50 @@ async function generateLeaderboard() {
         </p>
         <p style="">0 TON</p>
     </div>
+
+<button id="openPopupButton" style="
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+">Open Popup</button>
+
+<!-- Popup Structure -->
+<div id="popup" style="
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+">
+
+    <div style="
+        background-color: #fefefe;
+        margin: 15% auto; /* 15% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%; /* Could be more or less, depending on screen size */
+        max-width: 480px; /* Maximum width for the popup */
+        border-radius: 10px; /* Rounded corners */
+    ">
+        <span id="closePopupButton" style="
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        ">&times;</span>
 <div style="
     text-align: center;
     background: rgba(46, 44, 55, 0.65);
@@ -1293,7 +1337,31 @@ async function generateLeaderboard() {
     <input type="text" id="withdrawAddress" style="margin-bottom: 0px;font-size: 16px;background-color: #ffffff;color: #1e2739;padding: 9px 15px;width: auto;text-align: left;white-space: nowrap;overflow: hidden;display: inline-block;border-top-left-radius: 10px;border-bottom-left-radius: 10px;margin-right: -5px;border: 0px !important;" placeholder="Enter Withdraw Address">
     <button id="setAddressButton" style="background-color: #1f9611;border: none;cursor: pointer;border-bottom-right-radius: 10px;color: white;padding: 0px 15px;border-top-right-radius: 10px;height: 37px;font-size: 16px;">Update</button>
     </div>
-       <script>
+        <!-- You can add more content here -->
+    </div>
+</div>
+<script type="text/javascript">
+    
+
+document.getElementById('openPopupButton').onclick = function() {
+    document.getElementById('popup').style.display = 'block';
+}
+
+document.getElementById('closePopupButton').onclick = function() {
+    document.getElementById('popup').style.display = 'none';
+}
+
+// Optional: Close the popup when clicking anywhere outside of the popup content
+window.onclick = function(event) {
+    const popup = document.getElementById('popup');
+    if (event.target === popup) {
+        popup.style.display = 'none';
+    }
+}
+
+
+</script>
+ <script>
     // Function to set the withdrawal address
 // Function to set the withdraw address
 async function setWithdrawAddress() {
@@ -1386,7 +1454,6 @@ document.getElementById('setAddressButton').addEventListener('click', setWithdra
     // Call the function to load the stored address on page load
     loadWithdrawAddress();
 </script>
-
 
     <div id="copy-popupss" style="display: none;font-size: 17px;z-index: 999;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);background: rgb(30, 29, 34);color: white;padding: 20px;opacity: 0.88;border-radius: 10px;width: 60%;font-weight: 600;text-align: center;">
         Wallet Address copied to clipboard!
