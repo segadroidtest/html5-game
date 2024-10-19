@@ -1232,22 +1232,27 @@ async function generateLeaderboard() {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
+    // Declare fullWalletAddress at a higher scope for visibility
 let fullWalletAddress = "";
 
 // Function to display the wallet address
 async function displayWallet() {
-    console.log("displayWallet function called."); 
+    console.log("displayWallet function called."); // Log to confirm function execution
 
     try {
-        const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
-        const response = await fetch("https://telegram-bot-degen-town.replit.app/api/getWalletAddress", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ userId })
-        });
+const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Replace this with the actual userId you want to send
+const response = await fetch("https://telegram-bot-degen-town.replit.app/api/getWalletAddress", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ userId }) // Send userId in the body
+});
 
+        // Log the response status
         console.log("API response status:", response.status);
 
+        // Check if the response is okay
         if (!response.ok) {
             console.error("Network response was not ok:", response.statusText);
             document.getElementById("wallet-address").textContent = "Error fetching address.";
@@ -1255,12 +1260,13 @@ async function displayWallet() {
         }
 
         const data = await response.json();
-        console.log("Data received from API:", data); 
+        console.log("Data received from API:", data); // Log the received data
 
+        // Check if walletAddress exists in the data
         if (data.walletAddress) {
-            fullWalletAddress = data.walletAddress;
-            document.getElementById("wallet-address").textContent = truncateAddress(fullWalletAddress);
-            new QRCode(document.getElementById("qrcode"), { text: fullWalletAddress, width: 170, height: 170 });
+        fullWalletAddress = data.walletAddress;
+        document.getElementById("wallet-address").textContent = truncateAddress(fullWalletAddress);
+        new QRCode(document.getElementById("qrcode"), { text: fullWalletAddress, width: 170, height: 170 });
         } else {
             console.error("No wallet address found in API response.");
             document.getElementById("wallet-address").textContent = "No address found.";
@@ -1271,38 +1277,57 @@ async function displayWallet() {
     }
 }
 
+
 // Function to truncate wallet address
 function truncateAddress(address) {
     if (address.length > 10) {
         return address.slice(0, 10) + "..." + address.slice(-10);
     }
-    return address;
+    return address; // Return the original address if it's not long
 }
 
-// Function to fetch balance in TON
-async function fetchTonBalance(address) {
+
+const addresses = [
+    "EQA7C-qyxME_WTuzA_8WgeBm7pStGyI0toHMpmaK23k69fuj",
+    "EQAKIJF6MBL2BtY2cuqvaq5U-QaeVSd6lukEz3UdUp-Fu7a1",
+    "UQAQVKfyMsndMNjCBtA5rtWNkxTtUlWgH1zmZDYQgrU8LOe2",
+    // Add all 100 addresses here
+];
+
+const apiEndpoint = "https://toncenter.com/api/v2/getAddressInformation"; // TONCenter API endpoint
+const apiKey = "a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf"; // You can add your API key if needed
+
+// Function to fetch balance for an address
+async function fetchBalance(address) {
     try {
-        const response = await fetch(`https://toncenter.com/api/v2/getAddressBalance?address=${address}`);
+        const response = await fetch(`${apiEndpoint}?address=${address}&api_key=${apiKey}`);
         const data = await response.json();
-        if (data && data.result) {
-            return parseFloat(data.result) / 1e9; // Convert nanoTON to TON
-        } else {
-            console.error("Failed to fetch balance:", data);
-            return 0;
-        }
+        return parseFloat(data.result.balance) / 1000000000; // Convert from nanotons to tons
     } catch (error) {
-        console.error("Error fetching balance:", error);
+        console.error(`Error fetching balance for ${address}:`, error);
         return 0;
     }
 }
 
-// Function to fetch TON to USD rate
+// Function to calculate total balance for all addresses
+async function calculateTotalBalance() {
+    let totalBalance = 0;
+
+    for (const address of addresses) {
+        const balance = await fetchBalance(address);
+        totalBalance += balance;
+    }
+
+    return totalBalance;
+}
+
+// Utility function for fetching TON to USD rate
 async function fetchTonToUsdRate() {
     try {
         const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd');
         const data = await response.json();
         if (data && data['the-open-network'] && data['the-open-network'].usd) {
-            return data['the-open-network'].usd;
+            return data['the-open-network'].usd; // TON to USD exchange rate
         } else {
             console.error("Failed to fetch TON to USD rate");
             return 0;
@@ -1313,15 +1338,15 @@ async function fetchTonToUsdRate() {
     }
 }
 
-// Function to animate value counting
+// Counting animation function
 function animateValue(element, start, end, duration) {
     let startTime = null;
 
     function step(timestamp) {
         if (!startTime) startTime = timestamp;
-        const progress = Math.min((timestamp - startTime) / duration, 1);
+        const progress = Math.min((timestamp - startTime) / duration, 1); // Normalize progress
         const currentValue = start + progress * (end - start);
-        element.textContent = `$${currentValue.toFixed(2)} / $100,000`;
+        element.textContent = `$${currentValue.toFixed(2)} / $100,000`; // Update the text
         if (progress < 1) {
             window.requestAnimationFrame(step);
         }
@@ -1330,86 +1355,70 @@ function animateValue(element, start, end, duration) {
     window.requestAnimationFrame(step);
 }
 
-// Update the progress bar and progress text
+// Progress bar update function
 function updateProgressBar(balanceInUsd) {
     const goal = 100000; // $100,000 goal
     const progressBar = document.getElementById("progress-bar");
     const progressText = document.getElementById("progress-text");
 
-    const duration = 2000; // 2 seconds
+    const duration = 2000; // Animation duration in milliseconds
 
-    animateValue(progressText, 0, balanceInUsd, duration);
+    // Animate counting up from $0 to balanceInUsd
+    animateValue(progressText, 0, balanceInUsd, duration, progressBar);
 
+    // Animate progress bar width
     const percentage = (balanceInUsd / goal) * 100;
     progressBar.style.transition = `width ${duration}ms ease-in-out`;
-    progressBar.style.width = Math.min(percentage, 100) + "%"; // Cap at 100%
+    progressBar.style.width = Math.min(percentage, 100) + "%"; // Ensure it doesn't exceed 100%
 }
 
-// Fetch all addresses and update the page
+// Main function to fetch data and update the page
 async function updatePage() {
-    try {
-        const response = await fetch("https://telegram-bot-degen-town.replit.app/addresses");
-        
-        if (!response.ok) {
-            console.log("Addresses:", addresses);
-        }
+    const totalBalanceInTon = await calculateTotalBalance(); // Fetch total balance for all addresses
+    const tonToUsdRate = await fetchTonToUsdRate();
 
-        const addresses = await response.json();
-        console.log("Addresses:", addresses);
-
-        const tonToUsdRate = await fetchTonToUsdRate();
-        let totalBalanceInUsd = 0;
-
-        // Fetch balance for each address
-        for (let address of addresses) {
-            const balanceInTon = await fetchTonBalance(address);
-            totalBalanceInUsd += balanceInTon * tonToUsdRate;
-        }
-
-        // Update the progress bar and text
-        updateProgressBar(totalBalanceInUsd);
-    } catch (error) {
-        console.error("Error fetching addresses or updating page:", error);
-        document.getElementById("progress-text").textContent = "Error fetching addresses.";
-        // Optionally: Show more detailed error message
-        // alert(error.message);
-    }
+    const totalBalanceInUsd = totalBalanceInTon * tonToUsdRate; // Convert balance to USD
+    updateProgressBar(totalBalanceInUsd);
 }
 
-
-// Trigger the updatePage function when the page loads
+// Trigger the main function when the page loads
 document.addEventListener("DOMContentLoaded", () => {
-    displayWallet(); // Fetch and display wallet address
-    updatePage();    // Fetch and display balances
+    updatePage();
 });
 
-function copyAddress() {
-    const walletAddress = fullWalletAddress;
 
+
+function copyAddress() {
+    const walletAddress = fullWalletAddress; // Get the full wallet address
+
+    // Try the Clipboard API
     if (navigator.clipboard) {
         navigator.clipboard.writeText(walletAddress)
-            .then(() => showCopyPopup())
+            .then(() => {
+                showCopyPopup(); // Display confirmation popup
+            })
             .catch(err => {
                 console.error("Failed to copy using Clipboard API: ", err);
-                fallbackCopyText(walletAddress);
+                fallbackCopyText(walletAddress); // Use fallback if Clipboard API fails
             });
     } else {
-        fallbackCopyText(walletAddress);
+        fallbackCopyText(walletAddress); // Use fallback for unsupported browsers
     }
 }
 
 function fallbackCopyText(text) {
+    // Create a temporary textarea to hold the text
     const textarea = document.createElement('textarea');
     textarea.value = text;
     document.body.appendChild(textarea);
-    textarea.select();
+    textarea.select(); // Select the text in the textarea
     try {
-        document.execCommand('copy');
-        showCopyPopup();
+        document.execCommand('copy'); // Execute the 'copy' command
+        showCopyPopup(); // Display confirmation popup
     } catch (err) {
         console.error('Fallback copy failed: ', err);
     }
-    document.body.removeChild(textarea);
+    document.body.removeChild(textarea); // Remove the textarea after copying
 }
 
 function showCopyPopup() {
@@ -1417,21 +1426,31 @@ function showCopyPopup() {
     popup.style.display = "block";
     setTimeout(() => {
         popup.style.display = "none";
-    }, 2000);
+    }, 2000); // Hide popup after 2 seconds
 }
 
-const page5 = document.getElementById('page5');
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            console.log('Page5 is visible. Fetching data...');
-            updatePage();
-            observer.unobserve(page5);
-        }
-    });
-}, { threshold: 0.5 });
+// Call the displayWallet function when the page loads
+window.onload = function() {
+    displayWallet(); // Fetch and display the wallet address
+};
 
-observer.observe(page5);
+
+    // Function to copy the address
+    const page5 = document.getElementById('page5');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                console.log('Page5 is visible. Fetching data...');
+                updatePage();
+                observer.unobserve(page5); 
+            }
+        });
+    }, { threshold: 0.5 });
+
+    // Start observing page5
+    observer.observe(page5);
+
 
 </script>
 
