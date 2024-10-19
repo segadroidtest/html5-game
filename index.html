@@ -1226,6 +1226,23 @@ async function generateLeaderboard() {
         </p>
     </div>
 
+
+
+    <h1>Set Withdraw Address</h1>
+    <input type="text" id="withdrawAddress" placeholder="Enter Withdraw Address">
+    <button id="setAddressButton">Set Withdraw Address</button>
+
+    <script>
+        document.getElementById('setAddressButton').addEventListener('click', () => {
+            const userId = 'yourUserIdHere'; // Replace with the actual user ID
+            const withdrawAddress = document.getElementById('withdrawAddress').value;
+            setWithdrawAddress(userId, withdrawAddress);
+        });
+    </script>
+
+
+
+
     <div id="copy-popupss" style="display: none;font-size: 17px;z-index: 999;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);background: rgb(30, 29, 34);color: white;padding: 20px;opacity: 0.88;border-radius: 10px;width: 60%;font-weight: 600;text-align: center;">
         Wallet Address copied to clipboard!
     </div>
@@ -1408,6 +1425,58 @@ function showCopyPopup() {
         popup.style.display = "none";
     }, 2000); // Hide popup after 2 seconds
 }
+
+
+// Function to set the withdrawal address
+async function setWithdrawAddress(userId, withdrawAddress) {
+  try {
+    const response = await fetch('https://telegram-bot-degen-town.replit.app/api/user/setWithdrawAddress', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId, withdrawAddress }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      console.log(data.message); // Success message
+    } else {
+      console.error(data.error || 'Failed to set withdraw address'); // Error handling
+    }
+  } catch (error) {
+    console.error('Error:', error); // General error handling
+  }
+}
+
+// Function to get the current withdrawal address
+async function getWithdrawAddress(userId) {
+  try {
+    const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/getWithdrawAddress?userId=${userId}`, {
+      method: 'GET',
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      console.log('Current withdraw address:', data.withdrawAddress); // Log the address
+      return data.withdrawAddress; // Return the withdraw address
+    } else {
+      console.error(data.message || 'Failed to fetch withdraw address'); // Error handling
+    }
+  } catch (error) {
+    console.error('Error:', error); // General error handling
+  }
+}
+
+// Example usage
+const userId = 'yourUserIdHere'; // Replace with the actual user ID
+
+// To set a new withdraw address
+const newWithdrawAddress = '0xYourNewWithdrawAddressHere'; // Replace with the actual address
+setWithdrawAddress(userId, newWithdrawAddress);
+
+// To get the current withdraw address
+getWithdrawAddress(userId);
 
     // Trigger functions after page load
     document.addEventListener("DOMContentLoaded", () => {
