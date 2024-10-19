@@ -1270,51 +1270,71 @@ async function generateLeaderboard() {
         }
     }
 
-    // Utility function for TON to USD conversion rate
-    async function fetchTonToUsdRate() {
-        try {
-            const response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd");
-            const data = await response.json();
-            return data?.["the-open-network"]?.usd || 0;
-        } catch (error) {
-            console.error("Error fetching TON to USD rate:", error);
-            return 0;
+        let lastBalanceInUsd = 0; // Store the last known balance
+
+        // Function to fetch TON to USD rate from CoinGecko API
+        async function fetchTonToUsdRate() {
+            const url = 'https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd';
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status}`);
+                }
+                const data = await response.json();
+                return data["the-open-network"].usd;
+            } catch (error) {
+                console.error("Error fetching TON to USD rate:", error);
+                return null; // Return null if there's an error
+            }
         }
-    }
 
-    // Progress bar and text animation
-    function animateValue(element, start, end, duration) {
-        let startTime = null;
-        function step(timestamp) {
-            if (!startTime) startTime = timestamp;
-            const progress = Math.min((timestamp - startTime) / duration, 1);
-            const currentValue = start + progress * (end - start);
-            element.textContent = `$${currentValue.toFixed(2)} / $100,000`;
-            if (progress < 1) window.requestAnimationFrame(step);
+        // Function to animate the progress value
+        function animateValue(element, start, end, duration) {
+            let startTime = null;
+
+            function step(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const progress = Math.min((timestamp - startTime) / duration, 1);
+                const currentValue = start + progress * (end - start);
+
+                element.textContent = `$${currentValue.toFixed(2)} / $100,000`;
+
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            }
+
+            window.requestAnimationFrame(step);
         }
-        window.requestAnimationFrame(step);
-    }
 
-    // Progress bar update
-    function updateProgressBar(balanceInUsd) {
-        const goal = 100000;
-        const progressBar = document.getElementById("progress-bar");
-        const progressText = document.getElementById("progress-text");
+        // Function to update the progress bar
+        function updateProgressBar(balanceInUsd) {
+            const goal = 100000;
+            const progressBar = document.getElementById("progress-bar");
+            const progressText = document.getElementById("progress-text");
 
-        // Animate value and progress bar width
-        animateValue(progressText, 0, balanceInUsd, 2000);
-        progressBar.style.transition = "width 2000ms ease-in-out";
-        progressBar.style.width = `${Math.min((balanceInUsd / goal) * 100, 100)}%`;
-    }
+            if (balanceInUsd !== lastBalanceInUsd && balanceInUsd !== null) {
+                lastBalanceInUsd = balanceInUsd;
+
+                // Animate value and update the progress bar
+                animateValue(progressText, 0, balanceInUsd, 2000);
+                progressBar.style.transition = "width 2000ms ease-in-out";
+                progressBar.style.width = `${Math.min((balanceInUsd / goal) * 100, 100)}%`;
+            }
+        }
 
     // Main function to fetch data and update the page
     async function updatePage() {
         const addresses = ["UQCPLYQOwF0Rj5hFmgV7H8q1NcV7k3EiK-FWZ_7pMs6vUz6z"];
         const totalBalanceInTon = (await Promise.all(addresses.map(fetchBalance))).reduce((a, b) => a + b, 0);
-        const tonToUsdRate = await fetchTonToUsdRate();
         const totalBalanceInUsd = totalBalanceInTon * tonToUsdRate;
+        const tonRate = await fetchTonToUsdRate();
+            if (tonRate !== null) {
+                const balanceTon = 1000; // Assume we have 1000 TON (you can change this value)
+                const balanceInUsd = balanceTon * tonRate;
+                updateProgressBar(balanceInUsd);
+            }
 
-        updateProgressBar(totalBalanceInUsd);
     }
 
     // Call the update function periodically
