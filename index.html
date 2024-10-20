@@ -995,12 +995,11 @@ document.addEventListener("DOMContentLoaded", async function() {
   async function fetchReferralData(userId) {
     try {
       const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/referrals/${userId}`);
-      if (!response.ok) throw new Error("Error fetching data");
+            if (!response.ok) throw new Error("Error fetching data");
 
-      const userData = await response.json();
-      console.log("User data:", userData); // Log user data for debugging
-
-      document.getElementById("points-balance").textContent = userData.totalPoints || 0;
+            const userData = await response.json();
+            document.getElementById("referrals-count").textContent = userData.totalReferrals || 0;
+            document.getElementById("invite-points-earned").textContent = userData.totalPoints || 0;
 
             const referralList = document.getElementById("referral-list");
 
