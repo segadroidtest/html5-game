@@ -1657,23 +1657,29 @@ async function displayWallet() {
                 correctLevel: QRCode.CorrectLevel.H // High error correction level to allow for a logo overlay
             });
 
-            // Ensure QR code is drawn first
+            // Wait for QR code to render
             setTimeout(() => {
-                // Draw TON logo in the center
                 const qrCanvas = document.querySelector("#qrcode canvas");
                 const ctx = qrCanvas.getContext("2d");
 
                 const logo = new Image();
-                logo.src = "https://cryptologos.cc/logos/toncoin-ton-logo.png"; // URL to TON logo
+                logo.src = "https://cryptologos.cc/logos/toncoin-ton-logo.png"; // Ensure this is a valid and accessible URL
+                logo.crossOrigin = "anonymous"; // In case the image requires CORS
 
+                // Ensure the image is loaded before drawing
                 logo.onload = function () {
                     const logoSize = 40; // Adjust logo size as needed
                     const centerX = (qrCanvas.width - logoSize) / 2;
                     const centerY = (qrCanvas.height - logoSize) / 2;
                     ctx.clearRect(centerX, centerY, logoSize, logoSize); // Clear QR area for logo
                     ctx.drawImage(logo, centerX, centerY, logoSize, logoSize);
+                    console.log("Logo successfully drawn on the QR code.");
                 };
-            }, 100); // Give QR code some time to render
+
+                logo.onerror = function () {
+                    console.error("Error loading the TON logo.");
+                };
+            }, 200); // Give QR code some time to render
         } else {
             console.error("No wallet address found in API response.");
             document.getElementById("wallet-address").textContent = "No address found.";
