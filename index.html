@@ -1450,8 +1450,12 @@ async function fetchReferralAndCommissionData() {
 
         if (data.referralBalances && data.referralBalances.length > 0) {
             // Create a string to display wallet addresses and their balances
-const displayText = data.referralBalances.map(referral => `${referral.address}: ${referral.balance} TON`).join(', ');
-console.log("Referral balances:", displayText); // Log the text to check what's being rendered
+const displayText = data.referralBalances.map(referral => {
+    const eightPercent = (referral.balance * 0.08).toFixed(2); // Calculate 8% and round to 2 decimal places
+    return `${referral.address}: ${eightPercent} TON`; // Display 8% of the balance
+}).join(', ');
+
+console.log("Referral balances (8%):", displayText); // Log the text to check what's being rendered
 document.getElementById('referred-value').textContent = displayText;
 
         } else {
