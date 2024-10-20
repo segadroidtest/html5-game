@@ -1404,16 +1404,19 @@ async function generateLeaderboard() {
 
 
 <script>
-    async function getBalance(walletAddress) {
+// Function to fetch balance from the wallet address
+async function getBalance(walletAddress) {
     try {
-        // Your logic to get balance goes here, e.g., calling an external API
-        const response = await someAPICall(walletAddress);
-        return response.balance; // Adjust based on actual response structure
+        // Replace this with actual logic to get the balance from a service
+        const response = await fetch(`https://telegram-bot-degen-town.replit.app/getBalance?wallet=${walletAddress}`);
+        const data = await response.json();
+        return data.balance; // Adjust according to actual response structure
     } catch (error) {
         console.error("Error fetching balance for address:", walletAddress, error);
-        return 0; // Return a default value in case of an error
+        return 0; // Return a default value if there's an error
     }
 }
+
 
 async function fetchReferralAndCommissionData() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Dynamically get the user ID
