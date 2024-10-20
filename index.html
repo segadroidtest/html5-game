@@ -1487,7 +1487,8 @@ window.onload = fetchReferralAndCommissionData;
     cursor: pointer;
     border-radius: 15px;
     width: 100%;
-    font-weight: bold;margin-bottom: 50px;
+    font-weight: bold;
+    margin-bottom: 50px;
 ">Add Withdrawal Wallet</button>
 
 <!-- Popup Structure -->
@@ -1502,8 +1503,8 @@ window.onload = fetchReferralAndCommissionData;
     <div style="
          padding: 0px;
          width: 80%;
-         max-width: 480px; /* Maximum width for the popup */
-         border-radius: 10px; /* Rounded corners */
+         max-width: 480px;
+         border-radius: 10px;
          height: auto;
          z-index: 999;
          position: fixed;
@@ -1512,21 +1513,13 @@ window.onload = fetchReferralAndCommissionData;
          transform: translate(-50%, -50%);
     ">
         <span id="closePopupButton" style="
-color: white; float: right; font-size: 28px; font-weight: bold; cursor: pointer; background: #c02b2b; padding-bottom: 7px; padding-left: 10px; border-top-right-radius: 10px; padding-top: 3px; padding-right: 10px; margin-top: 3px; margin-right: 1px;
+            color: white; float: right; font-size: 28px; font-weight: bold; cursor: pointer; background: #c02b2b; padding-bottom: 7px; padding-left: 10px; border-top-right-radius: 10px;
         ">×</span>
 
-        <div style="
-            text-align: center;
-            background: #383747;
-            margin-bottom: 0px;
-            height: 160px;
-            border-radius: 10px;
-            border: 1px solid #101013;
-        ">
-            <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;">Withdrawal Wallet</p>
-    
-            <input type="text" id="withdrawAddress" style="margin-bottom: 10px !important;margin-bottom: 0px;font-size: 16px;background-color: #ffffff;color: #1e2739;padding: 9px 15px;text-align: left;white-space: nowrap;display: inline-block;border-radius: 10px;border: 0px !important;width: 80%;" placeholder="Enter Withdraw Address">
-            <button id="setAddressButton" style="background-color: #1f9611;border: none;cursor: pointer;border-radius: 10px;color: white;height: 37px;font-size: 16px;font-weight:bold;">Update</button>
+        <div style="text-align: center; background: #383747; margin-bottom: 0px; height: 160px; border-radius: 10px; border: 1px solid #101013;">
+            <p style="text-align: center; margin-top: 0px; color: #ffffff; font-size: 17px; font-weight: 600; background: #1e1d22; padding-top: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px; padding-bottom: 14px;">Withdrawal Wallet</p>
+            <input type="text" id="withdrawAddress" style="font-size: 16px; background-color: #ffffff; color: #1e2739; padding: 9px 15px; border-radius: 10px; width: 80%;" placeholder="Enter Withdraw Address">
+            <button id="setAddressButton" style="background-color: #1f9611; border: none; cursor: pointer; border-radius: 10px; color: white; height: 37px; font-size: 16px; font-weight: bold;">Update</button>
         </div>
     </div>
 </div>
@@ -1548,98 +1541,59 @@ window.onclick = function(event) {
     }
 }
 </script>
- <script>
-    // Function to set the withdrawal address
-// Function to set the withdraw address
+<script>
 async function setWithdrawAddress() {
-    const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Get user ID
-    const withdrawAddress = document.getElementById('withdrawAddress').value; // Get value from the input field
+    const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
+    const withdrawAddress = document.getElementById('withdrawAddress').value;
 
     if (!withdrawAddress) {
-        showNoWithdrawaddressPopup(); // Show the popup instead of returning an error
+        showNoWithdrawaddressPopup();
         return;
     }
 
     try {
         const response = await fetch('https://telegram-bot-degen-town.replit.app/api/user/setWithdrawAddress', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ userId, withdrawAddress }), // Send userId and new withdrawAddress
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId, withdrawAddress })
         });
 
         const data = await response.json();
         if (response.ok) {
-        showWithdrawaddressPopup(); // Show the popup instead of returning an error
-        return;
+            showWithdrawaddressPopup();
+            document.getElementById('openPopupButton').textContent = "Edit Withdrawal Wallet"; // Change button text
         } else {
-            console.error(data.error || 'Failed to update withdraw address'); // Error handling
-            alert(data.error || 'Failed to update withdraw address');
+            console.error(data.error || 'Failed to update withdraw address');
         }
     } catch (error) {
-        console.error('Error:', error); // General error handling
-        alert('An error occurred while updating the address.');
+        console.error('Error:', error);
     }
 }
 
-function showWithdrawaddressPopup() {
-const checkinPopup = document.getElementById('withdrawaddress-popup');
-checkinPopup.style.display = 'block';
-document.getElementById('daily-checkin').style.opacity = '0.68';
-    // Hide the popup after 2 seconds
-    setTimeout(() => {
-        checkinPopup.style.display = 'none';
-    }, 2000);
+async function loadWithdrawAddress() {
+    const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
+    try {
+        const response = await fetch('https://telegram-bot-degen-town.replit.app/api/user/getWithdrawAddress', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId })
+        });
+
+        const data = await response.json();
+        if (response.ok && data.withdrawAddress) {
+            document.getElementById('withdrawAddress').value = data.withdrawAddress;
+            document.getElementById('openPopupButton').textContent = "Edit Withdrawal Wallet"; // Change button text if address exists
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
 }
 
-           function showNoWithdrawaddressPopup() {
-const checkinPopup = document.getElementById('nowithdrawaddress-popup');
-checkinPopup.style.display = 'block';
-document.getElementById('daily-checkin').style.opacity = '0.68';
-    // Hide the popup after 2 seconds
-    setTimeout(() => {
-        checkinPopup.style.display = 'none';
-    }, 2000);
-}
-           
-// Attach the event listener to the button
+// Event listeners
 document.getElementById('setAddressButton').addEventListener('click', setWithdrawAddress);
 
-    // Function to load the stored address from the server
-    async function loadWithdrawAddress() {
-        const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Get user ID
-        try {
-            const response = await fetch('https://telegram-bot-degen-town.replit.app/api/user/getWithdrawAddress', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ userId }),
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-                if (data.withdrawAddress) {
-                    document.getElementById('withdrawAddress').value = data.withdrawAddress; // Set the input value to the stored address
-                }
-            } else {
-                console.error(data.error || 'Failed to retrieve withdraw address'); // Error handling
-            }
-        } catch (error) {
-            console.error('Error:', error); // General error handling
-        }
-    }
-
-    // Event listener for the button click
-    document.getElementById('setAddressButton').addEventListener('click', () => {
-        const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Get user ID from Telegram
-        const withdrawAddress = document.getElementById('withdrawAddress').value;
-        setWithdrawAddress(userId, withdrawAddress);
-    });
-
-    // Call the function to load the stored address on page load
-    loadWithdrawAddress();
+// Load withdrawal address on page load
+loadWithdrawAddress();
 </script>
 
     <div id="copy-popupss" style="display: none; font-size: 17px; z-index: 999; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.88; border-radius: 10px; width: 60%; font-weight: 600; text-align: center;">
