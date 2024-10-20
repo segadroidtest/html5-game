@@ -1432,7 +1432,7 @@ async function fetchReferralAndCommissionData() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Dynamically get the user ID
 
     try {
-        // Fetch referral wallet balances
+        // Fetch referral wallet balances and total balance
         const response = await fetch('https://telegram-bot-degen-town.replit.app/api/referral-wallet-addresses', {
             method: 'POST',
             headers: {
@@ -1446,25 +1446,17 @@ async function fetchReferralAndCommissionData() {
         }
 
         const data = await response.json();
-        console.log('Referral balances:', data); // Log the data to check it
+        console.log('Total referral balance:', data.totalBalance); // Log the total balance
 
-        if (data.referralBalances && data.referralBalances.length > 0) {
-            // Create a string to display wallet addresses and their balances
-const displayText = data.referralBalances.map(referral => {
-    const eightPercent = (referral.balance * 0.08).toFixed(2); // Calculate 8% and round to 2 decimal places
-    return `${referral.address}: ${eightPercent} TON`; // Display 8% of the balance
-}).join(', ');
+        // Calculate 8% of the total balance
+        const totalEightPercent = (data.totalBalance * 0.08).toFixed(2);
 
-console.log("Referral balances (8%):", displayText); // Log the text to check what's being rendered
-document.getElementById('referred-value').textContent = displayText;
-
-        } else {
-            document.getElementById('referred-value').textContent = "No referral wallet balances found.";
-        }
+        // Display the total 8% in the "Top Referred so far" section
+        document.getElementById('referred-value').textContent = `${totalEightPercent} TON`;
 
     } catch (error) {
         console.error('Error fetching data:', error);
-        document.getElementById('referred-value').textContent = "Error fetching wallet balances.";
+        document.getElementById('referred-value').textContent = "Error fetching total referral balance.";
     }
 }
 
