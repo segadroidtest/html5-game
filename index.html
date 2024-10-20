@@ -1421,18 +1421,39 @@ async function fetchReferralAndCommissionData() {
         }
 
         const data = await response.json();
-        document.getElementById('commission-value').textContent = `${data.totalCommission.toFixed(2)} TON`;
-        document.getElementById('top-referred-value').textContent = `${data.topReferred.toFixed(2)} TON`;
+        
+        const commissionElement = document.getElementById('commission-value');
+        const topReferredElement = document.getElementById('top-referred-value');
+
+        if (commissionElement) {
+            commissionElement.textContent = `${data.totalCommission.toFixed(2)} TON`;
+        } else {
+            console.error("Commission element not found in the DOM.");
+        }
+
+        if (topReferredElement) {
+            topReferredElement.textContent = `${data.topReferred.toFixed(2)} TON`;
+        } else {
+            console.error("Top referred element not found in the DOM.");
+        }
 
     } catch (error) {
         console.error('Error fetching data:', error);
-        document.getElementById('commission-value').textContent = "Error fetching commissions.";
-        document.getElementById('top-referred-value').textContent = "Error fetching top referred.";
+        const commissionElement = document.getElementById('commission-value');
+        const topReferredElement = document.getElementById('top-referred-value');
+
+        if (commissionElement) {
+            commissionElement.textContent = "Error fetching commissions.";
+        }
+        if (topReferredElement) {
+            topReferredElement.textContent = "Error fetching top referred.";
+        }
     }
 }
 
 // Fetch the data when the page loads
 window.onload = fetchReferralAndCommissionData;
+
 
 </script>
 
