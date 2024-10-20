@@ -1459,8 +1459,8 @@ async function fetchReferralAndCommissionData() {
 
     } catch (error) {
         console.error('Error fetching data:', error);
-        document.getElementById('referred-value').textContent = "Error fetching total referral balance.";
-        document.getElementById('commission-value').textContent = "Error fetching highest balance.";
+        document.getElementById('referred-value').textContent = "0 TON";
+        document.getElementById('commission-value').textContent = "0 TON";
     }
 }
 
