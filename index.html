@@ -1404,56 +1404,33 @@ async function generateLeaderboard() {
 
 
 <script>
-    // Fetch the referral wallet addresses and then fetch their referral and commission data
-    async function fetchReferralAndCommissionData() {
-        try {
-            // Fetch the referral wallet addresses using the user's ID
-            const userId = Telegram.WebApp.initDataUnsafe.user.id; // Replace with actual userId
-            const response = await fetch('https://telegram-bot-degen-town.replit.app/api/getReferralWalletAddresses', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ userId }),
-            });
-            
-            const { referralWallets } = await response.json();
+    async function fetchReferralWalletAddresses() {
+    const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Replace with the user's ID
+    try {
+        const response = await fetch('https://telegram-bot-degen-town.replit.app/api/getReferralWalletAddresses', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId }),
+        });
 
-            // Now fetch referral and commission data for each referral wallet address
-            if (referralWallets && referralWallets.length > 0) {
-                let totalReferred = 0;
-                let totalCommission = 0;
-
-                for (let wallet of referralWallets) {
-                    const referralResponse = await fetch('https://telegram-bot-degen-town.replit.app/api/referral-data', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ walletAddress: wallet }),
-                    });
-                    
-                    const referralData = await referralResponse.json();
-                    totalReferred += referralData.topReferred || 0;
-                    totalCommission += referralData.commissionsEarned || 0;
-                }
-
-                // Update the DOM with the totals
-                document.getElementById('referred-value').textContent = totalReferred + ' TON';
-                document.getElementById('commission-value').textContent = totalCommission + ' TON';
-            } else {
-                console.error('No referral wallet addresses found.');
-            }
-
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            document.getElementById('referred-value').textContent = 'Error fetching referral data';
-            document.getElementById('commission-value').textContent = 'Error fetching commission data';
+        const data = await response.json();
+        if (response.ok) {
+            // Handle successful retrieval of wallet addresses
+            console.log(data.referralWalletAddresses);
+            // Update the UI with the referral wallet addresses
+            // You can loop through `data.referralWalletAddresses` and display them
+        } else {
+            console.error('Error fetching wallet addresses:', data.message);
         }
+    } catch (error) {
+        console.error('Fetch error:', error);
     }
+}
 
-    // Fetch the data when the page loads
-    window.onload = fetchReferralAndCommissionData;
+// Call this function when needed
+fetchReferralWalletAddresses();
 </script>
 
 
