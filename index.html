@@ -1404,6 +1404,30 @@ async function generateLeaderboard() {
 
 
 <script>
+
+    async function getBalance(walletAddress) {
+    try {
+        console.log(`Fetching balance for wallet address: ${walletAddress}`);
+        const apiEndpoint = "https://toncenter.com/api/v2/getAddressInformation";
+        const response = await fetch(`${apiEndpoint}?address=${walletAddress}&api_key=a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf`);
+        if (!response.ok) {
+            throw new Error(`Error fetching balance for ${walletAddress}: ${response.statusText}`);
+        }
+        const data = await response.json();
+        console.log("API response for balance data:", data); // Log the response for debugging
+
+        // Convert the balance from nanoton to TON and return
+        const balanceInTON = parseFloat(data.result.balance) / 1000000000;
+        return balanceInTON || 0; // Ensure the balance is returned, default to 0 if undefined
+
+    } catch (error) {
+        console.error(`Error fetching balance for ${walletAddress}:`, error);
+        return 0; // Return 0 in case of error
+    }
+}
+
+
+    
 async function fetchReferralAndCommissionData() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Dynamically get the user ID
 
@@ -1426,8 +1450,10 @@ async function fetchReferralAndCommissionData() {
 
         if (data.referralBalances && data.referralBalances.length > 0) {
             // Create a string to display wallet addresses and their balances
-            const displayText = data.referralBalances.map(referral => `${referral.address}: ${referral.balance} TON`).join(', ');
-            document.getElementById('referred-value').textContent = displayText;
+const displayText = data.referralBalances.map(referral => `${referral.address}: ${referral.balance} TON`).join(', ');
+console.log("Referral balances:", displayText); // Log the text to check what's being rendered
+document.getElementById('referred-value').textContent = displayText;
+
         } else {
             document.getElementById('referred-value').textContent = "No referral wallet balances found.";
         }
