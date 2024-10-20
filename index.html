@@ -1451,10 +1451,10 @@ async function fetchReferralAndCommissionData() {
         const highestEightPercent = (data.highestBalance * 0.08).toFixed(2);
         
         // Display the 8% of the total balance in the "Top Referred so far" section
-        document.getElementById('commission-value').textContent = `${highestEightPercent} TON`;
+        document.getElementById('commission-value').textContent = `${data.highestBalance.toFixed(2)} TON`;
 
         // Display the highest balance in the "Commissions Earned" section
-        document.getElementById('referred-value').textContent = `${data.highestBalance.toFixed(2)} TON`;
+        document.getElementById('referred-value').textContent = `${totalEightPercent} TON`;
         
     } catch (error) {
         console.error('Error fetching data:', error);
