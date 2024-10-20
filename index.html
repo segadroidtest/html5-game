@@ -1452,11 +1452,11 @@ async function fetchReferralAndCommissionData() {
         const totalEightPercent = (data.totalBalance * 0.08).toFixed(2);
 
         // Display the total 8% in the "Top Referred so far" section
-        document.getElementById('referred-value').textContent = `${totalEightPercent} TON`;
+        document.getElementById('commission-value').textContent = `${totalEightPercent} TON`;
 
     } catch (error) {
         console.error('Error fetching data:', error);
-        document.getElementById('referred-value').textContent = "Error fetching total referral balance.";
+        document.getElementById('commission-value').textContent = "Error fetching total referral balance.";
     }
 }
 
