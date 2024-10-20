@@ -1385,7 +1385,7 @@ async function generateLeaderboard() {
         <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;padding-left: 0px;padding-right: 0px;">
             Top Referred so far
         </p>
-        <p style="font-weight: 700;">0 TON</p>
+        <p style="font-weight: 700;" id="referred-value">Loading referred value...</p>
     </div>
 
     <div style="
@@ -1399,7 +1399,7 @@ async function generateLeaderboard() {
         <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;padding-left: 0px;padding-right: 0px;">
             Commissions Earned
         </p>
-        <p style="font-weight: 700;">0 TON</p>
+        <p id="commission-value" style="font-weight: 700;">Loading commission value...</p>
     </div>
 
 
@@ -1407,18 +1407,52 @@ async function generateLeaderboard() {
     // Fetching data from the backend and updating the HTML dynamically
     async function fetchReferralAndCommissionData() {
         try {
-            const response = await fetch('https://telegram-bot-degen-town.replit.app/api/referral-data'); // Replace with actual backend endpoint
+            // Fetch data from the backend API
+            const response = await fetch('https://telegram-bot-degen-town.replit.app/api/referral-data');
+            
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            // Parse the JSON data
             const data = await response.json();
-            document.getElementById('referred-value').textContent = data.topReferred + ' TON';
-            document.getElementById('commission-value').textContent = data.commissionsEarned + ' TON';
+            
+            // Log the data to ensure it's being fetched correctly
+            console.log('Fetched data:', data);
+
+            // Check if elements exist before updating them
+            const referredElement = document.getElementById('referred-value');
+            const commissionElement = document.getElementById('commission-value');
+
+            if (referredElement) {
+                referredElement.textContent = data.topReferred + ' TON';
+            } else {
+                console.error("Element with id 'referred-value' not found.");
+            }
+
+            if (commissionElement) {
+                commissionElement.textContent = data.commissionsEarned + ' TON';
+            } else {
+                console.error("Element with id 'commission-value' not found.");
+            }
+            
         } catch (error) {
             console.error('Error fetching data:', error);
+        }
+
+        // Check if #referral-data element exists before setting its content
+        const referralDataElement = document.querySelector("#referral-data");
+        if (referralDataElement) {
+            referralDataElement.textContent = "Some Data"; // Example placeholder content
+        } else {
+            console.error("Element with id 'referral-data' not found in the DOM.");
         }
     }
 
     // Fetch the data when the page loads
     window.onload = fetchReferralAndCommissionData;
 </script>
+
 
       
 </div>
