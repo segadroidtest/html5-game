@@ -1556,7 +1556,27 @@ async function setWithdrawAddress() {
         console.error('Error:', error);
     }
 }
+    
+function showWithdrawaddressPopup() {
+const checkinPopup = document.getElementById('withdrawaddress-popup');
+checkinPopup.style.display = 'block';
+document.getElementById('daily-checkin').style.opacity = '0.68';
+    // Hide the popup after 2 seconds
+    setTimeout(() => {
+        checkinPopup.style.display = 'none';
+    }, 2000);
+}
 
+           function showNoWithdrawaddressPopup() {
+const checkinPopup = document.getElementById('nowithdrawaddress-popup');
+checkinPopup.style.display = 'block';
+document.getElementById('daily-checkin').style.opacity = '0.68';
+    // Hide the popup after 2 seconds
+    setTimeout(() => {
+        checkinPopup.style.display = 'none';
+    }, 2000);
+}
+    
 async function loadWithdrawAddress() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
     try {
