@@ -1427,12 +1427,11 @@ async function generateLeaderboard() {
 }
 
 
-    
 async function fetchReferralAndCommissionData() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Dynamically get the user ID
 
     try {
-        // Fetch referral wallet balances and total balance
+        // Fetch referral wallet balances, total balance, and highest balance
         const response = await fetch('https://telegram-bot-degen-town.replit.app/api/referral-wallet-addresses', {
             method: 'POST',
             headers: {
@@ -1447,6 +1446,7 @@ async function fetchReferralAndCommissionData() {
 
         const data = await response.json();
         console.log('Total referral balance:', data.totalBalance); // Log the total balance
+        console.log('Highest referral balance:', data.highestBalance); // Log the highest balance
 
         // Calculate 8% of the total balance
         const totalEightPercent = (data.totalBalance * 0.08).toFixed(2);
@@ -1454,14 +1454,19 @@ async function fetchReferralAndCommissionData() {
         // Display the total 8% in the "Top Referred so far" section
         document.getElementById('commission-value').textContent = `${totalEightPercent} TON`;
 
+        // Display the highest balance in the "Commissions Earned" section
+        document.getElementById('referred-value').textContent = `${data.highestBalance.toFixed(2)} TON`;
+
     } catch (error) {
         console.error('Error fetching data:', error);
-        document.getElementById('commission-value').textContent = "Error fetching total referral balance.";
+        document.getElementById('referred-value').textContent = "Error fetching total referral balance.";
+        document.getElementById('commission-value').textContent = "Error fetching highest balance.";
     }
 }
 
 // Fetch the data when the page loads
 window.onload = fetchReferralAndCommissionData;
+
 
 </script>
 
