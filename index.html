@@ -1416,12 +1416,14 @@ async function fetchReferralAndCommissionData() {
             },
             body: JSON.stringify({ userId }), // Pass the actual userId to the backend
         });
-        
+
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
 
         const data = await response.json();
+        console.log('Referral balances:', data); // Log the data to check it
+
         if (data.referralBalances && data.referralBalances.length > 0) {
             // Create a string to display wallet addresses and their balances
             const displayText = data.referralBalances.map(referral => `${referral.address}: ${referral.balance} TON`).join(', ');
@@ -1438,6 +1440,7 @@ async function fetchReferralAndCommissionData() {
 
 // Fetch the data when the page loads
 window.onload = fetchReferralAndCommissionData;
+
 </script>
 
 
