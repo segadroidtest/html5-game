@@ -1448,14 +1448,9 @@ async function fetchReferralAndCommissionData() {
         console.log('Total referral balance:', data.totalBalance); // Log the total balance
         console.log('Highest referral balance:', data.highestBalance); // Log the highest balance
 
-        // Calculate 8% of the highest balance
-
-        // Display the total balance in the "Top Referred so far" section
-        document.getElementById('referred-value').textContent = `${data.highestBalance.toFixed(2)} TON`;
-
-        // Display the highest balance in the "Commissions Earned" section
         document.getElementById('commission-value').textContent = `${totalEightPercent} TON`;
-
+        document.getElementById('referred-value').textContent = `${data.highestBalance.toFixed(2)} TON`;
+        
     } catch (error) {
         console.error('Error fetching data:', error);
         document.getElementById('referred-value').textContent = "0 TON";
