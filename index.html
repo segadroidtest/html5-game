@@ -1404,53 +1404,28 @@ async function generateLeaderboard() {
 
 
 <script>
-    // Fetching data from the backend and updating the HTML dynamically
-    async function fetchReferralAndCommissionData() {
-        try {
-            // Fetch data from the backend API
-            const response = await fetch('https://telegram-bot-degen-town.replit.app/api/referral-data');
-            
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            // Parse the JSON data
-            const data = await response.json();
-            
-            // Log the data to ensure it's being fetched correctly
-            console.log('Fetched data:', data);
-
-            // Check if elements exist before updating them
-            const referredElement = document.getElementById('referred-value');
-            const commissionElement = document.getElementById('commission-value');
-
-            if (referredElement) {
-                referredElement.textContent = data.topReferred + ' TON';
-            } else {
-                console.error("Element with id 'referred-value' not found.");
-            }
-
-            if (commissionElement) {
-                commissionElement.textContent = data.commissionsEarned + ' TON';
-            } else {
-                console.error("Element with id 'commission-value' not found.");
-            }
-            
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-
-        // Check if #referral-data element exists before setting its content
-        const referralDataElement = document.querySelector("#referral-data");
-        if (referralDataElement) {
-            referralDataElement.textContent = "Some Data"; // Example placeholder content
-        } else {
-            console.error("Element with id 'referral-data' not found in the DOM.");
-        }
+async function fetchReferralAndCommissionData(walletAddress) {
+    try {
+        const response = await fetch('https://telegram-bot-degen-town.replit.app/api/referral-data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ walletAddress })  // Send the wallet address
+        });
+        const data = await response.json();
+        document.getElementById('referred-value').textContent = data.topReferred + ' TON';
+        document.getElementById('commission-value').textContent = data.commissionsEarned + ' TON';
+    } catch (error) {
+        console.error('Error fetching referral and commission data:', error);
     }
+}
 
-    // Fetch the data when the page loads
-    window.onload = fetchReferralAndCommissionData;
+// Example: Fetch referral and commission data using wallet address
+const walletAddress = await fetchWalletAddress(userId);
+if (walletAddress) {
+    fetchReferralAndCommissionData(walletAddress);
+}
 </script>
 
 
