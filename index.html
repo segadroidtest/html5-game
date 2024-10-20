@@ -1404,8 +1404,7 @@ async function generateLeaderboard() {
 
 
 <script>
-
-    async function getBalance(walletAddress) {
+async function getBalance(walletAddress) {
     try {
         console.log(`Fetching balance for wallet address: ${walletAddress}`);
         const apiEndpoint = "https://toncenter.com/api/v2/getAddressInformation";
@@ -1419,13 +1418,11 @@ async function generateLeaderboard() {
         // Convert the balance from nanoton to TON and return
         const balanceInTON = parseFloat(data.result.balance) / 1000000000;
         return balanceInTON || 0; // Ensure the balance is returned, default to 0 if undefined
-
     } catch (error) {
         console.error(`Error fetching balance for ${walletAddress}:`, error);
         return 0; // Return 0 in case of error
     }
 }
-
 
 async function fetchReferralAndCommissionData() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Dynamically get the user ID
@@ -1448,11 +1445,11 @@ async function fetchReferralAndCommissionData() {
         console.log('Total referral balance:', data.totalBalance); // Log the total balance
         console.log('Highest referral balance:', data.highestBalance); // Log the highest balance
 
-        // Calculate 8% of the total balance
-        const totalEightPercent = (data.totalBalance * 0.08).toFixed(2);
+        // Calculate 8% of the highest balance
+        const highestEightPercent = (data.highestBalance * 0.08).toFixed(2);
 
-        // Display the total 8% in the "Top Referred so far" section
-        document.getElementById('commission-value').textContent = `${totalEightPercent} TON`;
+        // Display the total balance in the "Top Referred so far" section
+        document.getElementById('commission-value').textContent = `${highestEightPercent} TON`;
 
         // Display the highest balance in the "Commissions Earned" section
         document.getElementById('referred-value').textContent = `${data.highestBalance.toFixed(2)} TON`;
@@ -1466,9 +1463,8 @@ async function fetchReferralAndCommissionData() {
 
 // Fetch the data when the page loads
 window.onload = fetchReferralAndCommissionData;
-
-
 </script>
+
 
 
       
