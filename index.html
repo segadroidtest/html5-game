@@ -999,7 +999,8 @@ document.addEventListener("DOMContentLoaded", async function() {
 
             const userData = await response.json();
             document.getElementById("referrals-count").textContent = userData.totalReferrals || 0;
-            document.getElementById("invite-points-earned").textContent = userData.totalPoints || 0;
+            document.getElementById("points-balance").textContent = userData.totalPoints || 0;
+            document.getElementById("invite-points-earned").textContent = userData.referralPoints || 0;
 
             const referralList = document.getElementById("referral-list");
 
