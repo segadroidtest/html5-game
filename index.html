@@ -1417,7 +1417,8 @@ async function fetchReferralAndCommissionData() {
         });
 
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            const errorResponse = await response.json();
+            throw new Error(`Network response was not ok: ${errorResponse.error} - ${errorResponse.details}`);
         }
 
         const data = await response.json();
@@ -1453,7 +1454,6 @@ async function fetchReferralAndCommissionData() {
 
 // Fetch the data when the page loads
 window.onload = fetchReferralAndCommissionData;
-
 
 </script>
 
