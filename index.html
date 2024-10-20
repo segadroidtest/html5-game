@@ -941,7 +941,7 @@ window.addEventListener("load", () => {
 
         
 <div id="page3" class="page"  color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 100px); overflow-y: auto;">
-
+ <h2 id="player-count" style="text-align: center; color: #ffffff; margin: 20px 0;">Hurry, 1,011 players joined so far!</h2>
     <div id="referral-stats" style="display: flex; justify-content: space-between; padding: 10px 15px; margin-top: 20px;     margin-bottom: 12px; border-radius: 10px; background: #1e1d22; color: white !important; border: 1px solid #101013; position: sticky; top: 0; z-index: 1000;">
     <div class="stat" style="display: flex; flex-direction: column; align-items: center; font-weight: bold;">
         <div style="display: flex; align-items: center; justify-content: center; width: 100%;">
@@ -1055,6 +1055,28 @@ function copyLinkreferral() {
         console.error("Referral link is empty or not ready.");
     }
 }
+
+
+    async function fetchPlayerCount() {
+    try {
+        const response = await fetch('https://telegram-bot-degen-town.replit.app/api/player-count'); // Replace with your actual API endpoint
+        if (!response.ok) {
+            throw new Error('Failed to fetch player count');
+        }
+        const data = await response.json();
+        const playerCount = data.count || 0; // Adjust based on your API response structure
+        document.getElementById('player-count').textContent = `Hurry, ${playerCount} players joined so far`;
+    } catch (error) {
+        console.error('Error fetching player count:', error);
+        document.getElementById('player-count').textContent = 'Hurry, 0 players joined so far'; // Default to 0 if there's an error
+    }
+}
+
+// Call this function when the page loads
+document.addEventListener("DOMContentLoaded", function() {
+    fetchPlayerCount(); // Fetch player count on page load
+});
+
 </script>
 
 </div>
