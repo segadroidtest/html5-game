@@ -1441,14 +1441,19 @@ async function fetchReferralAndCommissionData() {
             throw new Error('Network response was not ok');
         }
 
-        const totalEightPercent = (data.totalBalance * 0.08).toFixed(2);
-        const highestEightPercent = (data.highestBalance * 0.08).toFixed(2);
-        
+        // Get the data after checking for a successful response
         const data = await response.json();
         console.log('Total referral balance:', data.totalBalance); // Log the total balance
         console.log('Highest referral balance:', data.highestBalance); // Log the highest balance
 
-        document.getElementById('commission-value').textContent = `${totalEightPercent} TON`;
+        // Calculate 8% of the total balance and highest balance
+        const totalEightPercent = (data.totalBalance * 0.08).toFixed(2);
+        const highestEightPercent = (data.highestBalance * 0.08).toFixed(2);
+        
+        // Display the 8% of the total balance in the "Top Referred so far" section
+        document.getElementById('commission-value').textContent = `${highestEightPercent} TON`;
+
+        // Display the highest balance in the "Commissions Earned" section
         document.getElementById('referred-value').textContent = `${data.highestBalance.toFixed(2)} TON`;
         
     } catch (error) {
@@ -1461,6 +1466,7 @@ async function fetchReferralAndCommissionData() {
 // Fetch the data when the page loads
 window.onload = fetchReferralAndCommissionData;
 </script>
+
 
 
 
