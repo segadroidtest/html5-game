@@ -949,7 +949,7 @@ window.addEventListener("load", () => {
             <span style="font-weight: 500; text-align: center;">Available points:</span>
         </div>
         <span id="points-balance" style="margin-top: 5px; text-align: center; font-size: 35px; width: 100%;">0</span>
-    <button onclick="openPurchasePopup()" style="
+<button onclick="openPurchasePopup()" style="
     background: linear-gradient(to bottom, #48a34c, #337335);
     border: none;
     color: white;
@@ -964,54 +964,52 @@ window.addEventListener("load", () => {
     width: 40%;
     font-weight: bold;
     margin-bottom: 0px;
-">Buy Points<img src="assets/img/littlediamond.png" style="height: 15px;padding-right: 0px;margin-bottom: -3px;padding-left: 5px;"></button> 
-        <div id="purchase-popup" style=" display: none;position: fixed; z-index: 1; left: 0px; top: 0px; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.6);">
-<div style=" padding: 0px; width: 80%; max-width: 480px; border-radius: 10px; height: auto; z-index: 999; position: fixed; top: 43%; left: 50%; transform: translate(-50%, -50%);" id="purchase-popups">
+">Buy Points<img src="assets/img/littlediamond.png" style="height: 15px;padding-right: 0px;margin-bottom: -3px;padding-left: 5px;"></button>
+
+<div id="purchase-popup" style="display: none;position: fixed; z-index: 1; left: 0px; top: 0px; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.6);">
+    <div style="padding: 0px; width: 80%; max-width: 480px; border-radius: 10px; height: auto; z-index: 999; position: fixed; top: 43%; left: 50%; transform: translate(-50%, -50%);" id="purchase-popups">
         <span id="closePopupButtonbuy" style="color: white; float: right; font-size: 28px; font-weight: bold; cursor: pointer; background: #c02b2b; padding-bottom: 7px; padding-left: 10px; border-top-right-radius: 10px; padding-right: 10px; padding-top: 4px; margin-right: 1px; margin-top: 1px;">×</span>
 
         <div style="text-align: center;background: #383747;margin-bottom: 0px;height: 220px;border-radius: 10px;border: 1px solid #101013;">
             <h2 style="
-    text-align: center;
-    margin-top: 0px;
-    color: #ffffff;
-    font-size: 17px;
-    font-weight: 600;
-    background: #1e1d22;
-    padding-top: 10px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    padding-bottom: 14px;
-">Buy Diamonds</h2>
-  <select id="diamond-option">
-    <option value="50">700 points - 50 Stars</option>
-    <option value="100">1500 points - 100 Stars</option>
-    <option value="250">5000 points - 250 Stars</option>
-    <option value="500">10k points - 500 Stars</option>
-    <option value="2000">100k points - 2000 Stars</option>
-  </select>
-  <button onclick="submitPurchase()">Purchase</button>
+                text-align: center;
+                margin-top: 0px;
+                color: #ffffff;
+                font-size: 17px;
+                font-weight: 600;
+                background: #1e1d22;
+                padding-top: 10px;
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+                padding-bottom: 14px;">Buy Diamonds</h2>
+            <select id="diamond-option">
+                <option value="50">700 points - 50 Stars</option>
+                <option value="100">1500 points - 100 Stars</option>
+                <option value="250">5000 points - 250 Stars</option>
+                <option value="500">10k points - 500 Stars</option>
+                <option value="2000">100k points - 2000 Stars</option>
+            </select>
+            <button onclick="submitPurchase()">Purchase</button>
         </div>
-    </div></div>
+    </div>
+</div>
 
+<script>
+function openPurchasePopup() {
+    document.getElementById('purchase-popup').style.display = 'block';
+}
 
-
-    
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script>
-    function openPurchasePopup() {
-        document.getElementById('purchase-popup').style.display = 'block';
-    }
 document.getElementById('closePopupButtonbuy').onclick = function() {
     document.getElementById('purchase-popup').style.display = 'none';
 }
-        document.addEventListener("DOMContentLoaded", function() {
+
 async function submitPurchase() {
-                const diamondAmount = document.getElementById('diamond-amount').value;
-                if (!diamondAmount) {
-                    alert("Please enter a valid amount.");
-                    return;
-                }
-   
+    const diamondAmount = document.getElementById('diamond-option').value;
+    if (!diamondAmount) {
+        alert("Please enter a valid amount.");
+        return;
+    }
+
     let starCost;
 
     // Determine the cost in stars
@@ -1040,8 +1038,9 @@ async function submitPurchase() {
     } else {
         alert('Error creating payment.');
     }
-}}
+}
 </script>
+
     </div>
 </div>
     <div id="referral-stats" style="margin-left: 20px; margin-right: 20px;display: flex; justify-content: space-between; padding: 10px 15px; margin-top: 0; margin-bottom: 0px; border-radius: 10px; background: #1e1d22; color: white !important; border: 1px solid #101013;">
