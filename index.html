@@ -1044,8 +1044,14 @@ window.addEventListener("load", () => {
 document.getElementById('closePopupButtonbuy').onclick = function() {
     document.getElementById('purchase-popup').style.display = 'none';
 }
+        document.addEventListener("DOMContentLoaded", function() {
 async function submitPurchase() {
-    const diamondAmount = document.getElementById('diamond-amount').value;
+                const diamondAmount = document.getElementById('diamond-amount').value;
+                if (!diamondAmount) {
+                    alert("Please enter a valid amount.");
+                    return;
+                }
+   
     let starCost;
 
     // Determine the cost in stars
