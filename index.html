@@ -1005,14 +1005,8 @@ document.getElementById('closePopupButtonbuy').onclick = function() {
 
 async function submitPurchase() {
     const diamondAmount = document.getElementById('diamond-option').value;
-    if (!diamondAmount) {
-        alert("Please enter a valid amount.");
-        return;
-    }
-
     let starCost;
 
-    // Determine the cost in stars
     if (diamondAmount == 700) {
         starCost = 50;
     } else if (diamondAmount == 1500) {
@@ -1025,20 +1019,21 @@ async function submitPurchase() {
         starCost = 2000;
     }
 
-    // Call backend to create payment request for Telegram Stars
     const response = await fetch('https://telegram-bot-degen-town.replit.app/create-telegram-payment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ diamondAmount, starCost })
     });
-    
+
     const result = await response.json();
+    console.log("Response from backend:", result); // Log the response from your backend
     if (result.success) {
         // Handle successful payment creation
     } else {
         alert('Error creating payment.');
     }
 }
+
 </script>
 
     </div>
