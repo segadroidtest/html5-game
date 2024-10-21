@@ -1023,6 +1023,23 @@ window.addEventListener("load", () => {
             alert('Error creating payment.');
         }
     }
+
+          async function verifyPayment(transactionHash) {
+      const url = `https://toncenter.com/api/v2/getTransaction?hash=${transactionHash}`;
+
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.result) {
+          // Transaction confirmed
+          const tonAmountPaid = data.result.in_msg.value / 1000000000; // Convert nanoton to TON
+          console.log(`User paid ${tonAmountPaid} TON`);
+          return tonAmountPaid;
+      } else {
+          console.error('Transaction not found or failed.');
+          return null;
+      }
+  }
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", async function() {
