@@ -970,7 +970,7 @@ window.addEventListener("load", () => {
     <div style="padding: 0px; width: 80%; max-width: 480px; border-radius: 10px; height: auto; z-index: 999; position: fixed; top: 43%; left: 50%; transform: translate(-50%, -50%);" id="purchase-popups">
         <span id="closePopupButtonbuy" style="color: white; float: right; font-size: 28px; font-weight: bold; cursor: pointer; background: #c02b2b; padding-bottom: 7px; padding-left: 10px; border-top-right-radius: 10px; padding-right: 10px; padding-top: 4px; margin-right: 1px; margin-top: 1px;">×</span>
 
-        <div style="text-align: center;background: #383747;margin-bottom: 0px;height: 220px;border-radius: 10px;border: 1px solid #101013;">
+        <div style="text-align: center;background: #383747;margin-bottom: 0px;height: 180px;border-radius: 10px;border: 1px solid #101013;">
             <h2 style="
                 text-align: center;
                 margin-top: 0px;
@@ -982,15 +982,35 @@ window.addEventListener("load", () => {
                 border-top-left-radius: 10px;
                 border-top-right-radius: 10px;
                 padding-bottom: 14px;">Buy Diamonds</h2>
-            <select id="diamond-option">
-                <option value="50">700 points - 50 Stars</option>
-                <option value="100">1500 points - 100 Stars</option>
-                <option value="250">5000 points - 250 Stars</option>
-                <option value="500">10k points - 500 Stars</option>
-                <option value="2000">100k points - 2000 Stars</option>
-            </select>
-            <button onclick="submitPurchase()">Purchase</button>
-        </div>
+<div style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
+    <select id="diamond-option" style="
+        padding: 10px;
+        border-radius: 5px; 
+        font-size: 17px; 
+        background-color: #f8f9fa; 
+        transition: border-color 0.3s; 
+        margin-bottom: 10px; /* Space below the dropdown */
+    " onfocus="this.style.borderColor='#0056b3'" onblur="this.style.borderColor='#007bff'">
+        <option value="50">700 Points = 50 Stars ⭐</option>
+        <option value="100">1500 Points = 100 Stars ⭐</option>
+        <option value="250">5000 Points = 250 Stars ⭐</option>
+        <option value="500">10k Points = 500 Stars ⭐</option>
+        <option value="2000">100k Points = 2000 Stars ⭐</option>
+    </select>
+    <button onclick="submitPurchase()" style="
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px; 
+        background-color: #1f9611; 
+        color: white; 
+        font-size: 16px; 
+        cursor: pointer; 
+        transition: background-color 0.3s, transform 0.2s;
+        font-weight: bold;
+    ">
+        Purchase
+    </button>
+</div>
     </div>
 </div>
 
