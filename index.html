@@ -34,33 +34,7 @@ document.addEventListener("DOMContentLoaded", async function() {
 
             const referralList = document.getElementById("referral-list");
 
-            if (userData.referrals.length === 0) {
-                // Display "No Referrals Available" message
-                const noReferralsMessage = document.createElement("li");
-                noReferralsMessage.textContent = "No Referrals Available";
-                noReferralsMessage.style.textAlign = "center";
-                noReferralsMessage.style.padding = "10px";
-                referralList.appendChild(noReferralsMessage);
-            } else {
-                // Display referral details in table
-                userData.referrals.forEach(referral => {
-                    const listItem = document.createElement("tr");
-
-                    const usernameCell = document.createElement("td");
-                    const levelCell = document.createElement("td");
-                    const pointsCell = document.createElement("td");
-
-                    usernameCell.textContent = referral.username;
-                    levelCell.textContent = getReferralLevel(referral.totalReferrals);
-                    pointsCell.textContent = referral.totalPoints;
-
-                    listItem.appendChild(usernameCell);
-                    listItem.appendChild(levelCell);
-                    listItem.appendChild(pointsCell);
-
-                    referralList.appendChild(listItem);
-                });
-            }
+            if (userData.referrals.length === 0) {} else {}
 
         } catch (error) {
             console.error("Failed to fetch referral data:", error);
