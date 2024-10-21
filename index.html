@@ -1238,7 +1238,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
     <!-- Current User Rank -->
     <div id="user-rank" class="user-info" style="width: auto !important; background: #1e1d22; color: white !important; border: 1px solid #101013;">
-        <!-- User Profile Picture and Username will be inserted here -->
+        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; color: white;">
+                            <div style="display: flex; align-items: center;">
+                                <div style="width: 60px; height: 60px; border-radius: 50%; background-color: ${colors[telegramUserRank % colors.length]}; color: #ffffff; text-align: center; line-height: 60px; font-size: 24px;">
+                                    ${user.username ? user.username.charAt(0).toUpperCase() : 'U'}
+                                </div>
+                                <div style="margin-left: 10px;">
+                                    <span style="font-weight: bold;">${user.username || "User"}</span>
+                                    <span style="display: block; color: white;">Rank: #${telegramUserRank}</span>
+                                </div>
+                            </div>
+                            <span id ="points-balance" style="color: white; margin-left: auto;">
+                                 <img src="assets/img/littlediamond.png" style="width: 19px; height:19px; margin-bottom:-4px;border: none !important;">
+                            </span>
+                        </div>
     </div>
 
     <!-- Leaderboard Container -->
@@ -1337,7 +1350,7 @@ document.addEventListener("DOMContentLoaded", async function() {
                 // Find the user's rank in the leaderboard data
                 const userIndex = leaderboardData.findIndex(u => u.username === user.username);
                 telegramUserRank = userIndex >= 0 ? userIndex + 1 : leaderboardData.length + 1;
-                telegramUserPoints = userData.totalPoints || 0;
+                telegramUserPoints = userIndex >= 0 ? leaderboardData[userIndex].totalPoints : 0;
 
                 // Log to check user points and rank
                 console.log(`Username: ${user.username}, Rank: ${telegramUserRank}, Points: ${telegramUserPoints}`);
@@ -1346,20 +1359,7 @@ document.addEventListener("DOMContentLoaded", async function() {
                 const userRankElement = document.getElementById('user-rank');
                 if (userRankElement) {
                     userRankElement.innerHTML = `
-                        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; color: white;">
-                            <div style="display: flex; align-items: center;">
-                                <div style="width: 60px; height: 60px; border-radius: 50%; background-color: ${colors[telegramUserRank % colors.length]}; color: #ffffff; text-align: center; line-height: 60px; font-size: 24px;">
-                                    ${user.username ? user.username.charAt(0).toUpperCase() : 'U'}
-                                </div>
-                                <div style="margin-left: 10px;">
-                                    <span style="font-weight: bold;">${user.username || "User"}</span>
-                                    <span style="display: block; color: white;">Rank: #${telegramUserRank}</span>
-                                </div>
-                            </div>
-                            <span style="color: white; margin-left: auto;">
-                                ${telegramUserPoints} <img src="assets/img/littlediamond.png" style="width: 19px; height:19px; margin-bottom:-4px;border: none !important;">
-                            </span>
-                        </div>
+                        
                     `;
                 }
             }
