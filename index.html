@@ -34,7 +34,16 @@ document.addEventListener("DOMContentLoaded", async function() {
 
             const referralList = document.getElementById("referral-list");
 
-                     if (userData.referrals.length === 0) {} else {
+                     if (userData.referrals.length === 0) {
+                         
+                // Display "No Referrals Available" message
+                const noReferralsMessage = document.createElement("li");
+                noReferralsMessage.textContent = "";
+                noReferralsMessage.style.textAlign = "center";
+                noReferralsMessage.style.padding = "0px";
+                referralList.appendChild(noReferralsMessage);
+            
+                     } else {
                 // Display referral details in table
                 userData.referrals.forEach(referral => {
                     const listItem = document.createElement("tr");
