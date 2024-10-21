@@ -1234,7 +1234,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
        
-<div id="page2" class="page" style="color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 70px); overflow-y: auto; padding-top: 7px !important;">
+    <div id="page2" class="page"  color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 70px); overflow-y: auto;  padding-top: 7px !important;">
 
     <!-- Current User Rank -->
     <div id="user-rank" class="user-info" style="width: auto !important; background: #1e1d22; color: white !important; border: 1px solid #101013;">
@@ -1244,136 +1244,126 @@ document.addEventListener("DOMContentLoaded", function() {
     <!-- Leaderboard Container -->
     <div id="leaderboard-container" style="border-radius: 10px;background-color: rgba(46, 44, 55, 0.95); padding: 0; max-height: 60vh; overflow: hidden;">
         <div class="leaderboard-header" style="border-top-left-radius: 10px;
-            border-top-right-radius: 10px;padding-top: 10px !important;padding-bottom: 30px !important;background: #1e1d22; padding: 15px; position: sticky; top: 0; z-index: 10;">
+    border-top-right-radius: 10px;padding-top: 10px !important;padding-bottom: 30px !important;background: #1e1d22; padding: 15px; position: sticky; top: 0; z-index: 10;">
             <span style="float: left;font-weight: bold;">Players Name</span>
             <span style="float: right;font-weight: bold;">Points Earned</span>
         </div>
         <ul id="leaderboard-list" style="padding-left: 10px !important; padding-right: 10px !important;scrollbar-width: none;list-style: none; padding: 0; margin: 0; max-height: 50vh; overflow-y: auto;">
             <!-- Leaderboard items will be added here -->
         </ul>
-    </div>
-    <p style=" margin-top: 5px; font-size: 14px; font-weight: 500; opacity: 0.85; margin-left: 5px;">Updated every 5 mins</p>
+</div>
+                <p style=" margin-top: 5px; font-size: 14px; font-weight: 500; opacity: 0.85; margin-left: 5px; ">Updated every 5 mins </p>
 
-    <script>
-    document.addEventListener('DOMContentLoaded', generateLeaderboard);
+   <script>
+document.addEventListener('DOMContentLoaded', generateLeaderboard);
 
-    async function generateLeaderboard() {
-        const leaderboardList = document.getElementById('leaderboard-list');
-        const colors = ['#F28B82', '#FBBC05', '#34A853', '#4285F4', '#A142F4', '#FF6D01', '#46BD8B', '#FFBF00', '#FF4500', '#9932CC'];
+async function generateLeaderboard() {
+    const leaderboardList = document.getElementById('leaderboard-list');
+    const colors = ['#F28B82', '#FBBC05', '#34A853', '#4285F4', '#A142F4', '#FF6D01', '#46BD8B', '#FFBF00', '#FF4500', '#9932CC'];
 
-        // Fetch leaderboard data from the backend
-        try {
-            const response = await fetch("https://telegram-bot-degen-town.replit.app/api/leaderboard");
-            const leaderboardData = await response.json();
+    // Fetch leaderboard data from the backend
+    try {
+        const response = await fetch("https://telegram-bot-degen-town.replit.app/api/leaderboard");
+        const leaderboardData = await response.json();
 
-            // Log the entire leaderboard data for debugging
-            console.log("Leaderboard Data:", leaderboardData);
+        // Check if the Telegram WebApp is ready and get the user data
+        Telegram.WebApp.ready();
+        const user = Telegram.WebApp.initDataUnsafe.user;
+        let telegramUserRank, telegramUserPoints;
 
-            // Check if the Telegram WebApp is ready and get the user data
-            Telegram.WebApp.ready();
-            const user = Telegram.WebApp.initDataUnsafe.user;
-            let telegramUserRank, telegramUserPoints;
+        // Insert Telegram user details if present
+        if (user) {
+            // Find the user's rank in the leaderboard data
+            const userIndex = leaderboardData.findIndex(u => u.username === user.username);
+            telegramUserRank = userIndex >= 0 ? userIndex + 1 : leaderboardData.length + 1;
+            telegramUserPoints = userIndex >= 0 ? leaderboardData[userIndex].totalPoints : 0;
 
-            // Insert Telegram user details if present
-            if (user) {
-                // Find the user's rank in the leaderboard data
-                const userIndex = leaderboardData.findIndex(u => u.username === user.username);
-                
-                // Log the specific userIndex and user data
-                console.log("User Index:", userIndex);
-                console.log("User Data at Index:", leaderboardData[userIndex]);
-
-                telegramUserRank = userIndex >= 0 ? userIndex + 1 : leaderboardData.length + 1;
-
-                // Check if the points field exists, fallback if it doesn't
-                telegramUserPoints = userIndex >= 0 ? leaderboardData[userIndex]?.totalPoints || 0 : 0;
-
-                // Log to check user points and rank
-                console.log(`Username: ${user.username}, Rank: ${telegramUserRank}, Points: ${telegramUserPoints}`);
-
-                // Add the Telegram user info at the top
-                const userRankElement = document.getElementById('user-rank');
-                if (userRankElement) {
-                    userRankElement.innerHTML = `
-                        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; color: white;">
-                            <div style="display: flex; align-items: center;">
-                                <div style="width: 60px; height: 60px; border-radius: 50%; background-color: ${colors[telegramUserRank % colors.length]}; color: #ffffff; text-align: center; line-height: 60px; font-size: 24px;">
-                                    ${user.username ? user.username.charAt(0).toUpperCase() : 'U'}
-                                </div>
-                                <div style="margin-left: 10px;">
-                                    <span style="font-weight: bold;">${user.username || "User"}</span>
-                                    <span style="display: block; color: white;">Rank: #${telegramUserRank}</span>
-                                </div>
+            // Add the Telegram user info at the top
+            const userRankElement = document.getElementById('user-rank');
+            if (userRankElement) {
+                userRankElement.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; color: white;">
+                        <div style="display: flex; align-items: center;">
+                            <div style="width: 60px; height: 60px; border-radius: 50%; background-color: ${colors[telegramUserRank % colors.length]}; color: #ffffff; text-align: center; line-height: 60px; font-size: 24px;">
+                                ${user.username ? user.username.charAt(0).toUpperCase() : 'U'}
                             </div>
-                            <span style="color: white; margin-left: auto;">
-                                ${telegramUserPoints} <img src="assets/img/littlediamond.png" style="width: 19px; height:19px; margin-bottom:-4px;border: none !important;">
-                            </span>
+                            <div style="margin-left: 10px;">
+                                <span style="font-weight: bold;">${user.username || "User"}</span>
+                                <span style="display: block; color: white;">Rank: #${telegramUserRank}</span>
+                            </div>
                         </div>
-                    `;
-                }
+                        <span style="color: white; margin-left: auto;">
+                            ${telegramUserPoints} <img src="assets/img/littlediamond.png" style="width: 19px; height:19px; margin-bottom:-4px;border: none !important;">
+                        </span>
+                    </div>
+                `;
             }
-
-            // Display leaderboard users
-            leaderboardData.forEach((user, index) => {
-                const username = user.username;
-                const points = user.totalPoints;
-                const color = colors[index % colors.length];
-                addLeaderboardEntry(username, points, index + 1, color);
-            });
-        } catch (error) {
-            console.error("Failed to fetch leaderboard data:", error);
         }
 
-        function addLeaderboardEntry(username, points, rank, color) {
-            const listItem = document.createElement('li');
-            listItem.style.display = 'flex';
-            listItem.style.alignItems = 'center';
-            listItem.style.padding = '10px';
-            listItem.style.borderBottom = '1px solid #4a4855';
-
-            const profilePicture = document.createElement('div');
-            profilePicture.style.width = '30px';
-            profilePicture.style.height = '30px';
-            profilePicture.style.borderRadius = '50%';
-            profilePicture.style.backgroundColor = color;
-            profilePicture.style.color = '#ffffff';
-            profilePicture.style.display = 'flex';
-            profilePicture.style.justifyContent = 'center';
-            profilePicture.style.alignItems = 'center';
-            profilePicture.innerText = username.charAt(0).toUpperCase();
-            profilePicture.style.marginRight = '10px';
-
-            const usernameContainer = document.createElement('div');
-            usernameContainer.style.display = 'flex';
-            usernameContainer.style.flexDirection = 'column';
-
-            const usernameSpan = document.createElement('span');
-            usernameSpan.innerText = username;
-            usernameSpan.style.fontSize = '15px';
-            usernameSpan.style.fontWeight = 'bold';
-
-            const rankSpan = document.createElement('span');
-            rankSpan.innerText = `Rank: #${rank}`;
-            rankSpan.style.fontSize = '13px';
-            rankSpan.style.color = 'white';
-            rankSpan.style.marginTop = '4px';
-
-            usernameContainer.appendChild(usernameSpan);
-            usernameContainer.appendChild(rankSpan);
-
-            const pointsSpan = document.createElement('span');
-            pointsSpan.innerHTML = `${points} <img src="assets/img/littlediamond.png" style="height: 15px;">`;
-            pointsSpan.style.color = 'white';
-            pointsSpan.style.marginLeft = 'auto';
-
-            listItem.appendChild(profilePicture);
-            listItem.appendChild(usernameContainer);
-            listItem.appendChild(pointsSpan);
-
-            leaderboardList.appendChild(listItem);
-        }
+        // Display leaderboard users
+        leaderboardData.forEach((user, index) => {
+            const username = user.username;
+            const points = user.totalPoints;
+            const color = colors[index % colors.length];
+            addLeaderboardEntry(username, points, index + 1, color);
+        });
+    } catch (error) {
+        console.error("Failed to fetch leaderboard data:", error);
     }
-    </script>
+
+    function addLeaderboardEntry(username, points, rank, color) {
+        const listItem = document.createElement('li');
+        listItem.style.display = 'flex';
+        listItem.style.alignItems = 'center';
+        listItem.style.padding = '10px';
+        listItem.style.borderBottom = '1px solid #4a4855';
+
+        const profilePicture = document.createElement('div');
+        profilePicture.style.width = '30px';
+        profilePicture.style.height = '30px';
+        profilePicture.style.borderRadius = '50%';
+        profilePicture.style.backgroundColor = color;
+        profilePicture.style.color = '#ffffff';
+        profilePicture.style.display = 'flex';
+        profilePicture.style.justifyContent = 'center';
+        profilePicture.style.alignItems = 'center';
+        profilePicture.innerText = username.charAt(0).toUpperCase();
+        profilePicture.style.marginRight = '10px';
+
+        const usernameContainer = document.createElement('div');
+        usernameContainer.style.display = 'flex';
+        usernameContainer.style.flexDirection = 'column';
+
+        const usernameSpan = document.createElement('span');
+        usernameSpan.innerText = username;
+        usernameSpan.style.fontSize = '15px';
+        usernameSpan.style.fontWeight = 'bold';
+
+        const rankSpan = document.createElement('span');
+        rankSpan.innerText = `Rank: #${rank}`;
+        rankSpan.style.fontSize = '13px';
+        rankSpan.style.color = 'white';
+        rankSpan.style.marginTop = '4px';
+
+        usernameContainer.appendChild(usernameSpan);
+        usernameContainer.appendChild(rankSpan);
+
+        const pointsSpan = document.createElement('span');
+        pointsSpan.innerHTML = `${points} <img src="assets/img/littlediamond.png" style="height: 15px;">`;
+        pointsSpan.style.color = 'white';
+        pointsSpan.style.marginLeft = 'auto';
+
+        listItem.appendChild(profilePicture);
+        listItem.appendChild(usernameContainer);
+        listItem.appendChild(pointsSpan);
+
+        leaderboardList.appendChild(listItem);
+    }
+}
+
+</script>
+
+
 
 </div>
 
