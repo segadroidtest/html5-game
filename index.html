@@ -1238,20 +1238,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     <!-- Current User Rank -->
     <div id="user-rank" class="user-info" style="width: auto !important; background: #1e1d22; color: white !important; border: 1px solid #101013;">
-        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; color: white;">
-                            <div style="display: flex; align-items: center;">
-                                <div style="width: 60px; height: 60px; border-radius: 50%; background-color: ${colors[telegramUserRank % colors.length]}; color: #ffffff; text-align: center; line-height: 60px; font-size: 24px;">
-                                    ${user.username ? user.username.charAt(0).toUpperCase() : 'U'}
-                                </div>
-                                <div style="margin-left: 10px;">
-                                    <span style="font-weight: bold;">${user.username || "User"}</span>
-                                    <span style="display: block; color: white;">Rank: #${telegramUserRank}</span>
-                                </div>
-                            </div>
-                            <span id ="points-balance" style="color: white; margin-left: auto;">
-                                 <img src="assets/img/littlediamond.png" style="width: 19px; height:19px; margin-bottom:-4px;border: none !important;">
-                            </span>
-                        </div>
+        <!-- User Profile Picture and Username will be inserted here -->
     </div>
 
     <!-- Leaderboard Container -->
@@ -1266,65 +1253,7 @@ document.addEventListener("DOMContentLoaded", function() {
         </ul>
     </div>
     <p style=" margin-top: 5px; font-size: 14px; font-weight: 500; opacity: 0.85; margin-left: 5px;">Updated every 5 mins</p>
-<script>
 
-document.addEventListener("DOMContentLoaded", async function() {
-    const userId = Telegram.WebApp.initDataUnsafe.user.id;
-
-    // Fetch user referral data from the API
-    async function fetchReferralData(userId) {
-        try {
-            const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/referrals/${userId}`);
-            if (!response.ok) throw new Error("Error fetching data");
-
-            const userData = await response.json();
-            document.getElementById("referrals-count").textContent = userData.totalReferrals || 0;
-            document.getElementById("points-earned").textContent = userData.totalPoints || 0;
-
-            const referralList = document.getElementById("referral-list");
-
-            if (userData.referrals.length === 0) {
-                // Display "No Referrals Available" message
-                const noReferralsMessage = document.createElement("li");
-                noReferralsMessage.textContent = "No Referrals Available";
-                noReferralsMessage.style.textAlign = "center";
-                noReferralsMessage.style.padding = "10px";
-                referralList.appendChild(noReferralsMessage);
-            } else {
-                // Display referral details in table
-                userData.referrals.forEach(referral => {
-                    const listItem = document.createElement("tr");
-
-                    const usernameCell = document.createElement("td");
-                    const levelCell = document.createElement("td");
-                    const pointsCell = document.createElement("td");
-
-                    usernameCell.textContent = referral.username;
-                    levelCell.textContent = getReferralLevel(referral.totalReferrals);
-                    pointsCell.textContent = referral.totalPoints;
-
-                    listItem.appendChild(usernameCell);
-                    listItem.appendChild(levelCell);
-                    listItem.appendChild(pointsCell);
-
-                    referralList.appendChild(listItem);
-                });
-            }
-
-        } catch (error) {
-            console.error("Failed to fetch referral data:", error);
-        }
-    }
-
-    await fetchReferralData(userId);
-
-
-          setInterval(async () => {
-    await fetchReferralData(userId);
-  }, 1000); // Fetch data every 5 seconds (5000 milliseconds)
-});
-    
-</script>
     <script>
     document.addEventListener('DOMContentLoaded', generateLeaderboard);
 
@@ -1349,8 +1278,15 @@ document.addEventListener("DOMContentLoaded", async function() {
             if (user) {
                 // Find the user's rank in the leaderboard data
                 const userIndex = leaderboardData.findIndex(u => u.username === user.username);
+                
+                // Log the specific userIndex and user data
+                console.log("User Index:", userIndex);
+                console.log("User Data at Index:", leaderboardData[userIndex]);
+
                 telegramUserRank = userIndex >= 0 ? userIndex + 1 : leaderboardData.length + 1;
-                telegramUserPoints = userIndex >= 0 ? leaderboardData[userIndex].totalPoints : 0;
+
+                // Check if the points field exists, fallback if it doesn't
+                telegramUserPoints = userIndex >= 0 ? leaderboardData[userIndex]?.totalPoints || 0 : 0;
 
                 // Log to check user points and rank
                 console.log(`Username: ${user.username}, Rank: ${telegramUserRank}, Points: ${telegramUserPoints}`);
@@ -1359,7 +1295,20 @@ document.addEventListener("DOMContentLoaded", async function() {
                 const userRankElement = document.getElementById('user-rank');
                 if (userRankElement) {
                     userRankElement.innerHTML = `
-                        
+                        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; color: white;">
+                            <div style="display: flex; align-items: center;">
+                                <div style="width: 60px; height: 60px; border-radius: 50%; background-color: ${colors[telegramUserRank % colors.length]}; color: #ffffff; text-align: center; line-height: 60px; font-size: 24px;">
+                                    ${user.username ? user.username.charAt(0).toUpperCase() : 'U'}
+                                </div>
+                                <div style="margin-left: 10px;">
+                                    <span style="font-weight: bold;">${user.username || "User"}</span>
+                                    <span style="display: block; color: white;">Rank: #${telegramUserRank}</span>
+                                </div>
+                            </div>
+                            <span style="color: white; margin-left: auto;">
+                                ${telegramUserPoints} <img src="assets/img/littlediamond.png" style="width: 19px; height:19px; margin-bottom:-4px;border: none !important;">
+                            </span>
+                        </div>
                     `;
                 }
             }
@@ -1427,6 +1376,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     </script>
 
 </div>
+
 
 
 
