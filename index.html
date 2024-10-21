@@ -1276,7 +1276,7 @@ async function generateLeaderboard() {
             // Find the user's rank in the leaderboard data
             const userIndex = leaderboardData.findIndex(u => u.username === user.username);
             telegramUserRank = userIndex >= 0 ? userIndex + 1 : leaderboardData.length + 1;
-            telegramUserPoints = userIndex >= 0 ? userData.totalPoints || 0;
+            telegramUserPoints = userIndex >= 0 ? leaderboardData[userIndex].totalPoints : 0;
 
             // Add the Telegram user info at the top
             const userRankElement = document.getElementById('user-rank');
@@ -1349,7 +1349,7 @@ async function generateLeaderboard() {
         usernameContainer.appendChild(rankSpan);
 
         const pointsSpan = document.createElement('span');
-        pointsSpan.innerHTML = `${points} <img src="assets/img/littlediamond.png" style="height: 15px;">`;
+        pointsSpan.innerHTML = `${telegramUserPoints} <img src="assets/img/littlediamond.png" style="height: 15px;">`;
         pointsSpan.style.color = 'white';
         pointsSpan.style.marginLeft = 'auto';
 
