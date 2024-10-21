@@ -1025,14 +1025,16 @@ async function submitPurchase() {
         body: JSON.stringify({ diamondAmount, starCost })
     });
 
-    const result = await response.json();
-    console.log("Response from backend:", result); // Log the response from your backend
-    if (result.success) {
-        // Handle successful payment creation
-    } else {
-        alert('Error creating payment.');
-    }
+const result = await response.json();
+if (result.success) {
+    // Handle successful payment creation
+} else {
+    console.error('Payment creation failed:', result.error); // Log the error
+    alert('Error creating payment: ' + result.error); // Display the error message
 }
+
+}
+
 
 </script>
 
