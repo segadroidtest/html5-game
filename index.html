@@ -1302,8 +1302,8 @@ async function generateLeaderboard() {
 
         // Display leaderboard users
         leaderboardData.forEach((user, index) => {
-            const username = userdata.username;
-            const points = userdata.totalPoints;
+            const username = user.username;
+            const points = user.totalPoints;
             const color = colors[index % colors.length];
             addLeaderboardEntry(username, points, index + 1, color);
         });
