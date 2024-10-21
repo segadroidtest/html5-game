@@ -770,12 +770,22 @@ async function dailyCheckin() {
             localStorage.setItem(lastCheckinKey, Date.now());
             startTimer(60); // Start 1-minute timer (in seconds for testing)
         } else {
-                    showCheckinPopup(); // Show the popup instead of returning an error
-        return; // Exit the function early
+    const checkinPopup = document.getElementById('checkin-popup');
+    checkinPopup.style.display = 'block';
+document.getElementById('daily-checkin').style.opacity = '0.68';
+    // Hide the popup after 2 seconds
+    setTimeout(() => {
+        checkinPopup.style.display = 'none';
+    }, 2000);
         
     } catch (error) {
-                showCheckinPopup(); // Show the popup instead of returning an error
-        return; // Exit the function early
+    const checkinPopup = document.getElementById('checkin-popup');
+    checkinPopup.style.display = 'block';
+document.getElementById('daily-checkin').style.opacity = '0.68';
+    // Hide the popup after 2 seconds
+    setTimeout(() => {
+        checkinPopup.style.display = 'none';
+    }, 2000);
     
 }
 
