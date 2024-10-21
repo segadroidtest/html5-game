@@ -1006,7 +1006,7 @@ window.addEventListener("load", () => {
     
 
 <div style="display: none;padding: 0px; width: 80%; max-width: 480px; border-radius: 10px; height: auto; z-index: 999; position: fixed; top: 43%; left: 50%; transform: translate(-50%, -50%);" id="purchase-popup">
-        <span id="closePopupButton" style="color: white; float: right; font-size: 28px; font-weight: bold; cursor: pointer; background: #c02b2b; padding-bottom: 7px; padding-left: 10px; border-top-right-radius: 10px; padding-right: 10px; padding-top: 4px; margin-right: 1px; margin-top: 1px;">×</span>
+        <span id="closePopupButtonbuy" style="color: white; float: right; font-size: 28px; font-weight: bold; cursor: pointer; background: #c02b2b; padding-bottom: 7px; padding-left: 10px; border-top-right-radius: 10px; padding-right: 10px; padding-top: 4px; margin-right: 1px; margin-top: 1px;">×</span>
 
         <div style="text-align: center;background: #383747;margin-bottom: 0px;height: 210px;border-radius: 10px;border: 1px solid #101013;">
             <h2>Buy Diamonds</h2>
@@ -1030,7 +1030,9 @@ window.addEventListener("load", () => {
     function openPurchasePopup() {
         document.getElementById('purchase-popup').style.display = 'block';
     }
-
+document.getElementById('closePopupButtonbuy').onclick = function() {
+    document.getElementById('purchase-popup').style.display = 'none';
+}
     async function submitPurchase() {
         const diamondAmount = document.getElementById('diamond-amount').value;
         let starCost;
