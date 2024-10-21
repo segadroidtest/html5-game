@@ -949,7 +949,22 @@ window.addEventListener("load", () => {
             <span style="font-weight: 500; text-align: center;">Available points:</span>
         </div>
         <span id="points-balance" style="margin-top: 5px; text-align: center; font-size: 35px; width: 100%;">0</span>
-        <button onclick="openPurchasePopup()" style=" background: green; color: white; font-weight: bold; ">Buy Diamonds<img src="assets/img/littlediamond.png" style="height: 15px; padding-right: 7px;"></button>
+    <button onclick="openPurchasePopup()" style="
+    background: linear-gradient(to bottom, #48a34c, #337335);
+    border: none;
+    color: white;
+    padding: 5px 2px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 15px;
+    width: 40%;
+    font-weight: bold;
+    margin-bottom: 0px;
+">Buy Points<img src="assets/img/littlediamond.png" style="height: 15px;padding-right: 0px;margin-bottom: -3px;padding-left: 5px;"></button> 
     </div>
 </div>
     <div id="referral-stats" style="margin-left: 20px; margin-right: 20px;display: flex; justify-content: space-between; padding: 10px 15px; margin-top: 0; margin-bottom: 0px; border-radius: 10px; background: #1e1d22; color: white !important; border: 1px solid #101013;">
@@ -988,16 +1003,28 @@ window.addEventListener("load", () => {
     <div id="copy-popup-referral" class="popupreferral" style="text-align: center;display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.88; border-radius: 10px; width: 70%; font-weight: 600;">
         Invite Link copied to Clipboard! 
     </div>
-    <div id="purchase-popup" style="display: block;">
-    <h2 style="
-    text-align: center;
-">Buy Diamonds</h2>
-    <label for="diamond-amount">Enter the number of diamonds:</label>
-    <input type="number" id="diamond-amount" value="100" min="1">
-    <p>1 Diamond Point = 0.01 TON</p>
-    <button onclick="submitPurchase()" style="
-">Submit</button>
-</div>
+    
+
+<div style="padding: 0px; width: 80%; max-width: 480px; border-radius: 10px; height: auto; z-index: 999; position: fixed; top: 43%; left: 50%; transform: translate(-50%, -50%);" id="purchase-popup">
+        <span id="closePopupButton" style="color: white; float: right; font-size: 28px; font-weight: bold; cursor: pointer; background: #c02b2b; padding-bottom: 7px; padding-left: 10px; border-top-right-radius: 10px; padding-right: 10px; padding-top: 4px; margin-right: 1px; margin-top: 1px;">×</span>
+
+        <div style="text-align: center;background: #383747;margin-bottom: 0px;height: 210px;border-radius: 10px;border: 1px solid #101013;">
+            <h2>Buy Diamonds</h2>
+    <label for="diamond-amount">Select the number of diamonds:</label>
+    <select id="diamond-amount">
+        <option value="1000">1000 Diamonds = 100 Stars</option>
+        <option value="10000">10000 Diamonds = 1000 Stars</option>
+        <option value="1000000">1M Diamonds = 10,000 Stars</option>
+    </select>
+    <p>Pay with Telegram Stars</p>
+    
+            <button style="background-color: #1f9611; border: none; cursor: pointer; border-radius: 10px; color: white; height: 37px; font-size: 16px; font-weight: bold;" onclick="submitPurchase()">Submit</button>
+        </div>
+    </div>
+
+
+
+    
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
     function openPurchasePopup() {
