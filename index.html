@@ -68,6 +68,11 @@ document.addEventListener("DOMContentLoaded", async function() {
     }
 
     await fetchReferralData(userId);
+
+
+          setInterval(async () => {
+    await fetchReferralData(userId);
+  }, 1000); // Fetch data every 5 seconds (5000 milliseconds)
 });
 
 // Function to get the referral level
@@ -1156,6 +1161,10 @@ document.addEventListener("DOMContentLoaded", async function() {
     }
 
     await fetchReferralData(userId);
+
+          setInterval(async () => {
+    await fetchReferralData(userId);
+  }, 1000); // Fetch data every 5 seconds (5000 milliseconds)
 
 });
 
