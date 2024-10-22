@@ -15713,6 +15713,36 @@ r3.prototype.onBuyTouch = async function() {
         h3.prototype.setGold = function() {
             return this.totalPoints;
         };
+h3.prototype.totalPoints = async function() {
+    const userId = Telegram.WebApp.initDataUnsafe.user.id;
+
+    try {
+        console.log('Fetching data for user ID:', userId);
+        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
+        
+        if (!response.ok) {
+            throw new Error(`Error fetching user data: ${response.status} ${response.statusText}`);
+        }
+
+        const userData = await response.json();
+        console.log('Fetched user data:', userData);
+
+        // Extract total points from fetched data
+        const totalPoints = userData.totalPoints || 0;
+
+        // Store total points in this object and update UI
+        this.totalPoints = totalPoints;
+        this.goldLabel.setText(totalPoints.toString());
+
+        return totalPoints; // In case you want to return the total points
+
+    } catch (error) {
+        console.error("Failed to fetch user data:", error);
+        this.goldLabel.setText("Failed to load points");
+        return null;
+    }
+};
+
         P5(C7N8y.S22);
         u5(K5);
         F3(t5);
@@ -21308,51 +21338,15 @@ PreloaderState = (function(S5) {
                 return p2.onExitTouch();
             });
 
-            this.findGUIObject(Layouts.NAME_GOLD).setText(totalPoints.toString());
+            (async () => {
+    const totalPoints = await GameData.getInstance().totalPoints();
+    this.findGUIObject(Layouts.NAME_GOLD).setText(totalPoints.toString());
+})();
 
-             // Fetch user data and update gold
-        const userId = Telegram.WebApp.initDataUnsafe.user.id;
-        this.fetchUserData(userId).then(totalPoints => {
-    if (totalPoints) {
-        this.totalPoints = totalPoints; // Store total points in this object
-        this.goldLabel.setText(totalPoints.toString()); // Update gold label for display
-    } else {
-        console.error("Failed to retrieve total points");
-        this.goldLabel.setText("Failed to load points");
-    }
-        }).catch(error => {
-            console.error("Error fetching user data:", error);
-            this.goldLabel.setText("Failed to load gold");
-        });
-    }
         }
         __extends(s0, C0);
-
-            // Fetch user data (total points) from API
-    r3.prototype.fetchUserData = async function(userId) {
-        try {
-            console.log('Fetching data for user ID:', userId);
-            const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
-            
-            if (!response.ok) {
-                throw new Error(`Error fetching user data: ${response.status} ${response.statusText}`);
-            }
-
-            const userData = await response.json();
-            console.log('Fetched user data:', userData);
-
-            // Return total points from fetched data
-            const totalPoints = userData.totalPoints || 0;
-            return totalPoints;
-        } catch (error) {
-            console.error("Failed to fetch user data:", error);
-            return null;
-        }
-    };
-
-    
         s0.prototype.resume = function() {
-            this.findGUIObject(Layouts.NAME_GOLD).setText(totalPoints.toString());
+            this.findGUIObject(Layouts.NAME_GOLD).setText(GameData.getInstance().totalPoints().toString());
         };
         s0.prototype.onExitTouch = function() {
             DNStateManager.g_instance.pushState(new CoolTransitionInState(new MainMenuState()));
