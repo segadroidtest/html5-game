@@ -13835,7 +13835,7 @@ var DNStateManager = (function() {
                 type: Layouts.TYPE_JELLY_BUTTON,
                 picture: Images.BUTTON_EXIT,
                 x: 75,
-                y: 12,
+                y: 65,
                 name: Layouts.NAME_BUTTON_BACK,
                 scale: 1
             }];
