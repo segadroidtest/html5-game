@@ -15596,17 +15596,29 @@ r3.prototype.onBuyTouch = function() {
                 }
             } catch (m5) {}
         };
-        h3.prototype.onWinLevel = function(m5, b5, h5) {
-            this.totalScore += b5;
-            this.starsPerLevel[m5] = Math.max(this.starsPerLevel[m5], h5);
-            if (C7N8y.t2w(m5, this.levelsCompleted)) {
-                this.levelsCompleted = m5 + C7N8y.T8U;
-                if (C7N8y.B2w(this.levelsCompleted, this.getTotalLevels())) {
-                    this.levelsCompleted = this.getTotalLevels();
-                }
-            }
-            this.save();
-        };
+h3.prototype.onWinLevel = function(m5, b5, h5) {
+    this.totalScore += b5;
+    this.starsPerLevel[m5] = Math.max(this.starsPerLevel[m5], h5);
+    if (C7N8y.t2w(m5, this.levelsCompleted)) {
+        this.levelsCompleted = m5 + C7N8y.T8U;
+        if (C7N8y.B2w(this.levelsCompleted, this.getTotalLevels())) {
+            this.levelsCompleted = this.getTotalLevels();
+        }
+    }
+    
+    // Set newtotalpoints to the updated totalScore
+    newtotalpoints = this.totalScore;  // Assuming newtotalpoints is declared somewhere accessible
+
+    this.save();
+};
+function updateUI() {
+    // Assuming you have a way to select your display element
+    document.getElementById("pointsDisplay").innerText = newtotalpoints; // Update the displayed points
+}
+
+// Call this function whenever you update newtotalpoints
+updateUI();
+
         h3.prototype.getTotalScore = function() {
             return this.totalScore;
         };
