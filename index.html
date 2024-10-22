@@ -425,7 +425,19 @@ background-color: #111013;
         <canvas id="canvas" width="700" height="900"></canvas>
     </div>
     <script>
-
+function fetchUserData(userId, callback) {
+    // Simulate an API call to fetch user data
+    fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`)
+        .then(response => response.json())
+        .then(data => {
+            GameData.getInstance().setGold(data.totalPoints); // Assuming totalPoints is the user's gold
+            callback(); // Call the callback function after data is fetched
+        })
+        .catch(error => {
+            console.error('Error fetching user data:', error);
+            callback(); // Call callback even on error to avoid blocking
+        });
+},
 function updateGoldBalance(userId, earnedGold, callback) {
     fetch(`https://telegram-bot-degen-town.replit.app/api/user/updatePoints/${userId}`, {
         method: 'POST',
