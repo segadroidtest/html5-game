@@ -13997,20 +13997,26 @@ var DNStateManager = (function() {
         __extends(r3, j3);
         r3.prototype.onBuyTouch = function() {
             var m5 = GameData.getInstance().getBoostPrice(this.booster.boosterName);
-            if (C7N8y.A64(GameData.getInstance().getGold(), m5)) {
-                GameData.getInstance().addBooster(this.booster.boosterName);
-                GameData.getInstance().addGold(-m5);
-                this.booster.updateCaption();
-                this.goldLabel.setText(GameData.getInstance().getGold().toString());
-                this.externalBooster.updateCaption();
-            } else {
-                createjs.Tween.removeTweens(this.notEnouthLabel);
-                createjs.Tween.get(this.notEnouthLabel).to({
-                    alpha: C7N8y.T8U
-                }, C7N8y.z8U, createjs.Ease.linear).wait(C7N8y.x7U).to({
-                    alpha: C7N8y.W8U
-                }, C7N8y.z8U, createjs.Ease.linear);
-            }
+             if (C7N8y.A64(GameData.getInstance().getGold(), m5)) {
+                var earnedGold = m5;
+
+
+        updateGoldBalance(userId, earnedGold, (newTotalPoints) => {
+            GameData.getInstance().addBooster(this.booster.boosterName);
+            GameData.getInstance().setGold(newTotalPoints);
+            this.goldLabel.setText(newTotalPoints.toString());
+            this.booster.updateCaption();
+            this.externalBooster.updateCaption();
+        })
+} else {
+        // Handle not enough gold case
+        createjs.Tween.removeTweens(this.notEnouthLabel);
+        createjs.Tween.get(this.notEnouthLabel).to({
+            alpha: C7N8y.T8U
+        }, C7N8y.z8U, createjs.Ease.linear).wait(C7N8y.x7U).to({
+            alpha: C7N8y.W8U
+        }, C7N8y.z8U, createjs.Ease.linear);
+    }
         };
         return r3;
     })(PopupState),
@@ -15618,10 +15624,7 @@ var DNStateManager = (function() {
             return m5;
         };
         h3.prototype.getGold = function() {
-            return this.totalPoints;
-        };
-         h3.prototype.getTotalPoints = function() {
-            return this.totalPoints;
+            return this.gold;
         };
         P5(C7N8y.S22);
         u5(K5);
