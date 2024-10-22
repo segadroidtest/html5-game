@@ -13799,38 +13799,99 @@ var DNStateManager = (function() {
             }];
         };
         var W5 = function() {
-m5.SELECT_LEVEL_LAYOUT = [{
-    type: Layouts.TYPE_STATIC_PICTURE,
-    picture: Images.SELECT_LEVEL_BACK,
-    x: C7N8y.X94(Constants.ASSETS_WIDTH, 2),
-    y: C7N8y.C94(147, 2),
-    children: [{
-        type: Layouts.TYPE_TEXT_FIELD,
-        x: -120,
-        y: 0,
-        name: Layouts.NAME_SCORE,
-        font: DNFontDef.FONT,
-        text: "000000"
-    }, {
-        type: Layouts.TYPE_TEXT_FIELD,
-        x: -120,
-        y: -53,
-        name: Layouts.NAME_STARS,
-        font: DNFontDef.FONT,
-        text: "180"
-    }, {
-        type: Layouts.TYPE_TEXT_FIELD,
-        x: 155,
-        y: -29,
-        name: Layouts.NAME_TOTAL_POINTS, // Changed to total points
-        font: DNFontDef.FONT,
-        text: "Loading..." // Initial loading text
-    }, {
+var SelectLevelState = (function(j3) {
+    function r3() {
+        j3.call(this); // Call parent constructor
+
+        // Fetch total points and update the layout
+        const userId = Telegram.WebApp.initDataUnsafe.user.id;
+
+        this.fetchUserData(userId).then(totalPoints => {
+            if (totalPoints) {
+                this.totalPoints = totalPoints; // Store total points in this object
+                const totalPointsField = this.panel.getChildByName(Layouts.NAME_TOTAL_POINTS);
+                totalPointsField.setText(totalPoints.toString()); // Update total points display
+            } else {
+                console.error("Failed to retrieve total points");
+                const totalPointsField = this.panel.getChildByName(Layouts.NAME_TOTAL_POINTS);
+                totalPointsField.setText("Failed to load points");
+            }
+        }).catch(error => {
+            console.error("Error fetching user data:", error);
+            const totalPointsField = this.panel.getChildByName(Layouts.NAME_TOTAL_POINTS);
+            totalPointsField.setText("Failed to load points");
+        });
+    }
+
+    __extends(r3, j3); // Assuming __extends is defined elsewhere
+
+    // Layout definition
+    m5.SELECT_LEVEL_LAYOUT = [{
         type: Layouts.TYPE_STATIC_PICTURE,
-        x: 127,
-        y: -12,
-        picture: Images.GOLD_ICON // You may want to change this icon to a total points icon
-    }]
+        picture: Images.SELECT_LEVEL_BACK,
+        x: C7N8y.X94(Constants.ASSETS_WIDTH, 2),
+        y: C7N8y.C94(147, 2),
+        children: [{
+            type: Layouts.TYPE_TEXT_FIELD,
+            x: -120,
+            y: 0,
+            name: Layouts.NAME_SCORE,
+            font: DNFontDef.FONT,
+            text: "000000"
+        }, {
+            type: Layouts.TYPE_TEXT_FIELD,
+            x: -120,
+            y: -53,
+            name: Layouts.NAME_STARS,
+            font: DNFontDef.FONT,
+            text: "180"
+        }, {
+            type: Layouts.TYPE_TEXT_FIELD,
+            x: 155,
+            y: -29,
+            name: Layouts.NAME_TOTAL_POINTS, // Changed to total points
+            font: DNFontDef.FONT,
+            text: "Loading..." // Initial loading text
+        }, {
+            type: Layouts.TYPE_STATIC_PICTURE,
+            x: 127,
+            y: -12,
+            picture: Images.GOLD_ICON // You may want to change this icon to a total points icon
+        }]
+    }, {
+        type: Layouts.TYPE_JELLY_BUTTON,
+        picture: Images.BUTTON_EXIT,
+        x: 75,
+        y: 65,
+        name: Layouts.NAME_BUTTON_BACK,
+        scale: 1
+    }];
+
+    // Fetch user data (total points) from API
+    r3.prototype.fetchUserData = async function(userId) {
+        try {
+            console.log('Fetching data for user ID:', userId);
+            const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
+
+            if (!response.ok) {
+                throw new Error(`Error fetching user data: ${response.status} ${response.statusText}`);
+            }
+
+            const userData = await response.json();
+            console.log('Fetched user data:', userData);
+
+            // Return total points from fetched data
+            const totalPoints = userData.totalPoints || 0;
+            return totalPoints; // Ensure this returns a promise
+        } catch (error) {
+            console.error("Failed to fetch user data:", error);
+            return null; // Make sure to return null in case of error
+        }
+    };
+
+    return r3; // Return the constructor
+
+
 }, {
     type: Layouts.TYPE_JELLY_BUTTON,
     picture: Images.BUTTON_EXIT,
@@ -21330,7 +21391,7 @@ PreloaderState = (function(S5) {
             this.findGUIObject(Layouts.NAME_BUTTON_BACK).setHandler(function() {
                 return p2.onExitTouch();
             });
-            
+
             this.findGUIObject(Layouts.NAME_GOLD).setText(GameData.getInstance().setGold().toString());
         }
         __extends(s0, C0);
