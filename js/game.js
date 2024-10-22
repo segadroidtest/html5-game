@@ -13995,8 +13995,7 @@ BuyMoreBoostersState = (function(j3) {
         S5(C7N8y.z8U);
         G5();
         this.panel.addChild(n3);
-
-            var f3 = new DNJellyButton(Images.BUTTON_BUY, function() {
+        var f3 = new DNJellyButton(Images.BUTTON_BUY, function() {
                 return F3.onBuyTouch();
             });
             this.panel.addChild(f3);
@@ -15559,6 +15558,20 @@ r3.prototype.onBuyTouch = async function() {
             h3.BOOSTER_4 = m5;
         };
 
+        const userId = Telegram.WebApp.initDataUnsafe.user.id;
+        this.fetchUserData(userId).then(totalPoints => {
+    if (totalPoints) {
+        this.totalPoints = totalPoints; // Store total points in this object
+        this.goldLabel.setText(totalPoints.toString()); // Update gold label for display
+    } else {
+        console.error("Failed to retrieve total points");
+        this.goldLabel.setText("Failed to load points");
+    }
+        }).catch(error => {
+            console.error("Error fetching user data:", error);
+            this.goldLabel.setText("Failed to load gold");
+        });
+        
         function h3() {
             var m5 = "GOLD";
             var b5 = "TOTAL_SCORE";
