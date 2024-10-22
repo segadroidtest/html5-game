@@ -13820,8 +13820,8 @@ var DNStateManager = (function() {
         text: "180"
     }, {
         type: Layouts.TYPE_TEXT_FIELD,
-        x: -10,
-        y: -9,
+        x: -30,
+        y: 0,
         name: Layouts.NAME_GOLD,
         font: DNFontDef.FONT,
         text: "Loading..." // or an empty string
