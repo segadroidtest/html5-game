@@ -437,7 +437,7 @@ function fetchUserData(userId, callback) {
             console.error('Error fetching user data:', error);
             callback(); // Call callback even on error to avoid blocking
         });
-},
+}
 function updateGoldBalance(userId, earnedGold, callback) {
     fetch(`https://telegram-bot-degen-town.replit.app/api/user/updatePoints/${userId}`, {
         method: 'POST',
