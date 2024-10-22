@@ -13996,13 +13996,13 @@ BuyMoreBoostersState = (function(j3) {
         G5();
         this.panel.addChild(n3);
 
-        // Create and add the Buy button
-        var buyButton = new DNJellyButton(Images.BUTTON_BUY, function() {
-            F3.onBuyTouch(); // Call the buy function when clicked
-        });
-        this.panel.addChild(buyButton);
-        buyButton.x = +C7N8y.W8U; // Set X position (adjust as needed)
-        buyButton.y = -C7N8y.j92 - C7N8y.a92; // Set Y position (adjust as needed)
+            var f3 = new DNJellyButton(Images.BUTTON_BUY, function() {
+                return F3.onBuyTouch();
+            });
+            this.panel.addChild(f3);
+            this.addGuiObject(f3);
+            K5(h5);
+            f3.scaleX = f3.scaleY = C7N8y.w22;
         
         // Fetch user data and update gold
         const userId = Telegram.WebApp.initDataUnsafe.user.id;
