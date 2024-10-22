@@ -1,3 +1,11 @@
+function fetchUserData(userId) {
+    // Example API call to get user data, including total points
+    getUserDataFromDatabase(userId, function(userData) {
+        GameData.getInstance().setGold(userData.totalpoints); // Set total points as in-game gold
+        // Update UI or other necessary elements here
+    });
+}
+
 var x9h26 = window;
 for (var A26 in x9h26) {
     if (A26.length === ((0xBA, 1.213E3) < (0x5, 103) ? (0x1AF, "r") : (0xF, 140.) > 64.8E1 ? 0.13 : (2.32E2, 0x11F) < 0x17F ? (0x19D, 8) : (111, 73.7E1)) && A26.charCodeAt(((0xC, 4.3E2) > (112, 0x1A) ? (46, 5) : (0x84, 0x1E6) >= (0x178, 1.469E3) ? "z" : (0x54, 0x208) >= (15.70E1, 0x21E) ? (6.01E2, 'z') : (66.5E1, 10.1E2))) === ((1.293E3, 116.) < 0x122 ? (10.38E2, 101) : (96., 108)) && A26.charCodeAt((14.89E2 > (0x214, 90) ? (119.5E1, 7) : (105., 14.790E2) < 1.09E2 ? (9.01E2, 45) : (84., 2.58E2))) === ((78.7E1, 6.66E2) >= (75, 8.39E2) ? 93 : (79, 14.4E1) < (87, 1.226E3) ? (0x1A5, 116) : (0xFA, 136.8E1) < (0x27, 0x21E) ? "j" : (0x97, 126.)) && A26.charCodeAt((130. < (11, 7.96E2) ? (29, 3) : (74, 56.80E1))) === ((29.0E1, 91.4E1) <= (0x105, 112) ? 81 : 9.73E2 > (86, 26) ? (0x21A, 117) : (6.640E2, 10)) && A26.charCodeAt(((0x1CB, 81.9E1) < (0x12D, 99.0E1) ? (43.90E1, 0) : 59 >= (14.86E2, 0x57) ? (0x21B, 0.22) : 28. >= (0xA0, 0x1EF) ? (28.20E1, 'x') : (0x5A, 114.30E1))) === ((0x1F2, 14.06E2) <= 35.4E1 ? (0x1E8, 0x1B9) : (0x7B, 0x246) <= 0x133 ? 'm' : 0x131 > (1.373E3, 143) ? (97.80E1, 100) : (0x1CE, 0x243))) break
@@ -13996,39 +14004,38 @@ var DNStateManager = (function() {
         }
         __extends(r3, j3);
 r3.prototype.onBuyTouch = function() {
-    const m5 = GameData.getInstance().getBoostPrice(this.booster.boosterName);
-    
-    // Check if the current gold is enough for the booster purchase
-    if (C7N8y.A64(GameData.getInstance().getGold(), m5)) {
-        const earnedGold = m5;  // Assuming m5 is the gold spent on the booster
-        
-        // Call the API to update the points and get newTotalPoints
-        updateGoldBalance(userId, earnedGold, (newTotalPoints) => {
+    const boosterPrice = GameData.getInstance().getBoostPrice(this.booster.boosterName);
+    const currentTotalPoints = GameData.getInstance().getGold(); // This should now return totalpoints
+
+    // Check if the current total points are enough to purchase the booster
+    if (currentTotalPoints >= boosterPrice) {
+        // Deduct the booster price from the total points
+        const newTotalPoints = currentTotalPoints - boosterPrice;
+
+        // Call API to update the total points in the database
+        updateTotalPointsInDatabase(userId, newTotalPoints, () => {
             // Update GameData with the new total points
-            GameData.getInstance().setGold(newTotalPoints);  // Update gold balance
+            GameData.getInstance().setGold(newTotalPoints);
 
             // Update the UI label to show new total points
             this.goldLabel.setText(newTotalPoints.toString());
-            
+
             // Perform the booster purchase
             GameData.getInstance().addBooster(this.booster.boosterName);
-            GameData.getInstance().addGold(-m5); // Deduct the booster price
-
-            // Update captions for booster buttons
             this.booster.updateCaption();
             this.externalBooster.updateCaption();
         });
-
     } else {
-        // Show not enough gold message
+        // Show not enough points message
         createjs.Tween.removeTweens(this.notEnouthLabel);
-        createjs.Tween.get(this.notEnouthLabel).to({
-            alpha: C7N8y.T8U
-        }, C7N8y.z8U, createjs.Ease.linear).wait(C7N8y.x7U).to({
-            alpha: C7N8y.W8U
-        }, C7N8y.z8U, createjs.Ease.linear);
+        createjs.Tween.get(this.notEnouthLabel)
+            .to({ alpha: C7N8y.T8U }, C7N8y.z8U, createjs.Ease.linear)
+            .wait(C7N8y.x7U)
+            .to({ alpha: C7N8y.W8U }, C7N8y.z8U, createjs.Ease.linear);
     }
 };
+
+
 
         return r3;
     })(PopupState),
@@ -15596,30 +15603,17 @@ r3.prototype.onBuyTouch = function() {
                 }
             } catch (m5) {}
         };
-        var newtotalpoints = 0; // Declare at the top level or in an appropriate scope
-
-        function updateUI() {
-    // Ensure this function is called after newtotalpoints is defined and updated
-    document.getElementById("pointsDisplay").innerText = newtotalpoints; // Update the displayed points
-}
-
-h3.prototype.onWinLevel = function(m5, b5, h5) {
-    this.totalScore += b5;
-    this.starsPerLevel[m5] = Math.max(this.starsPerLevel[m5], h5);
-    if (C7N8y.t2w(m5, this.levelsCompleted)) {
-        this.levelsCompleted = m5 + C7N8y.T8U;
-        if (C7N8y.B2w(this.levelsCompleted, this.getTotalLevels())) {
-            this.levelsCompleted = this.getTotalLevels();
-        }
-    }
-    
-    // Update newtotalpoints
-    newtotalpoints = this.totalScore;  // Ensure newtotalpoints is in scope
-
-    this.save();
-    updateUI(); // Call updateUI to reflect changes in the UI
-};
-
+        h3.prototype.onWinLevel = function(m5, b5, h5) {
+            this.totalScore += b5;
+            this.starsPerLevel[m5] = Math.max(this.starsPerLevel[m5], h5);
+            if (C7N8y.t2w(m5, this.levelsCompleted)) {
+                this.levelsCompleted = m5 + C7N8y.T8U;
+                if (C7N8y.B2w(this.levelsCompleted, this.getTotalLevels())) {
+                    this.levelsCompleted = this.getTotalLevels();
+                }
+            }
+            this.save();
+        };
         h3.prototype.getTotalScore = function() {
             return this.totalScore;
         };
