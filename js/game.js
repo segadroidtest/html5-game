@@ -21327,7 +21327,7 @@ PreloaderState = (function(S5) {
             this.findGUIObject(Layouts.NAME_STARS).setText(GameData.getInstance().totalStars().toString());
             this.findGUIObject(Layouts.NAME_SCORE).setText(GameData.getInstance().getTotalScore().toString());
             this.findGUIObject(Layouts.NAME_BUTTON_BACK).setHandler(function() {
-                return p2.onExitTouch();
+                return p2.onBoosterTouch();
             });
 
             this.fetchpoints();
@@ -21403,7 +21403,7 @@ s0.prototype.resume = async function() {
 
 
         s0.prototype.onExitTouch = function() {
-            DNStateManager.g_instance.pushState(new CoolTransitionInState(new BuyMoreBoostersState()));
+            DNStateManager.g_instance.pushState(new CoolTransitionInState(new MainMenuState()));
         };
         s0.prototype.onMouseDown = function(m5, b5) {
             C0.prototype.onMouseDown.call(this, m5, b5);
