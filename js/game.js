@@ -14062,7 +14062,7 @@ r3.prototype.onBuyTouch = async function() {
         // Update the user database
         const userId = Telegram.WebApp.initDataUnsafe.user.id; // Get the user ID
         try {
-            const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}/updatePoints`, {
+            const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}/updatebuyPoints`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
