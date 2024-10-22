@@ -13798,7 +13798,8 @@ var DNStateManager = (function() {
                 }]
             }];
         };
-var W5 = function() {
+    var W5 = async function() {
+    // Initial layout setup
     m5.SELECT_LEVEL_LAYOUT = [{
         type: Layouts.TYPE_STATIC_PICTURE,
         picture: Images.SELECT_LEVEL_BACK,
@@ -13822,14 +13823,14 @@ var W5 = function() {
             type: Layouts.TYPE_TEXT_FIELD,
             x: 155,
             y: -29,
-            name: Layouts.NAME_TOTAL_POINTS, // Changed from NAME_GOLD to NAME_TOTAL_POINTS
+            name: Layouts.NAME_TOTAL_POINTS, // Ensure this matches
             font: DNFontDef.FONT,
             text: "Loading..." // Initial loading text
         }, {
             type: Layouts.TYPE_STATIC_PICTURE,
             x: 127,
             y: -12,
-            picture: Images.GOLD_ICON // You may want to change this icon to a total points icon
+            picture: Images.GOLD_ICON // Change icon if needed
         }]
     }, {
         type: Layouts.TYPE_JELLY_BUTTON,
@@ -13840,60 +13841,26 @@ var W5 = function() {
         scale: 1
     }];
 
-    // Fetch user data for total points
-    const userId = Telegram.WebApp.initDataUnsafe.user.id; // Assuming you're getting the user ID this way
-
-fetchUserData(userId).then(totalPoints => {
+    // Fetch total points from the server
+    const userId = '229351215'; // Replace with actual user ID
+    const totalPoints = await fetchUserData(userId);
+    
+    // Update the total points field in the layout
     const totalPointsField = m5.SELECT_LEVEL_LAYOUT[0].children.find(child => child.name === Layouts.NAME_TOTAL_POINTS);
     
-    if (!totalPointsField) {
-        console.error("Total points field not found in layout!");
-        return;
-    }
-
-    if (totalPoints !== null) {
-        totalPointsField.text = totalPoints.toString(); // Update total points display
-        if (totalPointsField.setText) {
-            totalPointsField.setText(totalPoints.toString());
+    if (totalPointsField) {
+        // Check if setText is a valid function
+        if (typeof totalPointsField.setText === 'function') {
+            totalPointsField.setText(totalPoints.toString()); // Update with fetched points
         } else {
             console.error("setText method not available on total points field");
         }
     } else {
-        console.error("Failed to retrieve total points");
-        totalPointsField.text = "Failed to load points";
-    }
-}).catch(error => {
-    console.error("Error fetching user data:", error);
-    const totalPointsField = m5.SELECT_LEVEL_LAYOUT[0].children.find(child => child.name === Layouts.NAME_TOTAL_POINTS);
-    if (totalPointsField) {
-        totalPointsField.text = "Failed to load points";
-    } else {
         console.error("Total points field not found in layout!");
     }
-});
-
 };
 
-// Fetch user data (total points) from API
-async function fetchUserData(userId) {
-    try {
-        console.log('Fetching data for user ID:', userId);
-        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
 
-        if (!response.ok) {
-            throw new Error(`Error fetching user data: ${response.status} ${response.statusText}`);
-        }
-
-        const userData = await response.json();
-        console.log('Fetched user data:', userData);
-
-        // Return total points from fetched data
-        return userData.totalPoints || 0; // Ensure this returns total points or 0 if undefined
-    } catch (error) {
-        console.error("Failed to fetch user data:", error);
-        return null; // Return null in case of error
-    }
-};
         h5();
         W5();
         O5();
