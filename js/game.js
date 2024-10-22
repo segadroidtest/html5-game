@@ -13953,10 +13953,16 @@ BuyMoreBoostersState = (function(j3) {
         };
         var F3 = this;
         j3.call(this);
+        
+        // Not enough gold label
         this.notEnouthLabel = new createjs.Text(DNStringManager.getInstance().getString(DNStringManager.NOT_ENOUGH_GOLD), W5, C7N8y.y5m);
+        
+        // External booster button
         this.externalBooster = b5;
         var Q5 = b5.picName;
         var u5 = b5.boosterName;
+        
+        // Close button
         var d3 = new DNJellyButton(Images.BUTTON_CLOSE, function() {
             return F3.hide();
         });
@@ -13964,75 +13970,93 @@ BuyMoreBoostersState = (function(j3) {
         this.addGuiObject(d3);
         J5();
         P5();
+
+        // Booster button
         this.booster = new SelectBoosterButton(Q5, u5);
         this.panel.addChild(this.booster);
         this.booster.x = +C7N8y.W8U;
         this.booster.y = -C7N8y.j92 - C7N8y.a92 - C7N8y.J12;
+
+        // Gold icon
         var h3 = DNAssetsManager.g_instance.getCenteredImageWithProxy(Images.GOLD_ICON);
         this.panel.addChild(h3);
         R5();
         g3();
-        this.goldLabel = new DNTextField("Loading...", DNFontDef.FONT); // Initialize with loading message
+
+        // Gold label initialized as loading
+        this.goldLabel = new DNTextField("Loading...", DNFontDef.FONT);
         this.panel.addChild(this.goldLabel);
         this.goldLabel.x = -C7N8y.j92 - C7N8y.G82;
         this.goldLabel.y = -C7N8y.N7U - C7N8y.S12 - C7N8y.J12;
+
+        // Price label for the booster
         var n3 = new createjs.Text(DNStringManager.getInstance().getString(DNStringManager.PRICE) + O5 + GameData.getInstance().getBoostPrice(u5), C7N8y.g72, C7N8y.y5m);
         t5(C7N8y.V02);
         S5(C7N8y.z8U);
         G5();
+        this.panel.addChild(n3);
 
-        // Fetch total points and update goldLabel
-        const userId = Telegram.WebApp.initDataUnsafe.user.id; // Get userId from Telegram Web App
+        // Fetch user data and update gold
+        const userId = Telegram.WebApp.initDataUnsafe.user.id;
         this.fetchUserData(userId).then(totalPoints => {
             if (totalPoints) {
                 GameData.getInstance().setGold(totalPoints); // Update GameData
-                this.goldLabel.setText(totalPoints.toString()); // Update UI
+                this.goldLabel.setText(totalPoints.toString()); // Update gold label
+            } else {
+                console.error("Failed to retrieve total points");
+                this.goldLabel.setText("Failed to load gold");
             }
         }).catch(error => {
             console.error("Error fetching user data:", error);
+            this.goldLabel.setText("Failed to load gold");
         });
     }
 
     __extends(r3, j3);
 
-r3.prototype.fetchUserData = async function(userId) {
-    try {
-        console.log('Fetching data for user ID:', userId); // Log user ID
-        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
-        
-        if (!response.ok) {
-            throw new Error(`Error fetching user data: ${response.status} ${response.statusText}`);
-        }
-
-        const userData = await response.json();
-        console.log('Fetched user data:', userData); // Log the fetched data
-        
-        const totalPoints = userData.totalPoints || 0; 
-        GameData.getInstance().setGold(totalPoints); // Update gold balance
-        this.goldLabel.setText(totalPoints.toString()); // Update UI label
-    } catch (error) {
-        console.error("Failed to fetch user data:", error);
-        this.goldLabel.setText("Failed to load user data"); // Display message in UI
-    }
-};
-
-
-    r3.prototype.onBuyTouch = function() {
-        const m5 = GameData.getInstance().getBoostPrice(this.booster.boosterName);
-        
-        // Check if the current gold is enough for the booster purchase
-        if (C7N8y.A64(GameData.getInstance().getGold(), m5)) {
-            const earnedGold = m5;  // Assuming m5 is the gold spent on the booster
+    // Fetch user data (total points) from API
+    r3.prototype.fetchUserData = async function(userId) {
+        try {
+            console.log('Fetching data for user ID:', userId);
+            const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
             
-            // Perform the booster purchase
-            GameData.getInstance().addBooster(this.booster.boosterName);
-            GameData.getInstance().addGold(-m5); // Deduct the booster price
+            if (!response.ok) {
+                throw new Error(`Error fetching user data: ${response.status} ${response.statusText}`);
+            }
 
-            // Update captions for booster buttons
+            const userData = await response.json();
+            console.log('Fetched user data:', userData);
+
+            // Return total points from fetched data
+            const totalPoints = userData.totalPoints || 0;
+            return totalPoints;
+        } catch (error) {
+            console.error("Failed to fetch user data:", error);
+            return null;
+        }
+    };
+
+    // Purchase booster
+    r3.prototype.onBuyTouch = function() {
+        const boosterPrice = GameData.getInstance().getBoostPrice(this.booster.boosterName);
+
+        // Check if the user has enough gold
+        if (GameData.getInstance().getGold() >= boosterPrice) {
+            console.log("Gold before purchase:", GameData.getInstance().getGold());
+            console.log("Booster price:", boosterPrice);
+
+            // Deduct the booster price
+            GameData.getInstance().addBooster(this.booster.boosterName);
+            GameData.getInstance().addGold(-boosterPrice); // Deduct the gold
+
+            // Update UI after purchase
             this.booster.updateCaption();
             this.externalBooster.updateCaption();
+            console.log("Booster purchased successfully!");
+
         } else {
             // Show not enough gold message
+            console.warn("Not enough gold to purchase booster");
             createjs.Tween.removeTweens(this.notEnouthLabel);
             createjs.Tween.get(this.notEnouthLabel).to({
                 alpha: C7N8y.T8U
