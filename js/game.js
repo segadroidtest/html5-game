@@ -21330,10 +21330,6 @@ PreloaderState = (function(S5) {
                 return p2.onExitTouch();
             });
 
-            (async () => {
-    const totalPoints = await GameData.getInstance().totalPoints();
-    this.findGUIObject(Layouts.NAME_GOLD).setText(totalPoints.toString());
-})();
 
         }
         __extends(s0, C0);
