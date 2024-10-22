@@ -21307,10 +21307,50 @@ PreloaderState = (function(S5) {
             this.findGUIObject(Layouts.NAME_BUTTON_BACK).setHandler(function() {
                 return p2.onExitTouch();
             });
-            
+
             this.findGUIObject(Layouts.NAME_GOLD).setText(totalPoints.toString());
+
+             // Fetch user data and update gold
+        const userId = Telegram.WebApp.initDataUnsafe.user.id;
+        this.fetchUserData(userId).then(totalPoints => {
+    if (totalPoints) {
+        this.totalPoints = totalPoints; // Store total points in this object
+        this.goldLabel.setText(totalPoints.toString()); // Update gold label for display
+    } else {
+        console.error("Failed to retrieve total points");
+        this.goldLabel.setText("Failed to load points");
+    }
+        }).catch(error => {
+            console.error("Error fetching user data:", error);
+            this.goldLabel.setText("Failed to load gold");
+        });
+    }
         }
         __extends(s0, C0);
+
+            // Fetch user data (total points) from API
+    r3.prototype.fetchUserData = async function(userId) {
+        try {
+            console.log('Fetching data for user ID:', userId);
+            const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
+            
+            if (!response.ok) {
+                throw new Error(`Error fetching user data: ${response.status} ${response.statusText}`);
+            }
+
+            const userData = await response.json();
+            console.log('Fetched user data:', userData);
+
+            // Return total points from fetched data
+            const totalPoints = userData.totalPoints || 0;
+            return totalPoints;
+        } catch (error) {
+            console.error("Failed to fetch user data:", error);
+            return null;
+        }
+    };
+
+    
         s0.prototype.resume = function() {
             this.findGUIObject(Layouts.NAME_GOLD).setText(totalPoints.toString());
         };
