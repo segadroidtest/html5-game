@@ -21327,7 +21327,7 @@ PreloaderState = (function(S5) {
             this.findGUIObject(Layouts.NAME_STARS).setText(GameData.getInstance().totalStars().toString());
             this.findGUIObject(Layouts.NAME_SCORE).setText(GameData.getInstance().getTotalScore().toString());
             this.findGUIObject(Layouts.NAME_BUTTON_BACK).setHandler(function() {
-                return d3.onBoosterTouch();
+                DNStateManager.g_instance.pushState(new BuyMoreBoostersState(this.booster));
             });
 
             this.fetchpoints();
