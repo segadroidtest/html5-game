@@ -15717,31 +15717,22 @@ h3.prototype.totalPoints = async function() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id;
 
     try {
-        console.log('Fetching data for user ID:', userId);
         const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
+        if (!response.ok) throw new Error(`Error fetching user data: ${response.status} ${response.statusText}`);
         
-        if (!response.ok) {
-            throw new Error(`Error fetching user data: ${response.status} ${response.statusText}`);
-        }
-
         const userData = await response.json();
-        console.log('Fetched user data:', userData);
-
-        // Extract total points from fetched data
         const totalPoints = userData.totalPoints || 0;
+        
+        this.goldLabel.setText(totalPoints.toString()); // Update UI
 
-        // Store total points in this object and update UI
-        this.totalPoints = totalPoints;
-        this.goldLabel.setText(totalPoints.toString());
-
-        return totalPoints;
-
+        return totalPoints; // Return the value
     } catch (error) {
         console.error("Failed to fetch user data:", error);
         this.goldLabel.setText("Failed to load points");
         return null;
     }
 };
+
 
 
         P5(C7N8y.S22);
@@ -21348,23 +21339,22 @@ PreloaderState = (function(S5) {
         __extends(s0, C0);
 s0.prototype.resume = async function() {
     try {
-        const totalPoints = await GameData.getInstance().totalPoints();
+        const gameDataInstance = GameData.getInstance();
+        console.log('GameData instance:', gameDataInstance); // Check what is returned
 
-        if (totalPoints !== null) {
-            const goldLabel = this.findGUIObject(Layouts.NAME_GOLD);
-            if (goldLabel) {
-                goldLabel.setText(totalPoints.toString());
-            } else {
-                console.error("goldLabel is undefined");
-            }
-        } else {
-            this.findGUIObject(Layouts.NAME_GOLD).setText("Failed to load points");
+        if (typeof gameDataInstance.totalPoints !== 'function') {
+            throw new Error("totalPoints is not defined on the instance");
         }
+
+        const totalPoints = await gameDataInstance.totalPoints();
+        this.findGUIObject(Layouts.NAME_GOLD).setText(totalPoints.toString());
+
     } catch (error) {
         console.error("Error fetching total points:", error);
         this.findGUIObject(Layouts.NAME_GOLD).setText("Error loading points");
     }
 };
+
 
         s0.prototype.onExitTouch = function() {
             DNStateManager.g_instance.pushState(new CoolTransitionInState(new MainMenuState()));
