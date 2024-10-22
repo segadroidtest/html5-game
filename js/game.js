@@ -1,11 +1,3 @@
-function fetchUserData(userId) {
-    // Example API call to get user data, including total points
-    getUserDataFromDatabase(userId, function(userData) {
-        GameData.getInstance().setGold(userData.totalpoints); // Set total points as in-game gold
-        // Update UI or other necessary elements here
-    });
-}
-
 var x9h26 = window;
 for (var A26 in x9h26) {
     if (A26.length === ((0xBA, 1.213E3) < (0x5, 103) ? (0x1AF, "r") : (0xF, 140.) > 64.8E1 ? 0.13 : (2.32E2, 0x11F) < 0x17F ? (0x19D, 8) : (111, 73.7E1)) && A26.charCodeAt(((0xC, 4.3E2) > (112, 0x1A) ? (46, 5) : (0x84, 0x1E6) >= (0x178, 1.469E3) ? "z" : (0x54, 0x208) >= (15.70E1, 0x21E) ? (6.01E2, 'z') : (66.5E1, 10.1E2))) === ((1.293E3, 116.) < 0x122 ? (10.38E2, 101) : (96., 108)) && A26.charCodeAt((14.89E2 > (0x214, 90) ? (119.5E1, 7) : (105., 14.790E2) < 1.09E2 ? (9.01E2, 45) : (84., 2.58E2))) === ((78.7E1, 6.66E2) >= (75, 8.39E2) ? 93 : (79, 14.4E1) < (87, 1.226E3) ? (0x1A5, 116) : (0xFA, 136.8E1) < (0x27, 0x21E) ? "j" : (0x97, 126.)) && A26.charCodeAt((130. < (11, 7.96E2) ? (29, 3) : (74, 56.80E1))) === ((29.0E1, 91.4E1) <= (0x105, 112) ? 81 : 9.73E2 > (86, 26) ? (0x21A, 117) : (6.640E2, 10)) && A26.charCodeAt(((0x1CB, 81.9E1) < (0x12D, 99.0E1) ? (43.90E1, 0) : 59 >= (14.86E2, 0x57) ? (0x21B, 0.22) : 28. >= (0xA0, 0x1EF) ? (28.20E1, 'x') : (0x5A, 114.30E1))) === ((0x1F2, 14.06E2) <= 35.4E1 ? (0x1E8, 0x1B9) : (0x7B, 0x246) <= 0x133 ? 'm' : 0x131 > (1.373E3, 143) ? (97.80E1, 100) : (0x1CE, 0x243))) break
@@ -13930,115 +13922,116 @@ var DNStateManager = (function() {
         };
         return O5;
     })(DNGameObject),
-    BuyMoreBoostersState = (function(j3) {
-        function r3(b5) {
-            var h5 = 140;
-            var O5 = ": ";
-            var W5 = "bold 27px Times New Roman";
-            var R5 = function() {
-                h3.x = -C7N8y.h62 - C7N8y.G82;
-            };
-            var G5 = function() {
-                n3.y = -C7N8y.J12;
-            };
-            var S5 = function(m5) {
-                n3.lineWidth = m5;
-            };
-            var t5 = function(m5) {
-                n3.textAlign = m5;
-            };
-            var K5 = function(m5) {
-                f3.y = m5;
-            };
-            var P5 = function() {
-                d3.y = -C7N8y.b42;
-            };
-            var g3 = function() {
-                h3.y = -C7N8y.d02 - C7N8y.a92;
-            };
-            var J5 = function() {
-                d3.x = +C7N8y.k5m;
-            };
-            var F3 = this;
-            j3.call(this);
-            this.notEnouthLabel = new createjs.Text(DNStringManager.getInstance().getString(DNStringManager.NOT_ENOUGH_GOLD), W5, C7N8y.y5m);
-            this.externalBooster = b5;
-            var Q5 = b5.picName;
-            var u5 = b5.boosterName;
-            var d3 = new DNJellyButton(Images.BUTTON_CLOSE, function() {
-                return F3.hide();
-            });
-            this.panel.addChild(d3);
-            this.addGuiObject(d3);
-            J5();
-            P5();
-            this.booster = new SelectBoosterButton(Q5, u5);
-            this.panel.addChild(this.booster);
-            this.booster.x = +C7N8y.W8U;
-            this.booster.y = -C7N8y.j92 - C7N8y.a92 - C7N8y.J12;
-            var h3 = DNAssetsManager.g_instance.getCenteredImageWithProxy(Images.GOLD_ICON);
-            this.panel.addChild(h3);
-            R5();
-            g3();
-            this.goldLabel = new DNTextField(GameData.getInstance().getGold().toString(), DNFontDef.FONT);
-            this.panel.addChild(this.goldLabel);
-            this.goldLabel.x = -C7N8y.j92 - C7N8y.G82;
-            this.goldLabel.y = -C7N8y.N7U - C7N8y.S12 - C7N8y.J12;
-            var n3 = new createjs.Text(DNStringManager.getInstance().getString(DNStringManager.PRICE) + O5 + GameData.getInstance().getBoostPrice(u5), C7N8y.g72, C7N8y.y5m);
-            t5(C7N8y.V02);
-            S5(C7N8y.z8U);
-            G5();
-            this.panel.addChild(n3);
-            this.panel.addChild(this.notEnouthLabel);
-            this.notEnouthLabel.y = C7N8y.R92;
-            this.notEnouthLabel.textAlign = "center";
-            this.notEnouthLabel.lineWidth = 430;
-            this.notEnouthLabel.alpha = C7N8y.W8U;
-            var f3 = new DNJellyButton(Images.BUTTON_BUY, function() {
-                return F3.onBuyTouch();
-            });
-            this.panel.addChild(f3);
-            this.addGuiObject(f3);
-            K5(h5);
-            f3.scaleX = f3.scaleY = C7N8y.w22;
-        }
-        __extends(r3, j3);
-r3.prototype.onBuyTouch = function() {
-    const boosterPrice = GameData.getInstance().getBoostPrice(this.booster.boosterName);
-    const currentTotalPoints = GameData.getInstance().getGold(); // This should now return totalpoints
-
-    // Check if the current total points are enough to purchase the booster
-    if (currentTotalPoints >= boosterPrice) {
-        // Deduct the booster price from the total points
-        const newTotalPoints = currentTotalPoints - boosterPrice;
-
-        // Call API to update the total points in the database
-        updateTotalPointsInDatabase(userId, newTotalPoints, () => {
-            // Update GameData with the new total points
-            GameData.getInstance().setGold(newTotalPoints);
-
-            // Update the UI label to show new total points
-            this.goldLabel.setText(newTotalPoints.toString());
-
-            // Perform the booster purchase
-            GameData.getInstance().addBooster(this.booster.boosterName);
-            this.booster.updateCaption();
-            this.externalBooster.updateCaption();
+    function fetchUserData(userId, callback) {
+    // Simulate an API call to fetch user data
+    // Replace this with your actual API call
+    fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`)
+        .then(response => response.json())
+        .then(data => {
+            // Assuming the response contains gold and other necessary data
+            GameData.getInstance().setGold(data.totalPoints); // Assuming totalPoints is the user's gold
+            callback(); // Call the callback function after data is fetched
+        })
+        .catch(error => {
+            console.error('Error fetching user data:', error);
+            callback(); // Call callback even on error to avoid blocking
         });
-    } else {
-        // Show not enough points message
-        createjs.Tween.removeTweens(this.notEnouthLabel);
-        createjs.Tween.get(this.notEnouthLabel)
-            .to({ alpha: C7N8y.T8U }, C7N8y.z8U, createjs.Ease.linear)
-            .wait(C7N8y.x7U)
-            .to({ alpha: C7N8y.W8U }, C7N8y.z8U, createjs.Ease.linear);
+}
+BuyMoreBoostersState = (function(j3) {
+    function r3(b5) {
+        var h5 = 140; // Booster button height
+        var O5 = ": ";
+        var W5 = "bold 27px Times New Roman";
+        var F3 = this;
+        j3.call(this);
+
+        // Create close button
+        var closeButton = new DNJellyButton(Images.BUTTON_CLOSE, function() {
+            return F3.hide();
+        });
+        this.panel.addChild(closeButton);
+        this.addGuiObject(closeButton);
+        
+        // Booster setup
+        this.booster = new SelectBoosterButton(b5.picName, b5.boosterName);
+        this.panel.addChild(this.booster);
+        this.booster.x = +C7N8y.W8U;
+        this.booster.y = -C7N8y.j92 - C7N8y.a92 - C7N8y.J12;
+
+        // Add gold icon
+        var goldIcon = DNAssetsManager.g_instance.getCenteredImageWithProxy(Images.GOLD_ICON);
+        this.panel.addChild(goldIcon);
+        closeButton.y = -C7N8y.b42; // Position close button
+        goldIcon.y = -C7N8y.d02 - C7N8y.a92;
+
+        // Fetch and display total points (gold)
+        const totalPoints = GameData.getInstance().getGold(); // Assuming this gets total points from the database
+        this.goldLabel = new DNTextField(totalPoints.toString(), DNFontDef.FONT);
+        this.panel.addChild(this.goldLabel);
+        this.goldLabel.x = -C7N8y.j92 - C7N8y.G82;
+        this.goldLabel.y = -C7N8y.N7U - C7N8y.S12 - C7N8y.J12;
+
+        // Display booster price
+        var boosterPrice = GameData.getInstance().getBoostPrice(this.booster.boosterName);
+        var priceText = new createjs.Text(DNStringManager.getInstance().getString(DNStringManager.PRICE) + O5 + boosterPrice, C7N8y.g72, C7N8y.y5m);
+        priceText.textAlign = "left"; // Align text
+        priceText.lineWidth = C7N8y.z8U; // Set line width
+        this.panel.addChild(priceText);
+
+        // Set up the not enough gold label
+        this.notEnouthLabel = new createjs.Text(DNStringManager.getInstance().getString(DNStringManager.NOT_ENOUGH_GOLD), W5, C7N8y.y5m);
+        this.notEnouthLabel.y = C7N8y.R92;
+        this.notEnouthLabel.textAlign = "center";
+        this.notEnouthLabel.lineWidth = 430;
+        this.notEnouthLabel.alpha = 0; // Initially hidden
+        this.panel.addChild(this.notEnouthLabel);
+
+        // Buy button setup
+        var buyButton = new DNJellyButton(Images.BUTTON_BUY, function() {
+            return F3.onBuyTouch();
+        });
+        this.panel.addChild(buyButton);
+        this.addGuiObject(buyButton);
+        buyButton.y = h5; // Position buy button
+        buyButton.scaleX = buyButton.scaleY = C7N8y.w22; // Scale the button
     }
-};
 
+    __extends(r3, j3);
 
+    r3.prototype.onBuyTouch = function() {
+        const m5 = GameData.getInstance().getBoostPrice(this.booster.boosterName); // Get the booster price
+        const currentGold = GameData.getInstance().getGold(); // Get the current gold
 
-        return r3;
-    })(PopupState),
+        // Check if the user has enough gold to purchase the booster
+        if (currentGold >= m5) {
+            // Perform the booster purchase
+            GameData.getInstance().addGold(-m5); // Deduct booster price
+            GameData.getInstance().addBooster(this.booster.boosterName); // Add booster
+
+            // Call the API to update the points (if necessary)
+            updateGoldBalance(userId, m5, (newTotalPoints) => {
+                GameData.getInstance().setGold(newTotalPoints); // Update total points
+                this.goldLabel.setText(newTotalPoints.toString()); // Update UI label
+            });
+
+            // Update booster captions
+            this.booster.updateCaption();
+            // You may want to update the externalBooster's caption as well, if applicable
+            if (this.externalBooster) {
+                this.externalBooster.updateCaption();
+            }
+        } else {
+            // Not enough gold message
+            createjs.Tween.removeTweens(this.notEnouthLabel);
+            createjs.Tween.get(this.notEnouthLabel)
+                .to({ alpha: 1 }, 500, createjs.Ease.linear) // Fade in
+                .wait(2000) // Display for a while
+                .to({ alpha: 0 }, 500, createjs.Ease.linear); // Fade out
+        }
+    };
+
+    return r3;
+})(PopupState),
     Chip = (function(J5) {
         var F3 = "MATCH_REASON_I_AM_BONUS";
         var Q5 = "MATCH_REASON_BONUS_EFFECT_4_VERT";
