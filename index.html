@@ -437,8 +437,6 @@ background-color: #111013;
             <span style="font-weight: 500; text-align: center;">Available points:</span>
         </div>
         <span id="points-earned" style="margin-top: 5px; text-align: center; font-size: 35px; width: 100%;">0</span>
-       
-
     </div>
 </div>
        <p style=" font-weight: bold; ">Available Tasks:</p>
@@ -633,23 +631,11 @@ async function dailyCheckin() {
             localStorage.setItem(lastCheckinKey, Date.now());
             startTimer(60); // Start 1-minute timer (in seconds for testing)
         } else {
-    const checkinPopup = document.getElementById('checkin-popup');
-    checkinPopup.style.display = 'block';
-document.getElementById('daily-checkin').style.opacity = '0.68';
-    // Hide the popup after 2 seconds
-    setTimeout(() => {
-        checkinPopup.style.display = 'none';
-    }, 2000);
-        
+            showPopup(`Daily check-in failed: ${data.error}`);
+        }
     } catch (error) {
-    const checkinPopup = document.getElementById('checkin-popup');
-    checkinPopup.style.display = 'block';
-document.getElementById('daily-checkin').style.opacity = '0.68';
-    // Hide the popup after 2 seconds
-    setTimeout(() => {
-        checkinPopup.style.display = 'none';
-    }, 2000);
-    
+        console.error("Failed to complete daily check-in:", error);
+    }
 }
 
 function disableDailyCheckin() {
