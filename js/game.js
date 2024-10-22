@@ -21346,7 +21346,10 @@ PreloaderState = (function(S5) {
         }
         __extends(s0, C0);
         s0.prototype.resume = function() {
-            this.findGUIObject(Layouts.NAME_GOLD).setText(GameData.getInstance().getTotalScore().toString());
+                        (async () => {
+    const totalPoints = await GameData.getInstance().totalPoints();
+    this.findGUIObject(Layouts.NAME_GOLD).setText(totalPoints.toString());
+})();
         };
         s0.prototype.onExitTouch = function() {
             DNStateManager.g_instance.pushState(new CoolTransitionInState(new MainMenuState()));
