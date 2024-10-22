@@ -424,7 +424,27 @@ background-color: #111013;
     <div id="viewporter">
         <canvas id="canvas" width="700" height="900"></canvas>
     </div>
-    <!-- Loader styles already in the <head> -->
+    <script>
+
+function updateGoldBalance(userId, earnedGold, callback) {
+    fetch(`https://telegram-bot-degen-town.replit.app/api/user/updatePoints/${userId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ earnedGold })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.newTotalPoints) {
+            callback(data.newTotalPoints); // Return the new total points
+        }
+    })
+    .catch(error => console.error('Error updating points:', error));
+}
+
+        
+    </script>
 </div>
 
 
