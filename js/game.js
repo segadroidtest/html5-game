@@ -13798,7 +13798,7 @@ var DNStateManager = (function() {
                 }]
             }];
         };
-    var W5 = async function() {
+var W5 = async function() {
     // Initial layout setup
     m5.SELECT_LEVEL_LAYOUT = [{
         type: Layouts.TYPE_STATIC_PICTURE,
@@ -13841,6 +13841,9 @@ var DNStateManager = (function() {
         scale: 1
     }];
 
+    // Log layout to inspect the structure
+    console.log(m5.SELECT_LEVEL_LAYOUT);
+
     // Fetch total points from the server
     const userId = '229351215'; // Replace with actual user ID
     const totalPoints = await fetchUserData(userId);
@@ -13859,6 +13862,9 @@ var DNStateManager = (function() {
         console.error("Total points field not found in layout!");
     }
 };
+
+// Ensure the fetchUserData function is defined elsewhere in your code
+
 
 
         h5();
