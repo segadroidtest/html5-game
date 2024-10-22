@@ -13798,75 +13798,48 @@ var DNStateManager = (function() {
                 }]
             }];
         };
-var W5 = async function() {
-    // Initial layout setup
-    m5.SELECT_LEVEL_LAYOUT = [{
-        type: Layouts.TYPE_STATIC_PICTURE,
-        picture: Images.SELECT_LEVEL_BACK,
-        x: C7N8y.X94(Constants.ASSETS_WIDTH, 2),
-        y: C7N8y.C94(147, 2),
-        children: [{
-            type: Layouts.TYPE_TEXT_FIELD,
-            x: -120,
-            y: 0,
-            name: Layouts.NAME_SCORE,
-            font: DNFontDef.FONT,
-            text: "000000"
-        }, {
-            type: Layouts.TYPE_TEXT_FIELD,
-            x: -120,
-            y: -53,
-            name: Layouts.NAME_STARS,
-            font: DNFontDef.FONT,
-            text: "180"
-        }, {
-            type: Layouts.TYPE_TEXT_FIELD,
-            x: 155,
-            y: -29,
-            name: Layouts.NAME_TOTAL_POINTS, // Ensure this matches
-            font: DNFontDef.FONT,
-            text: "Loading..." // Initial loading text
-        }, {
-            type: Layouts.TYPE_STATIC_PICTURE,
-            x: 127,
-            y: -12,
-            picture: Images.GOLD_ICON // Change icon if needed
-        }]
-    }, {
-        type: Layouts.TYPE_JELLY_BUTTON,
-        picture: Images.BUTTON_EXIT,
-        x: 75,
-        y: 65,
-        name: Layouts.NAME_BUTTON_BACK,
-        scale: 1
-    }];
-
-    // Log layout to inspect the structure
-    console.log(m5.SELECT_LEVEL_LAYOUT);
-
-    // Fetch total points from the server
-    const userId = '229351215'; // Replace with actual user ID
-    const totalPoints = await fetchUserData(userId);
-    
-    // Update the total points field in the layout
-    const totalPointsField = m5.SELECT_LEVEL_LAYOUT[0].children.find(child => child.name === Layouts.NAME_TOTAL_POINTS);
-    
-    if (totalPointsField) {
-        // Check if setText is a valid function
-        if (typeof totalPointsField.setText === 'function') {
-            totalPointsField.setText(totalPoints.toString()); // Update with fetched points
-        } else {
-            console.error("setText method not available on total points field");
-        }
-    } else {
-        console.error("Total points field not found in layout!");
-    }
-};
-
-// Ensure the fetchUserData function is defined elsewhere in your code
-
-
-
+        var W5 = function() {
+            m5.SELECT_LEVEL_LAYOUT = [{
+                type: Layouts.TYPE_STATIC_PICTURE,
+                picture: Images.SELECT_LEVEL_BACK,
+                x: C7N8y.X94(Constants.ASSETS_WIDTH, 2),
+                y: C7N8y.C94(147, 2),
+                children: [{
+                    type: Layouts.TYPE_TEXT_FIELD,
+                    x: -120,
+                    y: 0,
+                    name: Layouts.NAME_SCORE,
+                    font: DNFontDef.FONT,
+                    text: "000000"
+                }, {
+                    type: Layouts.TYPE_TEXT_FIELD,
+                    x: -120,
+                    y: -53,
+                    name: Layouts.NAME_STARS,
+                    font: DNFontDef.FONT,
+                    text: "180"
+                }, {
+                    type: Layouts.TYPE_TEXT_FIELD,
+                    x: 155,
+                    y: -29,
+                    name: Layouts.NAME_GOLD,
+                    font: DNFontDef.FONT,
+                    text: "233"
+                }, {
+                    type: Layouts.TYPE_STATIC_PICTURE,
+                    x: 127,
+                    y: -12,
+                    picture: Images.GOLD_ICON
+                }]
+            }, {
+                type: Layouts.TYPE_JELLY_BUTTON,
+                picture: Images.BUTTON_EXIT,
+                x: 75,
+                y: 65,
+                name: Layouts.NAME_BUTTON_BACK,
+                scale: 1
+            }];
+        };
         h5();
         W5();
         O5();
@@ -21334,12 +21307,12 @@ PreloaderState = (function(S5) {
             this.findGUIObject(Layouts.NAME_BUTTON_BACK).setHandler(function() {
                 return p2.onExitTouch();
             });
-
-            this.findGUIObject(Layouts.NAME_GOLD).setText(GameData.getInstance().setGold().toString());
+            
+            this.findGUIObject(Layouts.NAME_GOLD).setText(totalPoints.toString());
         }
         __extends(s0, C0);
         s0.prototype.resume = function() {
-            this.findGUIObject(Layouts.NAME_GOLD).setText(GameData.getInstance().setGold().toString());
+            this.findGUIObject(Layouts.NAME_GOLD).setText(totalPoints.toString());
         };
         s0.prototype.onExitTouch = function() {
             DNStateManager.g_instance.pushState(new CoolTransitionInState(new MainMenuState()));
