@@ -15596,6 +15596,13 @@ r3.prototype.onBuyTouch = function() {
                 }
             } catch (m5) {}
         };
+        var newtotalpoints = 0; // Declare at the top level or in an appropriate scope
+
+        function updateUI() {
+    // Ensure this function is called after newtotalpoints is defined and updated
+    document.getElementById("pointsDisplay").innerText = newtotalpoints; // Update the displayed points
+}
+
 h3.prototype.onWinLevel = function(m5, b5, h5) {
     this.totalScore += b5;
     this.starsPerLevel[m5] = Math.max(this.starsPerLevel[m5], h5);
@@ -15606,18 +15613,12 @@ h3.prototype.onWinLevel = function(m5, b5, h5) {
         }
     }
     
-    // Set newtotalpoints to the updated totalScore
-    newtotalpoints = this.totalScore;  // Assuming newtotalpoints is declared somewhere accessible
+    // Update newtotalpoints
+    newtotalpoints = this.totalScore;  // Ensure newtotalpoints is in scope
 
     this.save();
+    updateUI(); // Call updateUI to reflect changes in the UI
 };
-function updateUI() {
-    // Assuming you have a way to select your display element
-    document.getElementById("pointsDisplay").innerText = newtotalpoints; // Update the displayed points
-}
-
-// Call this function whenever you update newtotalpoints
-updateUI();
 
         h3.prototype.getTotalScore = function() {
             return this.totalScore;
