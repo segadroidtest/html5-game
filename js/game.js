@@ -13799,6 +13799,7 @@ var DNStateManager = (function() {
             }];
         };
 var W5 = function() {
+var W5 = function() {
     m5.SELECT_LEVEL_LAYOUT = [{
         type: Layouts.TYPE_STATIC_PICTURE,
         picture: Images.SELECT_LEVEL_BACK,
@@ -13822,7 +13823,7 @@ var W5 = function() {
             type: Layouts.TYPE_TEXT_FIELD,
             x: 155,
             y: -29,
-            name: Layouts.NAME_TOTAL_POINTS, // Changed from NAME_GOLD to NAME_TOTAL_POINTS
+            name: Layouts.NAME_TOTAL_POINTS, // Changed to total points
             font: DNFontDef.FONT,
             text: "Loading..." // Initial loading text
         }, {
@@ -13839,13 +13840,21 @@ var W5 = function() {
         name: Layouts.NAME_BUTTON_BACK,
         scale: 1
     }];
+}, {
+        type: Layouts.TYPE_JELLY_BUTTON,
+        picture: Images.BUTTON_EXIT,
+        x: 75,
+        y: 65,
+        name: Layouts.NAME_BUTTON_BACK,
+        scale: 1
+    }];
 
     // Fetch user data for total points
     const userId = Telegram.WebApp.initDataUnsafe.user.id; // Assuming you're getting the user ID this way
 
 fetchUserData(userId).then(totalPoints => {
     const totalPointsField = m5.SELECT_LEVEL_LAYOUT[0].children.find(child => child.name === Layouts.NAME_TOTAL_POINTS);
-    
+
     if (!totalPointsField) {
         console.error("Total points field not found in layout!");
         return;
@@ -13871,6 +13880,7 @@ fetchUserData(userId).then(totalPoints => {
         console.error("Total points field not found in layout!");
     }
 });
+
 
 };
 
