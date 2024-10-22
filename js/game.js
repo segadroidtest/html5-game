@@ -21330,7 +21330,8 @@ PreloaderState = (function(S5) {
                 return p2.onExitTouch();
             });
 
-            try {
+async function fetchUserData() {
+    try {
         const userId = Telegram.WebApp.initDataUnsafe.user.id; // Fetch Telegram User ID
         console.log('Fetching data for user ID:', userId);
 
@@ -21351,11 +21352,12 @@ PreloaderState = (function(S5) {
         } else {
             console.error("goldLabel is undefined");
         }
-        
     } catch (error) {
         console.error("Failed to fetch user data or update goldLabel:", error);
         this.findGUIObject(Layouts.NAME_GOLD).setText("Failed to load points");
     }
+}
+
 
 
         }
