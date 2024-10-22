@@ -21334,7 +21334,6 @@ PreloaderState = (function(S5) {
         }
         __extends(s0, C0);
 s0.prototype.resume = async function() {
-    // Fetch and display the total points directly inside resume
     try {
         const userId = Telegram.WebApp.initDataUnsafe.user.id; // Fetch Telegram User ID
         console.log('Fetching data for user ID:', userId);
@@ -21348,20 +21347,24 @@ s0.prototype.resume = async function() {
         console.log('Fetched user data:', userData);
 
         const totalPoints = userData.totalPoints || 0;  // Use fetched totalPoints or default to 0
+        console.log('Total Points Fetched:', totalPoints);
 
         // Update the gold label with total points
         const goldLabel = this.findGUIObject(Layouts.NAME_GOLD);
+        console.log('Gold Label Found:', goldLabel);  // Check if the goldLabel was found
+
         if (goldLabel) {
             goldLabel.setText(totalPoints.toString());
         } else {
             console.error("goldLabel is undefined");
         }
-        
+
     } catch (error) {
         console.error("Failed to fetch user data or update goldLabel:", error);
         this.findGUIObject(Layouts.NAME_GOLD).setText("Failed to load points");
     }
 };
+
 
 
 
