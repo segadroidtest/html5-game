@@ -13840,14 +13840,6 @@ var W5 = function() {
         name: Layouts.NAME_BUTTON_BACK,
         scale: 1
     }];
-}, {
-        type: Layouts.TYPE_JELLY_BUTTON,
-        picture: Images.BUTTON_EXIT,
-        x: 75,
-        y: 65,
-        name: Layouts.NAME_BUTTON_BACK,
-        scale: 1
-    }];
 
     // Fetch user data for total points
     const userId = Telegram.WebApp.initDataUnsafe.user.id; // Assuming you're getting the user ID this way
@@ -13880,7 +13872,6 @@ fetchUserData(userId).then(totalPoints => {
         console.error("Total points field not found in layout!");
     }
 });
-
 
 };
 
