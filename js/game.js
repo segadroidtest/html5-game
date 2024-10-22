@@ -14045,7 +14045,8 @@ BuyMoreBoostersState = (function(j3) {
     };
 
 // Modify the purchase method
-r3.prototype.onBuyTouch = function() {
+// Purchase booster
+r3.prototype.onBuyTouch = async function() {
     const boosterPrice = GameData.getInstance().getBoostPrice(this.booster.boosterName);
 
     // Log current total points and booster price
@@ -14058,17 +14059,34 @@ r3.prototype.onBuyTouch = function() {
         this.totalPoints -= boosterPrice; // Update total points
         console.log("Total points after purchase:", this.totalPoints);
 
-        // You may want to call an API here to update the user's total points in the database if necessary
-        
-        // Add the booster
-        GameData.getInstance().addBooster(this.booster.boosterName);
+        // Update the user database
+        const userId = Telegram.WebApp.initDataUnsafe.user.id; // Get the user ID
+        try {
+            const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}/updatePoints`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ totalPoints: this.totalPoints }) // Send the new total points
+            });
 
-        // Update UI after purchase
-        this.booster.updateCaption();
-        this.goldLabel.setText(this.totalPoints.toString()); // Update displayed points
-        this.externalBooster.updateCaption();
-        console.log("Booster purchased successfully!");
+            if (!response.ok) {
+                throw new Error(`Failed to update user points: ${response.status} ${response.statusText}`);
+            }
 
+            // Add the booster
+            GameData.getInstance().addBooster(this.booster.boosterName);
+
+            // Update UI after purchase
+            this.booster.updateCaption();
+            this.goldLabel.setText(this.totalPoints.toString()); // Update displayed points
+            this.externalBooster.updateCaption();
+            console.log("Booster purchased successfully!");
+
+        } catch (error) {
+            console.error("Error updating user points in database:", error);
+            // You might want to show an error message to the user here
+        }
     } else {
         // Show not enough points message
         console.warn("Not enough points to purchase booster");
@@ -14080,6 +14098,7 @@ r3.prototype.onBuyTouch = function() {
         }, C7N8y.z8U, createjs.Ease.linear);
     }
 };
+
 
     return r3;
 })(PopupState),
