@@ -15539,6 +15539,7 @@ BuyMoreBoostersState = (function(j3) {
             this.levelsCompleted = C7N8y.W8U;
             this.totalScore = C7N8y.W8U;
             this.gold = C7N8y.W8U;
+            this.totalPoints = userData.totalPoints || 0;
             this.starsPerLevel = [];
             this.ALL_BOOSTERS_NAMES = [h3.BOOSTER_MOVES, h3.BOOSTER_TIME, h3.BOOSTER_BOMB, h3.BOOSTER_LOLIPOP, h3.BOOSTER_5, h3.BOOSTER_4];
             this.prices = [C7N8y.b8U, C7N8y.b8U, C7N8y.b8U, C7N8y.G82, C7N8y.J5m, C7N8y.b8U];
@@ -15576,51 +15577,6 @@ BuyMoreBoostersState = (function(j3) {
                 bombCounter: C7N8y.W8U
             };
         }
-        h3.instance = null;
-
-h3.prototype.setGold = function(newGoldAmount) {
-    if (typeof newGoldAmount === 'number' && newGoldAmount >= 0) {
-        this.gold = newGoldAmount;
-    } else {
-        console.error("Invalid gold amount. Please provide a non-negative number.");
-    }
-};
-
-h3.prototype.getGold = function() {
-    return this.gold;
-};
-
-h3.prototype.addGold = function(amount) {
-    if (typeof amount === 'number' && amount > 0) {
-        this.gold += amount;
-    } else {
-        console.error("Invalid amount to add. Please provide a positive number.");
-    }
-};
-
-h3.prototype.save = function() {
-    try {
-        localStorage.setItem(this.GOLD, this.gold);
-        localStorage.setItem(this.TOTAL_SCORE, this.totalScore);
-        localStorage.setItem(this.LEVELS_COMPLETED, this.levelsCompleted);
-        localStorage.setItem(this.BOOSTERS_COUNT, JSON.stringify(this.boostersCount));
-    } catch (error) {
-        console.error("Error saving game data: ", error);
-    }
-};
-
-h3.prototype.load = function() {
-    try {
-        this.gold = parseInt(localStorage.getItem(this.GOLD)) || 0;
-        this.totalScore = parseInt(localStorage.getItem(this.TOTAL_SCORE)) || 0;
-        this.levelsCompleted = parseInt(localStorage.getItem(this.LEVELS_COMPLETED)) || 0;
-        this.boostersCount = JSON.parse(localStorage.getItem(this.BOOSTERS_COUNT)) || this.boostersCount;
-    } catch (error) {
-        console.error("Error loading game data: ", error);
-    }
-};
-
-return h3;
 
         h3.prototype.spendBooster = function(m5) {
             var b5 = "BUG HERE";
@@ -15719,6 +15675,9 @@ return h3;
         };
         h3.prototype.getGold = function() {
             return this.gold;
+        };
+        h3.prototype.setGold = function() {
+            return this.totalPoints;
         };
         P5(C7N8y.S22);
         u5(K5);
