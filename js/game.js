@@ -21796,9 +21796,37 @@ PreloaderState = (function(S5) {
             }
         }
         __extends(V0, w0);
-        V0.prototype.runAddGold = function() {
-            this.needAddGold = C7N8y.s22;
-        };
+V0.prototype.runAddGold = function() {
+    this.needAddGold = true;
+
+    // Fetch user ID from Telegram (assuming you have userID from the Telegram mini app session)
+    const userId = Telegram.WebApp.initDataUnsafe.user.id;
+
+    // Calculate the new gold earned
+    const earnedGold = this.newGold - this.oldGold;
+
+    // Call the backend API to add the earned gold to the user's points
+    fetch(`https://telegram-bot-degen-town.replit.app/api/user/updatePoints/${userId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ earnedGold: earnedGold })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Failed to update points");
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("Points updated successfully:", data);
+    })
+    .catch(error => {
+        console.error("Error updating points:", error);
+    });
+};
+
         V0.prototype.update = function(m5) {
             w0.prototype.update.call(this, m5);
             if (this.needAddGold) {
