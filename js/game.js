@@ -13822,7 +13822,7 @@ var W5 = function() {
             type: Layouts.TYPE_TEXT_FIELD,
             x: 155,
             y: -29,
-            name: Layouts.NAME_TOTAL_POINTS, // Changed to total points
+            name: Layouts.NAME_TOTAL_POINTS, // Changed from NAME_GOLD to NAME_TOTAL_POINTS
             font: DNFontDef.FONT,
             text: "Loading..." // Initial loading text
         }, {
@@ -13845,7 +13845,7 @@ var W5 = function() {
 
 fetchUserData(userId).then(totalPoints => {
     const totalPointsField = m5.SELECT_LEVEL_LAYOUT[0].children.find(child => child.name === Layouts.NAME_TOTAL_POINTS);
-
+    
     if (!totalPointsField) {
         console.error("Total points field not found in layout!");
         return;
@@ -13893,7 +13893,7 @@ async function fetchUserData(userId) {
         console.error("Failed to fetch user data:", error);
         return null; // Return null in case of error
     }
-}};
+};
         h5();
         W5();
         O5();
