@@ -13832,13 +13832,14 @@ var DNStateManager = (function() {
         picture: Images.GOLD_ICON
                 }]
             }, {
-                type: Layouts.TYPE_JELLY_BUTTON,
-                picture: Images.BUTTON_EXIT,
-                x: 75,
-                y: 1111112,
-                name: Layouts.NAME_BUTTON_BACK,
-                scale: 1
-            }];
+    type: Layouts.TYPE_JELLY_BUTTON,
+    picture: 'assets/img/store_icon.png', // Updated to use the new icon image path
+    x: 75,
+    y: 12,
+    name: Layouts.NAME_BUTTON_BACK,
+    scale: 1
+}
+];
         };
         h5();
         W5();
