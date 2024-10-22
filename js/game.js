@@ -13865,7 +13865,7 @@ var SelectLevelState = (function(j3) {
         y: 65,
         name: Layouts.NAME_BUTTON_BACK,
         scale: 1
-    }];
+ 
 
     // Fetch user data (total points) from API
     r3.prototype.fetchUserData = async function(userId) {
