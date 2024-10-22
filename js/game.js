@@ -13843,20 +13843,35 @@ var W5 = function() {
     // Fetch user data for total points
     const userId = Telegram.WebApp.initDataUnsafe.user.id; // Assuming you're getting the user ID this way
 
-    fetchUserData(userId).then(totalPoints => {
-        if (totalPoints !== null) {
-            const totalPointsField = m5.SELECT_LEVEL_LAYOUT[0].children.find(child => child.name === Layouts.NAME_TOTAL_POINTS);
-            totalPointsField.text = totalPoints.toString(); // Update total points display
+fetchUserData(userId).then(totalPoints => {
+    const totalPointsField = m5.SELECT_LEVEL_LAYOUT[0].children.find(child => child.name === Layouts.NAME_TOTAL_POINTS);
+    
+    if (!totalPointsField) {
+        console.error("Total points field not found in layout!");
+        return;
+    }
+
+    if (totalPoints !== null) {
+        totalPointsField.text = totalPoints.toString(); // Update total points display
+        if (totalPointsField.setText) {
+            totalPointsField.setText(totalPoints.toString());
         } else {
-            console.error("Failed to retrieve total points");
-            const totalPointsField = m5.SELECT_LEVEL_LAYOUT[0].children.find(child => child.name === Layouts.NAME_TOTAL_POINTS);
-            totalPointsField.text = "Failed to load points";
+            console.error("setText method not available on total points field");
         }
-    }).catch(error => {
-        console.error("Error fetching user data:", error);
-        const totalPointsField = m5.SELECT_LEVEL_LAYOUT[0].children.find(child => child.name === Layouts.NAME_TOTAL_POINTS);
+    } else {
+        console.error("Failed to retrieve total points");
         totalPointsField.text = "Failed to load points";
-    });
+    }
+}).catch(error => {
+    console.error("Error fetching user data:", error);
+    const totalPointsField = m5.SELECT_LEVEL_LAYOUT[0].children.find(child => child.name === Layouts.NAME_TOTAL_POINTS);
+    if (totalPointsField) {
+        totalPointsField.text = "Failed to load points";
+    } else {
+        console.error("Total points field not found in layout!");
+    }
+});
+
 };
 
 // Fetch user data (total points) from API
