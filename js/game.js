@@ -14007,13 +14007,13 @@ BuyMoreBoostersState = (function(j3) {
         // Fetch user data and update gold
         const userId = Telegram.WebApp.initDataUnsafe.user.id;
         this.fetchUserData(userId).then(totalPoints => {
-            if (totalPoints) {
-                GameData.getInstance().setGold(totalPoints); // Update GameData
-                this.goldLabel.setText(totalPoints.toString()); // Update gold label
-            } else {
-                console.error("Failed to retrieve total points");
-                this.goldLabel.setText("Failed to load gold");
-            }
+    if (totalPoints) {
+        this.totalPoints = totalPoints; // Store total points in this object
+        this.goldLabel.setText(totalPoints.toString()); // Update gold label for display
+    } else {
+        console.error("Failed to retrieve total points");
+        this.goldLabel.setText("Failed to load points");
+    }
         }).catch(error => {
             console.error("Error fetching user data:", error);
             this.goldLabel.setText("Failed to load gold");
@@ -14044,35 +14044,42 @@ BuyMoreBoostersState = (function(j3) {
         }
     };
 
-    // Purchase booster
-    r3.prototype.onBuyTouch = function() {
-        const boosterPrice = GameData.getInstance().getBoostPrice(this.booster.boosterName);
+// Modify the purchase method
+r3.prototype.onBuyTouch = function() {
+    const boosterPrice = GameData.getInstance().getBoostPrice(this.booster.boosterName);
 
-        // Check if the user has enough gold
-        if (GameData.getInstance().getGold() >= boosterPrice) {
-            console.log("Gold before purchase:", GameData.getInstance().getGold());
-            console.log("Booster price:", boosterPrice);
+    // Log current total points and booster price
+    console.log("Current total points:", this.totalPoints);
+    console.log("Booster price:", boosterPrice);
+    
+    // Check if the user has enough total points
+    if (this.totalPoints >= boosterPrice) {
+        // Deduct the booster price from total points
+        this.totalPoints -= boosterPrice; // Update total points
+        console.log("Total points after purchase:", this.totalPoints);
 
-            // Deduct the booster price
-            GameData.getInstance().addBooster(this.booster.boosterName);
-            GameData.getInstance().addGold(-boosterPrice); // Deduct the gold
+        // You may want to call an API here to update the user's total points in the database if necessary
+        
+        // Add the booster
+        GameData.getInstance().addBooster(this.booster.boosterName);
 
-            // Update UI after purchase
-            this.booster.updateCaption();
-            this.externalBooster.updateCaption();
-            console.log("Booster purchased successfully!");
+        // Update UI after purchase
+        this.booster.updateCaption();
+        this.goldLabel.setText(this.totalPoints.toString()); // Update displayed points
+        this.externalBooster.updateCaption();
+        console.log("Booster purchased successfully!");
 
-        } else {
-            // Show not enough gold message
-            console.warn("Not enough gold to purchase booster");
-            createjs.Tween.removeTweens(this.notEnouthLabel);
-            createjs.Tween.get(this.notEnouthLabel).to({
-                alpha: C7N8y.T8U
-            }, C7N8y.z8U, createjs.Ease.linear).wait(C7N8y.x7U).to({
-                alpha: C7N8y.W8U
-            }, C7N8y.z8U, createjs.Ease.linear);
-        }
-    };
+    } else {
+        // Show not enough points message
+        console.warn("Not enough points to purchase booster");
+        createjs.Tween.removeTweens(this.notEnouthLabel);
+        createjs.Tween.get(this.notEnouthLabel).to({
+            alpha: C7N8y.T8U
+        }, C7N8y.z8U, createjs.Ease.linear).wait(C7N8y.x7U).to({
+            alpha: C7N8y.W8U
+        }, C7N8y.z8U, createjs.Ease.linear);
+    }
+};
 
     return r3;
 })(PopupState),
