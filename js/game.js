@@ -15734,7 +15734,7 @@ h3.prototype.totalPoints = async function() {
         this.totalPoints = totalPoints;
         this.goldLabel.setText(totalPoints.toString());
 
-        return totalPoints; // In case you want to return the total points
+        return totalPoints;
 
     } catch (error) {
         console.error("Failed to fetch user data:", error);
@@ -15742,6 +15742,7 @@ h3.prototype.totalPoints = async function() {
         return null;
     }
 };
+
 
         P5(C7N8y.S22);
         u5(K5);
@@ -21345,11 +21346,10 @@ PreloaderState = (function(S5) {
 
         }
         __extends(s0, C0);
-        s0.prototype.resume = function() {
-(async () => {
+s0.prototype.resume = async function() {
     try {
         const totalPoints = await GameData.getInstance().totalPoints();
-        
+
         if (totalPoints !== null) {
             const goldLabel = this.findGUIObject(Layouts.NAME_GOLD);
             if (goldLabel) {
@@ -21364,10 +21364,8 @@ PreloaderState = (function(S5) {
         console.error("Error fetching total points:", error);
         this.findGUIObject(Layouts.NAME_GOLD).setText("Error loading points");
     }
-})();
+};
 
-
-        };
         s0.prototype.onExitTouch = function() {
             DNStateManager.g_instance.pushState(new CoolTransitionInState(new MainMenuState()));
         };
