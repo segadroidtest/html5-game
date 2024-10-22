@@ -13804,41 +13804,15 @@ var DNStateManager = (function() {
     picture: Images.SELECT_LEVEL_BACK,
     x: C7N8y.X94(Constants.ASSETS_WIDTH, 2),
     y: C7N8y.C94(147, 2),
-    children: [{
+    children: [{}, {}, {
         type: Layouts.TYPE_TEXT_FIELD,
-        x: -120,
-        y: 0,
-        name: Layouts.NAME_SCORE,
-        font: DNFontDef.FONT,
-        text: "000000"
-    }, {
-        type: Layouts.TYPE_TEXT_FIELD,
-        x: -120,
-        y: -53,
-        name: Layouts.NAME_STARS,
-        font: DNFontDef.FONT,
-        text: "180"
-    }, {
-        type: Layouts.TYPE_TEXT_FIELD,
-        x: 155,
+        x: 55,
         y: -29,
         name: Layouts.NAME_GOLD,
         font: DNFontDef.FONT,
         text: "Loading..." // or an empty string
-    }, {
-        type: Layouts.TYPE_STATIC_PICTURE,
-        x: 127,
-        y: -12,
-        picture: Images.GOLD_ICON
-                }]
-            }, {
-                type: Layouts.TYPE_JELLY_BUTTON,
-                picture: Images.BUTTON_EXIT,
-                x: 75,
-                y: 65,
-                name: Layouts.NAME_BUTTON_BACK,
-                scale: 1
-            }];
+    }, {}]
+            }, {}];
         };
         h5();
         W5();
