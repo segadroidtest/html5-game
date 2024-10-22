@@ -11983,52 +11983,7 @@ var DNStateManager = (function() {
                 });
             }
             GameData.getInstance().load();
-      
-// Assuming this function changes the state to SelectLevelState
-async function changeToSelectLevelState() {
-    // Transition to the SelectLevelState
-    this.changeState(new SelectLevelState());
-
-    try {
-        // Fetch the Telegram user ID
-        const userId = Telegram.WebApp.initDataUnsafe.user.id;
-        console.log('Fetching data for user ID:', userId);
-
-        // Fetch user data from the server
-        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
-        if (!response.ok) {
-            throw new Error(`Error fetching user data: ${response.status} ${response.statusText}`);
-        }
-
-        // Parse the response
-        const userData = await response.json();
-        console.log('Fetched user data:', userData);
-
-        // Extract totalPoints from user data or default to 0
-        const totalPoints = userData.totalPoints || 0;
-
-        // Update the gold label with total points
-        const goldLabel = this.findGUIObject(Layouts.NAME_GOLD);
-        if (goldLabel) {
-            goldLabel.setText(totalPoints.toString());
-        } else {
-            console.error("goldLabel is undefined");
-        }
-
-    } catch (error) {
-        // Handle any errors that occurred during the fetch
-        console.error("Failed to fetch user data or update goldLabel:", error);
-        const goldLabel = this.findGUIObject(Layouts.NAME_GOLD);
-        if (goldLabel) {
-            goldLabel.setText("Failed to load points");
-        }
-    }
-}
-
-// Call this function when you want to change to SelectLevelState
-changeToSelectLevelState();
-
-      
+            this.changeState(new SelectLevelState());
             if (DNGameConfig.needShowRotateScreen) {
                 if (this.isLandscape()) {
                     this.pushState(new PortraitLockState());
@@ -12060,12 +12015,45 @@ changeToSelectLevelState();
             }
             this.stage.update(m5);
         };
-        h3.prototype.changeState = function(m5) {
-            while (C7N8y.W34(this.states.length, 0)) {
-                this.popState();
-            }
-            this.pushState(m5);
-        };
+h3.prototype.changeState = async function(m5) {
+    // Fetch and display the total points directly
+    try {
+        const userId = Telegram.WebApp.initDataUnsafe.user.id; // Fetch Telegram User ID
+        console.log('Fetching data for user ID:', userId);
+
+        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
+        if (!response.ok) {
+            throw new Error(`Error fetching user data: ${response.status} ${response.statusText}`);
+        }
+
+        const userData = await response.json();
+        console.log('Fetched user data:', userData);
+
+        const totalPoints = userData.totalPoints || 0;  // Use fetched totalPoints or default to 0
+
+        // Update the gold label with total points
+        const goldLabel = this.findGUIObject(Layouts.NAME_GOLD);
+        if (goldLabel) {
+            goldLabel.setText(totalPoints.toString());
+        } else {
+            console.error("goldLabel is undefined");
+        }
+        
+    } catch (error) {
+        console.error("Failed to fetch user data or update goldLabel:", error);
+        const goldLabel = this.findGUIObject(Layouts.NAME_GOLD);
+        if (goldLabel) {
+            goldLabel.setText("Failed to load points");
+        }
+    }
+
+    // Now change the state
+    while (this.states.length > 0) {
+        this.popState();
+    }
+    this.pushState(m5);
+};
+
         h3.prototype.pushState = function(m5) {
             this.states.push(m5);
             this.statesConstainer.addChild(m5);
