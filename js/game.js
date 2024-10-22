@@ -15525,6 +15525,32 @@ BuyMoreBoostersState = (function(j3) {
             h3.BOOSTER_4 = m5;
         };
 
+
+
+
+    function fetchUserData(userId, callback) {
+        try {
+            console.log('Fetching data for user ID:', userId);
+            const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
+            
+            if (!response.ok) {
+                throw new Error(`Error fetching user data: ${response.status} ${response.statusText}`);
+            }
+
+            const userData = await response.json();
+            console.log('Fetched user data:', userData);
+
+            // Return total points from fetched data
+            const totalPoints = userData.totalPoints || 0;
+            return totalPoints;
+        } catch (error) {
+            console.error("Failed to fetch user data:", error);
+            return null;
+        }
+};
+
+
+
         function h3() {
             var m5 = "GOLD";
             var b5 = "TOTAL_SCORE";
