@@ -13922,13 +13922,11 @@ var DNStateManager = (function() {
         };
         return O5;
     })(DNGameObject),
-    function fetchUserData(userId, callback) {
+function fetchUserData(userId, callback) {
     // Simulate an API call to fetch user data
-    // Replace this with your actual API call
     fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`)
         .then(response => response.json())
         .then(data => {
-            // Assuming the response contains gold and other necessary data
             GameData.getInstance().setGold(data.totalPoints); // Assuming totalPoints is the user's gold
             callback(); // Call the callback function after data is fetched
         })
@@ -13936,7 +13934,7 @@ var DNStateManager = (function() {
             console.error('Error fetching user data:', error);
             callback(); // Call callback even on error to avoid blocking
         });
-}
+},
 BuyMoreBoostersState = (function(j3) {
     function r3(b5) {
         var h5 = 140; // Booster button height
