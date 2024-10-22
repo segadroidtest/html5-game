@@ -21346,15 +21346,26 @@ PreloaderState = (function(S5) {
         }
         __extends(s0, C0);
         s0.prototype.resume = function() {
- (async () => {
-    const totalPoints = await GameData.getInstance().totalPoints();
-    
-    if (totalPoints) {
-        this.findGUIObject(Layouts.NAME_GOLD).setText(totalPoints.toString());
-    } else {
-        this.findGUIObject(Layouts.NAME_GOLD).setText("0"); // Default if no points are found
+(async () => {
+    try {
+        const totalPoints = await GameData.getInstance().totalPoints();
+        
+        if (totalPoints !== null) {
+            const goldLabel = this.findGUIObject(Layouts.NAME_GOLD);
+            if (goldLabel) {
+                goldLabel.setText(totalPoints.toString());
+            } else {
+                console.error("goldLabel is undefined");
+            }
+        } else {
+            this.findGUIObject(Layouts.NAME_GOLD).setText("Failed to load points");
+        }
+    } catch (error) {
+        console.error("Error fetching total points:", error);
+        this.findGUIObject(Layouts.NAME_GOLD).setText("Error loading points");
     }
 })();
+
 
         };
         s0.prototype.onExitTouch = function() {
