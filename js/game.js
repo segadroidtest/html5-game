@@ -15618,7 +15618,10 @@ var DNStateManager = (function() {
             return m5;
         };
         h3.prototype.getGold = function() {
-            return this.gold;
+            return this.totalPoints;
+        };
+         h3.prototype.getTotalPoints = function() {
+            return this.totalPoints;
         };
         P5(C7N8y.S22);
         u5(K5);
