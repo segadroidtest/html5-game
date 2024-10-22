@@ -13996,25 +13996,26 @@ BuyMoreBoostersState = (function(j3) {
     
     __extends(r3, j3);
 
-    // Define fetchUserData as a method of the class
-    r3.prototype.fetchUserData = async function(userId) {
-        try {
-            const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
-            if (!response.ok) throw new Error("Error fetching user data");
-
-            const userData = await response.json();
-            console.log('Fetched user data:', userData); // Log the fetched data
-            
-            // Use the totalPoints in your logic as needed
-            const totalPoints = userData.totalPoints || 0; 
-            GameData.getInstance().setGold(totalPoints); // Update gold balance
-
-            // Update the UI label to show total points
-            this.goldLabel.setText(totalPoints.toString());
-        } catch (error) {
-            console.error("Failed to fetch user data:", error);
+r3.prototype.fetchUserData = async function(userId) {
+    try {
+        console.log('Fetching data for user ID:', userId); // Log user ID
+        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
+        
+        if (!response.ok) {
+            throw new Error(`Error fetching user data: ${response.statusText}`);
         }
-    };
+
+        const userData = await response.json();
+        console.log('Fetched user data:', userData); // Log the fetched data
+        
+        const totalPoints = userData.totalPoints || 0; 
+        GameData.getInstance().setGold(totalPoints); // Update gold balance
+        this.goldLabel.setText(totalPoints.toString()); // Update UI label
+    } catch (error) {
+        console.error("Failed to fetch user data:", error);
+    }
+};
+
 
     r3.prototype.onBuyTouch = function() {
         const m5 = GameData.getInstance().getBoostPrice(this.booster.boosterName);
