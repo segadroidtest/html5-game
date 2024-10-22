@@ -13799,46 +13799,65 @@ var DNStateManager = (function() {
             }];
         };
         var W5 = function() {
-            m5.SELECT_LEVEL_LAYOUT = [{
-                type: Layouts.TYPE_STATIC_PICTURE,
-                picture: Images.SELECT_LEVEL_BACK,
-                x: C7N8y.X94(Constants.ASSETS_WIDTH, 2),
-                y: C7N8y.C94(147, 2),
-                children: [{
-                    type: Layouts.TYPE_TEXT_FIELD,
-                    x: -120,
-                    y: 0,
-                    name: Layouts.NAME_SCORE,
-                    font: DNFontDef.FONT,
-                    text: "000000"
-                }, {
-                    type: Layouts.TYPE_TEXT_FIELD,
-                    x: -120,
-                    y: -53,
-                    name: Layouts.NAME_STARS,
-                    font: DNFontDef.FONT,
-                    text: "180"
-                }, {
-                    type: Layouts.TYPE_TEXT_FIELD,
-                    x: 155,
-                    y: -29,
-                    name: Layouts.NAME_GOLD,
-                    font: DNFontDef.FONT,
-                    text: "233"
-                }, {
-                    type: Layouts.TYPE_STATIC_PICTURE,
-                    x: 127,
-                    y: -12,
-                    picture: Images.GOLD_ICON
-                }]
-            }, {
-                type: Layouts.TYPE_JELLY_BUTTON,
-                picture: Images.BUTTON_EXIT,
-                x: 75,
-                y: 65,
-                name: Layouts.NAME_BUTTON_BACK,
-                scale: 1
-            }];
+m5.SELECT_LEVEL_LAYOUT = [{
+    type: Layouts.TYPE_STATIC_PICTURE,
+    picture: Images.SELECT_LEVEL_BACK,
+    x: C7N8y.X94(Constants.ASSETS_WIDTH, 2),
+    y: C7N8y.C94(147, 2),
+    children: [{
+        type: Layouts.TYPE_TEXT_FIELD,
+        x: -120,
+        y: 0,
+        name: Layouts.NAME_SCORE,
+        font: DNFontDef.FONT,
+        text: "000000"
+    }, {
+        type: Layouts.TYPE_TEXT_FIELD,
+        x: -120,
+        y: -53,
+        name: Layouts.NAME_STARS,
+        font: DNFontDef.FONT,
+        text: "180"
+    }, {
+        type: Layouts.TYPE_TEXT_FIELD,
+        x: 155,
+        y: -29,
+        name: Layouts.NAME_TOTAL_POINTS, // Changed to total points
+        font: DNFontDef.FONT,
+        text: "Loading..." // Initial loading text
+    }, {
+        type: Layouts.TYPE_STATIC_PICTURE,
+        x: 127,
+        y: -12,
+        picture: Images.GOLD_ICON // You may want to change this icon to a total points icon
+    }]
+}, {
+    type: Layouts.TYPE_JELLY_BUTTON,
+    picture: Images.BUTTON_EXIT,
+    x: 75,
+    y: 65,
+    name: Layouts.NAME_BUTTON_BACK,
+    scale: 1
+}];
+
+// Fetch total points and update the layout
+const userId = Telegram.WebApp.initDataUnsafe.user.id;
+this.fetchUserData(userId).then(totalPoints => {
+    if (totalPoints) {
+        this.totalPoints = totalPoints; // Store total points in this object
+        const totalPointsField = this.panel.getChildByName(Layouts.NAME_TOTAL_POINTS);
+        totalPointsField.setText(totalPoints.toString()); // Update total points display
+    } else {
+        console.error("Failed to retrieve total points");
+        const totalPointsField = this.panel.getChildByName(Layouts.NAME_TOTAL_POINTS);
+        totalPointsField.setText("Failed to load points");
+    }
+}).catch(error => {
+    console.error("Error fetching user data:", error);
+    const totalPointsField = this.panel.getChildByName(Layouts.NAME_TOTAL_POINTS);
+    totalPointsField.setText("Failed to load points");
+});
+
         };
         h5();
         W5();
@@ -15558,20 +15577,7 @@ r3.prototype.onBuyTouch = async function() {
             h3.BOOSTER_4 = m5;
         };
 
-        const userId = Telegram.WebApp.initDataUnsafe.user.id;
-        this.fetchUserData(userId).then(totalPoints => {
-    if (totalPoints) {
-        this.totalPoints = totalPoints; // Store total points in this object
-        this.goldLabel.setText(totalPoints.toString()); // Update gold label for display
-    } else {
-        console.error("Failed to retrieve total points");
-        this.goldLabel.setText("Failed to load points");
-    }
-        }).catch(error => {
-            console.error("Error fetching user data:", error);
-            this.goldLabel.setText("Failed to load gold");
-        });
-        
+
         function h3() {
             var m5 = "GOLD";
             var b5 = "TOTAL_SCORE";
@@ -21313,12 +21319,14 @@ PreloaderState = (function(S5) {
                     this.layer.y = +Constants.ASSETS_HEIGHT / C7N8y.A8U - X0.y;
                 }
             }
+
             this.checkConstrains();
             this.findGUIObject(Layouts.NAME_STARS).setText(GameData.getInstance().totalStars().toString());
             this.findGUIObject(Layouts.NAME_SCORE).setText(GameData.getInstance().getTotalScore().toString());
             this.findGUIObject(Layouts.NAME_BUTTON_BACK).setHandler(function() {
                 return p2.onExitTouch();
             });
+            
             this.findGUIObject(Layouts.NAME_GOLD).setText(GameData.getInstance().setGold().toString());
         }
         __extends(s0, C0);
