@@ -13995,21 +13995,32 @@ var DNStateManager = (function() {
             f3.scaleX = f3.scaleY = C7N8y.w22;
         }
         __extends(r3, j3);
-        r3.prototype.onBuyTouch = function() {
-            var m5 = GameData.getInstance().getBoostPrice(this.booster.boosterName);
-             if (C7N8y.A64(GameData.getInstance().getGold(), m5)) {
-                var earnedGold = m5;
-
-
+r3.prototype.onBuyTouch = function() {
+    const m5 = GameData.getInstance().getBoostPrice(this.booster.boosterName);
+    
+    // Check if the current gold is enough for the booster purchase
+    if (C7N8y.A64(GameData.getInstance().getGold(), m5)) {
+        const earnedGold = m5;  // Assuming m5 is the gold spent on the booster
+        
+        // Call the API to update the points and get newTotalPoints
         updateGoldBalance(userId, earnedGold, (newTotalPoints) => {
-            GameData.getInstance().addBooster(this.booster.boosterName);
-            GameData.getInstance().setGold(newTotalPoints);
+            // Update GameData with the new total points
+            GameData.getInstance().setGold(newTotalPoints);  // Update gold balance
+
+            // Update the UI label to show new total points
             this.goldLabel.setText(newTotalPoints.toString());
+            
+            // Perform the booster purchase
+            GameData.getInstance().addBooster(this.booster.boosterName);
+            GameData.getInstance().addGold(-m5); // Deduct the booster price
+
+            // Update captions for booster buttons
             this.booster.updateCaption();
             this.externalBooster.updateCaption();
-        })
-} else {
-        // Handle not enough gold case
+        });
+
+    } else {
+        // Show not enough gold message
         createjs.Tween.removeTweens(this.notEnouthLabel);
         createjs.Tween.get(this.notEnouthLabel).to({
             alpha: C7N8y.T8U
@@ -14017,7 +14028,8 @@ var DNStateManager = (function() {
             alpha: C7N8y.W8U
         }, C7N8y.z8U, createjs.Ease.linear);
     }
-        };
+};
+
         return r3;
     })(PopupState),
     Chip = (function(J5) {
