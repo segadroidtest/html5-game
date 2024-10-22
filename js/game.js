@@ -13840,23 +13840,27 @@ m5.SELECT_LEVEL_LAYOUT = [{
     scale: 1
 }];
 
-// Fetch total points and update the layout
-const userId = Telegram.WebApp.initDataUnsafe.user.id;
-this.fetchUserData(userId).then(totalPoints => {
-    if (totalPoints) {
-        this.totalPoints = totalPoints; // Store total points in this object
-        const totalPointsField = this.panel.getChildByName(Layouts.NAME_TOTAL_POINTS);
-        totalPointsField.setText(totalPoints.toString()); // Update total points display
-    } else {
-        console.error("Failed to retrieve total points");
-        const totalPointsField = this.panel.getChildByName(Layouts.NAME_TOTAL_POINTS);
-        totalPointsField.setText("Failed to load points");
+r3.prototype.fetchUserData = async function(userId) {
+    try {
+        console.log('Fetching data for user ID:', userId);
+        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
+        
+        if (!response.ok) {
+            throw new Error(`Error fetching user data: ${response.status} ${response.statusText}`);
+        }
+
+        const userData = await response.json();
+        console.log('Fetched user data:', userData);
+
+        // Return total points from fetched data
+        const totalPoints = userData.totalPoints || 0;
+        return totalPoints; // Ensure this returns a promise
+    } catch (error) {
+        console.error("Failed to fetch user data:", error);
+        return null; // Make sure to return null in case of error
     }
-}).catch(error => {
-    console.error("Error fetching user data:", error);
-    const totalPointsField = this.panel.getChildByName(Layouts.NAME_TOTAL_POINTS);
-    totalPointsField.setText("Failed to load points");
-});
+};
+
 
         };
         h5();
