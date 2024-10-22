@@ -13799,7 +13799,6 @@ var DNStateManager = (function() {
             }];
         };
 var W5 = function() {
-var W5 = function() {
     m5.SELECT_LEVEL_LAYOUT = [{
         type: Layouts.TYPE_STATIC_PICTURE,
         picture: Images.SELECT_LEVEL_BACK,
@@ -13894,7 +13893,7 @@ async function fetchUserData(userId) {
         console.error("Failed to fetch user data:", error);
         return null; // Return null in case of error
     }
-};
+}};
         h5();
         W5();
         O5();
