@@ -21403,7 +21403,7 @@ s0.prototype.resume = async function() {
 
 
         s0.prototype.onExitTouch = function() {
-            DNStateManager.g_instance.pushState(new CoolTransitionInState(new MainMenuState()));
+            DNStateManager.g_instance.pushState(new CoolTransitionInState(new BuyMoreBoostersState()));
         };
         s0.prototype.onMouseDown = function(m5, b5) {
             C0.prototype.onMouseDown.call(this, m5, b5);
