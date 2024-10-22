@@ -437,6 +437,144 @@ background-color: #111013;
             <span style="font-weight: 500; text-align: center;">Available points:</span>
         </div>
         <span id="points-earned" style="margin-top: 5px; text-align: center; font-size: 35px; width: 100%;">0</span>
+         <button onclick="openPurchasePopup()" style="
+    background: linear-gradient(to bottom, #48a34c, #337335);
+    border: none;
+    color: white;
+    padding: 5px 2px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 15px;
+    width: 40%;
+    font-weight: bold;
+    margin-bottom: 0px;
+">Buy Points<img src="assets/img/littlediamond.png" style="height: 15px;padding-right: 0px;margin-bottom: -3px;padding-left: 5px;"></button>
+
+<div id="purchase-popup" style="display: none;position: fixed; z-index: 1; left: 0px; top: 0px; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.6);">
+    <div id="purchase-popuperror1" style="border-radius: 10px;display: none;z-index: 1000;text-align: center;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);background: rgb(22 22 32);color: white;padding: 20px;op;opacity: 0.98;rder-radius: 10px;width: 70%;font-weight: 600;">
+    This feature is not available in current Telegram version.
+</div>
+    
+    <div id="purchase-popuperror2" style="display: none;z-index: 1000;text-align: center;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);background: rgb(22 22 32);color: white;padding: 20px;opacity: 0.98;border-radius: 10px;width: 70%;font-weight: 600;">
+   This feature is not available in current Telegram version.
+</div>
+    <div style="padding: 0px; width: 80%; max-width: 480px; border-radius: 10px; height: auto; z-index: 999; position: fixed; top: 43%; left: 50%; transform: translate(-50%, -50%);" id="purchase-popup">
+        <span id="closePopupButtonbuy" style="color: white; float: right; font-size: 28px; font-weight: bold; cursor: pointer; background: #c02b2b; padding-bottom: 7px; padding-left: 10px; border-top-right-radius: 10px; padding-right: 10px; padding-top: 4px; margin-right: 1px; margin-top: 1px;">×</span>
+
+        <div style="text-align: center;background: #383747;margin-bottom: 0px;height: 180px;border-radius: 10px;border: 1px solid #101013;">
+            <h2 style="
+                text-align: center;
+                margin-top: 0px;
+                color: #ffffff;
+                font-size: 17px;
+                font-weight: 600;
+                background: #1e1d22;
+                padding-top: 10px;
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+                padding-bottom: 14px;">Buy Points</h2>
+<div style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
+    <select id="diamond-option" style="color: #1e1d22 !important; font-weight: 595;
+        padding: 10px;
+        border-radius: 5px; 
+        font-size: 17px; 
+        background-color: #f8f9fa; 
+        transition: border-color 0.3s; 
+        margin-bottom: 10px; /* Space below the dropdown */
+    " onfocus="this.style.borderColor='#0056b3'" onblur="this.style.borderColor='#007bff'">
+        <option value="50">700 Points = 50 Stars ⭐</option>
+        <option value="100">1500 Points = 100 Stars ⭐</option>
+        <option value="250">5000 Points = 250 Stars ⭐</option>
+        <option value="500">10k Points = 500 Stars ⭐</option>
+        <option value="2000">100k Points = 2000 Stars ⭐</option>
+    </select>
+    <button onclick="submitPurchase()" style="
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px; 
+        background-color: #1f9611; 
+        color: white; 
+        font-size: 16px; 
+        cursor: pointer; 
+        transition: background-color 0.3s, transform 0.2s;
+        font-weight: bold;
+    ">
+        Purchase
+    </button>
+</div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function purchasepopuperror1() {
+const checkinPopup = document.getElementById('purchase-popuperror1');
+checkinPopup.style.display = 'block';
+document.getElementById('purchase-popuperror1').style.opacity = '0.98';
+    // Hide the popup after 2 seconds
+    setTimeout(() => {
+        checkinPopup.style.display = 'none';
+    }, 1500);
+}
+
+           function purchasepopuperror2() {
+const checkinPopup = document.getElementById('purchase-popuperror2');
+checkinPopup.style.display = 'block';
+document.getElementById('daily-checkin').style.opacity = '0.68';
+    // Hide the popup after 2 seconds
+    setTimeout(() => {
+        checkinPopup.style.display = 'none';
+    }, 2000);
+}
+
+
+function openPurchasePopup() {
+    document.getElementById('purchase-popup').style.display = 'block';
+}
+
+document.getElementById('closePopupButtonbuy').onclick = function() {
+    document.getElementById('purchase-popup').style.display = 'none';
+}
+
+async function submitPurchase() {
+    const diamondAmount = document.getElementById('diamond-option').value;
+    let starCost;
+
+    if (diamondAmount == 700) {
+        starCost = 50;
+    } else if (diamondAmount == 1500) {
+        starCost = 100;
+    } else if (diamondAmount == 5000) {
+        starCost = 250;
+    } else if (diamondAmount == 10000) {
+        starCost = 500;
+    } else if (diamondAmount == 100000) {
+        starCost = 2000;
+    }
+
+const response = await fetch('https://telegram-bot-degen-town.replit.app/create-telegram-payment', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ diamondAmount: 10, starCost: 5 }) // Change these values as needed
+});
+
+
+const result = await response.json();
+if (result.success) {
+    // Handle successful payment creation
+} else {
+   purchasepopuperror1();
+}
+
+}
+
+
+</script>
     </div>
 </div>
        <p style=" font-weight: bold; ">Available Tasks:</p>
@@ -631,7 +769,8 @@ async function dailyCheckin() {
             localStorage.setItem(lastCheckinKey, Date.now());
             startTimer(60); // Start 1-minute timer (in seconds for testing)
         } else {
-            showPopup(`Daily check-in failed: ${data.error}`);
+         showCheckinPopup(); // Show the popup instead of returning an error
+        return; // Exit the function early
         }
     } catch (error) {
         console.error("Failed to complete daily check-in:", error);
