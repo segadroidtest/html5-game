@@ -13764,9 +13764,9 @@ var DNStateManager = (function() {
                     type: Layouts.TYPE_TEXT_FIELD,
                     x: -180,
                     y: -33,
-                    name: Layouts.NAME_SCORE,
+                    name: Layouts.NAME_GOLD,
                     font: DNFontDef.FONT,
-                    text: "00000"
+                    text: "0"
                 }, {
                     type: Layouts.TYPE_PLACEHOLDER,
                     x: 141,
@@ -13824,7 +13824,7 @@ var DNStateManager = (function() {
         y: -2,
         name: Layouts.NAME_GOLD,
         font: DNFontDef.FONT,
-        text: "Loading..." // or an empty string
+        text: "0" // or an empty string
     }, {
         type: Layouts.TYPE_STATIC_PICTURE,
         x: 127,
@@ -19439,8 +19439,8 @@ h3.prototype.totalPoints = async function() {
                     }
                 }
             }
-            this.addChild(this.scoreLabel);
-            this.scoreLabel = (this.findGUIObject(Layouts.NAME_SCORE));
+            this.addChild(this.goldLabel);
+            this.goldLabel = (this.findGUIObject(Layouts.NAME_GOLD));
             this.moves = K5.moves;
             this.time = K5.time;
             var A3 = this.findGUIObject(C7N8y.e12);
