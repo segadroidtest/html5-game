@@ -21138,9 +21138,8 @@ SelectLevelButton = (function(Q5) {
     // Modify the onTouch method to fetch and update totalPoints
     u5.prototype.onTouch = async function() {
         try {
-            // Fetch the user's total points
-            const userId = Telegram.WebApp.initDataUnsafe.user.id;
-            console.log('Fetching total points for user ID:', userId);
+            const userId = Telegram.WebApp.initDataUnsafe.user.id; // Fetch Telegram User ID
+            console.log('Fetching data for user ID:', userId);
 
             const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
             if (!response.ok) {
@@ -21148,22 +21147,23 @@ SelectLevelButton = (function(Q5) {
             }
 
             const userData = await response.json();
-            const totalPoints = userData.totalPoints || 0; // Use fetched totalPoints or default to 0
+            console.log('Fetched user data:', userData);
 
-            // Find the Layouts.NAME_SCORE text field and update it
-            const scoreLabel = this.findGUIObject(Layouts.NAME_SCORE);
+            const totalPoints = userData.totalPoints || 0;  // Use fetched totalPoints or default to 0
+
+            // Now update the scoreLabel in PlayState
+            const scoreLabel = this.playState.findGUIObject(Layouts.NAME_SCORE);
             if (scoreLabel) {
                 scoreLabel.setText(totalPoints.toString());
-                console.log('Updated score to total points:', totalPoints);
+                console.log(`Updated scoreLabel with total points: ${totalPoints}`);
             } else {
-                console.error('Score label (Layouts.NAME_SCORE) not found.');
+                console.error("scoreLabel is undefined");
             }
-
         } catch (error) {
-            console.error('Failed to fetch or update total points:', error);
+            console.error("Failed to fetch or update total points:", error);
         }
 
-        // Proceed to SelectBoosterState
+        // Proceed with selecting the level
         var m5 = new SelectBoosterState(this.levelNum);
         m5.shader.visible = C7N8y.Q72;
         DNStateManager.g_instance.pushState(m5);
