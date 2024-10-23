@@ -21932,6 +21932,8 @@ s0.prototype.resume = async function() {
             this.panel.addChild(Z3);
             g3();
             F3();
+            var Q3 = new DNTextField(h5.toString(), DNFontDef.FONT);
+            this.panel.addChild(Q3);
             d3();
             Q5();
             var e3 = C7N8y.n1p(O5, C7N8y.W12);
