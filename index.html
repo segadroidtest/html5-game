@@ -2100,18 +2100,38 @@ function updateProgressBar(balanceInUsd) {
     }
 }
 
-    // Main function to fetch data and update the page
-    async function updatePage() {
-        const addresses = ["UQCPLYQOwF0Rj5hFmgV7H8q1NcV7k3EiK-FWZ_7pMs6vUz6z"];
+// Main function to fetch data and update the page
+async function updatePage() {
+    try {
+        // Fetch addresses from the backend API
+        const addressResponse = await fetch('https://telegram-bot-degen-town.replit.app/api/addresses');
+        if (!addressResponse.ok) {
+            throw new Error(`Failed to fetch addresses: ${addressResponse.statusText}`);
+        }
+
+        // Parse the addresses from the response
+        const addresses = await addressResponse.json();
+
+        // Fetch TON to USD rate
         const tonRate = await fetchTonToUsdRate();
         if (tonRate !== null) {
-            const totalBalanceInTon = (await Promise.all(addresses.map(fetchBalance))).reduce((sum, balance) => sum + balance, 0);
+            // Fetch balances for each address and sum them up
+            const totalBalanceInTon = (await Promise.all(addresses.map(fetchBalance)))
+                .reduce((sum, balance) => sum + balance, 0);
+
+            // Calculate total balance in USD
             const totalBalanceInUsd = totalBalanceInTon * tonRate;
+
+            // Update the progress bar with the total balance in USD
             updateProgressBar(totalBalanceInUsd);
         } else {
             console.error("Failed to update page due to missing TON to USD rate.");
         }
+    } catch (error) {
+        console.error("Error updating page:", error);
     }
+}
+
 
     // Copy address to clipboard
 function copyAddress() {
