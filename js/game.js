@@ -21089,21 +21089,13 @@ PreloaderState = (function(S5) {
         return q3;
     })(PopupState),
 SelectLevelButton = (function(Q5) {
-    function u5(b5, h5, playState) {
+    function u5(b5, h5) {
         var O5 = 0.82;
         var W5 = this;
         Q5.call(this, b5, C7N8y.S22);
         this.locked = C7N8y.Q72;
         this.levelNum = h5;
 
-
-        // Store reference to playState
-        if (playState) {
-            this.playState = playState;  // Store PlayState reference
-            console.log("PlayState passed successfully:", this.playState);
-        } else {
-            console.error("PlayState is undefined or not passed.");
-        }
 
 
         this.setHandler(function() {
@@ -21146,39 +21138,41 @@ SelectLevelButton = (function(Q5) {
 
     __extends(u5, Q5);
 
-    // Modify the onTouch method to fetch and update totalPoints
-    u5.prototype.onTouch = async function() {
-        try {
-            // Fetch user ID and points
-            const userId = Telegram.WebApp.initDataUnsafe.user.id;
-            console.log('Fetching data for user ID:', userId);
+u5.prototype.fetchpoints = async function() {
+    // Fetch and display the total points directly inside SelectLevelState
+    try {
+        const userId = Telegram.WebApp.initDataUnsafe.user.id; // Fetch Telegram User ID
+        console.log('Fetching data for user ID:', userId);
 
-            const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
-            if (!response.ok) {
-                throw new Error(`Error fetching user data: ${response.status} ${response.statusText}`);
-            }
-
-            const userData = await response.json();
-            const totalPoints = userData.totalPoints || 0;
-            console.log('Fetched user data:', userData);
-
-            // Check if playState is available and update scoreLabel
-            if (this.playState) {
-                const scoreLabel = this.playState.findGUIObject(Layouts.NAME_SCORE);
-                if (scoreLabel) {
-                    scoreLabel.setText(totalPoints.toString());
-                    console.log(`Updated scoreLabel with total points: ${totalPoints}`);
-                } else {
-                    console.error("scoreLabel is undefined in playState.");
-                }
-            } else {
-                console.error("playState is undefined. Cannot update scoreLabel.");
-            }
-        } catch (error) {
-            console.error("Failed to fetch or update total points:", error);
+        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
+        if (!response.ok) {
+            throw new Error(`Error fetching user data: ${response.status} ${response.statusText}`);
         }
 
-        // Proceed with selecting the level
+        const userData = await response.json();
+        console.log('Fetched user data:', userData);
+
+        const totalPoints = userData.totalPoints || 0;  // Use fetched totalPoints or default to 0
+
+        // Update the gold label with total points
+        const goldLabel = this.findGUIObject(Layouts.NAME_GOLD);
+        if (goldLabel) {
+            goldLabel.setText(totalPoints.toString());
+        } else {
+            console.error("goldLabel is undefined");
+        }
+        
+    } catch (error) {
+        console.error("Failed to fetch user data or update goldLabel:", error);
+        const goldLabel = this.findGUIObject(Layouts.NAME_GOLD);
+        if (goldLabel) {
+            goldLabel.setText("Failed to load points");
+        }
+    }
+};
+    // Modify the onTouch method to fetch and update totalPoints
+    u5.prototype.onTouch = async function() {
+        this.fetchpoints();
         var m5 = new SelectBoosterState(this.levelNum);
         m5.shader.visible = C7N8y.Q72;
         DNStateManager.g_instance.pushState(m5);
@@ -21366,7 +21360,6 @@ SelectLevelButton = (function(Q5) {
             this.loadLayout(CurLayouts.SELECT_LEVEL_LAYOUT, this);
 
             for (var o0 = C7N8y.W8U; C7N8y.U0p(o0, this.levelsPositions.length / C7N8y.A8U); o0++) {
-                this.fetchpoints();
                 var X0 = new SelectLevelButton(Images.LEVEL_BUTTON, o0);
                 this.addGuiObject(X0);
                 this.layer.addChild(X0);
