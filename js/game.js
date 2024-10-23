@@ -21942,7 +21942,6 @@ s0.prototype.resume = async function() {
             q3.x = this.goldLabel.x + this.goldLabel.getBounds().width + 80;
             S5();
             J5(C7N8y.W8U);
-            q3.scaleX = q3.scaleY = C7N8y.V72;
             createjs.Tween.get(q3).wait(C7N8y.Q02).to({
                 scaleX: C7N8y.T8U,
                 scaleY: C7N8y.T8U,
