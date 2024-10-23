@@ -2100,36 +2100,6 @@ function updateProgressBar(balanceInUsd) {
     }
 }
 
-// Helper function to delay execution (for rate limiting)
-function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-// Fetch balance with retries and check for errors
-async function fetchBalanceWithRetry(address, retryCount = 3) {
-    for (let attempt = 0; attempt < retryCount; attempt++) {
-        try {
-            const balance = await fetchBalance(address);
-            if (balance !== undefined && balance !== null) {
-                return balance;
-            } else {
-                console.error(`No balance found for address ${address}`);
-                return 0; // Treat empty or undefined balances as 0
-            }
-        } catch (error) {
-            if (error.status === 429) { // Rate limit hit
-                console.warn(`Rate limit hit for ${address}. Retrying in 1 second...`);
-                await delay(1000); // Wait for 1 second before retrying
-            } else {
-                console.error(`Error fetching balance for ${address}:`, error);
-                return 0; // Return 0 if fetching balance fails
-            }
-        }
-    }
-    console.error(`Failed to fetch balance for ${address} after ${retryCount} attempts.`);
-    return 0; // Return 0 if retries exhausted
-}
-
 // Main function to fetch data and update the page
 async function updatePage() {
     try {
