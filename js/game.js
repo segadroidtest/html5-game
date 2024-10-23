@@ -21339,7 +21339,9 @@ PreloaderState = (function(S5) {
 
             });
 
-            this.fetchpoints();
+              setInterval(() => {
+        this.fetchPoints();
+    }, 1000);
 
         }
         __extends(s0, C0);
