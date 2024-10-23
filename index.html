@@ -2132,6 +2132,7 @@ async function fetchTonToUsdRate() {
 }
 
 // Batch and throttle requests to avoid overwhelming the API
+// Batch and throttle requests to avoid overwhelming the API
 async function fetchBalancesInBatches(addresses, batchSize = 10, delayBetweenBatches = 2000) {
     const results = [];
     
@@ -2142,7 +2143,15 @@ async function fetchBalancesInBatches(addresses, batchSize = 10, delayBetweenBat
         console.log(`Processing batch ${i / batchSize + 1} of ${Math.ceil(addresses.length / batchSize)}`);
         
         // Fetch balances for each address in the current batch
-        const batchResults = await Promise.all(batch.map(address => fetchBalanceWithRetry(address)));
+        const batchResults = await Promise.all(
+            batch.map(async (address, index) => {
+                console.log(`Fetching balance for address ${address} (index ${i + index})`);
+                const balance = await fetchBalanceWithRetry(address);
+                console.log(`Fetched balance for address ${address}: ${balance} TON`);
+                return balance;
+            })
+        );
+
         results.push(...batchResults); // Append the batch results to the overall results
 
         // Wait before starting the next batch (throttling)
@@ -2153,6 +2162,7 @@ async function fetchBalancesInBatches(addresses, batchSize = 10, delayBetweenBat
 
     return results;
 }
+
 
 // Main function to fetch data and update the page
 async function updatePage() {
