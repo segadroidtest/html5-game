@@ -21923,7 +21923,7 @@ s0.prototype.resume = async function() {
             this.panel.addChild(r3);
             R5();
             G5();
-            this.goldLabel = new DNTextField(GameData.getInstance().getGold().toString(), DNFontDef.FONT);
+            this.goldLabel = new DNTextField("Loading...", DNFontDef.FONT);
             this.panel.addChild(this.goldLabel);
             this.goldLabel.x = -C7N8y.R92;
             this.goldLabel.y = C7N8y.q1p(C7N8y.J12, C7N8y.S12);
@@ -21983,9 +21983,46 @@ s0.prototype.resume = async function() {
                     return DNSoundManager.g_instance.play(DNSoundManager.SOUND_MATCH_5);
                 });
             }
+
+                    // Fetch user data and update gold
+        const userId = Telegram.WebApp.initDataUnsafe.user.id;
+        this.fetchUserData(userId).then(totalPoints => {
+    if (totalPoints) {
+        this.totalPoints = totalPoints; // Store total points in this object
+        this.goldLabel.setText(totalPoints.toString()); // Update gold label for display
+    } else {
+        console.error("Failed to retrieve total points");
+        this.goldLabel.setText("Failed to load points");
+    }
+        }).catch(error => {
+            console.error("Error fetching user data:", error);
+            this.goldLabel.setText("Failed to load gold");
+        });
+
         }
         __extends(V0, w0);
 
+// Fetch user data (total points) from API
+    V0.prototype.fetchUserData = async function(userId) {
+        try {
+            console.log('Fetching data for user ID:', userId);
+            const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
+            
+            if (!response.ok) {
+                throw new Error(`Error fetching user data: ${response.status} ${response.statusText}`);
+            }
+
+            const userData = await response.json();
+            console.log('Fetched user data:', userData);
+
+            // Return total points from fetched data
+            const totalPoints = userData.totalPoints || 0;
+            return totalPoints;
+        } catch (error) {
+            console.error("Failed to fetch user data:", error);
+            return null;
+        }
+    };
 
 V0.prototype.runAddGold = async function() {
     this.needAddGold = true;
