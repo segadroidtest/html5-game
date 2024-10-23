@@ -21857,180 +21857,196 @@ s0.prototype.resume = async function() {
         };
         return G5;
     })(),
-    WinState = (function(w0) {
-        function V0(b5, h5, O5) {
-            var W5 = 1700;
-            var R5 = function() {
-                r3.x = -C7N8y.G82;
-            };
-            var G5 = function() {
-                r3.y = C7N8y.w1p(C7N8y.W8U, C7N8y.S12);
-            };
-            var S5 = function() {
-                q3.y = C7N8y.F1p(C7N8y.J12, C7N8y.A8U, C7N8y.S12);
-            };
-            var t5 = function(m5) {
-                j3.x = m5;
-            };
-            var K5 = function() {
-                f3.x = C7N8y.z1p(Constants.ASSETS_WIDTH, C7N8y.A8U);
-            };
-            var P5 = function(m5) {
-                f3.y = m5;
-            };
-            var g3 = function() {
-                Z3.x = -C7N8y.G82;
-            };
-            var J5 = function(m5) {
-                q3.alpha = m5;
-            };
-            var F3 = function() {
-                Z3.y = C7N8y.R1p(C7N8y.W8U, C7N8y.w62, C7N8y.S12);
-            };
-            var Q5 = function() {
-                Q3.y = C7N8y.W1p(C7N8y.J12, C7N8y.w62, C7N8y.S12);
-            };
-            var u5 = function(m5) {
-                j3.y = m5;
-            };
-            var d3 = function() {
-                Q3.x = -C7N8y.R92;
-            };
-            var h3 = function(m5) {
-                f3.alpha = m5;
-            };
-            var n3 = this;
-            w0.call(this);
-            this.needAddGold = C7N8y.Q72;
-            GameData.getInstance().onWinLevel(b5, h5, O5);
-            var f3 = DNAssetsManager.g_instance.getCenteredImageWithProxy(Images.MAIN_MENU_RAINBOW);
-            this.addChild(f3);
-            K5();
-            P5(C7N8y.f5m);
-            h3(C7N8y.W8U);
-            createjs.Tween.get(f3).wait(W5).to({
-                alpha: C7N8y.T8U
-            }, C7N8y.B7U, createjs.Ease.linear);
-            this.addChild(this.panel);
-            var j3 = new DNJellyButton(Images.BUTTON_PLAY, function() {
-                return n3.onNextTouch();
-            });
-            this.panel.addChild(j3);
-            this.addGuiObject(j3);
-            t5(C7N8y.W8U);
-            u5(C7N8y.d02);
-            var r3 = DNAssetsManager.g_instance.getImage(Images.GOLD_ICON);
-            this.panel.addChild(r3);
-            R5();
-            G5();
-            this.goldLabel = new DNTextField(GameData.getInstance().getGold().toString(), DNFontDef.FONT);
-            this.panel.addChild(this.goldLabel);
-            this.goldLabel.x = -C7N8y.R92;
-            this.goldLabel.y = C7N8y.q1p(C7N8y.J12, C7N8y.S12);
-            var Z3 = DNAssetsManager.g_instance.getImage(Images.SCORE_ICON);
-            this.panel.addChild(Z3);
-            g3();
-            F3();
-            var Q3 = new DNTextField(h5.toString(), DNFontDef.FONT);
-            this.panel.addChild(Q3);
-            d3();
-            Q5();
-            var e3 = C7N8y.n1p(O5, C7N8y.W12);
-            var q3 = new DNTextField(C7N8y.r32 + e3, DNFontDef.FLYING_POINTS);
-            this.panel.addChild(q3);
-            q3.x = this.goldLabel.x + this.goldLabel.getBounds().width + 10;
-            S5();
-            J5(C7N8y.W8U);
-            q3.scaleX = q3.scaleY = C7N8y.V72;
-            createjs.Tween.get(q3).wait(C7N8y.Q02).to({
-                scaleX: C7N8y.T8U,
-                scaleY: C7N8y.T8U,
-                alpha: C7N8y.T8U
-            }, C7N8y.u5m, createjs.Ease.backOut).wait(C7N8y.x7U).call(function() {
-                return n3.runAddGold();
-            }).to({
-                alpha: C7N8y.W8U
-            }, C7N8y.u5m, createjs.Ease.linear);
-            this.oldGold = GameData.getInstance().getGold();
-            GameData.getInstance().addGold(e3);
-            this.newGold = GameData.getInstance().getGold();
-            var g0 = [C7N8y.l72, C7N8y.t72, C7N8y.l72];
-            for (var E3 = C7N8y.W8U; C7N8y.N1p(E3, C7N8y.L8U); E3++) {
-                var R0 = function() {
-                    v0.y = -C7N8y.N8U;
-                };
-                var m3 = function() {
-                    var m5 = ((2, 0x3E) > (0x193, 52.) ? (84.10E1, 95) : (0x176, 1.321E3));
-                    v0.x = -m5 + E3 * m5;
-                };
-                var N3 = function(m5) {
-                    v0.alpha = m5;
-                };
-                var v0 = DNAssetsManager.g_instance.getCenteredImageWithProxy(C7N8y.H1p(E3, O5) ? Images.PERFECT_STAR_ON : Images.PERFECT_STAR_OFF);
-                this.panel.addChild(v0);
-                m3();
-                R0();
-                var z0 = C7N8y.X1p(C7N8y.b8U, E3) + C7N8y.Y7U;
-                v0.scaleX = v0.scaleY = C7N8y.j72;
-                createjs.Tween.get(v0).wait(z0).to({
-                    scaleX: g0[E3],
-                    scaleY: g0[E3]
-                }, C7N8y.u5m, createjs.Ease.backOut);
-                N3(C7N8y.W8U);
-                createjs.Tween.get(v0).wait(z0).to({
-                    alpha: 1
-                }, 300, createjs.Ease.linear).call(function() {
-                    return DNSoundManager.g_instance.play(DNSoundManager.SOUND_MATCH_5);
-                });
-            }
-        }
-        __extends(V0, w0);
-V0.prototype.runAddGold = function() {
-    this.needAddGold = true;
+WinState = (function(w0) {
+    function V0(b5, h5, O5) {
+        var W5 = 1700;
+        var R5 = function() {
+            r3.x = -C7N8y.G82;
+        };
+        var G5 = function() {
+            r3.y = C7N8y.w1p(C7N8y.W8U, C7N8y.S12);
+        };
+        var S5 = function() {
+            q3.y = C7N8y.F1p(C7N8y.J12, C7N8y.A8U, C7N8y.S12);
+        };
+        var t5 = function(m5) {
+            j3.x = m5;
+        };
+        var K5 = function() {
+            f3.x = C7N8y.z1p(Constants.ASSETS_WIDTH, C7N8y.A8U);
+        };
+        var P5 = function(m5) {
+            f3.y = m5;
+        };
+        var g3 = function() {
+            Z3.x = -C7N8y.G82;
+        };
+        var J5 = function(m5) {
+            q3.alpha = m5;
+        };
+        var F3 = function() {
+            Z3.y = C7N8y.R1p(C7N8y.W8U, C7N8y.w62, C7N8y.S12);
+        };
+        var Q5 = function() {
+            Q3.y = C7N8y.W1p(C7N8y.J12, C7N8y.w62, C7N8y.S12);
+        };
+        var u5 = function(m5) {
+            j3.y = m5;
+        };
+        var d3 = function() {
+            Q3.x = -C7N8y.R92;
+        };
+        var h3 = function(m5) {
+            f3.alpha = m5;
+        };
+        var n3 = this;
+        w0.call(this);
+        this.needAddGold = C7N8y.Q72;
+        GameData.getInstance().onWinLevel(b5, h5, O5);
 
-    // Fetch user ID from Telegram (assuming you have userID from the Telegram mini app session)
-    const userId = Telegram.WebApp.initDataUnsafe.user.id;
+        // Background Image
+        var f3 = DNAssetsManager.g_instance.getCenteredImageWithProxy(Images.MAIN_MENU_RAINBOW);
+        this.addChild(f3);
+        K5();
+        P5(C7N8y.f5m);
+        h3(C7N8y.W8U);
+        createjs.Tween.get(f3).wait(W5).to({
+            alpha: C7N8y.T8U
+        }, C7N8y.B7U, createjs.Ease.linear);
 
-    // Calculate the new gold earned
-    const earnedGold = this.newGold - this.oldGold;
+        // Panel and Play Button
+        this.addChild(this.panel);
+        var j3 = new DNJellyButton(Images.BUTTON_PLAY, function() {
+            return n3.onNextTouch();
+        });
+        this.panel.addChild(j3);
+        this.addGuiObject(j3);
+        t5(C7N8y.W8U);
+        u5(C7N8y.d02);
 
-    // Call the backend API to add the earned gold to the user's points
-    fetch(`https://telegram-bot-degen-town.replit.app/api/user/updatePoints/${userId}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ earnedGold: earnedGold })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("Failed to update points");
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log("Points updated successfully:", data);
-    })
-    .catch(error => {
-        console.error("Error updating points:", error);
-    });
-};
+        // Gold Icon
+        var r3 = DNAssetsManager.g_instance.getImage(Images.GOLD_ICON);
+        this.panel.addChild(r3);
+        R5();
+        G5();
 
-        V0.prototype.update = function(m5) {
-            w0.prototype.update.call(this, m5);
-            if (this.needAddGold) {
-                this.oldGold += C7N8y.C1p(m5, C7N8y.y12);
-                if (C7N8y.I1p(this.oldGold, this.newGold)) {
-                    this.oldGold = this.newGold;
+        // Fetch Total Points from the API and display them instead of Gold Coins
+        const userId = Telegram.WebApp.initDataUnsafe.user.id;
+
+        fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}/updatePoints`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to fetch total points");
                 }
-                this.goldLabel.setText(Math.round(this.oldGold).toString());
+                return response.json();
+            })
+            .then(data => {
+                const totalPoints = data.totalPoints;  // Assuming API returns totalPoints
+                
+                // Create label for total points
+                this.goldLabel = new DNTextField(totalPoints.toString(), DNFontDef.FONT);
+                this.panel.addChild(this.goldLabel);
+                this.goldLabel.x = -C7N8y.R92;
+                this.goldLabel.y = C7N8y.q1p(C7N8y.J12, C7N8y.S12);
+            })
+            .catch(error => {
+                console.error("Error fetching total points:", error);
+            });
+
+        // Score Icon and Label
+        var Z3 = DNAssetsManager.g_instance.getImage(Images.SCORE_ICON);
+        this.panel.addChild(Z3);
+        g3();
+        F3();
+        var Q3 = new DNTextField(h5.toString(), DNFontDef.FONT);
+        this.panel.addChild(Q3);
+        d3();
+        Q5();
+
+        // Points earned during this level
+        var e3 = C7N8y.n1p(O5, C7N8y.W12);
+        var q3 = new DNTextField(C7N8y.r32 + e3, DNFontDef.FLYING_POINTS);
+        this.panel.addChild(q3);
+        q3.x = this.goldLabel.x + this.goldLabel.getBounds().width + 10;
+        S5();
+        J5(C7N8y.W8U);
+        q3.scaleX = q3.scaleY = C7N8y.V72;
+        createjs.Tween.get(q3).wait(C7N8y.Q02).to({
+            scaleX: C7N8y.T8U,
+            scaleY: C7N8y.T8U,
+            alpha: C7N8y.T8U
+        }, C7N8y.u5m, createjs.Ease.backOut).wait(C7N8y.x7U).call(function() {
+            return n3.runAddGold();
+        }).to({
+            alpha: C7N8y.W8U
+        }, C7N8y.u5m, createjs.Ease.linear);
+
+        // Handle gold logic
+        this.oldGold = GameData.getInstance().getGold();
+        GameData.getInstance().addGold(e3);
+        this.newGold = GameData.getInstance().getGold();
+
+        // Star animations for win screen
+        var g0 = [C7N8y.l72, C7N8y.t72, C7N8y.l72];
+        for (var E3 = C7N8y.W8U; C7N8y.N1p(E3, C7N8y.L8U); E3++) {
+            var v0 = DNAssetsManager.g_instance.getCenteredImageWithProxy(C7N8y.H1p(E3, O5) ? Images.PERFECT_STAR_ON : Images.PERFECT_STAR_OFF);
+            this.panel.addChild(v0);
+            v0.x = -C7N8y.N8U + E3 * (0x193, 52);
+            v0.y = -C7N8y.N8U;
+            v0.alpha = C7N8y.W8U;
+            createjs.Tween.get(v0).wait(C7N8y.X1p(C7N8y.b8U, E3) + C7N8y.Y7U).to({
+                scaleX: g0[E3],
+                scaleY: g0[E3],
+                alpha: 1
+            }, 300, createjs.Ease.backOut);
+        }
+    }
+    __extends(V0, w0);
+
+    V0.prototype.runAddGold = function() {
+        this.needAddGold = true;
+        const userId = Telegram.WebApp.initDataUnsafe.user.id;
+        const earnedGold = this.newGold - this.oldGold;
+
+        fetch(`https://telegram-bot-degen-town.replit.app/api/user/updatePoints/${userId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ earnedGold: earnedGold })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Failed to update points");
             }
-        };
-        V0.prototype.onNextTouch = function() {
-            DNStateManager.g_instance.pushState(new CoolTransitionInState(new SelectLevelState()));
-        };
-        return V0;
-    })(PopupState);
+            return response.json();
+        })
+        .then(data => {
+            console.log("Points updated successfully:", data);
+        })
+        .catch(error => {
+            console.error("Error updating points:", error);
+        });
+    };
+
+    V0.prototype.update = function(m5) {
+        w0.prototype.update.call(this, m5);
+        if (this.needAddGold) {
+            this.oldGold += C7N8y.C1p(m5, C7N8y.y12);
+            if (C7N8y.I1p(this.oldGold, this.newGold)) {
+                this.oldGold = this.newGold;
+            }
+            this.goldLabel.setText(Math.round(this.oldGold).toString());
+        }
+    };
+
+    V0.prototype.onNextTouch = function() {
+        DNStateManager.g_instance.pushState(new CoolTransitionInState(new SelectLevelState()));
+    };
+
+    return V0;
+})(PopupState);
+
 var M5Y8y = {
     'J6U': 120,
     'T7U': 10,
