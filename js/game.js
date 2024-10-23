@@ -12813,60 +12813,47 @@ var DNStateManager = (function() {
         return W5;
     })(DNJellyButton),
 DNTextField = (function(R5) {
-    function G5(m5, b5) {
-        R5.call(this);
-        this.textWidth = C7N8y.W8U;
-        this.fontNamePrefix = C7N8y.c7U;
-        this.letterDistance = C7N8y.W8U;
-        if (b5) {
-            this.fontNamePrefix = b5.name;
-            this.letterDistance = b5.letterDist;
-        }
-        if (m5) {
-            this.setText(m5);
-        }
-    }
-    __extends(G5, R5);
-
-    G5.prototype.setText = function(m5) {
-        if (C7N8y.T94(this.text, m5)) {
-            return;
-        }
-        this.text = m5;
-        this.removeAllChildren();
-        var b5 = 0;
-
-        for (var h5 = 0; C7N8y.d94(h5, m5.length); h5++) {
-            var O5 = m5.charAt(h5);
-            var W5 = DNAssetsManager.g_instance.getImage(this.fontNamePrefix + O5);
-            if (!W5.getBounds()) {
-                continue;
+        function G5(m5, b5) {
+            R5.call(this);
+            this.textWidth = C7N8y.W8U;
+            this.fontNamePrefix = C7N8y.c7U;
+            this.letterDistance = C7N8y.W8U;
+            if (b5) {
+                this.fontNamePrefix = b5.name;
+                this.letterDistance = b5.letterDist;
             }
-
-            // Apply the custom font style for W5
-            W5.style = {
-                font: '20px SuperMario256', // Use the custom font here
-                fill: '#000', // Set the text color
-                align: 'left' // Set alignment if needed
-            };
-
-            this.addChild(W5);
-            W5.x = b5;
-            b5 += W5.getBounds().width + this.letterDistance;
+            if (m5) {
+                this.setText(m5);
+            }
         }
-        this.textWidth = b5;
-    };
-
-    G5.prototype.getWidth = function() {
-        return this.textWidth;
-    };
-
-    G5.prototype.getText = function() {
-        return this.text;
-    };
-
-    return G5;
-})(DNGUIObject),
+        __extends(G5, R5);
+        G5.prototype.setText = function(m5) {
+            if (C7N8y.T94(this.text, m5)) {
+                return;
+            }
+            this.text = m5;
+            this.removeAllChildren();
+            var b5 = 0;
+            for (var h5 = 0; C7N8y.d94(h5, m5.length); h5++) {
+                var O5 = m5.charAt(h5);
+                var W5 = DNAssetsManager.g_instance.getImage(this.fontNamePrefix + O5);
+                if (!W5.getBounds()) {
+                    continue;
+                }
+                this.addChild(W5);
+                W5.x = b5;
+                b5 += W5.getBounds().width + this.letterDistance;
+            }
+            this.textWidth = b5;
+        };
+        G5.prototype.getWidth = function() {
+            return this.textWidth;
+        };
+        G5.prototype.getText = function() {
+            return this.text;
+        };
+        return G5;
+    })(DNGUIObject),
     Constants = (function() {
         var b5 = 2500;
         var h5 = 0.25;
