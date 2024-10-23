@@ -21930,6 +21930,8 @@ s0.prototype.resume = async function() {
             this.panel.addChild(this.goldLabel);
             this.goldLabel.x = -C7N8y.R92;
             this.goldLabel.y = C7N8y.q1p(C7N8y.J12, C7N8y.S12);
+            var Z3 = new createjs.Text();
+            this.panel.addChild(Z3);
             g3();
             F3();
             var Q3 = new DNTextField(h5.toString(), DNFontDef.FONT);
