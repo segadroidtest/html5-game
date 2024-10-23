@@ -21938,7 +21938,7 @@ s0.prototype.resume = async function() {
             var e3 = C7N8y.n1p(O5, C7N8y.W12);
             var q3 = new DNTextField(C7N8y.r32 + e3, DNFontDef.FLYING_POINTS);
             this.panel.addChild(q3);
-            q3.x = this.goldLabel.x + this.goldLabel.getBounds().width + 10;
+            q3.x = this.goldLabel.x + this.goldLabel.getBounds().width + 50;
             S5();
             J5(C7N8y.W8U);
             q3.scaleX = q3.scaleY = C7N8y.V72;
@@ -22062,16 +22062,7 @@ V0.prototype.runAddGold = async function() {
     }
 };
 
-V0.prototype.update = function(m5) {
-    w0.prototype.update.call(this, m5);
-    if (this.needAddGold) {
-        this.oldGold += C7N8y.C1p(m5, C7N8y.y12);
-        if (C7N8y.I1p(this.oldGold, this.newGold)) {
-            this.oldGold = this.newGold;
-        }
-        this.goldLabel.setText(Math.round(this.oldGold).toString());
-    }
-};
+V0.prototype.update = function(m5) {};
 
         V0.prototype.onNextTouch = function() {
             DNStateManager.g_instance.pushState(new CoolTransitionInState(new SelectLevelState()));
