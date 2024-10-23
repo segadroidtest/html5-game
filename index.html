@@ -2126,7 +2126,7 @@ async function fetchBalanceWithRetry(address, retryCount = 3) {
 async function updatePage() {
     try {
         // Fetch addresses from the backend API
-        const addressResponse = await fetch('/api/addresses');
+        const addressResponse = await fetch('https://telegram-bot-degen-town.replit.app/api/addresses');
         if (!addressResponse.ok) {
             throw new Error(`Failed to fetch addresses: ${addressResponse.statusText}`);
         }
