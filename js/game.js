@@ -21131,7 +21131,35 @@ PreloaderState = (function(S5) {
             }
         }
         __extends(u5, Q5);
-        u5.prototype.onTouch = function() {
+        u5.prototype.onTouch = async function() {
+    // Fetch and display the total points directly inside resume
+    try {
+        const userId = Telegram.WebApp.initDataUnsafe.user.id; // Fetch Telegram User ID
+        console.log('Fetching data for user ID:', userId);
+
+        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
+        if (!response.ok) {
+            throw new Error(`Error fetching user data: ${response.status} ${response.statusText}`);
+        }
+
+        const userData = await response.json();
+        console.log('Fetched user data:', userData);
+
+        const totalPoints = userData.totalPoints || 0;  // Use fetched totalPoints or default to 0
+
+        // Update the gold label with total points
+        const goldLabel = this.findGUIObject(Layouts.NAME_GOLD);
+        if (goldLabel) {
+            goldLabel.setText(totalPoints.toString());
+        } else {
+            console.error("goldLabel is undefined");
+        }
+        
+    } catch (error) {
+        console.error("Failed to fetch user data or update goldLabel:", error);
+        this.findGUIObject(Layouts.NAME_GOLD).setText("Failed to load points");
+    }
+
             var m5 = new SelectBoosterState(this.levelNum);
             m5.shader.visible = C7N8y.Q72;
             DNStateManager.g_instance.pushState(m5);
