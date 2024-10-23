@@ -21926,7 +21926,7 @@ s0.prototype.resume = async function() {
             this.panel.addChild(r3);
             R5();
             G5();
-            this.goldLabel = new DNTextField("", DNFontDef.FONT);
+            this.goldLabel = new DNTextField("0", DNFontDef.FONT);
             this.panel.addChild(this.goldLabel);
             this.goldLabel.x = -C7N8y.R92;
             this.goldLabel.y = C7N8y.q1p(C7N8y.J12, C7N8y.S12);
