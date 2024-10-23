@@ -22011,7 +22011,7 @@ V0.prototype.runAddGold = async function() {
         }
 
         const data = await response.json(); // Convert response to JSON
-        this.oldGold = data.totalPoints || 0; // Get updated total points
+        this.oldGold = userdata.totalPoints || 0; // Get updated total points
         console.log("Total points fetched:", this.oldGold);
 
         // Update the gold label with the total points
