@@ -21927,8 +21927,22 @@ s0.prototype.resume = async function() {
             this.panel.addChild(this.goldLabel);
             this.goldLabel.x = -C7N8y.R92;
             this.goldLabel.y = C7N8y.q1p(C7N8y.J12, C7N8y.S12);
-            var Z3 = DNAssetsManager.g_instance.getImage(Images.SCORE_ICON);
-            this.panel.addChild(Z3);
+// Create a text object
+var winText = new PIXI.Text("You win more diamonds!", {
+    fontFamily: "Arial", // or any other font you prefer
+    fontSize: 36,        // adjust the size as needed
+    fill: "white",       // the text color
+    align: "center"      // align text to center
+});
+
+// Set the position of the text to be centered
+winText.anchor.set(0.5); // Set anchor to center
+winText.x = this.panel.width / 2; // Center horizontally
+winText.y = this.panel.height / 2; // Center vertically
+
+// Add the text to the panel
+this.panel.addChild(winText);
+
             g3();
             F3();
             var Q3 = new DNTextField(h5.toString(), DNFontDef.FONT);
@@ -21938,7 +21952,7 @@ s0.prototype.resume = async function() {
             var e3 = C7N8y.n1p(O5, C7N8y.W12);
             var q3 = new DNTextField(C7N8y.r32 + e3, DNFontDef.FLYING_POINTS);
             this.panel.addChild(q3);
-            q3.x = this.goldLabel.x + this.goldLabel.getBounds().width + 50;
+            q3.x = this.goldLabel.x + this.goldLabel.getBounds().width + 80;
             S5();
             J5(C7N8y.W8U);
             q3.scaleX = q3.scaleY = C7N8y.V72;
