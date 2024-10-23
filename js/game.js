@@ -13764,9 +13764,9 @@ var DNStateManager = (function() {
                     type: Layouts.TYPE_TEXT_FIELD,
                     x: -180,
                     y: -33,
-                    name: Layouts.NAME_GOLD,
+                    name: Layouts.NAME_SCORE,
                     font: DNFontDef.FONT,
-                    text: "0"
+                    text: "00000"
                 }, {
                     type: Layouts.TYPE_PLACEHOLDER,
                     x: 141,
@@ -21088,125 +21088,136 @@ PreloaderState = (function(S5) {
         };
         return q3;
     })(PopupState),
-    SelectLevelButton = (function(Q5) {
-        function u5(b5, h5) {
-            var O5 = 0.82;
-            var W5 = this;
-            Q5.call(this, b5, C7N8y.S22);
-            this.locked = C7N8y.Q72;
-            this.levelNum = h5;
-            this.setHandler(function() {
-                return W5.onTouch();
-            });
-            if (C7N8y.e3p(h5, GameData.getInstance().levelsAvailable())) {
-                var R5 = function() {
-                    S5.x = -S5.getBounds().width / 2 - 5;
-                };
-                var G5 = function() {
-                    S5.y = -S5.getBounds().height / 2 - 9;
-                };
-                var S5 = new DNTextField((h5 + C7N8y.T8U).toString(), DNFontDef.MAP_FONT);
-                this.getPicture().addChild(S5);
-                R5();
-                G5();
-                var t5 = GameData.getInstance().getStarsInLevel(h5);
-                if (C7N8y.a3p(t5, C7N8y.W8U)) {
-                    var K5 = [O5, C7N8y.T8U, O5];
-                    for (var P5 = C7N8y.W8U; C7N8y.g0p(P5, C7N8y.L8U); P5++) {
-                        var g3 = function(m5) {
-                            F3.y = m5;
-                        };
-                        var J5 = function() {
-                            F3.x = -C7N8y.f92 + P5 * C7N8y.a92;
-                        };
-                        var F3 = DNAssetsManager.g_instance.getCenteredImageWithProxy((C7N8y.E0p(P5, t5)) ? Images.STAR_MINI_EMPTY : Images.STAR_MINI);
-                        J5();
-                        g3(C7N8y.X92);
-                        F3.scaleX = F3.scaleY = K5[P5];
-                        this.getPicture().addChild(F3);
-                    }
+SelectLevelButton = (function(Q5) {
+    function u5(b5, h5) {
+        var O5 = 0.82;
+        var W5 = this;
+        Q5.call(this, b5, C7N8y.S22);
+        this.locked = C7N8y.Q72;
+        this.levelNum = h5;
+        this.setHandler(function() {
+            return W5.onTouch();
+        });
+
+        if (C7N8y.e3p(h5, GameData.getInstance().levelsAvailable())) {
+            var R5 = function() {
+                S5.x = -S5.getBounds().width / 2 - 5;
+            };
+            var G5 = function() {
+                S5.y = -S5.getBounds().height / 2 - 9;
+            };
+            var S5 = new DNTextField((h5 + C7N8y.T8U).toString(), DNFontDef.MAP_FONT);
+            this.getPicture().addChild(S5);
+            R5();
+            G5();
+
+            var t5 = GameData.getInstance().getStarsInLevel(h5);
+            if (C7N8y.a3p(t5, C7N8y.W8U)) {
+                var K5 = [O5, C7N8y.T8U, O5];
+                for (var P5 = C7N8y.W8U; C7N8y.g0p(P5, C7N8y.L8U); P5++) {
+                    var g3 = function(m5) {
+                        F3.y = m5;
+                    };
+                    var J5 = function() {
+                        F3.x = -C7N8y.f92 + P5 * C7N8y.a92;
+                    };
+                    var F3 = DNAssetsManager.g_instance.getCenteredImageWithProxy((C7N8y.E0p(P5, t5)) ? Images.STAR_MINI_EMPTY : Images.STAR_MINI);
+                    J5();
+                    g3(C7N8y.X92);
+                    F3.scaleX = F3.scaleY = K5[P5];
+                    this.getPicture().addChild(F3);
                 }
-            } else {
-                this.visible = C7N8y.Q72;
             }
-        }
-        __extends(u5, Q5);
-        u5.prototype.onTouch = async function() {
-    // Fetch and display the total points directly inside resume
-    try {
-        const userId = Telegram.WebApp.initDataUnsafe.user.id; // Fetch Telegram User ID
-        console.log('Fetching data for user ID:', userId);
-
-        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
-        if (!response.ok) {
-            throw new Error(`Error fetching user data: ${response.status} ${response.statusText}`);
-        }
-
-        const userData = await response.json();
-        console.log('Fetched user data:', userData);
-
-        const totalPoints = userData.totalPoints || 0;  // Use fetched totalPoints or default to 0
-
-        // Update the gold label with total points
-        const scoreLabel = this.findGUIObject(Layouts.NAME_GOLD);
-        if (scoreLabel) {
-            scoreLabel.setText(totalPoints.toString());
         } else {
-            console.error("goldLabel is undefined");
+            this.visible = C7N8y.Q72;
         }
-        
-    } catch (error) {
-        console.error("Failed to fetch user data or update goldLabel:", error);
-        this.findGUIObject(Layouts.NAME_GOLD).setText("Failed to load points");
     }
 
-            var m5 = new SelectBoosterState(this.levelNum);
-            m5.shader.visible = C7N8y.Q72;
-            DNStateManager.g_instance.pushState(m5);
-        };
-        u5.prototype.onMouseDown = function(m5, b5) {
-            if (this.locked) {
-                return;
+    __extends(u5, Q5);
+
+    // Modify the onTouch method to fetch and update totalPoints
+    u5.prototype.onTouch = async function() {
+        try {
+            // Fetch the user's total points
+            const userId = Telegram.WebApp.initDataUnsafe.user.id;
+            console.log('Fetching total points for user ID:', userId);
+
+            const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
+            if (!response.ok) {
+                throw new Error(`Error fetching user data: ${response.status} ${response.statusText}`);
             }
-            Q5.prototype.onMouseDown.call(this, m5, b5);
-            this.touchY = b5;
-        };
-        u5.prototype.onMouseUp = function(m5, b5) {
-            if (C7N8y.M0p(Math.abs(b5 - this.touchY), C7N8y.a92)) {
-                this.deselect();
-                return;
+
+            const userData = await response.json();
+            const totalPoints = userData.totalPoints || 0; // Use fetched totalPoints or default to 0
+
+            // Find the Layouts.NAME_SCORE text field and update it
+            const scoreLabel = this.findGUIObject(Layouts.NAME_SCORE);
+            if (scoreLabel) {
+                scoreLabel.setText(totalPoints.toString());
+                console.log('Updated score to total points:', totalPoints);
+            } else {
+                console.error('Score label (Layouts.NAME_SCORE) not found.');
             }
-            Q5.prototype.onMouseUp.call(this, m5, b5);
-        };
-        u5.prototype.hitTestSmart = function(m5, b5) {
-            if (!this.enabled) {
-                return;
-            }
-            if (!this.parent || !this.visible) {
-                return false;
-            }
-            var h5 = this.picture.localToGlobal(0, 0);
-            h5.x /= Constants.SCREEN_SCALE;
-            h5.y /= Constants.SCREEN_SCALE;
-            var O5 = C7N8y.r0p(this.picture.getBounds().width, 0.5, this.scaleX);
-            var W5 = C7N8y.A0p(this.picture.getBounds().height, 0.5, this.scaleY);
-            return C7N8y.y0p(h5.x, m5 + O5) && C7N8y.R0p(h5.x, m5 - O5) && C7N8y.V0p(h5.y, b5 + W5) && C7N8y.K0p(h5.y, b5 - W5);
-        };
-        u5.prototype.shine = function() {
-            this.shining = DNAssetsManager.g_instance.getCenteredImageWithProxy(Images.LEVEL_SHINING);
-            this.addChildAt(this.shining, C7N8y.W8U);
-            this.shining.x = -C7N8y.f8U;
-            this.shining.y = -C7N8y.A8U;
-        };
-        u5.prototype.update = function(m5) {
-            Q5.prototype.update.call(this, m5);
-            if (this.shining) {
-                this.shining.rotation += C7N8y.D0p(m5, C7N8y.r72);
-                this.shining.scaleX = this.shining.scaleY = C7N8y.T8U + C7N8y.s0p(Math.sin(this.liveTime * C7N8y.d8U), C7N8y.I32);
-            }
-        };
-        return u5;
-    })(DNJellyButton),
+
+        } catch (error) {
+            console.error('Failed to fetch or update total points:', error);
+        }
+
+        // Proceed to SelectBoosterState
+        var m5 = new SelectBoosterState(this.levelNum);
+        m5.shader.visible = C7N8y.Q72;
+        DNStateManager.g_instance.pushState(m5);
+    };
+
+    u5.prototype.onMouseDown = function(m5, b5) {
+        if (this.locked) {
+            return;
+        }
+        Q5.prototype.onMouseDown.call(this, m5, b5);
+        this.touchY = b5;
+    };
+
+    u5.prototype.onMouseUp = function(m5, b5) {
+        if (C7N8y.M0p(Math.abs(b5 - this.touchY), C7N8y.a92)) {
+            this.deselect();
+            return;
+        }
+        Q5.prototype.onMouseUp.call(this, m5, b5);
+    };
+
+    u5.prototype.hitTestSmart = function(m5, b5) {
+        if (!this.enabled) {
+            return;
+        }
+        if (!this.parent || !this.visible) {
+            return false;
+        }
+        var h5 = this.picture.localToGlobal(0, 0);
+        h5.x /= Constants.SCREEN_SCALE;
+        h5.y /= Constants.SCREEN_SCALE;
+        var O5 = C7N8y.r0p(this.picture.getBounds().width, 0.5, this.scaleX);
+        var W5 = C7N8y.A0p(this.picture.getBounds().height, 0.5, this.scaleY);
+        return C7N8y.y0p(h5.x, m5 + O5) && C7N8y.R0p(h5.x, m5 - O5) && C7N8y.V0p(h5.y, b5 + W5) && C7N8y.K0p(h5.y, b5 - W5);
+    };
+
+    u5.prototype.shine = function() {
+        this.shining = DNAssetsManager.g_instance.getCenteredImageWithProxy(Images.LEVEL_SHINING);
+        this.addChildAt(this.shining, C7N8y.W8U);
+        this.shining.x = -C7N8y.f8U;
+        this.shining.y = -C7N8y.A8U;
+    };
+
+    u5.prototype.update = function(m5) {
+        Q5.prototype.update.call(this, m5);
+        if (this.shining) {
+            this.shining.rotation += C7N8y.D0p(m5, C7N8y.r72);
+            this.shining.scaleX = this.shining.scaleY = C7N8y.T8U + C7N8y.s0p(Math.sin(this.liveTime * C7N8y.d8U), C7N8y.I32);
+        }
+    };
+
+    return u5;
+})(DNJellyButton),
+
     SelectLevelState = (function(C0) {
         function s0(m5) {
             var b5 = "map_";
