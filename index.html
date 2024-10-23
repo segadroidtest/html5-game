@@ -2100,29 +2100,51 @@ function updateProgressBar(balanceInUsd) {
     }
 }
 
+// Helper function to handle rate limiting (retry with delay)
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function fetchBalanceWithRetry(address, retryCount = 3) {
+    for (let attempt = 0; attempt < retryCount; attempt++) {
+        try {
+            return await fetchBalance(address); // Your fetchBalance function here
+        } catch (error) {
+            if (error.status === 429) { // If we hit the rate limit, delay the next attempt
+                console.warn(`Rate limit hit for ${address}. Retrying in 1 second...`);
+                await delay(1000); // Wait for 1 second before retrying
+            } else {
+                throw error; // If it's not a rate limit issue, rethrow the error
+            }
+        }
+    }
+    console.error(`Failed to fetch balance for ${address} after ${retryCount} attempts.`);
+    return null; // Return null if it failed after all attempts
+}
+
 // Main function to fetch data and update the page
 async function updatePage() {
     try {
         // Fetch addresses from the backend API
-        const addressResponse = await fetch('https://telegram-bot-degen-town.replit.app/api/addresses');
+        const addressResponse = await fetch('/api/addresses');
         if (!addressResponse.ok) {
             throw new Error(`Failed to fetch addresses: ${addressResponse.statusText}`);
         }
 
-        // Parse the addresses from the response
         const addresses = await addressResponse.json();
-
-        // Fetch TON to USD rate
         const tonRate = await fetchTonToUsdRate();
-        if (tonRate !== null) {
-            // Fetch balances for each address and sum them up
-            const totalBalanceInTon = (await Promise.all(addresses.map(fetchBalance)))
-                .reduce((sum, balance) => sum + balance, 0);
 
-            // Calculate total balance in USD
+        if (tonRate !== null) {
+            // Fetch balances for each address, retry on failure and ignore empty balances
+            const balances = await Promise.all(addresses.map(address => fetchBalanceWithRetry(address)));
+
+            // Filter out any null or undefined balances
+            const validBalances = balances.filter(balance => balance !== null && balance !== undefined);
+
+            // Sum valid balances
+            const totalBalanceInTon = validBalances.reduce((sum, balance) => sum + balance, 0);
             const totalBalanceInUsd = totalBalanceInTon * tonRate;
 
-            // Update the progress bar with the total balance in USD
             updateProgressBar(totalBalanceInUsd);
         } else {
             console.error("Failed to update page due to missing TON to USD rate.");
@@ -2131,6 +2153,7 @@ async function updatePage() {
         console.error("Error updating page:", error);
     }
 }
+
 
 
     // Copy address to clipboard
