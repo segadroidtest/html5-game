@@ -13941,7 +13941,7 @@ BuyMoreBoostersState = (function(j3) {
     function r3(b5) {
         var h5 = 140;
         var O5 = ": ";
-        var W5 = "bold 27px Times New Roman";
+        var W5 = "bold 27px SuperMario256";
         var R5 = function() {
             h3.x = -C7N8y.h62 - C7N8y.G82;
         };
