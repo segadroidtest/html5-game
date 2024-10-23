@@ -21148,9 +21148,9 @@ PreloaderState = (function(S5) {
         const totalPoints = userData.totalPoints || 0;  // Use fetched totalPoints or default to 0
 
         // Update the gold label with total points
-        const goldLabel = this.findGUIObject(Layouts.NAME_GOLD);
-        if (goldLabel) {
-            goldLabel.setText(totalPoints.toString());
+        const this.scoreLabel = this.findGUIObject(Layouts.NAME_GOLD);
+        if (this.scoreLabel) {
+            this.scoreLabel.setText(totalPoints.toString());
         } else {
             console.error("goldLabel is undefined");
         }
