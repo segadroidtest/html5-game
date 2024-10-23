@@ -15434,7 +15434,7 @@ r3.prototype.onBuyTouch = async function() {
             return r3.g_instance;
         };
         r3.prototype.getString = function(m5) {
-            var b5 = "You win more diamonds!";
+            var b5 = "You win!";
             var h5 = "!!!";
             if (!this.strings) {
                 return h5;
@@ -21922,7 +21922,7 @@ s0.prototype.resume = async function() {
             this.addGuiObject(j3);
             t5(C7N8y.W8U);
             u5(C7N8y.d02);
-            var r3 = new createjs.Text(DNStringManager.getInstance().getString(DNStringManager.LOADING), C7N8y.g72, C7N8y.y5m);
+            var r3 = DNAssetsManager.g_instance.getImage(Images.GOLD_ICON);
             this.panel.addChild(r3);
             R5();
             G5();
@@ -21930,7 +21930,7 @@ s0.prototype.resume = async function() {
             this.panel.addChild(this.goldLabel);
             this.goldLabel.x = -C7N8y.R92;
             this.goldLabel.y = C7N8y.q1p(C7N8y.J12, C7N8y.S12);
-            var Z3 = new createjs.Text();
+            var Z3 = new createjs.Text(DNStringManager.getInstance().getString(DNStringManager.LOADING), C7N8y.g72, C7N8y.y5m);
             this.panel.addChild(Z3);
             g3();
             F3();
