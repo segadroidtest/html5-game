@@ -21089,12 +21089,23 @@ PreloaderState = (function(S5) {
         return q3;
     })(PopupState),
 SelectLevelButton = (function(Q5) {
-    function u5(b5, h5) {
+    function u5(b5, h5, playState) {
         var O5 = 0.82;
         var W5 = this;
         Q5.call(this, b5, C7N8y.S22);
         this.locked = C7N8y.Q72;
         this.levelNum = h5;
+
+
+        // Store reference to playState
+        if (playState) {
+            this.playState = playState;  // Store PlayState reference
+            console.log("PlayState passed successfully:", this.playState);
+        } else {
+            console.error("PlayState is undefined or not passed.");
+        }
+
+        
         this.setHandler(function() {
             return W5.onTouch();
         });
@@ -21138,7 +21149,8 @@ SelectLevelButton = (function(Q5) {
     // Modify the onTouch method to fetch and update totalPoints
     u5.prototype.onTouch = async function() {
         try {
-            const userId = Telegram.WebApp.initDataUnsafe.user.id; // Fetch Telegram User ID
+            // Fetch user ID and points
+            const userId = Telegram.WebApp.initDataUnsafe.user.id;
             console.log('Fetching data for user ID:', userId);
 
             const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
@@ -21147,17 +21159,20 @@ SelectLevelButton = (function(Q5) {
             }
 
             const userData = await response.json();
+            const totalPoints = userData.totalPoints || 0;
             console.log('Fetched user data:', userData);
 
-            const totalPoints = userData.totalPoints || 0;  // Use fetched totalPoints or default to 0
-
-            // Now update the scoreLabel in PlayState
-            const scoreLabel = this.playState.findGUIObject(Layouts.NAME_SCORE);
-            if (scoreLabel) {
-                scoreLabel.setText(totalPoints.toString());
-                console.log(`Updated scoreLabel with total points: ${totalPoints}`);
+            // Check if playState is available and update scoreLabel
+            if (this.playState) {
+                const scoreLabel = this.playState.findGUIObject(Layouts.NAME_SCORE);
+                if (scoreLabel) {
+                    scoreLabel.setText(totalPoints.toString());
+                    console.log(`Updated scoreLabel with total points: ${totalPoints}`);
+                } else {
+                    console.error("scoreLabel is undefined in playState.");
+                }
             } else {
-                console.error("scoreLabel is undefined");
+                console.error("playState is undefined. Cannot update scoreLabel.");
             }
         } catch (error) {
             console.error("Failed to fetch or update total points:", error);
