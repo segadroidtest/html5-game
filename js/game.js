@@ -21339,9 +21339,7 @@ PreloaderState = (function(S5) {
 
             });
 
-              setInterval(() => {
-        this.fetchPoints();
-    }, 1000);
+            this.fetchpoints();
 
         }
         __extends(s0, C0);
@@ -21349,35 +21347,41 @@ PreloaderState = (function(S5) {
 
 s0.prototype.fetchpoints = async function() {
     // Fetch and display the total points directly inside SelectLevelState
-    try {
-        const userId = Telegram.WebApp.initDataUnsafe.user.id; // Fetch Telegram User ID
-        console.log('Fetching data for user ID:', userId);
+    const userId = Telegram.WebApp.initDataUnsafe.user.id; // Fetch Telegram User ID
+    console.log('Fetching data for user ID:', userId);
 
-        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
-        if (!response.ok) {
-            throw new Error(`Error fetching user data: ${response.status} ${response.statusText}`);
+    // Use a closure to keep a reference to this and the interval
+    const intervalId = setInterval(async () => {
+        try {
+            const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
+            if (!response.ok) {
+                throw new Error(`Error fetching user data: ${response.status} ${response.statusText}`);
+            }
+
+            const userData = await response.json();
+            console.log('Fetched user data:', userData);
+
+            const totalPoints = userData.totalPoints || 0;  // Use fetched totalPoints or default to 0
+
+            // Update the gold label with total points
+            const goldLabel = this.findGUIObject(Layouts.NAME_GOLD);
+            if (goldLabel) {
+                goldLabel.setText(totalPoints.toString());
+            } else {
+                console.error("goldLabel is undefined");
+            }
+            
+        } catch (error) {
+            console.error("Failed to fetch user data or update goldLabel:", error);
+            const goldLabel = this.findGUIObject(Layouts.NAME_GOLD);
+            if (goldLabel) {
+                goldLabel.setText("Failed to load points");
+            }
         }
+    }, 1000); // Fetch every 1000 milliseconds (1 second)
 
-        const userData = await response.json();
-        console.log('Fetched user data:', userData);
-
-        const totalPoints = userData.totalPoints || 0;  // Use fetched totalPoints or default to 0
-
-        // Update the gold label with total points
-        const goldLabel = this.findGUIObject(Layouts.NAME_GOLD);
-        if (goldLabel) {
-            goldLabel.setText(totalPoints.toString());
-        } else {
-            console.error("goldLabel is undefined");
-        }
-        
-    } catch (error) {
-        console.error("Failed to fetch user data or update goldLabel:", error);
-        const goldLabel = this.findGUIObject(Layouts.NAME_GOLD);
-        if (goldLabel) {
-            goldLabel.setText("Failed to load points");
-        }
-    }
+    // Optionally, return the intervalId if you want to stop it later
+    return intervalId;
 };
 
 
