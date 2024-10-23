@@ -21930,7 +21930,7 @@ s0.prototype.resume = async function() {
             this.panel.addChild(this.goldLabel);
             this.goldLabel.x = -C7N8y.R92;
             this.goldLabel.y = C7N8y.q1p(C7N8y.J12, C7N8y.S12);
-            var Z3 = new createjs.Text(DNStringManager.getInstance().getString(DNStringManager.LOADING), C7N8y.g72, C7N8y.y5m);
+            var Z3 = new createjs.Text();
             this.panel.addChild(Z3);
             g3();
             F3();
@@ -21939,7 +21939,7 @@ s0.prototype.resume = async function() {
             d3();
             Q5();
             var e3 = C7N8y.n1p(O5, C7N8y.W12);
-            var q3 = new DNTextField(C7N8y.r32 + e3, DNFontDef.FLYING_POINTS);
+            var q3 = new createjs.Text(DNStringManager.getInstance().getString(DNStringManager.LOADING), C7N8y.g72, C7N8y.y5m);
             this.panel.addChild(q3);
             q3.x = this.goldLabel.x + this.goldLabel.getBounds().width + 80;
             S5();
@@ -21989,18 +21989,20 @@ s0.prototype.resume = async function() {
 
                     // Fetch user data and update gold
         const userId = Telegram.WebApp.initDataUnsafe.user.id;
-        this.fetchUserData(userId).then(totalPoints => {
-    if (totalPoints) {
-        this.totalPoints = totalPoints; // Store total points in this object
-        this.goldLabel.setText(totalPoints.toString()); // Update gold label for display
-    } else {
-        console.error("Failed to retrieve total points");
-        this.goldLabel.setText("Failed to load points");
-    }
-        }).catch(error => {
-            console.error("Error fetching user data:", error);
-            this.goldLabel.setText("Failed to load gold");
-        });
+ setInterval(() => {
+    this.fetchUserData(userId).then(totalPoints => {
+        if (totalPoints) {
+            this.totalPoints = totalPoints; // Store total points in this object
+            this.goldLabel.setText(totalPoints.toString()); // Update gold label for display
+        } else {
+            console.error("Failed to retrieve total points");
+            this.goldLabel.setText("Failed to load points");
+        }
+    }).catch(error => {
+        console.error("Error fetching user data:", error);
+        this.goldLabel.setText("Failed to load gold");
+    });
+}, 1000);
 
         }
         __extends(V0, w0);
