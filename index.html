@@ -2100,6 +2100,51 @@ function updateProgressBar(balanceInUsd) {
     }
 }
 
+// Helper function to introduce a delay
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Function to fetch balance with retry logic in case of rate limiting (429 errors)
+async function fetchBalanceWithRetry(address, retryCount = 3) {
+    for (let attempt = 0; attempt < retryCount; attempt++) {
+        try {
+            const balance = await fetchBalance(address);
+            if (balance !== undefined && balance !== null) {
+                return balance; // Return balance if found
+            } else {
+                console.error(`No balance found for address ${address}`);
+                return 0; // Treat undefined or null balances as 0
+            }
+        } catch (error) {
+            if (error.status === 429) { // Rate limit hit
+                console.warn(`Rate limit hit for ${address}. Retrying in ${attempt + 1} seconds...`);
+                await delay((attempt + 1) * 1000); // Exponential backoff (1s, 2s, 3s, etc.)
+            } else {
+                console.error(`Error fetching balance for ${address}:`, error);
+                return 0; // Return 0 if any other error occurs
+            }
+        }
+    }
+    console.error(`Failed to fetch balance for ${address} after ${retryCount} attempts.`);
+    return 0; // Return 0 if retries exhausted
+}
+
+// Function to fetch TON to USD rate
+async function fetchTonToUsdRate() {
+    try {
+        const response = await fetch('https://api.example.com/ton-rate'); // Replace with actual rate API
+        if (response.ok) {
+            const data = await response.json();
+            return data.rate; // Assuming the response contains a "rate" field
+        }
+        throw new Error(`Failed to fetch TON to USD rate: ${response.statusText}`);
+    } catch (error) {
+        console.error("Error fetching TON to USD rate:", error);
+        return null; // Return null if there's an error fetching the rate
+    }
+}
+
 // Main function to fetch data and update the page
 async function updatePage() {
     try {
@@ -2113,13 +2158,14 @@ async function updatePage() {
         const tonRate = await fetchTonToUsdRate();
 
         if (tonRate !== null) {
-            // Fetch balances for each address with retries and ignoring invalid balances
+            // Fetch balances for each address with retries
             const balances = await Promise.all(addresses.map(address => fetchBalanceWithRetry(address)));
 
             // Sum valid balances
-            const totalBalanceInTon = balances.reduce((sum, balance) => sum + (balance || 0), 0); // Default balance to 0 if it's invalid
+            const totalBalanceInTon = balances.reduce((sum, balance) => sum + (balance || 0), 0);
             const totalBalanceInUsd = totalBalanceInTon * tonRate;
 
+            // Call your function to update the page with the fetched balance
             updateProgressBar(totalBalanceInUsd);
         } else {
             console.error("Failed to update page due to missing TON to USD rate.");
@@ -2128,6 +2174,8 @@ async function updatePage() {
         console.error("Error updating page:", error);
     }
 }
+
+
 
 
 
