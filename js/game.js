@@ -21986,37 +21986,8 @@ s0.prototype.resume = async function() {
         }
         __extends(V0, w0);
 
-        V0.prototype.fetchTotalPoints = function() {
-    const userId = Telegram.WebApp.initDataUnsafe.user.id;
 
-    // Fetch the user's total points from the server
-    fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}/updatePoints`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Failed to fetch total points");
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Assuming the server returns an object with the total points
-            this.oldGold = userData.totalPoints || 0;
-            console.log("Total points fetched:", this.oldGold);
-
-            // Update the gold label with the total points
-            if (this.goldLabel) {
-                this.goldLabel.setText(Math.round(this.oldGold).toString());
-            } else {
-                console.error("goldLabel is not initialized");
-            }
-        })
-        .catch(error => {
-            console.error("Error fetching total points:", error);
-        });
-};
-
-this.fetchTotalPoints();
-
-V0.prototype.runAddGold = function() {
+V0.prototype.runAddGold = async function() {
     this.needAddGold = true;
 
     // Fetch user ID from Telegram (assuming you have userID from the Telegram mini app session)
@@ -22026,37 +21997,45 @@ V0.prototype.runAddGold = function() {
     const earnedGold = this.newGold - this.oldGold;
 
     // Call the backend API to add the earned gold to the user's points
-    fetch(`https://telegram-bot-degen-town.replit.app/api/user/updatePoints/${userId}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ earnedGold: earnedGold })
-    })
-    .then(response => {
+    try {
+        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/updatePoints/${userId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ earnedGold: earnedGold })
+        });
+
         if (!response.ok) {
             throw new Error("Failed to update points");
         }
-        return response.json();
-    })
-    .then(data => {
-        console.log("Points updated successfully:", data);
-    })
-    .catch(error => {
+
+        const data = await response.json(); // Convert response to JSON
+        this.oldGold = data.totalPoints || 0; // Get updated total points
+        console.log("Total points fetched:", this.oldGold);
+
+        // Update the gold label with the total points
+        if (this.goldLabel) {
+            this.goldLabel.setText(Math.round(this.oldGold).toString());
+        } else {
+            console.error("goldLabel is not initialized");
+        }
+    } catch (error) {
         console.error("Error updating points:", error);
-    });
+    }
 };
 
-        V0.prototype.update = function(m5) {
-            w0.prototype.update.call(this, m5);
-            if (this.needAddGold) {
-                this.oldGold += C7N8y.C1p(m5, C7N8y.y12);
-                if (C7N8y.I1p(this.oldGold, this.newGold)) {
-                    this.oldGold = this.newGold;
-                }
-                this.goldLabel.setText(Math.round(this.oldGold).toString());
-            }
-        };
+V0.prototype.update = function(m5) {
+    w0.prototype.update.call(this, m5);
+    if (this.needAddGold) {
+        this.oldGold += C7N8y.C1p(m5, C7N8y.y12);
+        if (C7N8y.I1p(this.oldGold, this.newGold)) {
+            this.oldGold = this.newGold;
+        }
+        this.goldLabel.setText(Math.round(this.oldGold).toString());
+    }
+};
+
         V0.prototype.onNextTouch = function() {
             DNStateManager.g_instance.pushState(new CoolTransitionInState(new SelectLevelState()));
         };
