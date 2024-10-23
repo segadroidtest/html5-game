@@ -21934,12 +21934,12 @@ s0.prototype.resume = async function() {
             this.panel.addChild(Z3);
             g3();
             F3();
-            var Q3 = new DNTextField(h5.toString(), DNFontDef.FONT);
+            var Q3 = new DNTextField();
             this.panel.addChild(Q3);
             d3();
             Q5();
             var e3 = C7N8y.n1p(O5, C7N8y.W12);
-            var q3 = new DNTextField(C7N8y.r32 + e3, DNFontDef.FLYING_POINTS);
+            var q3 = new DNTextField();
             this.panel.addChild(q3);
             q3.x = this.goldLabel.x + this.goldLabel.getBounds().width + 80;
             S5();
