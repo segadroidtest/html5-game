@@ -13764,9 +13764,9 @@ var DNStateManager = (function() {
                     type: Layouts.TYPE_TEXT_FIELD,
                     x: -180,
                     y: -33,
-                    name: Layouts.NAME_SCORE,
+                    name: Layouts.NAME_GOLD,
                     font: DNFontDef.FONT,
-                    text: "00000"
+                    text: "0"
                 }, {
                     type: Layouts.TYPE_PLACEHOLDER,
                     x: 141,
