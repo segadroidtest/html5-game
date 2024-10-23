@@ -10258,7 +10258,7 @@ var C7N8y = {
     's1w': function(m5, b5) {
         return m5 >= b5;
     },
-    'g72': "bold 33px Times New Roman",
+    'g72': "bold 13px SuperMario256",
     'X5w': function(m5, b5) {
         return m5 / b5;
     },
