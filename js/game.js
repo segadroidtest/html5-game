@@ -21036,11 +21036,11 @@ PreloaderState = (function(S5) {
             this.addGuiObject(u5);
             P5(C7N8y.W8U);
             h5(C7N8y.d02);
-            var d3 = new createjs.Text(DNStringManager.getInstance().getString(DNStringManager.SELECT_BOOSTER), C7N8y.g72, C7N8y.y5m);
+                        var Z3 = new createjs.Text(DNStringManager.getInstance().getString(DNStringManager.LOADING), C7N8y.g72, C7N8y.y5m);
+            this.panel.addChild(Z3);
             K5(C7N8y.V02);
             S5(C7N8y.z8U);
             R5();
-            this.panel.addChild(d3);
             if (C7N8y.l3p(GameData.getInstance().getLevelDef(b5).moves, C7N8y.W8U)) {
                 var h3 = function() {
                     f3.y = -C7N8y.a92;
