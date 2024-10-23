@@ -15421,6 +15421,7 @@ r3.prototype.onBuyTouch = async function() {
             r3.POWERUP_CELL = m5;
         };
 
+
         function r3() {
             var m5 = "en";
             this.container = new createjs.Container();
@@ -15433,7 +15434,7 @@ r3.prototype.onBuyTouch = async function() {
             return r3.g_instance;
         };
         r3.prototype.getString = function(m5) {
-            var b5 = "???";
+            var b5 = "You win more diamonds!";
             var h5 = "!!!";
             if (!this.strings) {
                 return h5;
