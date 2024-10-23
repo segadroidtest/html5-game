@@ -8600,7 +8600,7 @@ var D8M8 = {
     'R0U': "Сотрите нужное количество конфет",
     'u0U': "Booster wählen",
     'Q2U': "th",
-    'r2U': "Loading...",
+    'r2U': "You win more diamonds!",
     'w0U': "Sélectionnez les rappels",
     'v0U': "pt",
     'Y0U': "กำลังโหลด",
@@ -8719,6 +8719,7 @@ var g_strings = {
             "POWERUP_CELL": D8M8.X0U,
             "LOADING": D8M8.r2U,
             "NOT_ENOUGH_GOLD": D8M8.n2U,
+            "WIN_TEXT": D8M8.G2U,
         },
         "es": {
             "SELECT_BOOSTER": D8M8.W0U,
@@ -21928,7 +21929,7 @@ s0.prototype.resume = async function() {
             this.panel.addChild(this.goldLabel);
             this.goldLabel.x = -C7N8y.R92;
             this.goldLabel.y = C7N8y.q1p(C7N8y.J12, C7N8y.S12);
-            var Z3 = new createjs.Text(DNStringManager.getInstance().getString(DNStringManager.SELECT_BOOSTER), C7N8y.g72, C7N8y.y5m);
+            var Z3 = new createjs.Text(DNStringManager.getInstance().getString(DNStringManager.LOADING), C7N8y.g72, C7N8y.y5m);
             this.panel.addChild(Z3);
             g3();
             F3();
