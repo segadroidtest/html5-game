@@ -8591,8 +8591,8 @@ this.createjs = this.createjs || {},
         k5.version = v5, k5.buildDate = p5;
     }();
 var D8M8 = {
-    'O2U': "Choose Gifts",
-    'G2U': "Pas assez d'argent",
+    'O2U': "Buy Boosters",
+    'G2U': "You win more diamonds",
     'E0U': "Price",
     'r0U': "Non abbastanza soldi!",
     'U0U': "Despeja todas las celdas de hielo",
@@ -8706,6 +8706,7 @@ var g_strings = {
             "POWERUP_CELL": D8M8.N0U,
             "LOADING": D8M8.D2U,
             "NOT_ENOUGH_GOLD": D8M8.B2U,
+            "WIN_TEXT": D8M8.G2U,
         },
         "en": {
             "SELECT_BOOSTER": D8M8.O2U,
@@ -21927,22 +21928,8 @@ s0.prototype.resume = async function() {
             this.panel.addChild(this.goldLabel);
             this.goldLabel.x = -C7N8y.R92;
             this.goldLabel.y = C7N8y.q1p(C7N8y.J12, C7N8y.S12);
-// Create a text object
-var winText = new PIXI.Text("You win more diamonds!", {
-    fontFamily: "Arial", // or any other font you prefer
-    fontSize: 36,        // adjust the size as needed
-    fill: "white",       // the text color
-    align: "center"      // align text to center
-});
-
-// Set the position of the text to be centered
-winText.anchor.set(0.5); // Set anchor to center
-winText.x = this.panel.width / 2; // Center horizontally
-winText.y = this.panel.height / 2; // Center vertically
-
-// Add the text to the panel
-this.panel.addChild(winText);
-
+            var Z3 = new createjs.Text(DNStringManager.getInstance().getString(DNStringManager.WIN_TEXT), C7N8y.g72, C7N8y.y5m);
+            this.panel.addChild(Z3);
             g3();
             F3();
             var Q3 = new DNTextField(h5.toString(), DNFontDef.FONT);
