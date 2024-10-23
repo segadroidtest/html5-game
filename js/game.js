@@ -10210,7 +10210,7 @@ var C7N8y = {
     'K84': function(m5, b5) {
         return m5 == b5;
     },
-    'y5m': "#ffffff",
+    'y5m': "#1e4366",
     'b24': function(m5, b5) {
         return m5 < b5;
     },
@@ -10258,7 +10258,7 @@ var C7N8y = {
     's1w': function(m5, b5) {
         return m5 >= b5;
     },
-    'g72': "bold 13px SuperMario256",
+    'g72': "bold 33px SuperMario256",
     'X5w': function(m5, b5) {
         return m5 / b5;
     },
