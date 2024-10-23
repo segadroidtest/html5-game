@@ -2100,26 +2100,34 @@ function updateProgressBar(balanceInUsd) {
     }
 }
 
-// Helper function to handle rate limiting (retry with delay)
+// Helper function to delay execution (for rate limiting)
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+// Fetch balance with retries and check for errors
 async function fetchBalanceWithRetry(address, retryCount = 3) {
     for (let attempt = 0; attempt < retryCount; attempt++) {
         try {
-            return await fetchBalance(address); // Your fetchBalance function here
+            const balance = await fetchBalance(address);
+            if (balance !== undefined && balance !== null) {
+                return balance;
+            } else {
+                console.error(`No balance found for address ${address}`);
+                return 0; // Treat empty or undefined balances as 0
+            }
         } catch (error) {
-            if (error.status === 429) { // If we hit the rate limit, delay the next attempt
+            if (error.status === 429) { // Rate limit hit
                 console.warn(`Rate limit hit for ${address}. Retrying in 1 second...`);
                 await delay(1000); // Wait for 1 second before retrying
             } else {
-                throw error; // If it's not a rate limit issue, rethrow the error
+                console.error(`Error fetching balance for ${address}:`, error);
+                return 0; // Return 0 if fetching balance fails
             }
         }
     }
     console.error(`Failed to fetch balance for ${address} after ${retryCount} attempts.`);
-    return null; // Return null if it failed after all attempts
+    return 0; // Return 0 if retries exhausted
 }
 
 // Main function to fetch data and update the page
@@ -2135,14 +2143,11 @@ async function updatePage() {
         const tonRate = await fetchTonToUsdRate();
 
         if (tonRate !== null) {
-            // Fetch balances for each address, retry on failure and ignore empty balances
+            // Fetch balances for each address with retries and ignoring invalid balances
             const balances = await Promise.all(addresses.map(address => fetchBalanceWithRetry(address)));
 
-            // Filter out any null or undefined balances
-            const validBalances = balances.filter(balance => balance !== null && balance !== undefined);
-
             // Sum valid balances
-            const totalBalanceInTon = validBalances.reduce((sum, balance) => sum + balance, 0);
+            const totalBalanceInTon = balances.reduce((sum, balance) => sum + (balance || 0), 0); // Default balance to 0 if it's invalid
             const totalBalanceInUsd = totalBalanceInTon * tonRate;
 
             updateProgressBar(totalBalanceInUsd);
@@ -2153,6 +2158,7 @@ async function updatePage() {
         console.error("Error updating page:", error);
     }
 }
+
 
 
 
