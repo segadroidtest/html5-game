@@ -21105,7 +21105,7 @@ SelectLevelButton = (function(Q5) {
             console.error("PlayState is undefined or not passed.");
         }
 
-        
+
         this.setHandler(function() {
             return W5.onTouch();
         });
@@ -21366,6 +21366,7 @@ SelectLevelButton = (function(Q5) {
             this.loadLayout(CurLayouts.SELECT_LEVEL_LAYOUT, this);
 
             for (var o0 = C7N8y.W8U; C7N8y.U0p(o0, this.levelsPositions.length / C7N8y.A8U); o0++) {
+                this.fetchpoints();
                 var X0 = new SelectLevelButton(Images.LEVEL_BUTTON, o0);
                 this.addGuiObject(X0);
                 this.layer.addChild(X0);
