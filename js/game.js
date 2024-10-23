@@ -21922,8 +21922,8 @@ s0.prototype.resume = async function() {
             this.addGuiObject(j3);
             t5(C7N8y.W8U);
             u5(C7N8y.d02);
-            var Z3 = new createjs.Text(DNStringManager.getInstance().getString(DNStringManager.LOADING), C7N8y.g72, C7N8y.y5m);
-            this.panel.addChild(Z3);
+            var r3 = new createjs.Text(DNStringManager.getInstance().getString(DNStringManager.LOADING), C7N8y.g72, C7N8y.y5m);
+            this.panel.addChild(r3);
             R5();
             G5();
             this.goldLabel = new DNTextField("Loading...", DNFontDef.FONT);
