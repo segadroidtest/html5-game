@@ -13,6 +13,7 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
         <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://unpkg.com/@tonconnect/sdk@latest"></script>
         <script type="text/javascript">
             
             window.Telegram.WebApp.ready(); window.Telegram.WebApp.expand();
@@ -1720,7 +1721,7 @@ async function generateLeaderboard() {
      <div id="connect-wallet-button" style="text-align: center; margin-top: 20px;">
     <button onclick="connectWallet()">Connect TON Wallet</button>
 </div>
-
+<script src="https://unpkg.com/@tonconnect/sdk@latest"></script>
 <script>
     let tonConnect;
 
@@ -1759,7 +1760,7 @@ async function generateLeaderboard() {
     <input type="number" id="ton-amount" placeholder="Enter amount in TON" style="margin: 10px;">
     <button onclick="sendPayment()">Send Payment</button>
 </div>
-
+<script src="https://unpkg.com/@tonconnect/sdk@latest"></script>
 <script>
     async function sendPayment() {
         const amount = document.getElementById('ton-amount').value;
