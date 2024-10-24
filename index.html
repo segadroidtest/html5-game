@@ -1734,15 +1734,16 @@ async function generateLeaderboard() {
 </div>
 
 <script>
+    const userId = Telegram.WebApp.initDataUnsafe.user.id;
   document.getElementById("payWithWallet").onclick = async function() {
     try {
       // Call the backend to get the TON payment link
-      const response = await fetch("https://telegram-bot-degen-town.replit.app/getPaymentLink");
+      const response = await fetch(`https://telegram-bot-degen-town.replit.app/getPaymentLink/${userId}`);
       const data = await response.json();
 
       // Construct Tonkeeper and Tonhub links
-      const tonkeeperLink = `https://app.tonkeeper.com/transfer/${data.walletAddress}?amount=&text=${data.memo}`;
-      const tonhubLink = `https://tonhub.com/transfer/${data.walletAddress}?text=${data.memo}`;
+      const tonkeeperLink = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}`;
+      const tonhubLink = `https://tonhub.com/transfer/${walletAddress}?text=${userId}`;
 
       // Try to open the TON link
       window.location.href = data.tonLink;
