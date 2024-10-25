@@ -483,7 +483,7 @@ async function getBalance(walletAddress) {
     }
 }
 
-const processedTransactions = new Set(); // To store processed transaction IDs
+let lastProcessedTimestamp = 0; // Track the timestamp of the latest processed transaction
 
 async function checkTransactions(walletAddress, userId) {
     const apiKey = "a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf";
@@ -508,16 +508,20 @@ async function checkTransactions(walletAddress, userId) {
         console.log("Transaction data:", data);
 
         if (data.result && Array.isArray(data.result) && data.result.length > 0) {
+            // Sort transactions by timestamp in descending order (newest first)
+            data.result.sort((a, b) => b.utime - a.utime);
+
             for (const transaction of data.result) {
-                const transactionId = transaction.transaction_id; // Replace this with actual transaction ID field if different
+                const timestamp = transaction.utime; // Use actual timestamp field if different
                 const message = transaction.in_msg?.message || ''; // Adjust if message field is in a different location
                 const valueInNanoton = transaction.in_msg?.value || transaction.value || 0;
                 const amount = parseFloat(valueInNanoton) / 1000000000;
 
-                // Only process new transactions that contain the userId in the message
-                if (!processedTransactions.has(transactionId) && message.includes(userId)) {
+                // Check if the transaction is newer than the last processed and contains the userId
+                if (timestamp > lastProcessedTimestamp && message.includes(userId)) {
                     alert(`New transaction received: ${amount} TON with userId: ${userId}`);
-                    processedTransactions.add(transactionId); // Mark this transaction as processed
+                    lastProcessedTimestamp = timestamp; // Update to the latest processed timestamp
+                    break; // Exit after processing the newest matching transaction
                 }
             }
         } else {
