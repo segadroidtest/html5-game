@@ -1842,14 +1842,13 @@ async function generateLeaderboard() {
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script type="text/javascript">
-    // Wallet information
-    const walletAddress = "UQAF72soTe3EGsvWES2iDFYra3imEA9tixwrQ0VUyc4D71D9";
-    const userId = "user123"; // Memo or user ID
-    const amount = "10";
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
+const walletAddress = "UQAF72soTe3EGsvWES2iDFYra3imEA9tixwrQ0VUyc4D71D9";
 
     // Generate QR code with wallet address and memo
-    const qrCodeURL = `https://tonhub.com/transfer/${walletAddress}?amount=${amount}&text=${userId}`;
+    const qrCodeURL = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
     new QRCode(document.getElementById("qrcode"), {
         text: qrCodeURL,
         width: 170,
