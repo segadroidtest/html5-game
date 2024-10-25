@@ -485,11 +485,40 @@ async function getBalance(walletAddress) {
 
 let lastProcessedTimestamp = 0; // Track the timestamp of the latest processed transaction
 
+async function initializeLastProcessedTimestamp(walletAddress) {
+    const apiKey = "a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf";
+    const apiEndpoint = `https://toncenter.com/api/v2/getTransactions?address=${walletAddress}&api_key=${apiKey}`;
+
+    try {
+        const response = await fetch(apiEndpoint, {
+            method: 'GET',
+            headers: {
+                'X-API-Key': apiKey
+            }
+        });
+
+        if (!response.ok) {
+            console.error(`HTTP error! status: ${response.status}`);
+            return;
+        }
+
+        const data = await response.json();
+        console.log("Initializing with the latest transaction data:", data);
+
+        // Set lastProcessedTimestamp to the most recent transaction's timestamp, if any
+        if (data.result && Array.isArray(data.result) && data.result.length > 0) {
+            lastProcessedTimestamp = data.result[0].utime; // Most recent transaction timestamp
+        }
+    } catch (error) {
+        console.error("Error initializing lastProcessedTimestamp:", error);
+    }
+}
+
 async function checkTransactions(walletAddress, userId) {
     const apiKey = "a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf";
     const apiEndpoint = `https://toncenter.com/api/v2/getTransactions?address=${walletAddress}&api_key=${apiKey}`;
 
-    console.log(`Fetching transactions for wallet address: ${walletAddress}`);
+    console.log(`Checking transactions for wallet address: ${walletAddress}`);
 
     try {
         const response = await fetch(apiEndpoint, {
@@ -512,8 +541,8 @@ async function checkTransactions(walletAddress, userId) {
             data.result.sort((a, b) => b.utime - a.utime);
 
             for (const transaction of data.result) {
-                const timestamp = transaction.utime; // Use actual timestamp field if different
-                const message = transaction.in_msg?.message || ''; // Adjust if message field is in a different location
+                const timestamp = transaction.utime;
+                const message = transaction.in_msg?.message || '';
                 const valueInNanoton = transaction.in_msg?.value || transaction.value || 0;
                 const amount = parseFloat(valueInNanoton) / 1000000000;
 
@@ -521,7 +550,7 @@ async function checkTransactions(walletAddress, userId) {
                 if (timestamp > lastProcessedTimestamp && message.includes(userId)) {
                     alert(`New transaction received: ${amount} TON with userId: ${userId}`);
                     lastProcessedTimestamp = timestamp; // Update to the latest processed timestamp
-                    break; // Exit after processing the newest matching transaction
+                    break;
                 }
             }
         } else {
@@ -532,14 +561,15 @@ async function checkTransactions(walletAddress, userId) {
     }
 }
 
-// Start checking for transactions at the defined interval
+// Start by initializing lastProcessedTimestamp with the current latest transaction
 const walletAddress = "EQAF72soTe3EGsvWES2iDFYra3imEA9tixwrQ0VUyc4D7w04";
-const userId = "229351215"; // Example userId
-const checkInterval = 5000;
-
-setInterval(() => {
-    checkTransactions(walletAddress, userId);
-}, checkInterval);
+const userId = "229351215";
+initializeLastProcessedTimestamp(walletAddress).then(() => {
+    // Once initialized, start checking for new transactions at regular intervals
+    setInterval(() => {
+        checkTransactions(walletAddress, userId);
+    }, 5000); // Check every 5 seconds
+});
 </script>
 </head>
 <body>
