@@ -1903,52 +1903,7 @@ async function getBalance(walletAddress) {
 }
 
 
-async function fetchUserData() {
-  console.log("Checking elements...");
-  console.log("totalDeposit element:", document.getElementById("totalDeposit"));
-  console.log("totalCommission element:", document.getElementById("totalCommission"));
-  console.log("highestCommission element:", document.getElementById("highestCommission"));
 
-  const userId = Telegram.WebApp.initDataUnsafe?.user?.id;
-  if (!userId) {
-    console.error("User ID not found in Telegram WebApp data.");
-    return;
-  }
-
-  const apiUrl = `https://telegram-bot-degen-town.replit.app/api/user/${userId}`;
-
-  try {
-    const response = await fetch(apiUrl);
-    if (!response.ok) throw new Error("Network response was not ok");
-
-    const data = await response.json();
-    console.log("Fetched user data:", data); // Log the entire response
-
-    // Only update if element exists
-    if (document.getElementById("totalDeposit")) {
-      document.getElementById("totalDeposit").textContent = (data.totalDeposit || 0) + " TON";
-    }
-    if (document.getElementById("totalCommission")) {
-      document.getElementById("totalCommission").textContent = (data.commissionEarned || 0) + " TON";
-    }
-    if (document.getElementById("highestCommission")) {
-      document.getElementById("highestCommission").textContent = (data.highestCommission || 0) + " TON";
-    }
-  } catch (error) {
-    console.error("Failed to fetch user data:", error);
-    if (document.getElementById("totalDeposit")) {
-      document.getElementById("totalDeposit").textContent = "Error loading data";
-    }
-    if (document.getElementById("totalCommission")) {
-      document.getElementById("totalCommission").textContent = "Error loading data";
-    }
-    if (document.getElementById("highestCommission")) {
-      document.getElementById("highestCommission").textContent = "Error loading data";
-    }
-  }
-}
-
-document.addEventListener("DOMContentLoaded", fetchUserData);
 
 
 </script>
