@@ -1641,75 +1641,11 @@ async function generateLeaderboard() {
 
     
 </script>
-
-
-        </div>
-
-
-
-  <div style="
-    display: flex; /* Use flexbox layout */
-    justify-content: space-between; /* Space between the items */
-    margin-bottom: 20px; /* Adjust the margin as needed */">
-    <div style="
-        text-align: center;
-        background: rgba(46, 44, 55, 0.65);
-        height: auto;
-        border-radius: 10px;
-        border: 1px solid #101013;
-        flex: 1; /* Allow the divs to grow and take equal space */
-        margin-right: 10px; /* Add margin between the divs */
-    ">
-        <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;padding-left: 0px;padding-right: 0px;">
-            Top Referred so far
-        </p>
-        <p style="font-weight: 700;" id="referred-value">Loading referred value...</p>
-    </div>
-
-    <div style="
-        text-align: center;
-        background: rgba(46, 44, 55, 0.65);
-        height: auto;
-        border-radius: 10px;
-        border: 1px solid #101013;
-        flex: 1; /* Allow the divs to grow and take equal space */
-    ">
-        <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;padding-left: 0px;padding-right: 0px;">
-            Commissions Earned
-        </p>
-        <p id="commission-value" style="font-weight: 700;">Loading commission value...</p>
-    </div>
-
-
-<script>
-const apiKey = 'a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf'; // Your API key
+<script type="text/javascript">
+    const apiKey = 'a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf'; // Your API key
 const walletAddress = "UQAF72soTe3EGsvWES2iDFYra3imEA9tixwrQ0VUyc4D71D9"; // Replace with your wallet address
 const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Assuming you're using Telegram Web App
 const checkInterval = 5000; // Check every 5 seconds
-
-async function getBalance(walletAddress) {
-    try {
-        console.log(`Fetching balance for wallet address: ${walletAddress}`);
-        const apiEndpoint = "https://toncenter.com/api/v2/getAddressInformation";
-        const response = await fetch(`${apiEndpoint}?address=${walletAddress}&api_key=${apiKey}`);
-        
-        if (!response.ok) {
-            console.error(`Error fetching balance: ${response.statusText}`);
-            return; // Exit the function if there's an error
-        }
-        
-        const data = await response.json();
-        console.log("Balance data:", data); // Log the response for debugging
-
-        // Convert the balance from nanoton to TON and return
-        const balanceInTON = parseFloat(data.result.balance) / 1000000000;
-        console.log(`Balance in TON: ${balanceInTON}`);
-        return balanceInTON || 0; // Ensure the balance is returned, default to 0 if undefined
-    } catch (error) {
-        console.error(`Error fetching balance:`, error);
-        return 0; // Return 0 in case of error
-    }
-}
 
 async function checkTransactions(walletAddress, userId) {
     try {
@@ -1753,11 +1689,67 @@ async function checkTransactions(walletAddress, userId) {
 setInterval(() => {
     checkTransactions(walletAddress, userId); // Call the function with parameters
 }, checkInterval); // Check every 5 seconds
+</script>
 
-// Call the getBalance function to fetch initial balance
-getBalance(walletAddress);
+        </div>
 
-        
+
+
+  <div style="
+    display: flex; /* Use flexbox layout */
+    justify-content: space-between; /* Space between the items */
+    margin-bottom: 20px; /* Adjust the margin as needed */">
+    <div style="
+        text-align: center;
+        background: rgba(46, 44, 55, 0.65);
+        height: auto;
+        border-radius: 10px;
+        border: 1px solid #101013;
+        flex: 1; /* Allow the divs to grow and take equal space */
+        margin-right: 10px; /* Add margin between the divs */
+    ">
+        <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;padding-left: 0px;padding-right: 0px;">
+            Top Referred so far
+        </p>
+        <p style="font-weight: 700;" id="referred-value">Loading referred value...</p>
+    </div>
+
+    <div style="
+        text-align: center;
+        background: rgba(46, 44, 55, 0.65);
+        height: auto;
+        border-radius: 10px;
+        border: 1px solid #101013;
+        flex: 1; /* Allow the divs to grow and take equal space */
+    ">
+        <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;padding-left: 0px;padding-right: 0px;">
+            Commissions Earned
+        </p>
+        <p id="commission-value" style="font-weight: 700;">Loading commission value...</p>
+    </div>
+
+
+<script>
+async function getBalance(walletAddress) {
+    try {
+        console.log(`Fetching balance for wallet address: ${walletAddress}`);
+        const apiEndpoint = "https://toncenter.com/api/v2/getAddressInformation";
+        const response = await fetch(`${apiEndpoint}?address=${walletAddress}&api_key=a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf`);
+        if (!response.ok) {
+            throw new Error(`Error fetching balance for ${walletAddress}: ${response.statusText}`);
+        }
+        const data = await response.json();
+        console.log("API response for balance data:", data); // Log the response for debugging
+
+        // Convert the balance from nanoton to TON and return
+        const balanceInTON = parseFloat(data.result.balance) / 1000000000;
+        return balanceInTON || 0; // Ensure the balance is returned, default to 0 if undefined
+    } catch (error) {
+        console.error(`Error fetching balance for ${walletAddress}:`, error);
+        return 0; // Return 0 in case of error
+    }
+}
+
 async function fetchReferralAndCommissionData() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Dynamically get the user ID
 
