@@ -27,31 +27,33 @@ const checkInterval = 5000; // Check every 5 seconds
 async function checkTransactions(walletAddress, userId) {
     try {
         console.log(`Checking transactions for wallet address: ${walletAddress}`);
-        const apiEndpoint = `https://toncenter.com/api/v2/getTransactions?account=${walletAddress}&api_key=${apiKey}`;
+        const apiEndpoint = `https://toncenter.com/api/v2/getTransactions`;
+        
         const response = await fetch(apiEndpoint, {
-            method: 'GET',
+            method: 'POST', // Change GET to POST
             headers: {
-                'X-API-Key': apiKey // Ensure the API key is correctly set
-            }
+                'Content-Type': 'application/json', // Specify content type
+                'X-API-Key': 'a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf' // Your API key
+            },
+            body: JSON.stringify({ account: walletAddress }) // Send wallet address in body
         });
 
         if (!response.ok) {
-            console.error(`HTTP error while checking transactions! status: ${response.status}`);
+            const errorData = await response.json();
+            console.error(`HTTP error while checking transactions! status: ${response.status}`, errorData);
             return; // Exit the function if there's an error
         }
 
         const data = await response.json();
-        console.log("Transaction data:", data); // Log the response for debugging
+        console.log("Transaction data:", data);
 
-        // Check if 'result' exists in the response
         if (data.result && Array.isArray(data.result)) {
             console.log(`Found ${data.result.length} transactions.`);
-            // Loop through transactions and check for user ID in memo
             for (const transaction of data.result) {
                 if (transaction.memo && transaction.memo.includes(userId)) {
-                    const amount = transaction.amount / 1000000000; // Convert from nanoTON to TON
+                    const amount = transaction.amount / 1000000000; // Convert from nanoton to TON
                     showPopup(`You have successfully participated with ${amount} TON`);
-                    break; // Stop checking after finding the first match
+                    break;
                 }
             }
         } else {
