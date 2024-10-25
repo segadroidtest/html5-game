@@ -1802,11 +1802,11 @@ async function generateLeaderboard() {
 
             <!-- Wallet options -->
             <div class="walletOption" id="tonkeeperOption" style="text-align: center; cursor: pointer; background: #10161f; height: 75px; border: 0px !important;" onclick="showTon1();">
-                <img src="https://i.imgur.com/1dizzpy.png" alt="Tonkeeper" style="width: 45px; height: 40px; display: block; margin: 0 auto 0px;">
+                <img src="assets/img/tonkeeper.png" alt="Tonkeeper" style="width: 45px; height: 40px; display: block; margin: 0 auto 0px;">
                 <p style="font-weight: bold;">Tonkeeper</p>
             </div>
             <div class="walletOption" id="tonhubOption" style="text-align: center; cursor: pointer; background: linear-gradient(to bottom, #c722fe, #1a6dfd); background-size: 100% 100%; height: 75px; border: 0px !important;" onclick="showTon2();">
-                <img src="https://i.imgur.com/e5OHSEx.png" alt="Tonhub" style="width: 45px; height: 40px; display: block; margin: 0 auto 0px;">
+                <img src="assets/img/tonhub.png" alt="Tonhub" style="width: 45px; height: 40px; display: block; margin: 0 auto 0px;">
                 <p style="font-weight: bold;">Tonhub</p>
             </div>
         </div>
@@ -1851,20 +1851,34 @@ async function generateLeaderboard() {
     display: flex; /* Use flexbox layout */
     justify-content: space-between; /* Space between the items */
     margin-bottom: 20px; /* Adjust the margin as needed */">
-    <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-  <div style="text-align: center; background: rgba(46, 44, 55, 0.65); height: auto; border-radius: 10px; border: 1px solid #101013; flex: 1; margin-right: 10px;">
-    <p style="color: #ffffff; font-size: 17px; font-weight: 600; background: #1e1d22; padding-top: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px;">
-      Top Referred so far
-    </p>
-    <p id="highestCommission" style="font-weight: 700;">Loading referred value..</p>
-  </div>
-  <div style="text-align: center; background: rgba(46, 44, 55, 0.65); height: auto; border-radius: 10px; border: 1px solid #101013; flex: 1;">
-    <p style="color: #ffffff; font-size: 17px; font-weight: 600; background: #1e1d22; padding-top: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px;">
-      Commissions Earned
-    </p>
-    <p id="totalCommission" style="font-weight: 700;">Loading commission value...</p>
-  </div>
-</div>
+    <div style="
+        text-align: center;
+        background: rgba(46, 44, 55, 0.65);
+        height: auto;
+        border-radius: 10px;
+        border: 1px solid #101013;
+        flex: 1; /* Allow the divs to grow and take equal space */
+        margin-right: 10px; /* Add margin between the divs */
+    ">
+        <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;padding-left: 0px;padding-right: 0px;">
+            Top Referred so far
+        </p>
+        <p style="font-weight: 700;" id="highestCommission">Loading referred value...</p>
+    </div>
+
+    <div style="
+        text-align: center;
+        background: rgba(46, 44, 55, 0.65);
+        height: auto;
+        border-radius: 10px;
+        border: 1px solid #101013;
+        flex: 1; /* Allow the divs to grow and take equal space */
+    ">
+        <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;padding-left: 0px;padding-right: 0px;">
+            Commissions Earned
+        </p>
+        <p id="totalCommission" style="font-weight: 700;">Loading commission value...</p>
+    </div>
 
 
 
