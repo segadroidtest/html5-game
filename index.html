@@ -549,7 +549,7 @@ async function checkTransactions(walletAddress, userId) {
                 // Check if the transaction is newer than the last processed and contains the userId
 // Inside checkTransactions function, replace the alert with the showMessage call
 if (timestamp > lastProcessedTimestamp && message.includes(userId)) {
-    const popupMessage = `New transaction received: ${amount} TON`;
+    const popupMessage = `New deposit received: ${amount} TON 🎉`;
     showMessage(popupMessage); // Call your showMessage function with the transaction details
     lastProcessedTimestamp = timestamp; // Update to the latest processed timestamp
     break; // Stop checking after the first match
@@ -571,7 +571,7 @@ initializeLastProcessedTimestamp(walletAddress).then(() => {
     // Once initialized, start checking for new transactions at regular intervals
     setInterval(() => {
         checkTransactions(walletAddress, userId);
-    }, 5000); // Check every 5 seconds
+    }, 1500); // Check every 5 seconds
 });
 
 function showMessage(message) {
@@ -1736,7 +1736,6 @@ async function generateLeaderboard() {
         }
     };
 </script>
-<button onclick="showMessage()" style="margin-top: 20px; padding: 10px 20px;">Simulate Transaction</button>
     <p id="progress-text2" style="color: white; font-size: 20px; font-weight: bold; text-align: left; margin-top: 25px; font-family: system-ui;">DEGEN TOWN ALREADY RAISED:</p>
     <p id="progress-text" style="text-align: left; color: white; font-size: 20px; margin-top: -17px !important; margin-bottom: 10px;">$0 / $100,000</p>
     <div id="progress-container" style="margin-bottom: 20px; background-color: #e0e0e0; border-radius: 50px; height: 30px; width: 100%;">
@@ -1745,10 +1744,10 @@ async function generateLeaderboard() {
     <div style="text-align: center;">
 
 
-  <div id="transactionMessage" style="margin-bottom: 20px;display: none; width: 100%; background-color: #4CAF50; color: white; padding: 20px; box-sizing: border-box;  border-radius: 8px; transition: opacity 0.3s ease; opacity: 0; z-index: 2;"> 
-    <button id="closeButton" onclick="closeMessage()" style=" top: 5px; right: 10px; cursor: pointer; background-color: #333; color: white; padding: 5px 10px; border: none; border-radius: 5px; font-size: 14px; transition: background-color 0.3s;">Close</button>
-    <p>Transaction successful! Your changes have been saved.</p>
-  </div>
+ <div id="transactionMessage" style="font-weight: bold; margin-bottom: 15px; display: none; width: 100%; background: linear-gradient(to bottom, #48a34c, #337335); color: white; padding: 20px; box-sizing: border-box; border-radius: 8px; transition: opacity 0.3s; opacity: 1; z-index: 2; display: flex; justify-content: space-between; align-items: center;">
+    <p style="margin: 0;">Transaction successful! Your changes have been saved</p> <!-- Ensures there's no extra margin -->
+    <button id="closeButton" onclick="closeMessage()" style="cursor: pointer;background-color: #c02b2b;color: white;padding: 10px 15px;border: none;border-radius: 5px;font-size: 16px;transition: background-color 0.3s;font-weight: bold;">Close</button>
+</div>
 
 
 <div id="walletsection" style="background: rgba(46, 44, 55, 0.65); border-radius: 15px; margin-bottom: 20px;">
