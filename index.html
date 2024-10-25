@@ -800,6 +800,9 @@ if (result.success) {
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
 const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
+const walletAddress = "UQAF72soTe3EGsvWES2iDFYra3imEA9tixwrQ0VUyc4D71D9";
+
+
 const dailyCheckinElement = document.getElementById('daily-checkin');
 let timerInterval;
 
@@ -915,6 +918,22 @@ function showPopup(message) {
 function closePopup() {
     document.getElementById('popup').style.display = 'none';
 }
+
+
+
+function showTon1() {
+window.location.href = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=${amount}&text=${userId}`;
+
+}
+function showTon2() {
+ window.location.href = `https://tonhub.com/transfer/${walletAddress}?amount=${amount}&text=${userId}`;
+
+}
+function showTon3() {
+window.location.href = `https://tonsrf.io/transfer/${walletAddress}?amount=${amount}&text=${userId}`;
+
+}
+
 
 function showCheckinPopup() {
     const checkinPopup = document.getElementById('checkin-popup');
