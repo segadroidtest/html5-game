@@ -1614,35 +1614,33 @@ async function generateLeaderboard() {
 </div>
    
 
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script type="text/javascript">
-    const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
-    $(document).ready(function () {
-        // Replace with your actual wallet address and Telegram user ID
-        const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Placeholder for user ID
-        const walletAddress = "UQAF72soTe3EGsvWES2iDFYra3imEA9tixwrQ0VUyc4D71D9"; // Replace with your wallet address
-        const qrCodeURL = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
-        const checkInterval = 5000; // Check every 5 seconds
+    
+        $(document).ready(function () {
+            // Replace with your actual wallet address and Telegram user ID
+            const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Placeholder for user ID
+            const walletAddress = "UQAF72soTe3EGsvWES2iDFYra3imEA9tixwrQ0VUyc4D71D9"; // Replace with your wallet address
+            const qrCodeURL = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
 
-        console.log("QR Code URL: ", qrCodeURL); // Log the QR code URL for debugging
+            console.log("QR Code URL: ", qrCodeURL); // Log the QR code URL for debugging
 
-        try {
-            $("#qrcode").qrcode({
-                text: qrCodeURL,
-                width: 170,
-                height: 170
-            });
-            console.log("QR Code generated successfully.");
-        } catch (error) {
-            console.error("Error generating QR Code: ", error);
-        }
+            try {
+                $("#qrcode").qrcode({
+                    text: qrCodeURL,
+                    width: 170,
+                    height: 170
+                });
+                console.log("QR Code generated successfully.");
+            } catch (error) {
+                console.error("Error generating QR Code: ", error);
+            }
+        });
 
-
-    });
+    
 </script>
-
 
 
         </div>
@@ -1704,6 +1702,7 @@ async function getBalance(walletAddress) {
     }
 }
 
+
         // Function to check transactions
 async function checkTransactions(walletAddress, userId) {
     try {
@@ -1740,17 +1739,12 @@ async function checkTransactions(walletAddress, userId) {
 }
 
 
-        // Function to show a popup message
-        function showPopup(message) {
-            alert(message); // You can customize this to use a nicer popup
-        }
-
         // Start checking for transactions at the defined interval
         setInterval(() => {
             checkTransactions(walletAddress, userId); // Call the function with parameters
         }, checkInterval); // Check every 5 seconds
 
-
+        
 async function fetchReferralAndCommissionData() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Dynamically get the user ID
 
