@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", async function() {
             if (!response.ok) throw new Error("Error fetching points data");
 
             const userData = await response.json();
-            document.getElementById("points-earned").textContent = userData.totalPoints || 0;
+            document.getElementById("points-earned").textContent = userData.commissionEarned || 0;
         } catch (error) {
             console.error("Failed to fetch points data:", error);
         }
