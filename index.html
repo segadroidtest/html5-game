@@ -774,70 +774,7 @@ function updateGoldBalance(userId, earnedGold, callback) {
     </div>
 </div>
 
-<script>
-    function purchasepopuperror1() {
-const checkinPopup = document.getElementById('purchase-popuperror1');
-checkinPopup.style.display = 'block';
-document.getElementById('purchase-popuperror1').style.opacity = '0.98';
-    // Hide the popup after 2 seconds
-    setTimeout(() => {
-        checkinPopup.style.display = 'none';
-    }, 1500);
-}
 
-           function purchasepopuperror2() {
-const checkinPopup = document.getElementById('purchase-popuperror2');
-checkinPopup.style.display = 'block';
-document.getElementById('daily-checkin').style.opacity = '0.68';
-    // Hide the popup after 2 seconds
-    setTimeout(() => {
-        checkinPopup.style.display = 'none';
-    }, 2000);
-}
-
-
-function openPurchasePopup() {
-    document.getElementById('purchase-popup').style.display = 'block';
-}
-
-document.getElementById('closePopupButtonbuy').onclick = function() {
-    document.getElementById('purchase-popup').style.display = 'none';
-}
-
-async function submitPurchase() {
-    const diamondAmount = document.getElementById('diamond-option').value;
-    let starCost;
-
-    if (diamondAmount == 700) {
-        starCost = 50;
-    } else if (diamondAmount == 1500) {
-        starCost = 100;
-    } else if (diamondAmount == 5000) {
-        starCost = 250;
-    } else if (diamondAmount == 10000) {
-        starCost = 500;
-    } else if (diamondAmount == 100000) {
-        starCost = 2000;
-    }
-
-const response = await fetch('https://telegram-bot-degen-town.replit.app/create-telegram-payment', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ diamondAmount: 10, starCost: 5 }) // Change these values as needed
-});
-
-
-const result = await response.json();
-if (result.success) {
-    // Handle successful payment creation
-} else {
-   purchasepopuperror1();
-}
-
-}
-
-
-</script>
     </div>
 </div>
        <p style=" font-weight: bold; ">Available Tasks:</p>
@@ -1102,9 +1039,6 @@ if (result.success) {
     }
 
 
-
-
-
     function showTon1() {
         window.location.href = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}`;
     }
@@ -1177,6 +1111,69 @@ if (result.success) {
             console.error("Failed to share points:", await response.json());
         }
     }
+
+        function purchasepopuperror1() {
+const checkinPopup = document.getElementById('purchase-popuperror1');
+checkinPopup.style.display = 'block';
+document.getElementById('purchase-popuperror1').style.opacity = '0.98';
+    // Hide the popup after 2 seconds
+    setTimeout(() => {
+        checkinPopup.style.display = 'none';
+    }, 1500);
+}
+
+           function purchasepopuperror2() {
+const checkinPopup = document.getElementById('purchase-popuperror2');
+checkinPopup.style.display = 'block';
+document.getElementById('daily-checkin').style.opacity = '0.68';
+    // Hide the popup after 2 seconds
+    setTimeout(() => {
+        checkinPopup.style.display = 'none';
+    }, 2000);
+}
+
+
+function openPurchasePopup() {
+    document.getElementById('purchase-popup').style.display = 'block';
+}
+
+document.getElementById('closePopupButtonbuy').onclick = function() {
+    document.getElementById('purchase-popup').style.display = 'none';
+}
+
+async function submitPurchase() {
+    const diamondAmount = document.getElementById('diamond-option').value;
+    let starCost;
+
+    if (diamondAmount == 700) {
+        starCost = 50;
+    } else if (diamondAmount == 1500) {
+        starCost = 100;
+    } else if (diamondAmount == 5000) {
+        starCost = 250;
+    } else if (diamondAmount == 10000) {
+        starCost = 500;
+    } else if (diamondAmount == 100000) {
+        starCost = 2000;
+    }
+
+const response = await fetch('https://telegram-bot-degen-town.replit.app/create-telegram-payment', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ diamondAmount: 10, starCost: 5 }) // Change these values as needed
+});
+
+
+const result = await response.json();
+if (result.success) {
+    // Handle successful payment creation
+} else {
+   purchasepopuperror1();
+}
+
+}
+
+
 </script>
 
 
@@ -1903,7 +1900,52 @@ async function getBalance(walletAddress) {
 }
 
 
+async function fetchUserData() {
+  console.log("Checking elements...");
+  console.log("totalDeposit element:", document.getElementById("totalDeposit"));
+  console.log("totalCommission element:", document.getElementById("totalCommission"));
+  console.log("highestCommission element:", document.getElementById("highestCommission"));
 
+  const userId = Telegram.WebApp.initDataUnsafe?.user?.id;
+  if (!userId) {
+    console.error("User ID not found in Telegram WebApp data.");
+    return;
+  }
+
+  const apiUrl = `https://telegram-bot-degen-town.replit.app/api/user/${userId}`;
+
+  try {
+    const response = await fetch(apiUrl);
+    if (!response.ok) throw new Error("Network response was not ok");
+
+    const data = await response.json();
+    console.log("Fetched user data:", data); // Log the entire response
+
+    // Only update if element exists
+    if (document.getElementById("totalDeposit")) {
+      document.getElementById("totalDeposit").textContent = (data.totalDeposit || 0) + " TON";
+    }
+    if (document.getElementById("totalCommission")) {
+      document.getElementById("totalCommission").textContent = (data.commissionEarned || 0) + " TON";
+    }
+    if (document.getElementById("highestCommission")) {
+      document.getElementById("highestCommission").textContent = (data.highestCommission || 0) + " TON";
+    }
+  } catch (error) {
+    console.error("Failed to fetch user data:", error);
+    if (document.getElementById("totalDeposit")) {
+      document.getElementById("totalDeposit").textContent = "Error loading data";
+    }
+    if (document.getElementById("totalCommission")) {
+      document.getElementById("totalCommission").textContent = "Error loading data";
+    }
+    if (document.getElementById("highestCommission")) {
+      document.getElementById("highestCommission").textContent = "Error loading data";
+    }
+  }
+}
+
+document.addEventListener("DOMContentLoaded", fetchUserData);
 
 
 </script>
