@@ -39,8 +39,29 @@ async function getBalance(walletAddress) {
     }
 }
 
+
+// Function to show the popup
+function showPopupDone(message) {
+    const popup = document.getElementById('payment-popup');
+    const overlay = document.getElementById('overlay');
+    const messageElement = document.getElementById('payment-message');
+
+    messageElement.innerHTML = message; // Set the message in the popup
+    popup.style.display = 'block'; // Show the popup
+    overlay.style.display = 'block'; // Show the overlay
+}
+
+// Function to close the popup
+function closePopupDone() {
+    const popup = document.getElementById('payment-popup');
+    const overlay = document.getElementById('overlay');
+
+    popup.style.display = 'none'; // Hide the popup
+    overlay.style.display = 'none'; // Hide the overlay
+}
+
 // Function to check transactions
-async function checkTransactions(walletAddress) {
+async function checkTransactions(walletAddress, userId) {
     const apiKey = "a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf"; // Your API key
     const apiEndpoint = `https://toncenter.com/api/v2/getTransactions?address=${walletAddress}&api_key=${apiKey}`; // Correct API endpoint
 
@@ -60,14 +81,16 @@ async function checkTransactions(walletAddress) {
         }
 
         const data = await response.json();
+        console.log("Transaction data:", data); // Log the entire API response
 
         // Check if 'result' exists in the response
-        if (data.result && Array.isArray(data.result)) {
+        if (data.result && Array.isArray(data.result) && data.result.length > 0) {
             // Loop through transactions and check for user ID in memo
             for (const transaction of data.result) {
+                console.log("Checking transaction:", transaction); // Log each transaction
                 if (transaction.memo && transaction.memo.includes(userId)) {
                     const amount = transaction.amount; // Get the amount of TON sent
-                    showPopup(`You have successfully participated with ${amount} TON`);
+                    showPopupDone(`You have successfully participated with ${amount} TON`); // Show the popup with the amount
                     break; // Stop checking after finding the first match
                 }
             }
@@ -79,8 +102,10 @@ async function checkTransactions(walletAddress) {
     }
 }
 
+
+
 // Start checking for transactions at the defined interval
-const walletAddress = "UQAF72soTe3EGsvWES2iDFYra3imEA9tixwrQ0VUyc4D71D9"; // Your wallet address
+const walletAddress = "EQAF72soTe3EGsvWES2iDFYra3imEA9tixwrQ0VUyc4D7w04"; // Your wallet address
 const userId = "229351215"; // Replace with the actual user ID you want to check for in the transaction memo
 const checkInterval = 5000; // Check every 5 seconds
 
