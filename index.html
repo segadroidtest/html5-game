@@ -1853,13 +1853,13 @@ async function generateLeaderboard() {
     <p style="color: #ffffff; font-size: 17px; font-weight: 600; background: #1e1d22; padding-top: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px;">
       Top Referred so far
     </p>
-    <p id="highestCommission" style="font-weight: 700;">Loading referred value...</p>
+    <p id="highestCommission" style="font-weight: 700;"></p>
   </div>
   <div style="text-align: center; background: rgba(46, 44, 55, 0.65); height: auto; border-radius: 10px; border: 1px solid #101013; flex: 1;">
     <p style="color: #ffffff; font-size: 17px; font-weight: 600; background: #1e1d22; padding-top: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px;">
       Commissions Earned
     </p>
-    <p id="totalCommission" style="font-weight: 700;">Loading commission value...</p>
+    <p id="totalCommission" style="font-weight: 700;"></p>
   </div>
 </div>
 
@@ -1907,14 +1907,14 @@ console.log("highestCommission element:", document.getElementById("highestCommis
     console.log("Fetched user data:", data); // Check structure
 
     // Only update if element exists
-    if (document.getElementById("totalDeposit")) {
-      document.getElementById("totalDeposit").textContent = data.totalDeposit + " TON";
+    if (document.getElementById("totalDeposit")) 
+      document.getElementById("totalDeposit").textContent = userData.totalDeposit + " TON";
     }
     if (document.getElementById("totalCommission")) {
-      document.getElementById("totalCommission").textContent = (data.commissionEarned || 0) + " TON";
+      document.getElementById("totalCommission").textContent = (userData.commissionEarned || 0) + " TON";
     }
     if (document.getElementById("highestCommission")) {
-      document.getElementById("highestCommission").textContent = (data.highestCommission || 0) + " TON";
+      document.getElementById("highestCommission").textContent = (userData.highestCommission || 0) + " TON";
     }
   } catch (error) {
     console.error("Failed to fetch user data:", error);
