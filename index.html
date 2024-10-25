@@ -1902,21 +1902,23 @@ async function fetchUserData() {
     const data = await response.json();
     console.log("Fetched user data:", data); // Log data to verify structure
 
-    // Update elements if data exists
-    document.getElementById("totalDeposit").textContent = (data.totalDeposit || 0) + " TON";
-    document.getElementById("totalCommission").textContent = (data.commissionEarned || 0) + " TON";
-    document.getElementById("highestCommission").textContent = (data.highestCommission || 0) + " TON";
+    // Use optional chaining and fallback to prevent null reference errors
+    document.getElementById("totalDeposit")?.textContent = (data.totalDeposit || 0) + " TON";
+    document.getElementById("totalCommission")?.textContent = (data.commissionEarned || 0) + " TON";
+    document.getElementById("highestCommission")?.textContent = (data.highestCommission || 0) + " TON";
 
   } catch (error) {
     console.error("Failed to fetch user data:", error);
-    document.getElementById("totalDeposit").textContent = "Error loading data";
-    document.getElementById("totalCommission").textContent = "Error loading data";
-    document.getElementById("highestCommission").textContent = "Error loading data";
+
+    document.getElementById("totalDeposit")?.textContent = "Error loading data";
+    document.getElementById("totalCommission")?.textContent = "Error loading data";
+    document.getElementById("highestCommission")?.textContent = "Error loading data";
   }
 }
 
 // Run function when page loads
 document.addEventListener("DOMContentLoaded", fetchUserData);
+
 
 </script>
 
