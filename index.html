@@ -918,7 +918,14 @@ function closePopup() {
     document.getElementById('popup').style.display = 'none';
 }
 
-
+    // Generate QR code with wallet address and memo
+    const qrCodeURL = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
+    new QRCode(document.getElementById("qrcode"), {
+        text: qrCodeURL,
+        width: 170,
+        height: 170
+    });
+    
 function showTon1() {
 window.location.href = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}`;
 
