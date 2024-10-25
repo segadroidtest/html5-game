@@ -1639,52 +1639,7 @@ async function generateLeaderboard() {
             console.error("Error generating QR Code: ", error);
         }
 
-        // Function to check transactions
-async function checkTransactions(walletAddress, userId) {
-    try {
-        const response = await fetch(`https://toncenter.com/api/v2/getTransactions?account=${walletAddress}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-API-Key': 'a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf' // Add your API key here
-            }
-        });
 
-        if (!response.ok) {
-            console.error(`HTTP error! status: ${response.status}`);
-            return; // Exit the function if there's an error
-        }
-
-        const data = await response.json();
-
-        // Check if 'result' exists in the response
-        if (data.result && Array.isArray(data.result)) {
-            // Loop through transactions and check for user ID in memo
-            for (const transaction of data.result) {
-                if (transaction.memo && transaction.memo.includes(userId)) {
-                    const amount = transaction.amount; // Get the amount of TON sent
-                    showPopup(`You have successfully participated with ${amount} TON`);
-                    break; // Stop checking after finding the first match
-                }
-            }
-        } else {
-            console.log("No transactions found.");
-        }
-    } catch (error) {
-        console.error("Error fetching transactions: ", error);
-    }
-}
-
-
-        // Function to show a popup message
-        function showPopup(message) {
-            alert(message); // You can customize this to use a nicer popup
-        }
-
-        // Start checking for transactions at the defined interval
-        setInterval(() => {
-            checkTransactions(walletAddress, userId); // Call the function with parameters
-        }, checkInterval); // Check every 5 seconds
     });
 </script>
 
@@ -1748,6 +1703,53 @@ async function getBalance(walletAddress) {
         return 0; // Return 0 in case of error
     }
 }
+
+        // Function to check transactions
+async function checkTransactions(walletAddress, userId) {
+    try {
+        const response = await fetch(`https://toncenter.com/api/v2/getTransactions?account=${walletAddress}`, {
+            method: 'GET',
+            headers: {
+                'X-API-Key': 'a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf' // Replace with your actual API key
+            }
+        });
+
+        if (!response.ok) {
+            console.error(`HTTP error! status: ${response.status}`);
+            return; // Exit the function if there's an error
+        }
+
+        const data = await response.json();
+
+        // Check if 'result' exists in the response
+        if (data.result && Array.isArray(data.result)) {
+            // Loop through transactions and check for user ID in memo
+            for (const transaction of data.result) {
+                if (transaction.memo && transaction.memo.includes(userId)) {
+                    const amount = transaction.amount; // Get the amount of TON sent
+                    showPopup(`You have successfully participated with ${amount} TON`);
+                    break; // Stop checking after finding the first match
+                }
+            }
+        } else {
+            console.log("No transactions found.");
+        }
+    } catch (error) {
+        console.error("Error fetching transactions: ", error);
+    }
+}
+
+
+        // Function to show a popup message
+        function showPopup(message) {
+            alert(message); // You can customize this to use a nicer popup
+        }
+
+        // Start checking for transactions at the defined interval
+        setInterval(() => {
+            checkTransactions(walletAddress, userId); // Call the function with parameters
+        }, checkInterval); // Check every 5 seconds
+
 
 async function fetchReferralAndCommissionData() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Dynamically get the user ID
