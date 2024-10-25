@@ -1618,6 +1618,7 @@ async function generateLeaderboard() {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script type="text/javascript">
+    const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
     $(document).ready(function () {
         // Replace with your actual wallet address and Telegram user ID
         const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Placeholder for user ID
