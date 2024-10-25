@@ -1902,22 +1902,35 @@ async function fetchUserData() {
     const data = await response.json();
     console.log("Fetched user data:", data); // Log data to verify structure
 
-    // Use optional chaining and fallback to prevent null reference errors
-    document.getElementById("totalDeposit")?.textContent = (data.totalDeposit || 0) + " TON";
-    document.getElementById("totalCommission")?.textContent = (data.commissionEarned || 0) + " TON";
-    document.getElementById("highestCommission")?.textContent = (data.highestCommission || 0) + " TON";
+    // Check data properties and log each individually to verify values
+    console.log("Total Deposit:", data.totalDeposit);
+    console.log("Commission Earned:", data.commissionEarned);
+    console.log("Highest Commission:", data.highestCommission);
+
+    // Update the DOM elements if data is valid
+    if (data.totalDeposit !== undefined) {
+      document.getElementById("totalDeposit").textContent = data.totalDeposit + " TON";
+    }
+    if (data.commissionEarned !== undefined) {
+      document.getElementById("totalCommission").textContent = data.commissionEarned + " TON";
+    }
+    if (data.highestCommission !== undefined) {
+      document.getElementById("highestCommission").textContent = data.highestCommission + " TON";
+    }
 
   } catch (error) {
     console.error("Failed to fetch user data:", error);
 
-    document.getElementById("totalDeposit")?.textContent = "Error loading data";
-    document.getElementById("totalCommission")?.textContent = "Error loading data";
-    document.getElementById("highestCommission")?.textContent = "Error loading data";
+    // Set error message if data fetch fails
+    document.getElementById("totalDeposit").textContent = "Error loading data";
+    document.getElementById("totalCommission").textContent = "Error loading data";
+    document.getElementById("highestCommission").textContent = "Error loading data";
   }
 }
 
 // Run function when page loads
 document.addEventListener("DOMContentLoaded", fetchUserData);
+
 
 
 </script>
