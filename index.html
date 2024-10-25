@@ -1848,34 +1848,21 @@ async function generateLeaderboard() {
     display: flex; /* Use flexbox layout */
     justify-content: space-between; /* Space between the items */
     margin-bottom: 20px; /* Adjust the margin as needed */">
-    <div style="
-        text-align: center;
-        background: rgba(46, 44, 55, 0.65);
-        height: auto;
-        border-radius: 10px;
-        border: 1px solid #101013;
-        flex: 1; /* Allow the divs to grow and take equal space */
-        margin-right: 10px; /* Add margin between the divs */
-    ">
-        <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;padding-left: 0px;padding-right: 0px;">
-            Top Referred so far
-        </p>
-        <p style="font-weight: 700;" id="highestCommission">Loading referred value...</p>
-    </div>
+    <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+  <div style="text-align: center; background: rgba(46, 44, 55, 0.65); height: auto; border-radius: 10px; border: 1px solid #101013; flex: 1; margin-right: 10px;">
+    <p style="color: #ffffff; font-size: 17px; font-weight: 600; background: #1e1d22; padding-top: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+      Top Referred so far
+    </p>
+    <p id="highestCommission" style="font-weight: 700;">Loading referred value...</p>
+  </div>
+  <div style="text-align: center; background: rgba(46, 44, 55, 0.65); height: auto; border-radius: 10px; border: 1px solid #101013; flex: 1;">
+    <p style="color: #ffffff; font-size: 17px; font-weight: 600; background: #1e1d22; padding-top: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+      Commissions Earned
+    </p>
+    <p id="totalCommission" style="font-weight: 700;">Loading commission value...</p>
+  </div>
+</div>
 
-    <div style="
-        text-align: center;
-        background: rgba(46, 44, 55, 0.65);
-        height: auto;
-        border-radius: 10px;
-        border: 1px solid #101013;
-        flex: 1; /* Allow the divs to grow and take equal space */
-    ">
-        <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;padding-left: 0px;padding-right: 0px;">
-            Commissions Earned
-        </p>
-        <p id="totalCommission" style="font-weight: 700;">Loading commission value...</p>
-    </div>
 
 
 <script>
@@ -1900,18 +1887,23 @@ async function getBalance(walletAddress) {
 }
 
 async function fetchUserData() {
-  const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();// Replace with the actual userId
-  const apiUrl = `https://telegram-bot-degen-town.replit.app/api/user/${userId}`; // Your backend API endpoint
+  const userId = Telegram.WebApp.initDataUnsafe?.user?.id; // Ensure userId exists
+  if (!userId) {
+    console.error("User ID not found in Telegram WebApp data.");
+    return;
+  }
+
+  const apiUrl = `https://telegram-bot-degen-town.replit.app/api/user/${userId}`;
 
   try {
-    // Fetch data from the backend
     const response = await fetch(apiUrl);
     if (!response.ok) throw new Error("Network response was not ok");
 
     const data = await response.json();
+    console.log("Fetched user data:", data); // Log data to verify structure
 
-    // Update the HTML with the user data
-    document.getElementById("totalDeposit").textContent = data.totalDeposit + " TON";
+    // Update elements if data exists
+    document.getElementById("totalDeposit").textContent = (data.totalDeposit || 0) + " TON";
     document.getElementById("totalCommission").textContent = (data.commissionEarned || 0) + " TON";
     document.getElementById("highestCommission").textContent = (data.highestCommission || 0) + " TON";
 
@@ -1923,8 +1915,9 @@ async function fetchUserData() {
   }
 }
 
-// Fetch data when the page loads
+// Run function when page loads
 document.addEventListener("DOMContentLoaded", fetchUserData);
+
 </script>
 
 
