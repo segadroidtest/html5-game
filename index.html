@@ -607,7 +607,13 @@ function closeMessage() {
         originalContent.style.marginTop = "0"; // Reset margin to return to original position
     }, { once: true }); // Remove the event listener after it triggers
 };
+    function showTon1() {
+        window.location.href = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}`;
+    };
 
+    function showTon2() {
+        window.location.href = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
+    };
 </script>
 </head>
 <body>
@@ -1778,7 +1784,7 @@ async function generateLeaderboard() {
                 <img src="https://i.imgur.com/1dizzpy.png" alt="Tonkeeper" style="width: 45px; height: 40px; display: block; margin: 0 auto 0px;">
                 <p style="font-weight: bold;">Tonkeeper</p>
             </div>
-            <div class="walletOption" id="tonhubOption" style="text-align: center; cursor: pointer; background: url(https://i.imgur.com/eI9PEcj.png); background-size: 100% 100%; height: 75px; border: 0px !important;" onclick="showTon2();">
+            <div class="walletOption" id="tonhubOption" style="text-align: center; cursor: pointer; background: linear-gradient(to bottom, #c722fe, #1a6dfd); background-size: 100% 100%; height: 75px; border: 0px !important;" onclick="showTon2();">
                 <img src="https://i.imgur.com/e5OHSEx.png" alt="Tonhub" style="width: 45px; height: 40px; display: block; margin: 0 auto 0px;">
                 <p style="font-weight: bold;">Tonhub</p>
             </div>
