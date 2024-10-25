@@ -1887,7 +1887,11 @@ async function getBalance(walletAddress) {
 }
 
 async function fetchUserData() {
-  const userId = Telegram.WebApp.initDataUnsafe?.user?.id; // Ensure userId exists
+    console.log("totalDeposit element:", document.getElementById("totalDeposit"));
+console.log("totalCommission element:", document.getElementById("totalCommission"));
+console.log("highestCommission element:", document.getElementById("highestCommission"));
+
+  const userId = Telegram.WebApp.initDataUnsafe?.user?.id;
   if (!userId) {
     console.error("User ID not found in Telegram WebApp data.");
     return;
@@ -1900,35 +1904,26 @@ async function fetchUserData() {
     if (!response.ok) throw new Error("Network response was not ok");
 
     const data = await response.json();
-    console.log("Fetched user data:", data); // Log data to verify structure
+    console.log("Fetched user data:", data); // Check structure
 
-    // Check data properties and log each individually to verify values
-    console.log("Total Deposit:", data.totalDeposit);
-    console.log("Commission Earned:", data.commissionEarned);
-    console.log("Highest Commission:", data.highestCommission);
-
-    // Update the DOM elements if data is valid
-    if (data.totalDeposit !== undefined) {
+    // Only update if element exists
+    if (document.getElementById("totalDeposit")) {
       document.getElementById("totalDeposit").textContent = data.totalDeposit + " TON";
     }
-    if (data.commissionEarned !== undefined) {
-      document.getElementById("totalCommission").textContent = data.commissionEarned + " TON";
+    if (document.getElementById("totalCommission")) {
+      document.getElementById("totalCommission").textContent = (data.commissionEarned || 0) + " TON";
     }
-    if (data.highestCommission !== undefined) {
-      document.getElementById("highestCommission").textContent = data.highestCommission + " TON";
+    if (document.getElementById("highestCommission")) {
+      document.getElementById("highestCommission").textContent = (data.highestCommission || 0) + " TON";
     }
-
   } catch (error) {
     console.error("Failed to fetch user data:", error);
-
-    // Set error message if data fetch fails
-    document.getElementById("totalDeposit").textContent = "Error loading data";
-    document.getElementById("totalCommission").textContent = "Error loading data";
-    document.getElementById("highestCommission").textContent = "Error loading data";
+    document.getElementById("totalDeposit")?.textContent = "Error loading data";
+    document.getElementById("totalCommission")?.textContent = "Error loading data";
+    document.getElementById("highestCommission")?.textContent = "Error loading data";
   }
 }
 
-// Run function when page loads
 document.addEventListener("DOMContentLoaded", fetchUserData);
 
 
