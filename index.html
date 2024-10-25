@@ -18,6 +18,55 @@
             window.Telegram.WebApp.ready(); window.Telegram.WebApp.expand();
         </script>
     <script src="js/qrcode.js"></script>
+    <script type="text/javascript">
+    const apiKey = 'a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf'; // Your API key
+const walletAddress = "UQAF72soTe3EGsvWES2iDFYra3imEA9tixwrQ0VUyc4D71D9"; // Replace with your wallet address
+const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Assuming you're using Telegram Web App
+const checkInterval = 5000; // Check every 5 seconds
+
+async function checkTransactions(walletAddress, userId) {
+    try {
+        console.log(`Checking transactions for wallet address: ${walletAddress}`);
+        const apiEndpoint = `https://toncenter.com/api/v2/getTransactions?account=${walletAddress}&api_key=${apiKey}`;
+        const response = await fetch(apiEndpoint, {
+            method: 'GET',
+            headers: {
+                'X-API-Key': apiKey // Ensure the API key is correctly set
+            }
+        });
+
+        if (!response.ok) {
+            console.error(`HTTP error while checking transactions! status: ${response.status}`);
+            return; // Exit the function if there's an error
+        }
+
+        const data = await response.json();
+        console.log("Transaction data:", data); // Log the response for debugging
+
+        // Check if 'result' exists in the response
+        if (data.result && Array.isArray(data.result)) {
+            console.log(`Found ${data.result.length} transactions.`);
+            // Loop through transactions and check for user ID in memo
+            for (const transaction of data.result) {
+                if (transaction.memo && transaction.memo.includes(userId)) {
+                    const amount = transaction.amount / 1000000000; // Convert from nanoTON to TON
+                    showPopup(`You have successfully participated with ${amount} TON`);
+                    break; // Stop checking after finding the first match
+                }
+            }
+        } else {
+            console.log("No transactions found or result is not an array.");
+        }
+    } catch (error) {
+        console.error("Error fetching transactions: ", error);
+    }
+}
+
+// Start checking for transactions at the defined interval
+setInterval(() => {
+    checkTransactions(walletAddress, userId); // Call the function with parameters
+}, checkInterval); // Check every 5 seconds
+</script>
 <script>
 document.addEventListener("DOMContentLoaded", async function() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id;
@@ -1641,55 +1690,7 @@ async function generateLeaderboard() {
 
     
 </script>
-<script type="text/javascript">
-    const apiKey = 'a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf'; // Your API key
-const walletAddress = "UQAF72soTe3EGsvWES2iDFYra3imEA9tixwrQ0VUyc4D71D9"; // Replace with your wallet address
-const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Assuming you're using Telegram Web App
-const checkInterval = 5000; // Check every 5 seconds
 
-async function checkTransactions(walletAddress, userId) {
-    try {
-        console.log(`Checking transactions for wallet address: ${walletAddress}`);
-        const apiEndpoint = `https://toncenter.com/api/v2/getTransactions?account=${walletAddress}&api_key=${apiKey}`;
-        const response = await fetch(apiEndpoint, {
-            method: 'GET',
-            headers: {
-                'X-API-Key': apiKey // Ensure the API key is correctly set
-            }
-        });
-
-        if (!response.ok) {
-            console.error(`HTTP error while checking transactions! status: ${response.status}`);
-            return; // Exit the function if there's an error
-        }
-
-        const data = await response.json();
-        console.log("Transaction data:", data); // Log the response for debugging
-
-        // Check if 'result' exists in the response
-        if (data.result && Array.isArray(data.result)) {
-            console.log(`Found ${data.result.length} transactions.`);
-            // Loop through transactions and check for user ID in memo
-            for (const transaction of data.result) {
-                if (transaction.memo && transaction.memo.includes(userId)) {
-                    const amount = transaction.amount / 1000000000; // Convert from nanoTON to TON
-                    showPopup(`You have successfully participated with ${amount} TON`);
-                    break; // Stop checking after finding the first match
-                }
-            }
-        } else {
-            console.log("No transactions found or result is not an array.");
-        }
-    } catch (error) {
-        console.error("Error fetching transactions: ", error);
-    }
-}
-
-// Start checking for transactions at the defined interval
-setInterval(() => {
-    checkTransactions(walletAddress, userId); // Call the function with parameters
-}, checkInterval); // Check every 5 seconds
-</script>
 
         </div>
 
