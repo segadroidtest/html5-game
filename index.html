@@ -910,7 +910,7 @@ if (result.success) {
     }
 
     // Generate QR code with wallet address and memo
-    const qrCodeURL = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
+    const qrCodeURL = `https://tonhub.com/transfer/UQAF72soTe3EGsvWES2iDFYra3imEA9tixwrQ0VUyc4D71D9?amount=&text=${userId}`;
     const qrcodeElement = document.getElementById("qrcode");
 
     // Ensure the QR code element is present before generating
@@ -2104,25 +2104,6 @@ function updateProgressBar(totalBalanceInUsd) {
     }
 }
 
-
-    // Copy address to clipboard
-function copyAddress() {
-    const walletAddress = fullWalletAddress; // Get the full wallet address
-
-    // Try the Clipboard API
-    if (navigator.clipboard) {
-        navigator.clipboard.writeText(walletAddress)
-            .then(() => {
-                showCopyPopup(); // Display confirmation popup
-            })
-            .catch(err => {
-                console.error("Failed to copy using Clipboard API: ", err);
-                fallbackCopyText(walletAddress); // Use fallback if Clipboard API fails
-            });
-    } else {
-        fallbackCopyText(walletAddress); // Use fallback for unsupported browsers
-    }
-}
 
 function fallbackCopyText(text) {
     // Create a temporary textarea to hold the text
