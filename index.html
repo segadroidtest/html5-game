@@ -909,20 +909,29 @@ if (result.success) {
         document.getElementById('daily-checkin').style.opacity = '0.68';
     }
 
-    // Generate QR code with wallet address and memo
-    const qrCodeURL = `https://tonhub.com/transfer/UQAF72soTe3EGsvWES2iDFYra3imEA9tixwrQ0VUyc4D71D9?amount=&text=${userId}`;
-    const qrcodeElement = document.getElementById("qrcode");
 
-    // Ensure the QR code element is present before generating
-    if (qrcodeElement) {
-        new QRCode(qrcodeElement, {
-            text: qrCodeURL,
-            width: 130,  // Width of the QR code
-            height: 130, // Height of the QR code
+        $(document).ready(function () {
+            // Replace with your actual wallet address and Telegram user ID
+            const userId = "123456"; // Placeholder for user ID
+            const walletAddress = "UQAF72soTe3EGsvWES2iDFYra3imEA9tixwrQ0VUyc4D71D9"; // Replace with your wallet address
+            const qrCodeURL = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
+
+            console.log("QR Code URL: ", qrCodeURL); // Log the QR code URL for debugging
+
+            try {
+                $("#qrcode").qrcode({
+                    text: qrCodeURL,
+                    width: 170,
+                    height: 170
+                });
+                console.log("QR Code generated successfully.");
+            } catch (error) {
+                console.error("Error generating QR Code: ", error);
+            }
         });
-    } else {
-        console.error("QR code element not found.");
-    }
+
+
+
 
     function showTon1() {
         window.location.href = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}`;
@@ -1592,7 +1601,7 @@ async function generateLeaderboard() {
     <p style="text-align: center; margin-top: 0px; color: #ffffff; font-size: 17px; font-weight: 600; background: #1e1d22; padding-top: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-top: 1px solid #101013; border-left: 1px solid #101013; border-right: 1px solid #101013; padding-bottom: 14px; padding-left: 0px; padding-right: 0px;">Participate in this Stage</p>
     
     <!-- QR Code Section -->
-    <div id="qrcode" style="padding-bottom: 30px !important; text-align: center; margin: 20px auto; width: 170px; height: 170px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: white; border-radius: 10px; padding: 10px;">
+    <div  id="qrcode" style="padding-bottom: 30px !important; text-align: center; margin: 20px auto; width: 170px; height: 170px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: white; border-radius: 10px; padding: 10px;">
         <!-- Text above the QR Code -->
         <p style="margin: 10px 0; font-size: 16px; font-weight: 500; width: 112%; background: #1e1d22; margin-top: 0px; padding-bottom: 5px; color: white; padding-top: 5px; border-top-left-radius: 10px; border-top-right-radius: 10px;">Scan QR Code</p>
         <!-- QR code will be generated here -->
