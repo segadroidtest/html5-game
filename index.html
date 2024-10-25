@@ -566,7 +566,7 @@ if (timestamp > lastProcessedTimestamp && message.includes(userId)) {
 
 // Start by initializing lastProcessedTimestamp with the current latest transaction
 const walletAddress = "EQAF72soTe3EGsvWES2iDFYra3imEA9tixwrQ0VUyc4D7w04";
-const userId = "229351215";
+const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
 initializeLastProcessedTimestamp(walletAddress).then(() => {
     // Once initialized, start checking for new transactions at regular intervals
     setInterval(() => {
