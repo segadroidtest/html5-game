@@ -934,34 +934,7 @@ document.getElementById('daily-checkin').style.opacity = '0.68';
 
 }
 
-        // Generate QR code with wallet address and memo
-        const qrCodeURL = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
-        const qrcodeElement = document.getElementById("qrcode");
 
-        // Ensure the QR code element is present before generating
-        if (qrcodeElement) {
-            new QRCode(qrcodeElement, {
-                text: qrCodeURL,
-                width: 130,  // Width of the QR code
-                height: 130, // Height of the QR code
-            });
-        } else {
-            console.error("QR code element not found.");
-        }
-
-        
-function showTon1() {
-window.location.href = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}`;
-
-}
-function showTon2() {
- window.location.href = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
-
-}
-function showTon3() {
-window.location.href = `https://tonsrf.io/transfer/${walletAddress}?amount=&text=${userId}`;
-
-}
 
 
 function closeWalletPopup() {
