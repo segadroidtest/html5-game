@@ -503,19 +503,26 @@ async function checkTransactions(walletAddress) {
             return;
         }
 
-        const responseText = await response.text(); // Get raw text to check for unexpected errors
-        console.log("Raw response text:", responseText); // Log the raw response
-
-        const data = JSON.parse(responseText); // Parse the response as JSON
+        const data = await response.json();
         console.log("Parsed transaction data:", data);
 
         if (data.result && Array.isArray(data.result) && data.result.length > 0) {
             for (const transaction of data.result) {
-                console.log("Transaction found:", transaction);
+                console.log("Transaction object:", transaction); // Log the transaction object to identify fields
+
+                // Check if 'value' is within in_msg or another nested field
+                const valueInNanoton = transaction.in_msg?.value || transaction.value || null; 
                 
-                // Temporary alert to confirm transaction data
-                alert(`Transaction ID: ${transaction.id}, Value: ${transaction.value}`);
-                break; // Stop after the first transaction for testing
+                if (valueInNanoton) {
+                    const amount = parseFloat(valueInNanoton) / 1000000000; // Convert nanoton to TON
+                    if (!isNaN(amount)) {
+                        alert(`Transaction received: ${amount} TON`);
+                    } else {
+                        console.warn("Invalid amount parsed, check transaction structure.");
+                    }
+                } else {
+                    console.warn("No valid 'value' field found in transaction.");
+                }
             }
         } else {
             console.log("No transactions found or result array is empty.");
