@@ -18,98 +18,7 @@
             window.Telegram.WebApp.ready(); window.Telegram.WebApp.expand();
         </script>
     <script src="js/qrcode.js"></script>
-<script>
-async function getBalance(walletAddress) {
-    try {
-        console.log(`Fetching balance for wallet address: ${walletAddress}`);
-        const apiEndpoint = "https://toncenter.com/api/v2/getAddressInformation";
-        const response = await fetch(`${apiEndpoint}?address=${walletAddress}&api_key=a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf`);
-        if (!response.ok) {
-            throw new Error(`Error fetching balance for ${walletAddress}: ${response.statusText}`);
-        }
-        const data = await response.json();
-        console.log("API response for balance data:", data); // Log the response for debugging
 
-        // Convert the balance from nanoton to TON and return
-        const balanceInTON = parseFloat(data.result.balance) / 1000000000;
-        return balanceInTON || 0; // Ensure the balance is returned, default to 0 if undefined
-    } catch (error) {
-        console.error(`Error fetching balance for ${walletAddress}:`, error);
-        return 0; // Return 0 in case of error
-    }
-}
-
-// Function to check transactions
-async function checkTransactions(walletAddress, userId) {
-    const apiKey = "a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf"; // Your API key
-    const apiEndpoint = `https://toncenter.com/api/v2/getTransactions?address=${walletAddress}&api_key=${apiKey}`; // Correct API endpoint
-
-    console.log(`Checking transactions for wallet address: ${walletAddress}`); // Log the address being checked
-
-    try {
-        const response = await fetch(apiEndpoint, {
-            method: 'GET',
-            headers: {
-                'X-API-Key': apiKey // Replace with your actual API key if needed
-            }
-        });
-
-        if (!response.ok) {
-            console.error(`HTTP error! status: ${response.status}`);
-            return; // Exit the function if there's an error
-        }
-
-        const data = await response.json();
-        console.log("Transaction data:", data); // Log the entire API response
-
-        // Check if 'result' exists in the response
-        if (data.result && Array.isArray(data.result) && data.result.length > 0) {
-            // Loop through transactions and check for user ID in message
-            for (const transaction of data.result) {
-                console.log("Checking transaction:", transaction); // Log each transaction
-                
-                // Assuming the message is stored in in_msg field
-                if (transaction.in_msg && transaction.in_msg.value.includes(userId)) {
-                    const amount = parseFloat(transaction.value) / 1000000000; // Convert value from nanoton to TON
-                    showPopuptransaction(`You have successfully participated with ${amount} TON`); // Show the popup with the amount
-                    break; // Stop checking after finding the first match
-                }
-            }
-        } else {
-            console.log("No transactions found.");
-        }
-    } catch (error) {
-        console.error("Error fetching transactions: ", error);
-    }
-}
-
-function showPopuptransaction(message) {
-    const popup = document.createElement('div');
-    popup.classList.add('popup'); // Add a class for styling
-    popup.innerHTML = `
-        <h3>New Transaction Alert</h3>
-        <p>${message}</p>
-        <button onclick="closePopuptransaction()">Close</button>
-    `;
-    document.body.appendChild(popup);
-}
-
-function closePopuptransaction() {
-    const popup = document.querySelector('.popup');
-    if (popup) {
-        document.body.removeChild(popup);
-    }
-}
-
-// Start checking for transactions at the defined interval
-const walletAddress = "EQAF72soTe3EGsvWES2iDFYra3imEA9tixwrQ0VUyc4D7w04"; // Your wallet address
-const userId = "229351215"; // Replace with the actual user ID you want to check for in the transaction memo
-const checkInterval = 5000; // Check every 5 seconds
-
-setInterval(() => {
-    checkTransactions(walletAddress, userId); // Call the function with the wallet address and userId
-}, checkInterval); // Check every defined interval
-</script>
 
 <script>
 document.addEventListener("DOMContentLoaded", async function() {
@@ -535,7 +444,115 @@ background-color: #111013;
             height: 100px; 
             text-align: center;
         }
+
+
+
+                .showPopuptransaction {
+     position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+        }
     </style>
+
+
+    <script>
+async function getBalance(walletAddress) {
+    try {
+        console.log(`Fetching balance for wallet address: ${walletAddress}`);
+        const apiEndpoint = "https://toncenter.com/api/v2/getAddressInformation";
+        const response = await fetch(`${apiEndpoint}?address=${walletAddress}&api_key=a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf`);
+        if (!response.ok) {
+            throw new Error(`Error fetching balance for ${walletAddress}: ${response.statusText}`);
+        }
+        const data = await response.json();
+        console.log("API response for balance data:", data); // Log the response for debugging
+
+        // Convert the balance from nanoton to TON and return
+        const balanceInTON = parseFloat(data.result.balance) / 1000000000;
+        return balanceInTON || 0; // Ensure the balance is returned, default to 0 if undefined
+    } catch (error) {
+        console.error(`Error fetching balance for ${walletAddress}:`, error);
+        return 0; // Return 0 in case of error
+    }
+}
+
+// Function to check transactions
+async function checkTransactions(walletAddress, userId) {
+    const apiKey = "a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf"; // Your API key
+    const apiEndpoint = `https://toncenter.com/api/v2/getTransactions?address=${walletAddress}&api_key=${apiKey}`; // Correct API endpoint
+
+    console.log(`Checking transactions for wallet address: ${walletAddress}`); // Log the address being checked
+
+    try {
+        const response = await fetch(apiEndpoint, {
+            method: 'GET',
+            headers: {
+                'X-API-Key': apiKey // Replace with your actual API key if needed
+            }
+        });
+
+        if (!response.ok) {
+            console.error(`HTTP error! status: ${response.status}`);
+            return; // Exit the function if there's an error
+        }
+
+        const data = await response.json();
+        console.log("Transaction data:", data); // Log the entire API response
+
+        // Check if 'result' exists in the response
+        if (data.result && Array.isArray(data.result) && data.result.length > 0) {
+            // Loop through transactions and check for user ID in message
+            for (const transaction of data.result) {
+                console.log("Checking transaction:", transaction); // Log each transaction
+                
+                // Assuming the message is stored in in_msg field
+                if (transaction.in_msg && transaction.in_msg.value.includes(userId)) {
+                    const amount = parseFloat(transaction.value) / 1000000000; // Convert value from nanoton to TON
+                    showPopuptransaction(`You have successfully participated with ${amount} TON`); // Show the popup with the amount
+                    break; // Stop checking after finding the first match
+                }
+            }
+        } else {
+            console.log("No transactions found.");
+        }
+    } catch (error) {
+        console.error("Error fetching transactions: ", error);
+    }
+}
+
+function showPopuptransaction(message) {
+    const popup = document.createElement('div');
+    popup.classList.add('popup'); // Add a class for styling
+    popup.innerHTML = `
+        <h3>New Transaction Alert</h3>
+        <p>${message}</p>
+        <button onclick="closePopuptransaction()">Close</button>
+    `;
+    document.body.appendChild(popup);
+}
+
+function closePopuptransaction() {
+    const popup = document.querySelector('.popup');
+    if (popup) {
+        document.body.removeChild(popup);
+    }
+}
+
+// Start checking for transactions at the defined interval
+const walletAddress = "EQAF72soTe3EGsvWES2iDFYra3imEA9tixwrQ0VUyc4D7w04"; // Your wallet address
+const userId = "229351215"; // Replace with the actual user ID you want to check for in the transaction memo
+const checkInterval = 5000; // Check every 5 seconds
+
+setInterval(() => {
+    checkTransactions(walletAddress, userId); // Call the function with the wallet address and userId
+}, checkInterval); // Check every defined interval
+</script>
 </head>
 <body>
 
