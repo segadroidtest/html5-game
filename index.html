@@ -1750,13 +1750,13 @@ async function generateLeaderboard() {
     <div style="text-align: center;">
 
 
- <div id="transactionMessage" style="font-weight: bold; margin-bottom: 15px; display: none; width: 100%; background: linear-gradient(to bottom, #48a34c, #337335); color: white; padding: 20px; box-sizing: border-box; border-radius: 8px; transition: opacity 0.3s; opacity: 1; z-index: 2;  justify-content: space-between; align-items: center;">
-    <p style="margin: 0;">Transaction successful! Your changes have been saved</p> <!-- Ensures there's no extra margin -->
+ <div id="transactionMessage" style="font-weight: bold; margin-bottom: 15px; display: none; width: 100%; background: linear-gradient(rgb(86 193 90 / 85%), rgb(62 137 64 / 85%)); color: white; padding: 14px; box-sizing: border-box; border-radius: 8px; transition: opacity 0.3s; opacity: 1; z-index: 2;  justify-content: space-between; align-items: center;">
+    <p style="margin: 0;width: 100% !important;margin-bottom: 7px;font-size: 17px;">Transaction successful! Your changes have been saved</p> <!-- Ensures there's no extra margin -->
     <button id="closeButton" onclick="closeMessage()" style="cursor: pointer;background-color: #c02b2b;color: white;padding: 10px 15px;border: none;border-radius: 5px;font-size: 16px;transition: background-color 0.3s;font-weight: bold;">Close</button>
 </div>
 
 
-<div id="walletsection" style="background: rgba(46, 44, 55, 0.65); border-radius: 15px; margin-bottom: 20px;">
+<div id="walletsection" style="border: 1px solid #101013;background: rgba(46, 44, 55, 0.65); border-radius: 15px; margin-bottom: 20px;">
     <p style="text-align: center; margin-top: 0px; color: #ffffff; font-size: 17px; font-weight: 600; background: #1e1d22; padding-top: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-top: 1px solid #101013; border-left: 1px solid #101013; border-right: 1px solid #101013; padding-bottom: 14px; padding-left: 0px; padding-right: 0px;">Participate in this Stage</p>
     
     <!-- QR Code Section -->
@@ -1769,7 +1769,7 @@ async function generateLeaderboard() {
     <!-- Pay with Wallet button -->
     <button id="openWalletPopupButton" style="color: white; padding: 15px 30px; border: none; cursor: pointer; font-size: 16px; background: linear-gradient(to bottom, #45a9ce, #3a7590); font-weight: bold; width: 90%; border-radius: 15px; margin-bottom: 20px;" onclick="showWalletPopup();">Pay with Wallet</button>
 
-    <p style="color: white; font-size: 15px; margin-top: -10px; font-weight: bold; padding: 10px; border-radius: 10px; text-align: center; padding-top: 0px; padding-bottom: 20px;">
+    <p style="color: white; font-size: 15px; margin-top: -10px; font-weight: bold; padding: 10px; border-radius: 10px; text-align: center; padding-top: 0px; padding-bottom: 10px;">
         <i class="fa fa-warning" aria-hidden="true" style="margin-right: 8px; vertical-align: middle;"></i>Minimum purchase is 10 TON. Any smaller transactions will be refunded.
     </p>
 
@@ -2119,7 +2119,6 @@ loadWithdrawAddress();
 
 async function fetchTonToUsdRate() {
     // Add your logic to fetch the TON to USD rate
-    // For example:
     const response = await fetch('https://api.example.com/ton-to-usd-rate'); // Replace with your actual API
     const data = await response.json();
     return data.rate; // Adjust based on the API response structure
@@ -2152,7 +2151,10 @@ async function updatePage() {
     }
 }
 
-// Call the updatePage function to initiate the process
+// Call the updatePage function every 5 seconds
+setInterval(updatePage, 5000);
+
+// Call the updatePage function initially to load the balance immediately
 updatePage();
 
 
