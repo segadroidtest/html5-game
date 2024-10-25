@@ -910,26 +910,6 @@ if (result.success) {
     }
 
 
-        $(document).ready(function () {
-            // Replace with your actual wallet address and Telegram user ID
-            const userId = "123456"; // Placeholder for user ID
-            const walletAddress = "UQAF72soTe3EGsvWES2iDFYra3imEA9tixwrQ0VUyc4D71D9"; // Replace with your wallet address
-            const qrCodeURL = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
-
-            console.log("QR Code URL: ", qrCodeURL); // Log the QR code URL for debugging
-
-            try {
-                $("#qrcode").qrcode({
-                    text: qrCodeURL,
-                    width: 170,
-                    height: 170
-                });
-                console.log("QR Code generated successfully.");
-            } catch (error) {
-                console.error("Error generating QR Code: ", error);
-            }
-        });
-
 
 
 
@@ -1632,9 +1612,35 @@ async function generateLeaderboard() {
         </div>
     </div>
 </div>
+   
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script type="text/javascript">
+    
+        $(document).ready(function () {
+            // Replace with your actual wallet address and Telegram user ID
+            const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Placeholder for user ID
+            const walletAddress = "UQAF72soTe3EGsvWES2iDFYra3imEA9tixwrQ0VUyc4D71D9"; // Replace with your wallet address
+            const qrCodeURL = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
 
+            console.log("QR Code URL: ", qrCodeURL); // Log the QR code URL for debugging
 
+            try {
+                $("#qrcode").qrcode({
+                    text: qrCodeURL,
+                    width: 170,
+                    height: 170
+                });
+                console.log("QR Code generated successfully.");
+            } catch (error) {
+                console.error("Error generating QR Code: ", error);
+            }
+        });
+
+    
+</script>
 
 
         </div>
