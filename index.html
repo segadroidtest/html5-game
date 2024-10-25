@@ -641,57 +641,7 @@ function closeMessage() {
 
     <!-- Content Container -->
     <div class="content">
-        <!-- Home Page with only the canvas -->
-       <div id="page1" class="page active" style="padding: 0; height: 100%; background: url(assets/img/splashscreen.png) no-repeat center center; background-size: cover;">
-    <!-- Canvas screen code -->
-    <script type="text/javascript">
-        window.gameLangs = ['en'];
-        window.gameJS = ['js/game.js'];
-        window.gameOnLoadScript = "init();";
-    </script>
-    <script type="text/javascript" src="js/script.js"></script>
-    <script type="text/javascript" src="js/hooks.js"></script>
-    <script type="text/javascript" src="js/ads.js"></script>
-    <div id="viewporter">
-        <canvas id="canvas" width="700" height="900"></canvas>
-    </div>
-    <script>
-function fetchUserData(userId, callback) {
-    // Simulate an API call to fetch user data
-    fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`)
-        .then(response => response.json())
-        .then(data => {
-            GameData.getInstance().setGold(data.totalPoints); // Assuming totalPoints is the user's gold
-            callback(); // Call the callback function after data is fetched
-        })
-        .catch(error => {
-            console.error('Error fetching user data:', error);
-            callback(); // Call callback even on error to avoid blocking
-        });
-}
-function updateGoldBalance(userId, earnedGold, callback) {
-    fetch(`https://telegram-bot-degen-town.replit.app/api/user/updatePoints/${userId}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ earnedGold })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.newTotalPoints) {
-            callback(data.newTotalPoints); // Return the new total points
-        }
-    })
-    .catch(error => console.error('Error updating points:', error));
-}
-
-        
-    </script>
-</div>
-
-
-<div id="page4" class="page" style=" color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 70px); overflow-y: auto; padding-top: 7px !important;">
+        <div id="page4" class="page" style=" color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 70px); overflow-y: auto; padding-top: 7px !important;">
     <ul id="tasks-list" style="margin-bottom: 20px; margin-top: -5px; list-style-type: none; padding: 0;">
 <div id="referral-stats" style="display: flex; justify-content: space-between; padding: 10px 15px; margin-top: 20px; border-radius: 10px; background: #1e1d22; color: white !important; border: 1px solid #101013; position: sticky; top: 0; z-index: 1000;">
     <div class="stat" style="display: flex; flex-direction: column; align-items: center; font-weight: bold;">
@@ -774,7 +724,70 @@ function updateGoldBalance(userId, earnedGold, callback) {
     </div>
 </div>
 
+<script>
+    function purchasepopuperror1() {
+const checkinPopup = document.getElementById('purchase-popuperror1');
+checkinPopup.style.display = 'block';
+document.getElementById('purchase-popuperror1').style.opacity = '0.98';
+    // Hide the popup after 2 seconds
+    setTimeout(() => {
+        checkinPopup.style.display = 'none';
+    }, 1500);
+}
 
+           function purchasepopuperror2() {
+const checkinPopup = document.getElementById('purchase-popuperror2');
+checkinPopup.style.display = 'block';
+document.getElementById('daily-checkin').style.opacity = '0.68';
+    // Hide the popup after 2 seconds
+    setTimeout(() => {
+        checkinPopup.style.display = 'none';
+    }, 2000);
+}
+
+
+function openPurchasePopup() {
+    document.getElementById('purchase-popup').style.display = 'block';
+}
+
+document.getElementById('closePopupButtonbuy').onclick = function() {
+    document.getElementById('purchase-popup').style.display = 'none';
+}
+
+async function submitPurchase() {
+    const diamondAmount = document.getElementById('diamond-option').value;
+    let starCost;
+
+    if (diamondAmount == 700) {
+        starCost = 50;
+    } else if (diamondAmount == 1500) {
+        starCost = 100;
+    } else if (diamondAmount == 5000) {
+        starCost = 250;
+    } else if (diamondAmount == 10000) {
+        starCost = 500;
+    } else if (diamondAmount == 100000) {
+        starCost = 2000;
+    }
+
+const response = await fetch('https://telegram-bot-degen-town.replit.app/create-telegram-payment', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ diamondAmount: 10, starCost: 5 }) // Change these values as needed
+});
+
+
+const result = await response.json();
+if (result.success) {
+    // Handle successful payment creation
+} else {
+   purchasepopuperror1();
+}
+
+}
+
+
+</script>
     </div>
 </div>
        <p style=" font-weight: bold; ">Available Tasks:</p>
@@ -1111,69 +1124,6 @@ function updateGoldBalance(userId, earnedGold, callback) {
             console.error("Failed to share points:", await response.json());
         }
     }
-
-        function purchasepopuperror1() {
-const checkinPopup = document.getElementById('purchase-popuperror1');
-checkinPopup.style.display = 'block';
-document.getElementById('purchase-popuperror1').style.opacity = '0.98';
-    // Hide the popup after 2 seconds
-    setTimeout(() => {
-        checkinPopup.style.display = 'none';
-    }, 1500);
-}
-
-           function purchasepopuperror2() {
-const checkinPopup = document.getElementById('purchase-popuperror2');
-checkinPopup.style.display = 'block';
-document.getElementById('daily-checkin').style.opacity = '0.68';
-    // Hide the popup after 2 seconds
-    setTimeout(() => {
-        checkinPopup.style.display = 'none';
-    }, 2000);
-}
-
-
-function openPurchasePopup() {
-    document.getElementById('purchase-popup').style.display = 'block';
-}
-
-document.getElementById('closePopupButtonbuy').onclick = function() {
-    document.getElementById('purchase-popup').style.display = 'none';
-}
-
-async function submitPurchase() {
-    const diamondAmount = document.getElementById('diamond-option').value;
-    let starCost;
-
-    if (diamondAmount == 700) {
-        starCost = 50;
-    } else if (diamondAmount == 1500) {
-        starCost = 100;
-    } else if (diamondAmount == 5000) {
-        starCost = 250;
-    } else if (diamondAmount == 10000) {
-        starCost = 500;
-    } else if (diamondAmount == 100000) {
-        starCost = 2000;
-    }
-
-const response = await fetch('https://telegram-bot-degen-town.replit.app/create-telegram-payment', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ diamondAmount: 10, starCost: 5 }) // Change these values as needed
-});
-
-
-const result = await response.json();
-if (result.success) {
-    // Handle successful payment creation
-} else {
-   purchasepopuperror1();
-}
-
-}
-
-
 </script>
 
 
@@ -1186,6 +1136,57 @@ if (result.success) {
         }
     </style>
 </div>
+
+        <!-- Home Page with only the canvas -->
+       <div id="page1" class="page active" style="padding: 0; height: 100%; background: url(assets/img/splashscreen.png) no-repeat center center; background-size: cover;">
+    <!-- Canvas screen code -->
+    <script type="text/javascript">
+        window.gameLangs = ['en'];
+        window.gameJS = ['js/game.js'];
+        window.gameOnLoadScript = "init();";
+    </script>
+    <script type="text/javascript" src="js/script.js"></script>
+    <script type="text/javascript" src="js/hooks.js"></script>
+    <script type="text/javascript" src="js/ads.js"></script>
+    <div id="viewporter">
+        <canvas id="canvas" width="700" height="900"></canvas>
+    </div>
+    <script>
+function fetchUserData(userId, callback) {
+    // Simulate an API call to fetch user data
+    fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`)
+        .then(response => response.json())
+        .then(data => {
+            GameData.getInstance().setGold(data.totalPoints); // Assuming totalPoints is the user's gold
+            callback(); // Call the callback function after data is fetched
+        })
+        .catch(error => {
+            console.error('Error fetching user data:', error);
+            callback(); // Call callback even on error to avoid blocking
+        });
+}
+function updateGoldBalance(userId, earnedGold, callback) {
+    fetch(`https://telegram-bot-degen-town.replit.app/api/user/updatePoints/${userId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ earnedGold })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.newTotalPoints) {
+            callback(data.newTotalPoints); // Return the new total points
+        }
+    })
+    .catch(error => console.error('Error updating points:', error));
+}
+
+        
+    </script>
+</div>
+
+
 
         
 <div id="page3" class="page" style="padding: 0px !important; color: #ffffff;  border-radius: 0px; width: auto; margin: 0 auto;  height: 100% !important; overflow-y: auto;">
