@@ -483,12 +483,13 @@ async function getBalance(walletAddress) {
     }
 }
 
-// Function to check transactions
-async function checkTransactions(walletAddress) {
+const processedTransactions = new Set(); // To store processed transaction IDs
+
+async function checkTransactions(walletAddress, userId) {
     const apiKey = "a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf";
     const apiEndpoint = `https://toncenter.com/api/v2/getTransactions?address=${walletAddress}&api_key=${apiKey}`;
 
-    console.log(`Attempting to fetch transactions for wallet address: ${walletAddress}`);
+    console.log(`Fetching transactions for wallet address: ${walletAddress}`);
 
     try {
         const response = await fetch(apiEndpoint, {
@@ -504,59 +505,36 @@ async function checkTransactions(walletAddress) {
         }
 
         const data = await response.json();
-        console.log("Parsed transaction data:", data);
+        console.log("Transaction data:", data);
 
         if (data.result && Array.isArray(data.result) && data.result.length > 0) {
             for (const transaction of data.result) {
-                console.log("Transaction object:", transaction); // Log the transaction object to identify fields
+                const transactionId = transaction.transaction_id; // Replace this with actual transaction ID field if different
+                const message = transaction.in_msg?.message || ''; // Adjust if message field is in a different location
+                const valueInNanoton = transaction.in_msg?.value || transaction.value || 0;
+                const amount = parseFloat(valueInNanoton) / 1000000000;
 
-                // Check if 'value' is within in_msg or another nested field
-                const valueInNanoton = transaction.in_msg?.value || transaction.value || null; 
-                
-                if (valueInNanoton) {
-                    const amount = parseFloat(valueInNanoton) / 1000000000; // Convert nanoton to TON
-                    if (!isNaN(amount)) {
-                        alert(`Transaction received: ${amount} TON`);
-                    } else {
-                        console.warn("Invalid amount parsed, check transaction structure.");
-                    }
-                } else {
-                    console.warn("No valid 'value' field found in transaction.");
+                // Only process new transactions that contain the userId in the message
+                if (!processedTransactions.has(transactionId) && message.includes(userId)) {
+                    alert(`New transaction received: ${amount} TON with userId: ${userId}`);
+                    processedTransactions.add(transactionId); // Mark this transaction as processed
                 }
             }
         } else {
-            console.log("No transactions found or result array is empty.");
+            console.log("No transactions found.");
         }
     } catch (error) {
-        console.error("Error fetching or parsing transactions:", error);
-    }
-}
-
-function showPopuptransaction(message) {
-    const popup = document.createElement('div');
-    popup.classList.add('popup'); // Add a class for styling
-    popup.innerHTML = `
-        <h3>New Transaction Alert</h3>
-        <p>${message}</p>
-        <button onclick="closePopuptransaction()">Close</button>
-    `;
-    document.body.appendChild(popup);
-}
-
-function closePopuptransaction() {
-    const popup = document.querySelector('.popup');
-    if (popup) {
-        document.body.removeChild(popup);
+        console.error("Error fetching transactions:", error);
     }
 }
 
 // Start checking for transactions at the defined interval
-const walletAddress = "EQAF72soTe3EGsvWES2iDFYra3imEA9tixwrQ0VUyc4D7w04"; // Your wallet address
-const userId = "229351215"; // Replace with the actual user ID you want to check for in the transaction memo
+const walletAddress = "EQAF72soTe3EGsvWES2iDFYra3imEA9tixwrQ0VUyc4D7w04";
+const userId = "229351215"; // Example userId
 const checkInterval = 5000;
 
 setInterval(() => {
-    checkTransactions(walletAddress);
+    checkTransactions(walletAddress, userId);
 }, checkInterval);
 </script>
 </head>
