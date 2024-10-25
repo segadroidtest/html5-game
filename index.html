@@ -27,15 +27,13 @@ const checkInterval = 5000; // Check every 5 seconds
 async function checkTransactions(walletAddress, userId) {
     try {
         console.log(`Checking transactions for wallet address: ${walletAddress}`);
-        const apiEndpoint = `https://toncenter.com/api/v2/getTransactions`;
+        const apiEndpoint = `https://toncenter.com/api/v2/getTransactions?account=${walletAddress}&api_key=a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf`;
         
         const response = await fetch(apiEndpoint, {
-            method: 'POST', // Change GET to POST
+            method: 'GET', // Ensure it's a GET request
             headers: {
-                'Content-Type': 'application/json', // Specify content type
-                'X-API-Key': 'a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf' // Your API key
-            },
-            body: JSON.stringify({ account: walletAddress }) // Send wallet address in body
+                'Content-Type': 'application/json' // This might not be necessary for a GET request
+            }
         });
 
         if (!response.ok) {
@@ -63,6 +61,7 @@ async function checkTransactions(walletAddress, userId) {
         console.error("Error fetching transactions: ", error);
     }
 }
+
 
 // Start checking for transactions at the defined interval
 setInterval(() => {
