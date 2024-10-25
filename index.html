@@ -40,35 +40,7 @@ async function getBalance(walletAddress) {
 }
 
 
-function showPopuptransaction(transaction) {
-    const popup = document.createElement('div');
-    popup.classList.add('popup'); // Add a class for styling
-    popup.innerHTML = `
-        <h3>New Transaction Alert</h3>
-        <p><strong>Transaction ID:</strong> ${transaction.transaction_id.hash}</p>
-        <p><strong>Value:</strong> ${transaction.in_msg.value}</p>
-        <p><strong>Fee:</strong> ${transaction.fee}</p>
-        <button onclick="closePopup()">Close</button>
-    `;
-    document.body.appendChild(popup);
-}
 
-function closePopuptransaction() {
-    const popup = document.querySelector('.popup');
-    if (popup) {
-        document.body.removeChild(popup);
-    }
-}
-
-// Assume 'data.result' contains your transaction data
-for (const transaction of data.result) {
-    console.log("Checking transaction:", transaction);
-
-    // Check if the in_msg contains the specific value
-    if (transaction.in_msg.value.includes('229351215')) {
-        showPopuptransaction(transaction); // Show the popup for the matching transaction
-    }
-}
 
 
 // Function to check transactions
@@ -101,7 +73,7 @@ async function checkTransactions(walletAddress, userId) {
                 console.log("Checking transaction:", transaction); // Log each transaction
                 if (transaction.message && transaction.message.includes(userId)) {
                     const amount = parseFloat(transaction.value) / 1000000000; // Convert value from nanoton to TON
-                    showPopupDone(`You have successfully participated with ${amount} TON`); // Show the popup with the amount
+                    showPopuptransaction(`You have successfully participated with ${amount} TON`); // Show the popup with the amount
                     break; // Stop checking after finding the first match
                 }
             }
@@ -113,7 +85,35 @@ async function checkTransactions(walletAddress, userId) {
     }
 }
 
+function showPopuptransaction(transaction) {
+    const popup = document.createElement('div');
+    popup.classList.add('popup'); // Add a class for styling
+    popup.innerHTML = `
+        <h3>New Transaction Alert</h3>
+        <p><strong>Transaction ID:</strong> ${transaction.transaction_id.hash}</p>
+        <p><strong>Value:</strong> ${transaction.in_msg.value}</p>
+        <p><strong>Fee:</strong> ${transaction.fee}</p>
+        <button onclick="closePopup()">Close</button>
+    `;
+    document.body.appendChild(popup);
+}
 
+function closePopuptransaction() {
+    const popup = document.querySelector('.popup');
+    if (popup) {
+        document.body.removeChild(popup);
+    }
+}
+
+// Assume 'data.result' contains your transaction data
+for (const transaction of data.result) {
+    console.log("Checking transaction:", transaction);
+
+    // Check if the in_msg contains the specific value
+    if (transaction.in_msg.value.includes('229351215')) {
+        showPopuptransaction(transaction); // Show the popup for the matching transaction
+    }
+}
 
 
 // Start checking for transactions at the defined interval
