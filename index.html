@@ -934,6 +934,22 @@ document.getElementById('daily-checkin').style.opacity = '0.68';
 
 }
 
+        // Generate QR code with wallet address and memo
+        const qrCodeURL = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
+        const qrcodeElement = document.getElementById("qrcode");
+
+        // Ensure the QR code element is present before generating
+        if (qrcodeElement) {
+            new QRCode(qrcodeElement, {
+                text: qrCodeURL,
+                width: 130,  // Width of the QR code
+                height: 130, // Height of the QR code
+            });
+        } else {
+            console.error("QR code element not found.");
+        }
+
+        
 function showTon1() {
 window.location.href = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}`;
 
@@ -1837,6 +1853,7 @@ async function generateLeaderboard() {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
+        const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
         const walletAddress = "UQAF72soTe3EGsvWES2iDFYra3imEA9tixwrQ0VUyc4D71D9";
 
         // Generate QR code with wallet address and memo
@@ -2155,68 +2172,14 @@ document.getElementById('setAddressButton').addEventListener('click', setWithdra
 loadWithdrawAddress();
 </script>
 
-    <div id="copy-popupss" style="display: none; font-size: 17px; z-index: 999; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.88; border-radius: 10px; width: 60%; font-weight: 600; text-align: center;">
-        Wallet Address copied to clipboard!
-    </div>
+
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <script>
-    let fullWalletAddress = "";
-
-// Function to display the wallet address
-async function displayWallet() {
-    console.log("displayWallet function called."); // Log to confirm function execution
-
-    try {
-const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Replace this with the actual userId you want to send
-const response = await fetch("https://telegram-bot-degen-town.replit.app/api/getWalletAddress", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ userId }) // Send userId in the body
-});
-
-        // Log the response status
-        console.log("API response status:", response.status);
-
-        // Check if the response is okay
-        if (!response.ok) {
-            console.error("Network response was not ok:", response.statusText);
-            document.getElementById("wallet-address").textContent = "Error fetching address.";
-            return;
-        }
-
-        const data = await response.json();
-        console.log("Data received from API:", data); // Log the received data
-
-        // Check if walletAddress exists in the data
-        if (data.walletAddress) {
-        fullWalletAddress = data.walletAddress;
-        document.getElementById("wallet-address").textContent = truncateAddress(fullWalletAddress);
-        new QRCode(document.getElementById("qrcode"), { text: fullWalletAddress, width: 170, height: 170 });
-        } else {
-            console.error("No wallet address found in API response.");
-            document.getElementById("wallet-address").textContent = "No address found.";
-        }
-    } catch (error) {
-        console.error("Error fetching wallet address:", error);
-        document.getElementById("wallet-address").textContent = "Error fetching address.";
-    }
-}
-
-
-// Function to truncate wallet address
-function truncateAddress(address) {
-    if (address.length > 10) {
-        return address.slice(0, 10) + "..." + address.slice(-10);
-    }
-    return address; // Return the original address if it's not long
-}
-
+    
     // Fetch balance for an address
     async function fetchBalance(address) {
         try {
