@@ -515,7 +515,7 @@ async function checkTransactions(walletAddress, userId) {
                 // Assuming the message is stored in in_msg field
                 if (transaction.in_msg && transaction.in_msg.value.includes(userId)) {
                     const amount = parseFloat(transaction.value) / 1000000000; // Convert value from nanoton to TON
-                    showPopuptransaction(`You have successfully participated with ${amount} TON`); // Show the popup with the amount
+                    alert(`You have successfully participated with ${amount} TON`); // Show the popup with the amount
                     break; // Stop checking after finding the first match
                 }
             }
