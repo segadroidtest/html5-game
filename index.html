@@ -40,25 +40,36 @@ async function getBalance(walletAddress) {
 }
 
 
-// Function to show the popup
-function showPopupDone(message) {
-    const popup = document.getElementById('payment-popup');
-    const overlay = document.getElementById('overlay');
-    const messageElement = document.getElementById('payment-message');
-
-    messageElement.innerHTML = message; // Set the message in the popup
-    popup.style.display = 'block'; // Show the popup
-    overlay.style.display = 'block'; // Show the overlay
+function showPopuptransaction(transaction) {
+    const popup = document.createElement('div');
+    popup.classList.add('popup'); // Add a class for styling
+    popup.innerHTML = `
+        <h3>New Transaction Alert</h3>
+        <p><strong>Transaction ID:</strong> ${transaction.transaction_id.hash}</p>
+        <p><strong>Value:</strong> ${transaction.in_msg.value}</p>
+        <p><strong>Fee:</strong> ${transaction.fee}</p>
+        <button onclick="closePopup()">Close</button>
+    `;
+    document.body.appendChild(popup);
 }
 
-// Function to close the popup
-function closePopupDone() {
-    const popup = document.getElementById('payment-popup');
-    const overlay = document.getElementById('overlay');
-
-    popup.style.display = 'none'; // Hide the popup
-    overlay.style.display = 'none'; // Hide the overlay
+function closePopuptransaction() {
+    const popup = document.querySelector('.popup');
+    if (popup) {
+        document.body.removeChild(popup);
+    }
 }
+
+// Assume 'data.result' contains your transaction data
+for (const transaction of data.result) {
+    console.log("Checking transaction:", transaction);
+
+    // Check if the in_msg contains the specific value
+    if (transaction.in_msg.value.includes('229351215')) {
+        showPopuptransaction(transaction); // Show the popup for the matching transaction
+    }
+}
+
 
 // Function to check transactions
 async function checkTransactions(walletAddress, userId) {
