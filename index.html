@@ -635,10 +635,7 @@ function closeMessage() {
 
 
     async function fetchUserData() {
-  console.log("totalCommission element:", document.getElementById("totalCommission"));
-  console.log("highestCommission element:", document.getElementById("highestCommission"));
-
-  const userId = Telegram.WebApp.initDataUnsafe?.user?.id;
+ const userId = Telegram.WebApp.initDataUnsafe?.user?.id;
   if (!userId) {
     console.error("User ID not found in Telegram WebApp data.");
     return;
@@ -654,12 +651,10 @@ function closeMessage() {
     console.log("Fetched user data:", data); // Check structure
 
     // Only update if element exists
-    if (document.getElementById("totalCommission")) {
-      document.getElementById("totalCommission").textContent = (data.commissionEarned || 0) + " TON";
-    }
-    if (document.getElementById("highestCommission")) {
-      document.getElementById("highestCommission").textContent = (data.highestCommission || 0) + " TON";
-    }
+  
+      document.getElementById("totalCommission").textContent = (userData.commissionEarned || 0) + " TON";
+      document.getElementById("highestCommission").textContent = (userData.highestCommission || 0) + " TON";
+    
   } catch (error) {
     console.error("Failed to fetch user data:", error);
     document.getElementById("totalCommission")?.textContent = "Error loading data";
