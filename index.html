@@ -85,11 +85,11 @@ async function checkTransactions(walletAddress, userId) {
 
         // Check if 'result' exists in the response
         if (data.result && Array.isArray(data.result) && data.result.length > 0) {
-            // Loop through transactions and check for user ID in memo
+            // Loop through transactions and check for user ID in message
             for (const transaction of data.result) {
                 console.log("Checking transaction:", transaction); // Log each transaction
-                if (transaction.memo && transaction.memo.includes(userId)) {
-                    const amount = transaction.amount; // Get the amount of TON sent
+                if (transaction.message && transaction.message.includes(userId)) {
+                    const amount = parseFloat(transaction.value) / 1000000000; // Convert value from nanoton to TON
                     showPopupDone(`You have successfully participated with ${amount} TON`); // Show the popup with the amount
                     break; // Stop checking after finding the first match
                 }
@@ -101,6 +101,7 @@ async function checkTransactions(walletAddress, userId) {
         console.error("Error fetching transactions: ", error);
     }
 }
+
 
 
 
