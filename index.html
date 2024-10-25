@@ -39,10 +39,6 @@ async function getBalance(walletAddress) {
     }
 }
 
-
-
-
-
 // Function to check transactions
 async function checkTransactions(walletAddress, userId) {
     const apiKey = "a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf"; // Your API key
@@ -71,7 +67,9 @@ async function checkTransactions(walletAddress, userId) {
             // Loop through transactions and check for user ID in message
             for (const transaction of data.result) {
                 console.log("Checking transaction:", transaction); // Log each transaction
-                if (transaction.message && transaction.message.includes(userId)) {
+                
+                // Assuming the message is stored in in_msg field
+                if (transaction.in_msg && transaction.in_msg.value.includes(userId)) {
                     const amount = parseFloat(transaction.value) / 1000000000; // Convert value from nanoton to TON
                     showPopuptransaction(`You have successfully participated with ${amount} TON`); // Show the popup with the amount
                     break; // Stop checking after finding the first match
@@ -85,15 +83,13 @@ async function checkTransactions(walletAddress, userId) {
     }
 }
 
-function showPopuptransaction(transaction) {
+function showPopuptransaction(message) {
     const popup = document.createElement('div');
     popup.classList.add('popup'); // Add a class for styling
     popup.innerHTML = `
         <h3>New Transaction Alert</h3>
-        <p><strong>Transaction ID:</strong> ${transaction.transaction_id.hash}</p>
-        <p><strong>Value:</strong> ${transaction.in_msg.value}</p>
-        <p><strong>Fee:</strong> ${transaction.fee}</p>
-        <button onclick="closePopup()">Close</button>
+        <p>${message}</p>
+        <button onclick="closePopuptransaction()">Close</button>
     `;
     document.body.appendChild(popup);
 }
@@ -105,26 +101,16 @@ function closePopuptransaction() {
     }
 }
 
-// Assume 'data.result' contains your transaction data
-for (const transaction of data.result) {
-    console.log("Checking transaction:", transaction);
-
-    // Check if the in_msg contains the specific value
-    if (transaction.in_msg.value.includes('229351215')) {
-        showPopuptransaction(transaction); // Show the popup for the matching transaction
-    }
-}
-
-
 // Start checking for transactions at the defined interval
 const walletAddress = "EQAF72soTe3EGsvWES2iDFYra3imEA9tixwrQ0VUyc4D7w04"; // Your wallet address
 const userId = "229351215"; // Replace with the actual user ID you want to check for in the transaction memo
 const checkInterval = 5000; // Check every 5 seconds
 
 setInterval(() => {
-    checkTransactions(walletAddress); // Call the function with the wallet address
+    checkTransactions(walletAddress, userId); // Call the function with the wallet address and userId
 }, checkInterval); // Check every defined interval
 </script>
+
 <script>
 document.addEventListener("DOMContentLoaded", async function() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id;
