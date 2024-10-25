@@ -1694,24 +1694,26 @@ async function getBalance(walletAddress) {
         const response = await fetch(`${apiEndpoint}?address=${walletAddress}&api_key=${apiKey}`);
         
         if (!response.ok) {
-            throw new Error(`Error fetching balance for ${walletAddress}: ${response.statusText}`);
+            console.error(`Error fetching balance: ${response.statusText}`);
+            return; // Exit the function if there's an error
         }
         
         const data = await response.json();
-        console.log("API response for balance data:", data); // Log the response for debugging
+        console.log("Balance data:", data); // Log the response for debugging
 
         // Convert the balance from nanoton to TON and return
         const balanceInTON = parseFloat(data.result.balance) / 1000000000;
         console.log(`Balance in TON: ${balanceInTON}`);
         return balanceInTON || 0; // Ensure the balance is returned, default to 0 if undefined
     } catch (error) {
-        console.error(`Error fetching balance for ${walletAddress}:`, error);
+        console.error(`Error fetching balance:`, error);
         return 0; // Return 0 in case of error
     }
 }
 
 async function checkTransactions(walletAddress, userId) {
     try {
+        console.log(`Checking transactions for wallet address: ${walletAddress}`);
         const apiEndpoint = `https://toncenter.com/api/v2/getTransactions?account=${walletAddress}&api_key=${apiKey}`;
         const response = await fetch(apiEndpoint, {
             method: 'GET',
@@ -1721,15 +1723,16 @@ async function checkTransactions(walletAddress, userId) {
         });
 
         if (!response.ok) {
-            console.error(`HTTP error! status: ${response.status}`);
+            console.error(`HTTP error while checking transactions! status: ${response.status}`);
             return; // Exit the function if there's an error
         }
 
         const data = await response.json();
-        console.log("API response for transactions:", data); // Log the response for debugging
+        console.log("Transaction data:", data); // Log the response for debugging
 
         // Check if 'result' exists in the response
         if (data.result && Array.isArray(data.result)) {
+            console.log(`Found ${data.result.length} transactions.`);
             // Loop through transactions and check for user ID in memo
             for (const transaction of data.result) {
                 if (transaction.memo && transaction.memo.includes(userId)) {
