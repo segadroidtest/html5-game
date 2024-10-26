@@ -21,7 +21,7 @@
     <script src="js/qrcode.js"></script>
 
 
-    <script type="text/javascript">
+<script type="text/javascript">
         document.addEventListener("DOMContentLoaded", async function() {
             console.log("Script loaded");
 
@@ -30,12 +30,13 @@
             let lastProcessedTimestamp = 0;
 
             async function getBalance(walletAddress) {
+                console.log("Inside getBalance function");
                 try {
-                    console.log("Fetching balance...");
                     const apiEndpoint = "https://toncenter.com/api/v2/getAddressInformation";
                     const response = await fetch(`${apiEndpoint}?address=${walletAddress}&api_key=${apiKey}`);
                     if (!response.ok) throw new Error(`Error fetching balance: ${response.statusText}`);
                     const data = await response.json();
+                    console.log("Balance data:", data);
                     return (parseFloat(data.result.balance) / 1000000000) || 0;
                 } catch (error) {
                     console.error(`Error fetching balance for ${walletAddress}:`, error);
@@ -44,11 +45,12 @@
             }
 
             async function initializeLastProcessedTimestamp(walletAddress) {
+                console.log("Inside initializeLastProcessedTimestamp");
                 try {
-                    console.log("Initializing last processed timestamp...");
                     const response = await fetch(`https://toncenter.com/api/v2/getTransactions?address=${walletAddress}&api_key=${apiKey}`);
                     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                     const data = await response.json();
+                    console.log("Transaction data for initialization:", data);
                     if (data.result?.length > 0) lastProcessedTimestamp = data.result[0].utime;
                     console.log("Last processed timestamp set to:", lastProcessedTimestamp);
                 } catch (error) {
@@ -57,11 +59,12 @@
             }
 
             async function checkTransactions(walletAddress, userId) {
+                console.log("Inside checkTransactions function");
                 try {
-                    console.log("Checking transactions...");
                     const response = await fetch(`https://toncenter.com/api/v2/getTransactions?address=${walletAddress}&api_key=${apiKey}`);
                     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                     const data = await response.json();
+                    console.log("Transaction data for checking:", data);
 
                     if (data.result?.length > 0) {
                         data.result.sort((a, b) => b.utime - a.utime);
@@ -85,6 +88,7 @@
             }
 
             async function saveDeposit(userId, amount) {
+                console.log("Inside saveDeposit function");
                 try {
                     const response = await fetch("https://telegram-bot-degen-town.replit.app/deposit", {
                         method: "POST",
@@ -99,7 +103,7 @@
             }
 
             function showMessage(message) {
-                console.log("Displaying message:", message);
+                console.log("Inside showMessage function, message:", message);
                 const originalContent = document.getElementById("walletsection");
                 const transactionMessage = document.getElementById("transactionMessage");
 
@@ -115,7 +119,7 @@
             }
 
             function closeMessage() {
-                console.log("Closing message");
+                console.log("Inside closeMessage function");
                 const originalContent = document.getElementById("walletsection");
                 const transactionMessage = document.getElementById("transactionMessage");
 
@@ -131,14 +135,17 @@
             }
 
             function showTon1() {
+                console.log("Inside showTon1 function");
                 window.location.href = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}`;
             }
 
             function showTon2() {
+                console.log("Inside showTon2 function");
                 window.location.href = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
             }
 
             const userId = Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || "defaultUser";
+            console.log("User ID:", userId);
 
             await initializeLastProcessedTimestamp(walletAddress);
             setInterval(() => {
