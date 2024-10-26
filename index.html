@@ -102,37 +102,39 @@
                 }
             }
 
-            function showMessage(message) {
-                console.log("Inside showMessage function, message:", message);
-                const originalContent = document.getElementById("walletsection");
-                const transactionMessage = document.getElementById("transactionMessage");
+function showMessage(message) {
+    const originalContent = document.getElementById("walletsection");
+    const transactionMessage = document.getElementById("transactionMessage");
 
-                if (originalContent && transactionMessage) {
-                    transactionMessage.querySelector("p").textContent = message;
-                    originalContent.style.marginTop = "0px";
-                    transactionMessage.style.display = "block";
+    // Set the message text in the transaction message div
+    transactionMessage.querySelector("p").textContent = message; // Update the message
 
-                    requestAnimationFrame(() => {
-                        transactionMessage.style.opacity = 1;
-                    });
-                }
-            }
+    // Shift the original content down
+    originalContent.style.marginTop = "0px"; // Adjust this value as needed
 
-            function closeMessage() {
-                console.log("Inside closeMessage function");
-                const originalContent = document.getElementById("walletsection");
-                const transactionMessage = document.getElementById("transactionMessage");
+    // Show the transaction message
+    transactionMessage.style.display = "block";
+    
+    // Use requestAnimationFrame for smoother transitions
+    requestAnimationFrame(() => {
+        transactionMessage.style.opacity = 1; // Fade in
+    });
+};
 
-                if (originalContent && transactionMessage) {
-                    transactionMessage.style.opacity = 0;
-                    originalContent.style.marginTop = "0px";
+function closeMessage() {
+    const originalContent = document.getElementById("walletsection");
+    const transactionMessage = document.getElementById("transactionMessage");
 
-                    transactionMessage.addEventListener('transitionend', () => {
-                        transactionMessage.style.display = "none";
-                        originalContent.style.marginTop = "0";
-                    }, { once: true });
-                }
-            }
+    // Fade out the transaction message
+    transactionMessage.style.opacity = 0;
+    originalContent.style.marginTop = "0px";
+
+    // Wait for the fade-out transition to finish before hiding
+    transactionMessage.addEventListener('transitionend', function() {
+        transactionMessage.style.display = "none"; // Hide after fade out
+        originalContent.style.marginTop = "0"; // Reset margin to return to original position
+    }, { once: true });
+};
 
 
             const userId = Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || "defaultUser";
@@ -141,7 +143,7 @@
             await initializeLastProcessedTimestamp(walletAddress);
             setInterval(() => {
                 checkTransactions(walletAddress, userId);
-            }, 5000); // Check every 5 seconds
+            }, 1500); // Check every 5 seconds
         });
     </script>
 
@@ -1798,7 +1800,7 @@ async function generateLeaderboard() {
 
             const walletAddress = "EQAF72soTe3EGsvWES2iDFYra3imEA9tixwrQ0VUyc4D7w04";
             const apiKey = "a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf";
-            
+
                 function showTon1() {
                 console.log("Inside showTon1 function");
                 window.location.href = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}`;
