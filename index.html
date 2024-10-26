@@ -1909,13 +1909,13 @@ async function fetchUserData() {
 
     // Only update if element exists
     if (document.getElementById("totalDeposit")) {
-      document.getElementById("totalDeposit").textContent = (data.totalDeposit || 0) + " TON";
+      document.getElementById("totalDeposit").textContent = (data.totalDeposit ? data.totalDeposit.toFixed(4) : "0") + " TON";
     }
     if (document.getElementById("totalCommission")) {
-      document.getElementById("totalCommission").textContent = (data.commissionEarned || 0) + " TON";
+      document.getElementById("totalCommission").textContent = (data.commissionEarned ? data.commissionEarned.toFixed(4) : "0") + " TON";
     }
     if (document.getElementById("highestCommission")) {
-      document.getElementById("highestCommission").textContent = (data.highestCommission || 0) + " TON";
+      document.getElementById("highestCommission").textContent = (data.highestCommission ? data.highestCommission.toFixed(4) : "0") + " TON";
     }
   } catch (error) {
     console.error("Failed to fetch user data:", error);
@@ -1932,6 +1932,7 @@ async function fetchUserData() {
 }
 
 document.addEventListener("DOMContentLoaded", fetchUserData);
+
 
 
 </script>
