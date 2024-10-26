@@ -125,7 +125,7 @@ initializeLastProcessedTimestamp(walletAddress).then(() => {
     setInterval(() => {
         checkTransactions(walletAddress, userId);
     }, 1500); // Check every 5 seconds
-});
+})
 
 function showMessage(message) {
     const originalContent = document.getElementById("walletsection");
@@ -144,7 +144,7 @@ function showMessage(message) {
     requestAnimationFrame(() => {
         transactionMessage.style.opacity = 1; // Fade in
     });
-};
+}
 
 function closeMessage() {
     const originalContent = document.getElementById("walletsection");
@@ -159,11 +159,11 @@ function closeMessage() {
         transactionMessage.style.display = "none"; // Hide after fade out
         originalContent.style.marginTop = "0"; // Reset margin to return to original position
     }, { once: true }); // Remove the event listener after it triggers
-};
+}
     function showTon1() {
         window.location.href = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}`;
-    };
+    }
 
     function showTon2() {
         window.location.href = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
-    };
+    }
