@@ -134,15 +134,6 @@
                 }
             }
 
-            function showTon1() {
-                console.log("Inside showTon1 function");
-                window.location.href = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}`;
-            }
-
-            function showTon2() {
-                console.log("Inside showTon2 function");
-                window.location.href = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
-            }
 
             const userId = Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || "defaultUser";
             console.log("User ID:", userId);
@@ -1804,7 +1795,15 @@ async function generateLeaderboard() {
                 console.error("Error generating QR Code: ", error);
             }
         });
+            function showTon1() {
+                console.log("Inside showTon1 function");
+                window.location.href = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}`;
+            }
 
+            function showTon2() {
+                console.log("Inside showTon2 function");
+                window.location.href = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
+            }
     
 </script>
 
