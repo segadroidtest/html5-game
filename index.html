@@ -932,14 +932,6 @@ if (result.success) {
     }
 
 
-    function showTon1() {
-        window.location.href = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}`;
-    }
-
-    function showTon2() {
-        window.location.href = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
-    }
-
     function closeWalletPopup() {
         const walletPopup = document.getElementById('wallet-popup');
         walletPopup.style.display = 'none';
