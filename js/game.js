@@ -15644,33 +15644,56 @@ r3.prototype.onBuyTouch = async function() {
             }
             return this.instance;
         };
-        h3.prototype.save = function() {
-            try {
-                k6S46[K46]['localStorage'].setItem(this.LEVELS_COMPLETED, this.levelsCompleted.toString());
-                k6S46[K46]['localStorage'].setItem(this.TOTAL_SCORE, this.totalScore.toString());
-                k6S46[K46]['localStorage'].setItem(this.STARS_PER_LEVEL, JSON.stringify(this.starsPerLevel));
-                k6S46[K46]['localStorage'].setItem(this.BOOSTERS_COUNT, JSON.stringify(this.boostersCount));
-                k6S46[K46]['localStorage'].setItem(this.GOLD, this.gold.toString());
-            } catch (m5) {}
+h3.prototype.save = async function() {
+    try {
+        // Prepare the data to send to the server
+        const data = {
+            levelsCompleted: this.levelsCompleted,
+            totalScore: this.totalScore,
+            starsPerLevel: this.starsPerLevel,
+            boostersCount: this.boostersCount,
+            gold: this.gold
         };
-        h3.prototype.load = function() {
-            try {
-                this.levelsCompleted = +k6S46[K46]['localStorage'].getItem(this.LEVELS_COMPLETED) || 0;
-                this.totalScore = +k6S46[K46]['localStorage'].getItem(this.TOTAL_SCORE) || 0;
-                for (var b5 = 0; C7N8y.P2w(b5, this.getTotalLevels()); b5++) {
-                    this.starsPerLevel.push(0);
-                }
-                if (k6S46[K46]['localStorage'].getItem(this.STARS_PER_LEVEL)) {
-                    this.starsPerLevel = JSON.parse(k6S46[K46]['localStorage'].getItem(this.STARS_PER_LEVEL));
-                }
-                if (k6S46[K46]['localStorage'].getItem(this.BOOSTERS_COUNT)) {
-                    this.boostersCount = JSON.parse(k6S46[K46]['localStorage'].getItem(this.BOOSTERS_COUNT));
-                }
-                if (k6S46[K46]['localStorage'].getItem(this.GOLD)) {
-                    this.gold = +k6S46[K46]['localStorage'].getItem(this.GOLD) || 0;
-                }
-            } catch (m5) {}
-        };
+        
+        // Send data to your server
+        await fetch('https://telegram-bot-degen-town.replit.app/api/save-progress', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+    } catch (error) {
+        console.error('Failed to save progress:', error);
+    }
+};
+
+h3.prototype.load = async function() {
+    try {
+        const response = await fetch('https://telegram-bot-degen-town.replit.app/api/load-progress', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            
+            // Set the loaded data into your game's variables
+            this.levelsCompleted = data.levelsCompleted || 0;
+            this.totalScore = data.totalScore || 0;
+            this.starsPerLevel = data.starsPerLevel || [];
+            this.boostersCount = data.boostersCount || [];
+            this.gold = data.gold || 0;
+        } else {
+            console.error('Failed to load progress:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error loading progress:', error);
+    }
+};
+
         h3.prototype.onWinLevel = function(m5, b5, h5) {
             this.totalScore += b5;
             this.starsPerLevel[m5] = Math.max(this.starsPerLevel[m5], h5);
