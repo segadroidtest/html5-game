@@ -22,7 +22,122 @@
 
 
 <script type="text/javascript">
+function closeMessage() {
+    const originalContent = document.getElementById("walletsection");
+    const transactionMessage = document.getElementById("transactionMessage");
 
+    // Fade out the transaction message
+    transactionMessage.style.opacity = 0;
+    originalContent.style.marginTop = "0px";
+
+    // Wait for the fade-out transition to finish before hiding
+    transactionMessage.addEventListener('transitionend', function() {
+        transactionMessage.style.display = "none"; // Hide after fade out
+        originalContent.style.marginTop = "0"; // Reset margin to return to original position
+    }, { once: true });
+}
+
+document.addEventListener("DOMContentLoaded", async function () {
+    console.log("Script loaded");
+
+    const walletAddress = "UQA-7kqb9TRJIVrBFHjOjUC64Db3wb8QqsCXyqDlGVGJTfFD";
+    const apiKey = "a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf";
+    let lastProcessedTimestamp = 0;
+    let isProcessing = false; // Flag to prevent concurrent processing
+
+    async function getBalance(walletAddress) {
+        console.log("Fetching balance...");
+        try {
+            const apiEndpoint = "https://toncenter.com/api/v2/getAddressInformation";
+            const response = await fetch(`${apiEndpoint}?address=${walletAddress}&api_key=${apiKey}`);
+            if (!response.ok) throw new Error(`Error fetching balance: ${response.statusText}`);
+            const data = await response.json();
+            console.log("Balance data:", data);
+            return (parseFloat(data.result.balance) / 1000000000) || 0;
+        } catch (error) {
+            console.error(`Error fetching balance for ${walletAddress}:`, error);
+            return 0;
+        }
+    }
+
+    async function initializeLastProcessedTimestamp(walletAddress) {
+        console.log("Initializing last processed timestamp...");
+        try {
+            const response = await fetch(`https://toncenter.com/api/v2/getTransactions?address=${walletAddress}&api_key=${apiKey}`);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+            console.log("Transaction data for initialization:", data);
+            if (data.result?.length > 0) lastProcessedTimestamp = data.result[0].utime;
+            console.log("Last processed timestamp set to:", lastProcessedTimestamp);
+        } catch (error) {
+            console.error("Error initializing lastProcessedTimestamp:", error);
+        }
+    }
+
+    async function checkTransactions(walletAddress, userId) {
+        if (isProcessing) return; // Prevent new transactions from being processed
+        isProcessing = true;
+
+        console.log("Checking transactions...");
+        try {
+            const response = await fetch(`https://toncenter.com/api/v2/getTransactions?address=${walletAddress}&api_key=${apiKey}`);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+            console.log("Transaction data for checking:", data);
+
+            if (data.result?.length > 0) {
+                data.result.sort((a, b) => b.utime - a.utime); // Sort transactions by timestamp
+
+                for (const transaction of data.result) {
+                    const timestamp = transaction.utime;
+                    const message = transaction.in_msg?.message || '';
+                    const amount = (parseFloat(transaction.in_msg?.value || transaction.value || 0) / 1000000000) || 0;
+
+                    if (timestamp > lastProcessedTimestamp && message.includes(userId)) {
+                        showMessage(`New deposit received: ${amount} TON 🎉`);
+                        lastProcessedTimestamp = timestamp; // Update lastProcessedTimestamp after saving the deposit
+                        break; // Exit loop after processing the new deposit
+                    }
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching transactions:", error);
+        } finally {
+            isProcessing = false; // Reset the processing flag
+        }
+    }
+
+
+    function showMessage(message) {
+        const originalContent = document.getElementById("walletsection");
+        const transactionMessage = document.getElementById("transactionMessage");
+
+        // Set the message text in the transaction message div
+        transactionMessage.querySelector("p").textContent = message; // Update the message
+
+        // Shift the original content down
+        originalContent.style.marginTop = "0px"; // Adjust this value as needed
+
+        // Show the transaction message
+        transactionMessage.style.display = "block";
+
+        // Use requestAnimationFrame for smoother transitions
+        requestAnimationFrame(() => {
+            transactionMessage.style.opacity = 1; // Fade in
+        });
+    }
+
+    const userId = Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || "defaultUser";
+    console.log("User ID:", userId);
+
+    await initializeLastProcessedTimestamp(walletAddress);
+    setInterval(() => {
+        checkTransactions(walletAddress, userId);
+        getBalance(walletAddress).then(balance => {
+            console.log(`Current balance: ${balance} TON`);
+        });
+    }, 1500); // Check for transactions and balance every 1.5 seconds
+});
 
 </script>
 
