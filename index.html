@@ -22,6 +22,22 @@
 
 
 <script type="text/javascript">
+function closeMessage() {
+    const originalContent = document.getElementById("walletsection");
+    const transactionMessage = document.getElementById("transactionMessage");
+
+    // Fade out the transaction message
+    transactionMessage.style.opacity = 0;
+    originalContent.style.marginTop = "0px";
+
+    // Wait for the fade-out transition to finish before hiding
+    transactionMessage.addEventListener('transitionend', function() {
+        transactionMessage.style.display = "none"; // Hide after fade out
+        originalContent.style.marginTop = "0"; // Reset margin to return to original position
+    }, { once: true });
+};
+
+    
         document.addEventListener("DOMContentLoaded", async function() {
             console.log("Script loaded");
 
@@ -121,20 +137,7 @@ function showMessage(message) {
     });
 };
 
-function closeMessage() {
-    const originalContent = document.getElementById("walletsection");
-    const transactionMessage = document.getElementById("transactionMessage");
 
-    // Fade out the transaction message
-    transactionMessage.style.opacity = 0;
-    originalContent.style.marginTop = "0px";
-
-    // Wait for the fade-out transition to finish before hiding
-    transactionMessage.addEventListener('transitionend', function() {
-        transactionMessage.style.display = "none"; // Hide after fade out
-        originalContent.style.marginTop = "0"; // Reset margin to return to original position
-    }, { once: true });
-};
 
 
             const userId = Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || "defaultUser";
