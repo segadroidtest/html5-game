@@ -21001,19 +21001,9 @@ PreloaderState = (function(S5) {
     // Handle progress of asset loading
     t5.prototype.handleProgress = function(m5) {
         this.loadingBar.setProgress(m5.loaded);
-
-        // Check if loading is complete
-        if (m5.loaded >= 1) {
-            this.nextState(); // Transition to the next state after assets are fully loaded
-        }
     };
-
-    // Method to transition to the next state after loading
-    t5.prototype.nextState = function() {
-        this.state.start('MainMenuState'); // Adjust this to your next state
-    };
-    
     t5.prototype.onOrientationChanged = function(m5) {};
+    return t5;
     
     return t5;
 })(DNGameState),
