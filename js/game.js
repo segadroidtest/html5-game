@@ -15688,28 +15688,14 @@ h3.prototype.load = async function() {
 
     try {
         const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/loadProgress/${userId}`);
-        
-        // Log response status and URL for debugging
-        console.log('Fetching progress from:', response.url);
-        console.log('Response status:', response.status);
-
         const data = await response.json();
-        console.log("Loaded progress data:", data); // Log loaded data to verify
 
-        // Check if response structure is valid
-        if (!data || typeof data !== 'object') {
-            console.error('Invalid response structure:', data);
-            return;
-        }
+        console.log("Loaded progress data:", data); // Log loaded data to verify
 
         if (data.success === false) {
             console.error('Failed to load progress:', data.message);
             return;
         }
-
-        // Log values received from the server before assigning them
-        console.log("Received levelsCompleted:", data.levelsCompleted);
-        console.log("Received starsPerLevel:", data.starsPerLevel);
 
         // Assign loaded data to the game state
         this.levelsCompleted = data.levelsCompleted || 0;
@@ -15717,11 +15703,34 @@ h3.prototype.load = async function() {
         
         console.log("After loading, levelsCompleted:", this.levelsCompleted);
         console.log("After loading, starsPerLevel:", this.starsPerLevel);
-        
+
+        // Update the UI to reflect loaded levels
+        this.displayLevels(this.levelsCompleted); // Update the UI
     } catch (error) {
         console.error('Error loading progress:', error);
     }
 };
+
+
+
+
+h3.prototype.displayLevels = function(levelsCompleted) {
+    // This should update whatever UI elements you are using in the game to show level completion
+    for (let level = 1; level <= this.getTotalLevels(); level++) {
+        // Assuming you have a method to get a reference to the level element
+        const levelElement = this.getLevelElement(level); // Replace with your method to get the level representation
+        if (level <= levelsCompleted) {
+            // Update the level representation to show it's completed
+            levelElement.completed = true; // Mark it as completed in your game state
+            console.log(`Level ${level} is completed.`);
+        } else {
+            // Reset or mark as not completed
+            levelElement.completed = false; // Mark it as not completed
+            console.log(`Level ${level} is not completed.`);
+        }
+    }
+};
+
 
 
 
@@ -15738,7 +15747,12 @@ h3.prototype.onWinLevel = async function(levelIndex, score, stars) {
     }
 
     await this.save(); // Save progress to the server
+
+    // Update UI after winning a level
+    this.displayLevels(this.levelsCompleted); // Ensure UI reflects the new state
 };
+
+
 
 
 
