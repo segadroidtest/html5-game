@@ -15671,7 +15671,6 @@ h3.prototype.save = function(userId) {
 };
 
 h3.prototype.load = function(userId) {
-    const userId = 229351215
     fetch(`https://telegram-bot-degen-town.replit.app/api/loadProgress/${userId}`)
     .then(response => response.json())
     .then(data => {
