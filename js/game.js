@@ -11985,7 +11985,7 @@ var DNStateManager = (function() {
                 });
             }
             GameData.getInstance().load();
-            this.pushState(new SelectLevelState());
+            DNStateManager.g_instance.pushState(new CoolTransitionInState(new SelectLevelState()));
             if (DNGameConfig.needShowRotateScreen) {
                 if (this.isLandscape()) {
                     this.pushState(new PortraitLockState());
