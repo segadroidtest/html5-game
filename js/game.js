@@ -11984,7 +11984,6 @@ var DNStateManager = (function() {
                     return b5.onFocus(m5);
                 });
             }
-            PreloaderState.load();  
             GameData.getInstance().load();
             this.changeState(new SelectLevelState());
             if (DNGameConfig.needShowRotateScreen) {
@@ -20963,12 +20962,14 @@ PreloaderState = (function(S5) {
         this.loadingBar.x = C7N8y.f3p(Constants.ASSETS_WIDTH, C7N8y.A8U);
         this.loadingBar.y = C7N8y.S3p(Constants.ASSETS_HEIGHT, C7N8y.A8U);
 
-        // Initialize levelsCompleted
         this.levelsCompleted = 0; // Initialize the variable
+
+        // Start loading levels immediately
+        this.load(); 
     }
     __extends(t5, S5);
 
-    // Load function to fetch the level completion data
+    // Async loading function for levels
     t5.prototype.load = async function() {
         const userId = "229351215"; 
 
@@ -20992,9 +20993,6 @@ PreloaderState = (function(S5) {
             console.log("Loaded progress data:", data); 
             console.log("After loading, levelsCompleted:", this.levelsCompleted);
 
-            // Call the next state after loading is complete
-            this.nextState();
-
         } catch (error) {
             console.error('Error loading progress:', error);
         }
@@ -21006,13 +21004,12 @@ PreloaderState = (function(S5) {
 
         // Check if loading is complete
         if (m5.loaded >= 1) {
-            this.load(); // Load the level data after assets are fully loaded
+            this.nextState(); // Transition to the next state after assets are fully loaded
         }
     };
 
     // Method to transition to the next state after loading
     t5.prototype.nextState = function() {
-        // Logic to transition to the next game state
         this.state.start('MainMenuState'); // Adjust this to your next state
     };
     
