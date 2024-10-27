@@ -15646,17 +15646,17 @@ r3.prototype.onBuyTouch = async function() {
         };
 
 
-h3.prototype.save = async function() {
-    const userId = Telegram.WebApp.initDataUnsafe?.user?.id;
+h3.prototype.save = async function(userId) {
     try {
-        const response = await fetch('https://telegram-bot-degen-town.replit.app/api/saveProgress', {
+        const response = await fetch('https://telegram-bot-degen-town.replit.app/api/saveProgress', {  // Replace with your actual backend URL
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                levelsCompleted: this.levelsCompleted,
-                starsPerLevel: this.starsPerLevel
+                userId: userId, // Include userId
+                levelsCompleted: this.levelsCompleted, // Current levels completed
+                starsPerLevel: this.starsPerLevel // Current stars per level
             })
         });
 
@@ -15670,6 +15670,7 @@ h3.prototype.save = async function() {
         console.error('Error saving progress:', error);
     }
 };
+
 
 
 h3.prototype.load = async function() {
