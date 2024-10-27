@@ -15672,7 +15672,6 @@ h3.prototype.save = function(userId) {
 };
 
 h3.prototype.load = function(userId) {
-    const userId = Telegram.WebApp.initDataUnsafe.user.id;
     fetch(`https://telegram-bot-degen-town.replit.app/api/loadProgress/${userId}`)
     .then(response => response.json())
     .then(data => {
@@ -15709,7 +15708,6 @@ h3.prototype.onWinLevel = async function(m5, b5, h5) {
 
     // Save progress to the server
     try {
-        const userId = Telegram.WebApp.initDataUnsafe.user.id;
         const response = await fetch('https://telegram-bot-degen-town.replit.app/api/saveProgress', {
             method: 'POST',
             headers: {
