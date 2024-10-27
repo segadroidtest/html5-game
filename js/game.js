@@ -20963,9 +20963,6 @@ PreloaderState = (function(S5) {
             console.log("Loaded progress data:", data); 
             console.log("After loading, levelsCompleted:", this.levelsCompleted);
 
-            // Update the UI to reflect the loaded levels
-            this.updateLevelSelectionUI();
-
         } catch (error) {
             console.error('Error loading progress:', error);
         }
