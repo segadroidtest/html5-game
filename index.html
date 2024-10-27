@@ -2192,27 +2192,20 @@ async function fetchTotalDeposits() {
     }
 }
 
-
-
 async function fetchTonToUsdRate() {
-    const currentTime = Date.now();
-    if (currentTime - lastFetchedTime < 60000 && lastFetchedRate !== null) {
-        return lastFetchedRate; // Return cached value
-    }
-
+    const url = "https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd";
     try {
-        const response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd");
-        if (!response.ok) throw new Error("Failed to fetch rate");
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Error fetching TON to USD rate: ${response.status}`);
+        }
         const data = await response.json();
-        lastFetchedRate = data["the-open-network"].usd; // Cache the value
-        lastFetchedTime = currentTime; // Update fetch time
-        return lastFetchedRate;
+        return data["the-open-network"].usd; // Return the rate
     } catch (error) {
-        console.error("Error fetching TON to USD rate:", error);
-        return null; // Return null on error
+        console.error(error);
+        return null; // Return null in case of error
     }
 }
-
 
 async function updatePage() {
     try {
