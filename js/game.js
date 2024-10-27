@@ -15676,14 +15676,11 @@ h3.prototype.save = async function() {
 
 
 
-
-
-
 h3.prototype.load = async function() {
     const userId = "229351215"; // Ensure this is the correct userId
 
     try {
-        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/loadProgress/${userId}`); // Use GET request
+        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/loadProgress/${userId}`);
 
         if (!response.ok) {
             const errorText = await response.text();
@@ -15693,17 +15690,18 @@ h3.prototype.load = async function() {
 
         const data = await response.json(); // Convert response to JSON
 
-        // Check if data contains levelsCompleted and starsPerLevel
-        if (data && data.levelsCompleted !== undefined && data.starsPerLevel) {
-            this.levelsCompleted = data.levelsCompleted || 0;
-            this.starsPerLevel = data.starsPerLevel || Array(this.getTotalLevels()).fill(0);
+        if (data && data.levelsCompleted !== undefined) {
+            this.levelsCompleted = data.levelsCompleted || 0; // Load only levelsCompleted
         } else {
             console.error('Invalid data received from server:', data);
         }
 
         console.log("Loaded progress data:", data); // Log loaded data to verify
         console.log("After loading, levelsCompleted:", this.levelsCompleted);
-        console.log("After loading, starsPerLevel:", this.starsPerLevel);
+
+        // Update the UI to reflect the loaded levels
+        this.updateLevelSelectionUI();
+
     } catch (error) {
         console.error('Error loading progress:', error);
     }
@@ -21400,6 +21398,16 @@ PreloaderState = (function(S5) {
         }
         __extends(s0, C0);
 
+s0.prototype.updateLevelSelectionUI = function() {
+    // Iterate through levels and update the UI elements based on this.levelsCompleted
+    for (let levelIndex = 0; levelIndex < this.getTotalLevels(); levelIndex++) {
+        const levelElement = this.getLevelElement(levelIndex); // Assuming this method retrieves the correct DOM element for a level
+        if (levelElement) {
+            // Update the element's state based on the completed levels
+            levelElement.classList.toggle('completed', levelIndex < this.levelsCompleted);
+        }
+    }
+};
 
 s0.prototype.fetchpoints = async function() {
     // Fetch and display the total points directly inside SelectLevelState
