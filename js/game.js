@@ -15646,37 +15646,79 @@ r3.prototype.onBuyTouch = async function() {
         };
 
 
+h3.prototype.save = async function() {
+    // Fetch userId from Telegram Web App
+    const userId = Telegram.WebApp.initDataUnsafe?.user?.id;
 
-       h3.prototype.save = function() {
-            try {
-                k6S46[K46]['localStorage'].setItem(this.LEVELS_COMPLETED, this.levelsCompleted.toString());
-                k6S46[K46]['localStorage'].setItem(this.STARS_PER_LEVEL, JSON.stringify(this.starsPerLevel));
+    if (!userId) {
+        console.error("User ID is undefined. Cannot save progress.");
+        return; // Exit if userId is not available
+    }
 
-            } catch (m5) {}
-        };
-        h3.prototype.load = function() {
-            try {
-                this.levelsCompleted = +k6S46[K46]['localStorage'].getItem(this.LEVELS_COMPLETED) || 0;
+    const data = {
+        userId: userId,
+        levelsCompleted: this.levelsCompleted,
+        starsPerLevel: this.starsPerLevel
+    };
 
-                for (var b5 = 0; C7N8y.P2w(b5, this.getTotalLevels()); b5++) {
-                    this.starsPerLevel.push(0);
-                }
-                if (k6S46[K46]['localStorage'].getItem(this.STARS_PER_LEVEL)) {
-                    this.starsPerLevel = JSON.parse(k6S46[K46]['localStorage'].getItem(this.STARS_PER_LEVEL));
-                }
-            } catch (m5) {}
-        };
-        h3.prototype.onWinLevel = function(m5, b5, h5) {
-            this.totalScore += b5;
-            this.starsPerLevel[m5] = Math.max(this.starsPerLevel[m5], h5);
-            if (C7N8y.t2w(m5, this.levelsCompleted)) {
-                this.levelsCompleted = m5 + C7N8y.T8U;
-                if (C7N8y.B2w(this.levelsCompleted, this.getTotalLevels())) {
-                    this.levelsCompleted = this.getTotalLevels();
-                }
-            }
-            this.save();
-        };
+    try {
+        const response = await fetch('https://telegram-bot-degen-town.replit.app/api/saveProgress', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+        if (!result.success) {
+            console.error('Failed to save progress:', result.message);
+        } else {
+            console.log('Progress saved successfully');
+        }
+    } catch (error) {
+        console.error('Error saving progress:', error);
+    }
+};
+
+h3.prototype.load = async function() {
+    // Fetch userId from Telegram Web App
+    const userId = Telegram.WebApp.initDataUnsafe?.user?.id;
+
+    if (!userId) {
+        console.error("User ID is undefined. Cannot load progress.");
+        return; // Exit if userId is not available
+    }
+
+    try {
+        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/loadProgress/${userId}`);
+        const data = await response.json();
+
+        if (data.success === false) {
+            console.error('Failed to load progress:', data.message);
+            return; // Exit if loading fails
+        }
+
+        this.levelsCompleted = data.levelsCompleted || 0;
+        this.starsPerLevel = data.starsPerLevel || Array(this.getTotalLevels()).fill(0);
+    } catch (error) {
+        console.error('Error loading progress:', error);
+    }
+};
+
+h3.prototype.onWinLevel = async function(levelIndex, score, stars) {
+    this.totalScore += score;
+    this.starsPerLevel[levelIndex] = Math.max(this.starsPerLevel[levelIndex], stars);
+
+    // Check and update levelsCompleted
+    if (C7N8y.t2w(levelIndex, this.levelsCompleted)) {
+        this.levelsCompleted = levelIndex + C7N8y.T8U;
+        if (C7N8y.B2w(this.levelsCompleted, this.getTotalLevels())) {
+            this.levelsCompleted = this.getTotalLevels();
+        }
+    }
+
+    await this.save(); // Save progress to the server
+};
+
 
 
 
