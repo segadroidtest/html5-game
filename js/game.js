@@ -15768,7 +15768,7 @@ h3.prototype.onWinLevel = async function(m5, b5, h5) {
             return this.totalPoints;
         };
 h3.prototype.totalPoints = async function() {
-    const userId = Telegram.WebApp.initDataUnsafe.user.id;
+
 
     try {
         const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
