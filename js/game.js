@@ -15647,37 +15647,30 @@ r3.prototype.onBuyTouch = async function() {
 
 
 h3.prototype.save = async function() {
-    // Fetch userId from Telegram Web App
     const userId = Telegram.WebApp.initDataUnsafe?.user?.id;
-
-    if (!userId) {
-        console.error("User ID is undefined. Cannot save progress.");
-        return; // Exit if userId is not available
-    }
-
-    const data = {
-        userId: userId,
-        levelsCompleted: this.levelsCompleted,
-        starsPerLevel: this.starsPerLevel
-    };
-
     try {
         const response = await fetch('https://telegram-bot-degen-town.replit.app/api/saveProgress', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                levelsCompleted: this.levelsCompleted,
+                starsPerLevel: this.starsPerLevel
+            })
         });
 
-        const result = await response.json();
-        if (!result.success) {
-            console.error('Failed to save progress:', result.message);
-        } else {
-            console.log('Progress saved successfully');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
+
+        const result = await response.json();
+        console.log('Progress saved:', result);
     } catch (error) {
         console.error('Error saving progress:', error);
     }
 };
+
 
 h3.prototype.load = async function() {
     // Fetch userId from Telegram Web App
