@@ -15644,30 +15644,30 @@ r3.prototype.onBuyTouch = async function() {
             }
             return this.instance;
         };
+// Function to save level progress
 h3.prototype.save = async function() {
     try {
-        const data = {
-            levelsCompleted: this.levelsCompleted,
-            totalScore: this.totalScore,
-            starsPerLevel: this.starsPerLevel,
-            boostersCount: this.boostersCount,
-            gold: this.gold
-        };
-        console.log("Saving data:", data);
-
-        await fetch('https://telegram-bot-degen-town.replit.app/api/save-progress', {
+        const data = { levelsCompleted: this.levelsCompleted };
+        
+        const response = await fetch('https://telegram-bot-degen-town.replit.app/api/save-progress', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
         });
+
+        if (!response.ok) {
+            throw new Error('Failed to save level progress');
+        }
+        
+        console.log("Level progress saved:", data.levelsCompleted);
     } catch (error) {
-        console.error('Failed to save progress:', error);
+        console.error('Failed to save level progress:', error);
     }
 };
 
-
+// Function to load level progress
 h3.prototype.load = async function() {
     try {
         const response = await fetch('https://telegram-bot-degen-town.replit.app/api/load-progress', {
@@ -15679,20 +15679,16 @@ h3.prototype.load = async function() {
 
         if (response.ok) {
             const data = await response.json();
-            console.log("Loaded data:", data); // Log data to check response
-
             this.levelsCompleted = data.levelsCompleted || 0;
-            this.totalScore = data.totalScore || 0;
-            this.starsPerLevel = data.starsPerLevel || [];
-            this.boostersCount = data.boostersCount || 0;
-            this.gold = data.gold || 0;
+            console.log("Loaded level progress:", this.levelsCompleted);
         } else {
-            console.error('Failed to load progress:', response.statusText);
+            console.error('Failed to load level progress:', response.statusText);
         }
     } catch (error) {
-        console.error('Error loading progress:', error);
+        console.error('Error loading level progress:', error);
     }
 };
+
 
 
         h3.prototype.onWinLevel = function(m5, b5, h5) {
