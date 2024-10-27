@@ -15648,19 +15648,21 @@ r3.prototype.onBuyTouch = async function() {
 
 h3.prototype.save = async function(userId) {
     try {
-        const response = await fetch('https://telegram-bot-degen-town.replit.app/api/saveProgress', {  // Replace with your actual backend URL
+        const response = await fetch('https://telegram-bot-degen-town.replit.app/api/saveProgress', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                userId: userId, // Include userId
-                levelsCompleted: this.levelsCompleted, // Current levels completed
-                starsPerLevel: this.starsPerLevel // Current stars per level
+                userId: userId,
+                levelsCompleted: this.levelsCompleted,
+                starsPerLevel: this.starsPerLevel
             })
         });
 
         if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Error response from server:', errorText);
             throw new Error('Network response was not ok');
         }
 
