@@ -15683,7 +15683,10 @@ h3.prototype.load = async function() {
     const userId = "229351215";
     try {
         const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/loadProgress/${userId}`);
-        const data = await response.json();
+            const data = {
+        levelsCompleted: 4,
+        starsPerLevel: [1, 2, 3, 4]  
+    };
 
         console.log("Loaded progress data:", data); // Log loaded data to verify
 
@@ -15692,10 +15695,7 @@ h3.prototype.load = async function() {
             return;
         }
 
-    const data = {
-        levelsCompleted: 4,
-        starsPerLevel: [1, 2, 3, 4]  
-    };
+
 
     if (!userId) {
         console.error("User ID is undefined. Cannot load progress.");
