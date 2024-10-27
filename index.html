@@ -2176,9 +2176,12 @@ loadWithdrawAddress();
 
 <script>
 let lastBalanceInUsd = 0; // Initialize lastBalanceInUsd
+let lastFetchTime = 0; // Initialize last fetch time
+const fetchInterval = 60000; // 60 seconds
+const goal = 100000; // Set your goal amount here
 
 async function fetchTotalDeposits() {
-    const apiEndpoint = 'https://telegram-bot-degen-town.replit.app/api/total-deposits'; // Ensure this is the correct endpoint
+    const apiEndpoint = 'https://telegram-bot-degen-town.replit.app/api/total-deposits';
     try {
         const response = await fetch(apiEndpoint);
         if (!response.ok) {
@@ -2208,9 +2211,17 @@ async function fetchTonToUsdRate() {
 }
 
 async function updatePage() {
+    const now = Date.now();
+    if (now - lastFetchTime < fetchInterval) {
+        return; // Skip fetch if less than 60 seconds since last fetch
+    }
+
+    lastFetchTime = now; // Update last fetch time
+    document.getElementById("loading").style.display = "block"; // Show loading indicator
     try {
         const totalDepositsInUsd = await fetchTotalDeposits();
         const tonRate = await fetchTonToUsdRate();
+        document.getElementById("loading").style.display = "none"; // Hide loading indicator
 
         if (tonRate !== null) {
             // Update the progress bar and text
@@ -2225,6 +2236,7 @@ async function updatePage() {
             }
         }
     } catch (error) {
+        document.getElementById("loading").style.display = "none"; // Hide loading indicator on error
         console.error("Error updating page:", error);
     }
 }
@@ -2237,7 +2249,6 @@ updatePage();
 
 // Update the updateProgressBar function to ensure it uses the defined variable
 function updateProgressBar(totalDepositsInUsd) {
-    const goal = 100000; // Set your goal amount here
     const progressBar = document.getElementById("progress-bar");
     const progressText = document.getElementById("progress-text");
 
@@ -2275,6 +2286,7 @@ function animateValue(element, start, end, duration) {
 
     window.requestAnimationFrame(step);
 }
+
 
 
 
