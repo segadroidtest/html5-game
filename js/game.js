@@ -15693,8 +15693,8 @@ h3.prototype.load = async function() {
 
 
         const data = await response.json(); // Convert response to JSON
-        this.levelsCompleted = userdata.levelsCompleted || 0;
-        this.starsPerLevel = userdata.starsPerLevel || Array(this.getTotalLevels()).fill(0);
+        this.levelsCompleted = data.levelsCompleted || 0;
+        this.starsPerLevel = data.starsPerLevel || Array(this.getTotalLevels()).fill(0);
 
 
         console.log("Loaded progress data:", data); // Log loaded data to verify
