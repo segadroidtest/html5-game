@@ -15654,7 +15654,7 @@ h3.prototype.save = function(userId) {
         starsPerLevel: this.starsPerLevel
     };
 
-    fetch('/api/saveProgress', {
+    fetch('https://telegram-bot-degen-town.replit.app/api/saveProgress', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
