@@ -11985,7 +11985,7 @@ var DNStateManager = (function() {
                 });
             }
             GameData.getInstance().load();
-            DNStateManager.g_instance.pushState(new CoolTransitionInState(new SelectLevelState()));
+            this.changeState(new MainMenuState());
             if (DNGameConfig.needShowRotateScreen) {
                 if (this.isLandscape()) {
                     this.pushState(new PortraitLockState());
@@ -21386,12 +21386,7 @@ PreloaderState = (function(S5) {
             this.findGUIObject(Layouts.NAME_STARS).setText(GameData.getInstance().totalStars().toString());
             this.findGUIObject(Layouts.NAME_SCORE).setText(GameData.getInstance().getTotalScore().toString());
             this.findGUIObject(Layouts.NAME_BUTTON_BACK).setHandler(function() {
-                        if (C7N8y.u2w(m5, C7N8y.W8U)) {
-                PlayState.g_instance.saveByBooster(this.loseReason);
-                this.hide();
-            } else {
-                DNStateManager.g_instance.pushState(new BuyMoreBoostersState(this.booster));
-            }
+                        return p2.onExitTouch();
 
             });
 
