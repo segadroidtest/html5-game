@@ -20966,11 +20966,119 @@ PreloaderState = (function(S5) {
 
         // Start loading levels immediately
         this.load(); 
-        return F3.onPlayTouch();
+        this.generageLevel();
     }
     __extends(t5, S5);
 
-    // Async loading function for levels
+        t5.prototype.generageLevel = async function() {
+            var m5 = GameData.getInstance().mapEditorLevel;
+            for (var b5 = C7N8y.W8U; C7N8y.w3u(b5, this.fieldWidth); b5++) {
+                for (var h5 = C7N8y.W8U; C7N8y.z3u(h5, this.fieldHeight); h5++) {
+                    m5.form[h5][b5] = (this.field[b5][h5].isHole() ? C7N8y.W8U : C7N8y.T8U);
+                    if (this.field[b5][h5].isHole()) {
+                        m5.chips[h5][b5] = C7N8y.W8U;
+                    } else {
+                        if (this.field[b5][h5].isStoneHeart()) {
+                            m5.chips[h5][b5] = C7N8y.c8U;
+                        } else {
+                            if (this.field[b5][h5].isStrawberry()) {
+                                m5.chips[h5][b5] = C7N8y.D8U;
+                            } else {
+                                if (this.field[b5][h5].isChocolate()) {
+                                    m5.chips[h5][b5] = -C7N8y.T8U;
+                                } else {
+                                    m5.chips[h5][b5] = this.field[b5][h5].getColorID() + (this.field[b5][h5].haveCage() ? C7N8y.J12 : C7N8y.W8U);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            var O5 = C7N8y.Q72;
+            for (var b5 = C7N8y.W8U; C7N8y.q3u(b5, this.fieldWidth); b5++) {
+                for (var h5 = C7N8y.W8U; C7N8y.n3u(h5, this.fieldHeight); h5++) {
+                    if (C7N8y.N3u(this.fieldDirt[b5][h5], C7N8y.W8U)) {
+                        O5 = C7N8y.s22;
+                    }
+                }
+            }
+            if (O5) {
+                var W5 = new Array(this.fieldHeight);
+                for (var R5 = C7N8y.W8U; C7N8y.H3u(R5, this.fieldHeight); R5++) {
+                    W5[R5] = new Array(this.fieldWidth);
+                }
+                for (var b5 = C7N8y.W8U; C7N8y.X3u(b5, this.fieldWidth); b5++) {
+                    for (var h5 = C7N8y.W8U; C7N8y.C3u(h5, this.fieldHeight); h5++) {
+                        W5[h5][b5] = this.fieldDirt[b5][h5];
+                    }
+                }
+                m5.dirt = W5;
+            } else {
+                m5.dirt = C7N8y.S22;
+            }
+            if (this.loseTypeMoves) {
+                m5.moves = this.loseCounter;
+                m5.time = C7N8y.W8U;
+            } else {
+                m5.moves = C7N8y.W8U;
+                m5.time = this.loseCounter;
+            }
+            m5.score_goal_count = C7N8y.W8U;
+            m5.chip_goal = C7N8y.W8U;
+            m5.chip_types = this.colorsCount;
+            switch (this.goal) {
+                case C7N8y.B12:
+                    m5.goal = PlayState.GOAL_SCORE;
+                    m5.score_goal_count = this.goalCounter;
+                    break;
+                case C7N8y.i7U:
+                    m5.goal = PlayState.GOAL_STRAWBERRY;
+                    break;
+                case C7N8y.n12:
+                    m5.goal = PlayState.GOAL_DIRT;
+                    break;
+                case C7N8y.i72:
+                    m5.goal = PlayState.GOAL_COUNT;
+                    m5.chip_goal = C7N8y.T8U;
+                    m5.chip_goal_count = this.goalCounter;
+                    break;
+                case C7N8y.c72:
+                    m5.goal = PlayState.GOAL_COUNT;
+                    m5.chip_goal = C7N8y.A8U;
+                    m5.chip_goal_count = this.goalCounter;
+                    break;
+                case C7N8y.i62:
+                    m5.goal = PlayState.GOAL_COUNT;
+                    m5.chip_goal = C7N8y.L8U;
+                    m5.chip_goal_count = this.goalCounter;
+                    break;
+                case C7N8y.n62:
+                    m5.goal = PlayState.GOAL_COUNT;
+                    m5.chip_goal = C7N8y.S8U;
+                    m5.chip_goal_count = this.goalCounter;
+                    break;
+                case C7N8y.W62:
+                    m5.goal = PlayState.GOAL_COUNT;
+                    m5.chip_goal = C7N8y.f8U;
+                    m5.chip_goal_count = this.goalCounter;
+                    break;
+                case C7N8y.i12:
+                    m5.goal = PlayState.GOAL_COUNT;
+                    m5.chip_goal = C7N8y.x8U;
+                    m5.chip_goal_count = this.goalCounter;
+                    break;
+                case C7N8y.Z12:
+                    m5.goal = PlayState.GOAL_COUNT;
+                    m5.chip_goal = C7N8y.d8U;
+                    m5.chip_goal_count = this.goalCounter;
+                    break;
+            }
+            m5.bombCounter = this.bombCounter;
+            m5.bombProb = C7N8y.I3u(this.bombProb, C7N8y.G82);
+            console.log(JSON.stringify(m5));
+        };
+
+
     t5.prototype.load = async function() {
         const userId = "229351215"; 
 
