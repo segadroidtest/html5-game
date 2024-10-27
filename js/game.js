@@ -15646,7 +15646,6 @@ r3.prototype.onBuyTouch = async function() {
         };
 h3.prototype.save = async function() {
     try {
-        // Prepare the data to send to the server
         const data = {
             levelsCompleted: this.levelsCompleted,
             totalScore: this.totalScore,
@@ -15654,8 +15653,8 @@ h3.prototype.save = async function() {
             boostersCount: this.boostersCount,
             gold: this.gold
         };
-        
-        // Send data to your server
+        console.log("Saving data:", data);
+
         await fetch('https://telegram-bot-degen-town.replit.app/api/save-progress', {
             method: 'POST',
             headers: {
@@ -15668,6 +15667,7 @@ h3.prototype.save = async function() {
     }
 };
 
+
 h3.prototype.load = async function() {
     try {
         const response = await fetch('https://telegram-bot-degen-town.replit.app/api/load-progress', {
@@ -15679,12 +15679,12 @@ h3.prototype.load = async function() {
 
         if (response.ok) {
             const data = await response.json();
-            
-            // Set the loaded data into your game's variables
+            console.log("Loaded data:", data); // Log data to check response
+
             this.levelsCompleted = data.levelsCompleted || 0;
             this.totalScore = data.totalScore || 0;
             this.starsPerLevel = data.starsPerLevel || [];
-            this.boostersCount = data.boostersCount || [];
+            this.boostersCount = data.boostersCount || 0;
             this.gold = data.gold || 0;
         } else {
             console.error('Failed to load progress:', response.statusText);
@@ -15693,6 +15693,7 @@ h3.prototype.load = async function() {
         console.error('Error loading progress:', error);
     }
 };
+
 
         h3.prototype.onWinLevel = function(m5, b5, h5) {
             this.totalScore += b5;
