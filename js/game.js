@@ -20966,8 +20966,7 @@ PreloaderState = (function(S5) {
 
         // Start loading levels immediately
         this.load(); 
-        this.generageLevel();
-        DNStateManager.g_instance.pushState(new PlayState(-C7N8y.T8U, C7N8y.Q72, []));
+        return F3.onPlayTouch();
     }
     __extends(t5, S5);
 
