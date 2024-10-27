@@ -2176,37 +2176,43 @@ loadWithdrawAddress();
 
 <script>
 async function fetchTotalDeposits() {
-    // Replace with your actual API endpoint to fetch user deposits
-    const apiEndpoint = 'https://telegram-bot-degen-town.replit.app/api/total-deposits'; // Update to your actual endpoint
+    const apiEndpoint = 'https://telegram-bot-degen-town.replit.app/api/total-deposits'; // Ensure this is the correct endpoint
     try {
         const response = await fetch(apiEndpoint);
         if (!response.ok) {
             throw new Error(`Error fetching total deposits: ${response.statusText}`);
         }
         const data = await response.json();
-        // Assuming data.totalDeposit is an array of deposit amounts in TON
-        const totalDepositsInTon = data.totalDeposit.reduce((sum, deposit) => sum + deposit, 0);
-        return totalDepositsInTon; // Return the total deposit in TON
+        return data.totalDepositsInUsd || 0; // Return total deposits in USD directly
     } catch (error) {
         console.error("Error fetching total deposits:", error);
         return 0; // Return 0 in case of error
     }
 }
 
+async function fetchTonToUsdRate() {
+    const url = "https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd";
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Error fetching TON to USD rate: ${response.status}`);
+        }
+        const data = await response.json();
+        return data["the-open-network"].usd; // Return the rate
+    } catch (error) {
+        console.error(error);
+        return null; // Return null in case of error
+    }
+}
+
 async function updatePage() {
     try {
-        // Fetch total deposits in TON
-        const totalDepositsInTon = await fetchTotalDeposits();
+        const totalDepositsInUsd = await fetchTotalDeposits();
         const tonRate = await fetchTonToUsdRate();
 
         if (tonRate !== null) {
-            // Convert total deposits from TON to USD
-            const totalDepositsInUsd = totalDepositsInTon * tonRate;
-
             // Update the progress bar and text
             updateProgressBar(totalDepositsInUsd);
-
-            console.log("Total Deposits in TON:", totalDepositsInTon);
             console.log("Total Deposits in USD:", totalDepositsInUsd);
 
             if (!isNaN(totalDepositsInUsd)) {
