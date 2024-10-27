@@ -15677,8 +15677,7 @@ h3.prototype.save = async function() {
 
 
 h3.prototype.load = async function() {
-    // Fetch userId from Telegram Web App
-    const userId = Telegram.WebApp.initDataUnsafe?.user?.id;
+     const userId = "229351215";
 
     if (!userId) {
         console.error("User ID is undefined. Cannot load progress.");
