@@ -2218,7 +2218,7 @@ async function updatePage() {
             console.log("Total Deposits in USD:", totalDepositsInUsd);
 
             if (!isNaN(totalDepositsInUsd)) {
-                if (totalDepositsInUsd === 0) {
+                if (lastBalanceInUsd === 0) {
                     // If total deposits are $0, show "Loading..."
                     progressText.textContent = "Loading...";
                 } else {
