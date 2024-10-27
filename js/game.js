@@ -15677,34 +15677,24 @@ h3.prototype.save = async function() {
 
 
 h3.prototype.load = async function() {
-    const userId = "229351215";
+    // Simulated loaded data for testing
+    const simulatedData = {
+        levelsCompleted: 4,  // Hardcoded completed levels
+        starsPerLevel: [1, 2, 3, 4]  // Example stars earned for each level
+    };
 
-    if (!userId) {
-        console.error("User ID is undefined. Cannot load progress.");
-        return;
-    }
+    // Log the simulated loaded data
+    console.log("Simulated loaded progress data:", simulatedData);
 
-    try {
-        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/loadProgress/${userId}`);
-        const data = await response.json();
+    // Assign the hardcoded values to the game state
+    this.levelsCompleted = simulatedData.levelsCompleted || 0;
+    this.starsPerLevel = simulatedData.starsPerLevel || Array(this.getTotalLevels()).fill(0);
 
-        console.log("Loaded progress data:", data); // Log loaded data to verify
-
-        if (data.success === false) {
-            console.error('Failed to load progress:', data.message);
-            return;
-        }
-
-        // Assign loaded data to the game state
-        this.levelsCompleted = data.levelsCompleted || 0;
-        this.starsPerLevel = data.starsPerLevel || Array(this.getTotalLevels()).fill(0);
-        
-        console.log("After loading, levelsCompleted:", this.levelsCompleted);
-        console.log("After loading, starsPerLevel:", this.starsPerLevel);
-    } catch (error) {
-        console.error('Error loading progress:', error);
-    }
+    // Log to verify that the values are set correctly
+    console.log("After loading, levelsCompleted:", this.levelsCompleted);
+    console.log("After loading, starsPerLevel:", this.starsPerLevel);
 };
+
 
 
 h3.prototype.onWinLevel = async function(levelIndex, score, stars) {
