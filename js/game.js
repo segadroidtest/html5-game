@@ -15677,28 +15677,35 @@ h3.prototype.save = async function() {
 
 
 h3.prototype.load = async function() {
-     const userId = "229351215";
+    const userId = "229351215";
 
     if (!userId) {
         console.error("User ID is undefined. Cannot load progress.");
-        return; // Exit if userId is not available
+        return;
     }
 
     try {
         const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/loadProgress/${userId}`);
         const data = await response.json();
 
+        console.log("Loaded progress data:", data); // Log loaded data to verify
+
         if (data.success === false) {
             console.error('Failed to load progress:', data.message);
-            return; // Exit if loading fails
+            return;
         }
 
+        // Assign loaded data to the game state
         this.levelsCompleted = data.levelsCompleted || 0;
         this.starsPerLevel = data.starsPerLevel || Array(this.getTotalLevels()).fill(0);
+        
+        console.log("After loading, levelsCompleted:", this.levelsCompleted);
+        console.log("After loading, starsPerLevel:", this.starsPerLevel);
     } catch (error) {
         console.error('Error loading progress:', error);
     }
 };
+
 
 h3.prototype.onWinLevel = async function(levelIndex, score, stars) {
     this.totalScore += score;
