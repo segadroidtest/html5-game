@@ -15707,7 +15707,7 @@ h3.prototype.onWinLevel = async function(m5, b5, h5) {
 
     // Save progress to the server
     try {
-        const userId = /* Fetch user ID from your authentication system */;
+        const userId = 229351215;
         const response = await fetch('https://telegram-bot-degen-town.replit.app/api/saveProgress', {
             method: 'POST',
             headers: {
