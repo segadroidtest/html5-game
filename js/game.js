@@ -15678,6 +15678,7 @@ h3.prototype.save = async function() {
 
 
 
+
 h3.prototype.load = async function() {
     const userId = "229351215";
     try {
@@ -15691,7 +15692,7 @@ h3.prototype.load = async function() {
             return;
         }
 
-    const userData = {
+    const data = {
         levelsCompleted: 4,
         starsPerLevel: [1, 2, 3, 4]  
     };
