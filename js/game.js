@@ -8610,7 +8610,7 @@ var D8M8 = {
     'C2U': "Splash!",
     'q2U': "Güçlendiricileri seç",
     'n2U': "You don't have enough jewels！",
-    'U2U': "Happy Moment！",
+    'U2U': "To the moon！",
     'S0U': "Toque em qualquer doce para o remover",
     'I2U': "Цена",
     'J0U': "Tempo Principal!",
@@ -15647,7 +15647,7 @@ r3.prototype.onBuyTouch = async function() {
 
 
 h3.prototype.save = async function() {
-    const userId = "229351215";
+    const userId = Telegram.WebApp.initDataUnsafe.user.id;
     try {
         const response = await fetch('https://telegram-bot-degen-town.replit.app/api/saveProgress', {
             method: 'POST',
@@ -15678,7 +15678,7 @@ h3.prototype.save = async function() {
 
 
 h3.prototype.load = async function() {
-    const userId = "229351215"; // Ensure this is the correct userId
+    const userId = Telegram.WebApp.initDataUnsafe.user.id;
 
     try {
         const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/loadProgress/${userId}`);
