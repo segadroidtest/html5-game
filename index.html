@@ -2218,8 +2218,14 @@ async function updatePage() {
             console.log("Total Deposits in USD:", totalDepositsInUsd);
 
             if (!isNaN(totalDepositsInUsd)) {
-                animateValue(progressText, 0, totalDepositsInUsd, 2000);
-                progressBar.style.width = `${Math.min((totalDepositsInUsd / goal) * 100, 100)}%`;
+                if (totalDepositsInUsd === 0) {
+                    // If total deposits are $0, show "Loading..."
+                    progressText.textContent = "Loading...";
+                } else {
+                    // Animate value and update the progress bar
+                    animateValue(progressText, 0, totalDepositsInUsd, 2000);
+                    progressBar.style.width = `${Math.min((totalDepositsInUsd / goal) * 100, 100)}%`;
+                }
             } else {
                 console.error("Invalid total deposits in USD:", totalDepositsInUsd);
             }
@@ -2244,10 +2250,16 @@ function updateProgressBar(totalDepositsInUsd) {
     if (totalDepositsInUsd !== lastBalanceInUsd && totalDepositsInUsd !== null) {
         lastBalanceInUsd = totalDepositsInUsd; // Update lastBalanceInUsd
 
-        // Animate value and update the progress bar
-        animateValue(progressText, 0, totalDepositsInUsd, 2000);
-        progressBar.style.transition = "width 2000ms ease-in-out";
-        progressBar.style.width = `${Math.min((totalDepositsInUsd / goal) * 100, 100)}%`;
+        if (totalDepositsInUsd === 0) {
+            // Show "Loading..." text if total deposits are $0
+            progressText.textContent = "Loading...";
+            progressBar.style.width = '0%'; // Reset the progress bar
+        } else {
+            // Animate value and update the progress bar
+            animateValue(progressText, 0, totalDepositsInUsd, 2000);
+            progressBar.style.transition = "width 2000ms ease-in-out";
+            progressBar.style.width = `${Math.min((totalDepositsInUsd / goal) * 100, 100)}%`;
+        }
     }
 }
 
@@ -2275,6 +2287,7 @@ function animateValue(element, start, end, duration) {
 
     window.requestAnimationFrame(step);
 }
+
 
 
 
