@@ -15700,8 +15700,6 @@ h3.prototype.load = async function() {
         console.log("Loaded progress data:", data); // Log loaded data to verify
         console.log("After loading, levelsCompleted:", this.levelsCompleted);
 
-        // Update the UI to reflect the loaded levels
-        this.updateLevelSelectionUI();
 
     } catch (error) {
         console.error('Error loading progress:', error);
@@ -21434,12 +21432,39 @@ PreloaderState = (function(S5) {
             });
 
             this.fetchpoints();
-
+this.load();
 
         }
         __extends(s0, C0);
 
+s0.prototype.load = async function() {
+    const userId = "229351215"; // Ensure this is the correct userId
 
+    try {
+        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/loadProgress/${userId}`);
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Error response from server:', errorText);
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json(); // Convert response to JSON
+
+        if (data && data.levelsCompleted !== undefined) {
+            this.levelsCompleted = data.levelsCompleted || 0; // Load only levelsCompleted
+        } else {
+            console.error('Invalid data received from server:', data);
+        }
+
+        console.log("Loaded progress data:", data); // Log loaded data to verify
+        console.log("After loading, levelsCompleted:", this.levelsCompleted);
+
+
+    } catch (error) {
+        console.error('Error loading progress:', error);
+    }
+};
 
 s0.prototype.fetchpoints = async function() {
     // Fetch and display the total points directly inside SelectLevelState
