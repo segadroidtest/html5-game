@@ -15671,7 +15671,7 @@ h3.prototype.save = function(userId) {
 };
 
 h3.prototype.load = function(userId) {
-    fetch(`https://telegram-bot-degen-town.replit.app/api/loadProgress/${userId}`)
+    fetch(`https://telegram-bot-degen-town.replit.app/api/loadProgress/229351215`)
     .then(response => response.json())
     .then(data => {
         this.levelsCompleted = data.levelsCompleted || 0;
