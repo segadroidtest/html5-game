@@ -11985,7 +11985,7 @@ var DNStateManager = (function() {
                 });
             }
             GameData.getInstance().load();
-            this.changeState(new SelectLevelState());
+            this.pushState(new SelectLevelState());
             if (DNGameConfig.needShowRotateScreen) {
                 if (this.isLandscape()) {
                     this.pushState(new PortraitLockState());
@@ -20944,16 +20944,16 @@ PreloaderState = (function(S5) {
 
         // Create a div for the background
         var backgroundDiv = document.createElement('div');
-        backgroundDiv.style.position = 'fixed';
+        backgroundDiv.style.position = 'fixed';  // Use fixed positioning
         backgroundDiv.style.top = '0';
         backgroundDiv.style.left = '0';
-        backgroundDiv.style.width = '100vw';
-        backgroundDiv.style.height = '100vh';
-        backgroundDiv.style.backgroundImage = 'url("assets/img/splashscreen.png")';
-        backgroundDiv.style.backgroundSize = 'cover';
-        backgroundDiv.style.backgroundPosition = 'center';
-        backgroundDiv.style.zIndex = '-1';
-        document.body.appendChild(backgroundDiv);
+        backgroundDiv.style.width = '100vw';  // Full viewport width
+        backgroundDiv.style.height = '100vh'; // Full viewport height
+        backgroundDiv.style.backgroundImage = 'url("assets/img/splashscreen.png")'; // Path to your background image
+        backgroundDiv.style.backgroundSize = 'cover'; // Cover the entire area
+        backgroundDiv.style.backgroundPosition = 'center'; // Center the image
+        backgroundDiv.style.zIndex = '-1'; // Send it to the back
+        document.body.appendChild(backgroundDiv); // Add to the document
 
         // Create loading bar
         this.loadingBar = new DNLoadingBar(C7N8y.C82, C7N8y.Z22, "#ffffff", C7N8y.Z22);
@@ -20966,30 +20966,12 @@ PreloaderState = (function(S5) {
         this.loadingBar.y = C7N8y.S3p(Constants.ASSETS_HEIGHT, C7N8y.A8U);
     }
     __extends(t5, S5);
-
     t5.prototype.handleProgress = function(m5) {
         this.loadingBar.setProgress(m5.loaded);
-
-        // Check if loading is complete
-        if (m5.loaded >= 1) {  // Assuming 1 represents 100% progress
-            console.log("Loading complete, triggering onPlayTouch");
-
-            // Call the onPlayTouch method or simulate a button click
-            DNStateManager.g_instance.pushState(new CoolTransitionInState(new SelectLevelState()));
-        }
     };
-
-    t5.prototype.onPlayTouch = function() {
-        // Implement the functionality to start the game here
-        console.log("Game started!");
-        // You may need to trigger whatever functionality starts the game here.
-    };
-
     t5.prototype.onOrientationChanged = function(m5) {};
-
     return t5;
-})(DNGameState);
-
+})(DNGameState),
     RunLolipopEffect = (function(h5) {
         function O5() {
             h5.call(this);
