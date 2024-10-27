@@ -15677,35 +15677,38 @@ h3.prototype.save = async function() {
 
 
 
-
-
 h3.prototype.load = async function() {
-    const userId = "229351215";
+    const userId = "229351215"; // Ensure this is the correct userId
+
     try {
-        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/loadProgress/${userId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ levelsCompleted, starsPerLevel })
-        });
+        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/loadProgress/${userId}`);
 
-
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Error response from server:', errorText);
+            throw new Error('Network response was not ok');
+        }
 
         const data = await response.json(); // Convert response to JSON
-        this.levelsCompleted = userdata.levelsCompleted || 0;
-        this.starsPerLevel = userdata.starsPerLevel || Array(this.getTotalLevels()).fill(0);
 
+        if (data && data.levelsCompleted !== undefined) {
+            this.levelsCompleted = data.levelsCompleted || 0; // Load only levelsCompleted
+            this.starsPerLevel = data.starsPerLevel || Array(this.getTotalLevels()).fill(0);
+        } else {
+            console.error('Invalid data received from server:', data);
+        }
 
         console.log("Loaded progress data:", data); // Log loaded data to verify
-
-        
         console.log("After loading, levelsCompleted:", this.levelsCompleted);
-        console.log("After loading, starsPerLevel:", this.starsPerLevel);
+
+        // Update the UI to reflect the loaded levels
+        this.updateLevelSelectionUI();
+
     } catch (error) {
         console.error('Error loading progress:', error);
     }
 };
+
 
 
 
