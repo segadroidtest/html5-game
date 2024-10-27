@@ -15647,6 +15647,7 @@ r3.prototype.onBuyTouch = async function() {
 
 
 
+// Method to save user progress
 h3.prototype.save = function(userId) {
     const data = {
         userId: userId,
@@ -15663,51 +15664,58 @@ h3.prototype.save = function(userId) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Save successful:', data);
+        if (data.success) {
+            console.log('Save successful:', data);
+        } else {
+            console.error('Failed to save progress:', data.message);
+        }
     })
     .catch((error) => {
         console.error('Error saving progress:', error);
     });
 };
 
+// Method to load user progress
 h3.prototype.load = function(userId) {
-    fetch(`https://telegram-bot-degen-town.replit.app/api/loadProgress/229351215`)
+    fetch(`https://telegram-bot-degen-town.replit.app/api/loadProgress/${userId}`)
     .then(response => response.json())
     .then(data => {
         this.levelsCompleted = data.levelsCompleted || 0;
 
-        // Initialize starsPerLevel array
+        // Initialize starsPerLevel array with zeros up to total levels
         this.starsPerLevel = Array(this.getTotalLevels()).fill(0);
 
+        // Populate starsPerLevel if data exists
         if (data.starsPerLevel) {
             this.starsPerLevel = data.starsPerLevel;
         }
+
+        console.log('Load successful:', data);
     })
     .catch((error) => {
         console.error('Error loading progress:', error);
     });
 };
 
+// Method triggered when a level is won
+h3.prototype.onWinLevel = async function(levelIndex, score, stars) {
+    // Update score and stars for the won level
+    this.totalScore += score;
+    this.starsPerLevel[levelIndex] = Math.max(this.starsPerLevel[levelIndex], stars);
 
-
-
-
-
-h3.prototype.onWinLevel = async function(m5, b5, h5) {
-    this.totalScore += b5;
-    this.starsPerLevel[m5] = Math.max(this.starsPerLevel[m5], h5);
-    
-    if (C7N8y.t2w(m5, this.levelsCompleted)) {
-        this.levelsCompleted = m5 + C7N8y.T8U;
-
-        if (C7N8y.B2w(this.levelsCompleted, this.getTotalLevels())) {
+    // Update levelsCompleted based on the current level index
+    if (levelIndex >= this.levelsCompleted) {
+        this.levelsCompleted = levelIndex + 1;
+        
+        // Ensure levelsCompleted does not exceed total levels
+        if (this.levelsCompleted > this.getTotalLevels()) {
             this.levelsCompleted = this.getTotalLevels();
         }
     }
 
     // Save progress to the server
     try {
-        const userId = 229351215
+        const userId = 229351215;  // Example user ID, replace as needed
         const response = await fetch('https://telegram-bot-degen-town.replit.app/api/saveProgress', {
             method: 'POST',
             headers: {
@@ -15730,8 +15738,16 @@ h3.prototype.onWinLevel = async function(m5, b5, h5) {
         console.error('Error while saving progress to the server:', error);
     }
 
-    this.save(); // Save locally as well (if needed)
+    // Optionally save locally (if local saving is implemented)
+    this.save(userId); // Saves current progress for the given user ID
 };
+
+// Helper method to get the total levels in the game
+h3.prototype.getTotalLevels = function() {
+    // Replace with the actual total levels in your game
+    return 50; // Example total level count
+};
+
 
         h3.prototype.getTotalScore = function() {
             return this.totalScore;
