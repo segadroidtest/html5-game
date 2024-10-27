@@ -21394,8 +21394,6 @@ s0.prototype.load = async function() {
         console.log("Loaded progress data:", data); // Log loaded data to verify
         console.log("After loading, levelsCompleted:", this.levelsCompleted);
 
-        // Update the UI to reflect the loaded levels
-        this.updateLevelSelectionUI();
 
     } catch (error) {
         console.error('Error loading progress:', error);
