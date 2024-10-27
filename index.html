@@ -2175,6 +2175,8 @@ loadWithdrawAddress();
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <script>
+let lastBalanceInUsd = 0; // Initialize lastBalanceInUsd
+
 async function fetchTotalDeposits() {
     const apiEndpoint = 'https://telegram-bot-degen-town.replit.app/api/total-deposits'; // Ensure this is the correct endpoint
     try {
@@ -2233,14 +2235,14 @@ setInterval(updatePage, 5000);
 // Call the updatePage function initially to load the balance immediately
 updatePage();
 
-// Function to update the progress bar
+// Update the updateProgressBar function to ensure it uses the defined variable
 function updateProgressBar(totalDepositsInUsd) {
     const goal = 100000; // Set your goal amount here
     const progressBar = document.getElementById("progress-bar");
     const progressText = document.getElementById("progress-text");
 
     if (totalDepositsInUsd !== lastBalanceInUsd && totalDepositsInUsd !== null) {
-        lastBalanceInUsd = totalDepositsInUsd;
+        lastBalanceInUsd = totalDepositsInUsd; // Update lastBalanceInUsd
 
         // Animate value and update the progress bar
         animateValue(progressText, 0, totalDepositsInUsd, 2000);
