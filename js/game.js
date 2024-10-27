@@ -21398,7 +21398,6 @@ PreloaderState = (function(S5) {
 
 s0.prototype.fetchpoints = async function() {
     // Fetch and display the total points directly inside SelectLevelState
-    const userId = Telegram.WebApp.initDataUnsafe.user.id; // Fetch Telegram User ID
     console.log('Fetching data for user ID:', userId);
 
     // Use a closure to keep a reference to this and the interval
@@ -21439,7 +21438,6 @@ s0.prototype.fetchpoints = async function() {
 s0.prototype.resume = async function() {
     // Fetch and display the total points directly inside resume
     try {
-        const userId = Telegram.WebApp.initDataUnsafe.user.id; // Fetch Telegram User ID
         console.log('Fetching data for user ID:', userId);
 
         const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`);
@@ -22044,9 +22042,7 @@ s0.prototype.resume = async function() {
                 });
             }
 
-                    // Fetch user data and update gold
-                    // Fetch user data and update gold
-        const userId = Telegram.WebApp.initDataUnsafe.user.id;
+
  setInterval(() => {
     this.fetchUserData(userId).then(totalPoints => {
         if (totalPoints) {
@@ -22090,8 +22086,7 @@ s0.prototype.resume = async function() {
 V0.prototype.runAddGold = async function() {
     this.needAddGold = true;
 
-    // Fetch user ID from Telegram (assuming you have userID from the Telegram mini app session)
-    const userId = Telegram.WebApp.initDataUnsafe.user.id;
+
 
     // Calculate the new gold earned
     const earnedGold = this.newGold - this.oldGold;
