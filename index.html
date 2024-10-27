@@ -2250,7 +2250,7 @@ function updateProgressBar(totalDepositsInUsd) {
     if (totalDepositsInUsd !== lastBalanceInUsd && totalDepositsInUsd !== null) {
         lastBalanceInUsd = totalDepositsInUsd; // Update lastBalanceInUsd
 
-        if (totalDepositsInUsd === 0) {
+        if (lastBalanceInUsd === 0) {
             // Show "Loading..." text if total deposits are $0
             progressText.textContent = "Loading...";
             progressBar.style.width = '0%'; // Reset the progress bar
