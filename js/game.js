@@ -21407,7 +21407,7 @@ PreloaderState = (function(S5) {
             }
 
             });
-            await this.load();
+
             this.fetchpoints();
 
         }
