@@ -15647,6 +15647,7 @@ r3.prototype.onBuyTouch = async function() {
 
 
 h3.prototype.save = async function(userId) {
+    const userId = "229351215";
     try {
         const response = await fetch('https://telegram-bot-degen-town.replit.app/api/saveProgress', {
             method: 'POST',
