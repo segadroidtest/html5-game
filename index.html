@@ -2177,7 +2177,7 @@ loadWithdrawAddress();
 <script>
 async function fetchTotalDeposits() {
     // Replace with your actual API endpoint to fetch user deposits
-    const apiEndpoint = 'https://telegram-bot-degen-town.replit.app/getUserDeposits'; // Update to your actual endpoint
+    const apiEndpoint = 'https://telegram-bot-degen-town.replit.app/api/total-deposits'; // Update to your actual endpoint
     try {
         const response = await fetch(apiEndpoint);
         if (!response.ok) {
@@ -2185,7 +2185,7 @@ async function fetchTotalDeposits() {
         }
         const data = await response.json();
         // Assuming data.totalDeposit is an array of deposit amounts in TON
-        const totalDepositsInTon = data.totalDeposits.reduce((sum, deposit) => sum + deposit, 0);
+        const totalDepositsInTon = data.totalDeposit.reduce((sum, deposit) => sum + deposit, 0);
         return totalDepositsInTon; // Return the total deposit in TON
     } catch (error) {
         console.error("Error fetching total deposits:", error);
