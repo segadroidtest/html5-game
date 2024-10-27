@@ -15644,11 +15644,15 @@ r3.prototype.onBuyTouch = async function() {
             }
             return this.instance;
         };
-// Function to save level progress
 h3.prototype.save = async function() {
     try {
-        const data = { levelsCompleted: this.levelsCompleted };
+        // Prepare the data to send to the server
+        const data = {
+            userId: this.userId,  // Add userId here
+            levelsCompleted: this.levelsCompleted,
+        };
         
+        // Send data to your server
         const response = await fetch('https://telegram-bot-degen-town.replit.app/api/save-progress', {
             method: 'POST',
             headers: {
@@ -15657,20 +15661,19 @@ h3.prototype.save = async function() {
             body: JSON.stringify(data)
         });
 
-        if (!response.ok) {
-            throw new Error('Failed to save level progress');
+        if (response.ok) {
+            console.log('Progress saved successfully!');
+        } else {
+            console.error('Failed to save progress:', response.statusText);
         }
-        
-        console.log("Level progress saved:", data.levelsCompleted);
     } catch (error) {
-        console.error('Failed to save level progress:', error);
+        console.error('Failed to save progress:', error);
     }
 };
 
-// Function to load level progress
 h3.prototype.load = async function() {
     try {
-        const response = await fetch('https://telegram-bot-degen-town.replit.app/api/load-progress', {
+        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/load-progress/${this.userId}`, { // Include userId in the URL
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -15679,13 +15682,14 @@ h3.prototype.load = async function() {
 
         if (response.ok) {
             const data = await response.json();
-            this.levelsCompleted = data.levelsCompleted || 0;
-            console.log("Loaded level progress:", this.levelsCompleted);
+            
+            // Set the loaded data into your game's variables
+            this.levelsCompleted = data.levelsCompleted || 0;  // Update levelsCompleted from loaded data
         } else {
-            console.error('Failed to load level progress:', response.statusText);
+            console.error('Failed to load progress:', response.statusText);
         }
     } catch (error) {
-        console.error('Error loading level progress:', error);
+        console.error('Error loading progress:', error);
     }
 };
 
