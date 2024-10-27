@@ -15678,6 +15678,7 @@ h3.prototype.save = async function() {
 
 
 
+
 h3.prototype.load = async function() {
     const userId = "229351215";
     try {
@@ -15692,8 +15693,8 @@ h3.prototype.load = async function() {
         }
 
     const userData = {
-        levelsCompleted = data.levelsCompleted || 0;  // Hardcoded completed levels
-        starsPerLevel  = data.starsPerLevel || Array(this.getTotalLevels()).fill(0);// Example stars earned for each level
+        levelsCompleted: this.levelsCompleted;
+        starsPerLevel: this.starsPerLevel;
     };
 
     if (!userId) {
@@ -15701,6 +15702,11 @@ h3.prototype.load = async function() {
         return;
     }
 
+
+
+        // Assign loaded data to the game state
+        this.levelsCompleted = data.levelsCompleted || 0;
+        this.starsPerLevel = data.starsPerLevel || Array(this.getTotalLevels()).fill(0);
         
         console.log("After loading, levelsCompleted:", this.levelsCompleted);
         console.log("After loading, starsPerLevel:", this.starsPerLevel);
