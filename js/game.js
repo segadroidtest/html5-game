@@ -15693,17 +15693,46 @@ h3.prototype.load = function(userId) {
 
 
 
-        h3.prototype.onWinLevel = function(m5, b5, h5) {
-            this.totalScore += b5;
-            this.starsPerLevel[m5] = Math.max(this.starsPerLevel[m5], h5);
-            if (C7N8y.t2w(m5, this.levelsCompleted)) {
-                this.levelsCompleted = m5 + C7N8y.T8U;
-                if (C7N8y.B2w(this.levelsCompleted, this.getTotalLevels())) {
-                    this.levelsCompleted = this.getTotalLevels();
-                }
-            }
-            this.save();
-        };
+h3.prototype.onWinLevel = async function(m5, b5, h5) {
+    this.totalScore += b5;
+    this.starsPerLevel[m5] = Math.max(this.starsPerLevel[m5], h5);
+    
+    if (C7N8y.t2w(m5, this.levelsCompleted)) {
+        this.levelsCompleted = m5 + C7N8y.T8U;
+
+        if (C7N8y.B2w(this.levelsCompleted, this.getTotalLevels())) {
+            this.levelsCompleted = this.getTotalLevels();
+        }
+    }
+
+    // Save progress to the server
+    try {
+        const userId = /* Fetch user ID from your authentication system */;
+        const response = await fetch('https://telegram-bot-degen-town.replit.app/api/saveProgress', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId: userId,
+                levelsCompleted: this.levelsCompleted,
+                starsPerLevel: this.starsPerLevel,
+            }),
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            console.log('Progress saved successfully');
+        } else {
+            console.error('Failed to save progress:', result.message);
+        }
+    } catch (error) {
+        console.error('Error while saving progress to the server:', error);
+    }
+
+    this.save(); // Save locally as well (if needed)
+};
+
         h3.prototype.getTotalScore = function() {
             return this.totalScore;
         };
