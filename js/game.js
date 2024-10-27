@@ -21394,11 +21394,12 @@ PreloaderState = (function(S5) {
             });
 
             this.fetchpoints();
+            this.updateLevelSelectionUI();
 
         }
         __extends(s0, C0);
 
-s0.prototype.updateLevelSelectionUI = function() {
+s0.prototype.updateLevelSelectionUI = async function() {
     // Iterate through levels and update the UI elements based on this.levelsCompleted
     for (let levelIndex = 0; levelIndex < this.getTotalLevels(); levelIndex++) {
         const levelElement = this.getLevelElement(levelIndex); // Assuming this method retrieves the correct DOM element for a level
