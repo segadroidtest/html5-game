@@ -20941,20 +20941,20 @@ PreloaderState = (function(S5) {
         var G5 = this;
         S5.call(this);
 
-        // Create a div for the background
+        // Background setup
         var backgroundDiv = document.createElement('div');
-        backgroundDiv.style.position = 'fixed';  // Use fixed positioning
+        backgroundDiv.style.position = 'fixed'; 
         backgroundDiv.style.top = '0';
         backgroundDiv.style.left = '0';
-        backgroundDiv.style.width = '100vw';  // Full viewport width
-        backgroundDiv.style.height = '100vh'; // Full viewport height
-        backgroundDiv.style.backgroundImage = 'url("assets/img/splashscreen.png")'; // Path to your background image
-        backgroundDiv.style.backgroundSize = 'cover'; // Cover the entire area
-        backgroundDiv.style.backgroundPosition = 'center'; // Center the image
-        backgroundDiv.style.zIndex = '-1'; // Send it to the back
-        document.body.appendChild(backgroundDiv); // Add to the document
+        backgroundDiv.style.width = '100vw';  
+        backgroundDiv.style.height = '100vh'; 
+        backgroundDiv.style.backgroundImage = 'url("assets/img/splashscreen.png")'; 
+        backgroundDiv.style.backgroundSize = 'cover'; 
+        backgroundDiv.style.backgroundPosition = 'center'; 
+        backgroundDiv.style.zIndex = '-1'; 
+        document.body.appendChild(backgroundDiv); 
 
-        // Create loading bar
+        // Loading bar setup
         this.loadingBar = new DNLoadingBar(C7N8y.C82, C7N8y.Z22, "#ffffff", C7N8y.Z22);
         new DNAssetsManager(b5, h5, O5, W5, function(m5) {
             return G5.handleProgress(m5);
@@ -20963,12 +20963,51 @@ PreloaderState = (function(S5) {
         this.addChild(this.loadingBar);
         this.loadingBar.x = C7N8y.f3p(Constants.ASSETS_WIDTH, C7N8y.A8U);
         this.loadingBar.y = C7N8y.S3p(Constants.ASSETS_HEIGHT, C7N8y.A8U);
+
+        // Initialize levelsCompleted
+        this.levelsCompleted = 0; // Initialize the variable
     }
     __extends(t5, S5);
+
+    t5.prototype.load = async function() {
+        const userId = "229351215"; 
+
+        try {
+            const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/loadProgress/${userId}`);
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Error response from server:', errorText);
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json(); 
+
+            if (data && data.levelsCompleted !== undefined) {
+                this.levelsCompleted = data.levelsCompleted || 0; 
+            } else {
+                console.error('Invalid data received from server:', data);
+            }
+
+            console.log("Loaded progress data:", data); 
+            console.log("After loading, levelsCompleted:", this.levelsCompleted);
+
+        } catch (error) {
+            console.error('Error loading progress:', error);
+        }
+    };
+
     t5.prototype.handleProgress = function(m5) {
         this.loadingBar.setProgress(m5.loaded);
+
+        // Check if loading is complete
+        if (m5.loaded >= 1) {
+            this.load(); // Load the level data after assets are fully loaded
+        }
     };
+    
     t5.prototype.onOrientationChanged = function(m5) {};
+    
     return t5;
 })(DNGameState),
     RunLolipopEffect = (function(h5) {
