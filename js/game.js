@@ -11985,7 +11985,7 @@ var DNStateManager = (function() {
                 });
             }
             GameData.getInstance().load();
-            this.changeState(new MainMenuState());
+            this.changeState(new SelectLevelState());
             if (DNGameConfig.needShowRotateScreen) {
                 if (this.isLandscape()) {
                     this.pushState(new PortraitLockState());
@@ -20962,13 +20962,14 @@ PreloaderState = (function(S5) {
         this.loadingBar.x = C7N8y.f3p(Constants.ASSETS_WIDTH, C7N8y.A8U);
         this.loadingBar.y = C7N8y.S3p(Constants.ASSETS_HEIGHT, C7N8y.A8U);
 
-        // Initialize levelsCompleted
-        this.levelsCompleted = 0; // Initialize the variable
+        this.levelsCompleted = 0;
+        this.assetsLoaded = false; // Track asset loading status
+        this.dataLoaded = false;   // Track data loading status
     }
     __extends(t5, S5);
 
-    // Load function to fetch the level completion data
-    t5.prototype.load = async function() {
+    // Function to load game data
+    t5.prototype.loadGameData = async function() {
         const userId = "229351215"; 
 
         try {
@@ -20983,36 +20984,41 @@ PreloaderState = (function(S5) {
             const data = await response.json(); 
 
             if (data && data.levelsCompleted !== undefined) {
-                this.levelsCompleted = data.levelsCompleted || 0; 
+                this.levelsCompleted = data.levelsCompleted || 0;
+                console.log("Data loaded successfully:", this.levelsCompleted);
             } else {
                 console.error('Invalid data received from server:', data);
             }
 
-            console.log("Loaded progress data:", data); 
-            console.log("After loading, levelsCompleted:", this.levelsCompleted);
-
-            // Call the next state after loading is complete
-            this.nextState();
+            this.dataLoaded = true;
+            this.checkReadyToStart();
 
         } catch (error) {
             console.error('Error loading progress:', error);
         }
     };
 
+    // Call loadGameData immediately to start fetching level data
+    t5.prototype.preload = function() {
+        this.loadGameData(); // Start loading game data
+    };
+
     // Handle progress of asset loading
     t5.prototype.handleProgress = function(m5) {
         this.loadingBar.setProgress(m5.loaded);
 
-        // Check if loading is complete
         if (m5.loaded >= 1) {
-            this.load(); // Load the level data after assets are fully loaded
+            this.assetsLoaded = true;
+            this.checkReadyToStart();
         }
     };
 
-    // Method to transition to the next state after loading
-    t5.prototype.nextState = function() {
-        // Logic to transition to the next game state
-        this.state.start('MainMenuState'); // Adjust this to your next state
+    // Check if both assets and data are loaded, then change state
+    t5.prototype.checkReadyToStart = function() {
+        if (this.assetsLoaded && this.dataLoaded) {
+            GameData.getInstance().levelsCompleted = this.levelsCompleted; // Pass data to GameData
+            this.changeState(new SelectLevelState());
+        }
     };
     
     t5.prototype.onOrientationChanged = function(m5) {};
