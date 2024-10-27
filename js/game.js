@@ -15682,31 +15682,23 @@ h3.prototype.save = async function() {
 h3.prototype.load = async function() {
     const userId = "229351215";
     try {
-        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/loadProgress/${userId}`);
-            const data = {
-        levelsCompleted: 4,
-        starsPerLevel: [1, 2, 3, 4]  
-    };
+        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/loadProgress/${userId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ levelsCompleted, starsPerLevel })
+        });
+
+
+
+        const data = await response.json(); // Convert response to JSON
+        this.levelsCompleted = userdata.levelsCompleted || 0;
+        this.starsPerLevel = userdata.starsPerLevel || Array(this.getTotalLevels()).fill(0);
+
 
         console.log("Loaded progress data:", data); // Log loaded data to verify
 
-        if (data.success === false) {
-            console.error('Failed to load progress:', data.message);
-            return;
-        }
-
-
-
-    if (!userId) {
-        console.error("User ID is undefined. Cannot load progress.");
-        return;
-    }
-
-
-
-        // Assign loaded data to the game state
-        this.levelsCompleted = data.levelsCompleted || 0;
-        this.starsPerLevel = data.starsPerLevel || Array(this.getTotalLevels()).fill(0);
         
         console.log("After loading, levelsCompleted:", this.levelsCompleted);
         console.log("After loading, starsPerLevel:", this.starsPerLevel);
@@ -15714,6 +15706,7 @@ h3.prototype.load = async function() {
         console.error('Error loading progress:', error);
     }
 };
+
 
 
 h3.prototype.onWinLevel = async function(levelIndex, score, stars) {
