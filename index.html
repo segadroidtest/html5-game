@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const walletAddress = "UQA-7kqb9TRJIVrBFHjOjUC64Db3wb8QqsCXyqDlGVGJTfFD";
     const apiKey = "a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf";
-    let lastProcessedTimestamp = 0;
+    let lastProcessedTimestamp = parseInt(localStorage.getItem('lastProcessedTimestamp')) || 0;
     let isProcessing = false; // Flag to prevent concurrent processing
 
     async function getBalance(walletAddress) {
@@ -67,7 +67,10 @@ document.addEventListener("DOMContentLoaded", async function () {
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const data = await response.json();
             console.log("Transaction data for initialization:", data);
-            if (data.result?.length > 0) lastProcessedTimestamp = data.result[0].utime;
+            if (data.result?.length > 0) {
+                lastProcessedTimestamp = data.result[0].utime;
+                localStorage.setItem('lastProcessedTimestamp', lastProcessedTimestamp); // Store in localStorage
+            }
             console.log("Last processed timestamp set to:", lastProcessedTimestamp);
         } catch (error) {
             console.error("Error initializing lastProcessedTimestamp:", error);
@@ -97,6 +100,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                         showMessage(`New deposit received: ${amount} TON 🎉`);
                         await saveDeposit(userId, amount);
                         lastProcessedTimestamp = timestamp; // Update lastProcessedTimestamp after saving the deposit
+                        localStorage.setItem('lastProcessedTimestamp', lastProcessedTimestamp); // Update in localStorage
                         break; // Exit loop after processing the new deposit
                     }
                 }
@@ -190,7 +194,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Call to process any unsaved deposits on page load
     await processUnsavedDeposits();
 
-    await initializeLastProcessedTimestamp(walletAddress);
+    // Initialize the last processed timestamp if it's not set
+    if (lastProcessedTimestamp === 0) {
+        await initializeLastProcessedTimestamp(walletAddress);
+    }
+
+    // Set an interval to check for new transactions and update the balance
     setInterval(() => {
         checkTransactions(walletAddress, userId);
         getBalance(walletAddress).then(balance => {
