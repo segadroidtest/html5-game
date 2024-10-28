@@ -15647,15 +15647,15 @@ r3.prototype.onBuyTouch = async function() {
 
 
 h3.prototype.save = async function() {
-    const userId = "Telegram.WebApp.initDataUnsafe.user.id";
+    const userId = Telegram.WebApp.initDataUnsafe.user.id;
     try {
-        const response = await fetch('https://telegram-bot-degen-town.replit.app/api/saveProgress', {
+        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/saveProgress/${userId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-            userId: Telegram.WebApp.initDataUnsafe.user.id,
+            userId: userId,
             levelsCompleted: this.levelsCompleted,
             starsPerLevel: this.starsPerLevel
             })
@@ -15678,7 +15678,7 @@ h3.prototype.save = async function() {
 
 
 h3.prototype.load = async function() {
-    const userId = "Telegram.WebApp.initDataUnsafe.user.id";
+    const userId = Telegram.WebApp.initDataUnsafe.user.id;
 
     try {
         const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/loadProgress/${userId}`);
