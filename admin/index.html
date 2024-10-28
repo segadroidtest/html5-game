@@ -174,6 +174,9 @@ width: calc(100% - 50px);
             <button onclick="fetchUsers()">Refresh</button>
         </div>
         <div id="userList"></div>
+           <button id="loadMoreButton" onclick="loadMoreUsers()" style="margin: 10px; display: none;">Load More Users</button>
+           <button id="previousButton" onclick="loadPreviousUsers()" style="margin: 10px; display: none;">Previous Users</button>
+   
     </div>
 
     <script>
@@ -196,13 +199,11 @@ width: calc(100% - 50px);
                 document.getElementById("authContainer").style.display = "none";
                 document.getElementById("dashboard").style.display = "block";
                 fetchUsers(); // Fetch users after successful login
-                setupScrollListener(); // Setup scroll listener for infinite scroll
             } else {
                 alert("Invalid username or password");
             }
         }
 
-        // Fetch users from backend
         async function fetchUsers() {
             if (loading) return; // Prevent multiple fetches
             loading = true;
@@ -212,13 +213,50 @@ width: calc(100% - 50px);
                     "Authorization": "Basic " + btoa(document.getElementById("username").value + ":" + document.getElementById("password").value)
                 }
             });
-            const users = await response.json();
-            allUsers = [...allUsers, ...users]; // Append new users
-            renderUsers(allUsers.slice(0, currentUserIndex + 5)); // Render the next set of users
-            currentUserIndex += 5; // Move to the next set of users
+
+            if (response.ok) {
+                const users = await response.json();
+                allUsers = users; // Store users
+                renderUsers(allUsers.slice(0, currentUserIndex + 5)); // Render the first set of users
+                currentUserIndex = 5; // Set current user index for loading more
+                document.getElementById("loadMoreButton").style.display = "block"; // Show the load more button
+                document.getElementById("previousButton").style.display = "none"; // Hide the previous button initially
+            }
             loading = false; // Reset loading state
         }
 
+       // Load more users
+        function loadMoreUsers() {
+            const nextUsers = allUsers.slice(currentUserIndex, currentUserIndex + 5); // Get next 5 users
+            renderUsers(nextUsers); // Render the next set of users
+            currentUserIndex += 5; // Move to the next set of users
+
+            // Hide the load more button if all users have been loaded
+            if (currentUserIndex >= allUsers.length) {
+                document.getElementById("loadMoreButton").style.display = "none";
+            }
+            // Show previous button if we have loaded more than the first set
+            if (currentUserIndex > 5) {
+                document.getElementById("previousButton").style.display = "block";
+            }
+        }
+
+        // Load previous users
+        function loadPreviousUsers() {
+            // Move back to the previous set of users
+            if (currentUserIndex > 5) {
+                currentUserIndex -= 5; // Decrease the index
+                const previousUsers = allUsers.slice(currentUserIndex - 5, currentUserIndex); // Get the previous set of 5 users
+                renderUsers(previousUsers); // Render the previous set of users
+
+                // Show load more button since we are back to previous users
+                document.getElementById("loadMoreButton").style.display = "block";
+            }
+            // Hide previous button if we are at the start
+            if (currentUserIndex <= 5) {
+                document.getElementById("previousButton").style.display = "none";
+            }
+        }
         // Render users based on current index
         function renderUsers(users) {
             const userList = document.getElementById("userList");
@@ -292,14 +330,7 @@ width: calc(100% - 50px);
             }
         }
 
-        // Infinite scroll functionality
-        function setupScrollListener() {
-            window.addEventListener("scroll", () => {
-                if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 10) {
-                    fetchUsers(); // Fetch more users when scrolled to bottom
-                }
-            });
-        }
+
     </script>
 </body>
 </html>
