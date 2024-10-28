@@ -19,21 +19,21 @@
     <div id="userList"></div>
 
     <script>
-        let allUsers = []; // To store the original list of users
+        let allUsers = []; // Store the full list of users
 
         // Fetch users from backend
         async function fetchUsers() {
-            const response = await fetch("https://telegram-bot-degen-town.replit.app/admin/users", {
+            const response = await fetch("http://localhost:3000/admin/users", {
                 headers: { "Authorization": "Basic " + btoa("admin:admin") }
             });
             allUsers = await response.json();
             renderUsers(allUsers);
         }
 
-        // Render users based on the search result
+        // Render users based on search results
         function renderUsers(users) {
             const userList = document.getElementById("userList");
-            userList.innerHTML = ""; // Clear existing users
+            userList.innerHTML = ""; // Clear existing user elements
 
             users.forEach(user => {
                 const userContainer = document.createElement("div");
@@ -42,12 +42,21 @@
                 userContainer.innerHTML = `
                     <div class="user-field">User ID: ${user.userId}</div>
                     <div class="user-field">Username: ${user.username}</div>
-                    <label>Commission Earned: 
+                    <div class="user-field">Total Referrals: 
+                        <input type="number" value="${user.totalReferrals}" id="totalReferrals-${user.userId}" />
+                    </div>
+                    <div class="user-field">Withdraw Address: 
+                        <input type="text" value="${user.withdrawAddress}" id="withdrawAddress-${user.userId}" />
+                    </div>
+                    <div class="user-field">Total Referral Earnings: 
+                        <input type="number" value="${user.totalReferralEarnings}" id="totalReferralEarnings-${user.userId}" />
+                    </div>
+                    <div class="user-field">Commission Earned: 
                         <input type="number" value="${user.commissionEarned}" id="commissionEarned-${user.userId}" />
-                    </label>
-                    <label>Commission Paid: 
+                    </div>
+                    <div class="user-field">Commission Paid: 
                         <input type="number" value="${user.commissionPaid}" id="commissionPaid-${user.userId}" />
-                    </label>
+                    </div>
                     <button onclick="updateUser('${user.userId}')">Update User</button>
                 `;
                 userList.appendChild(userContainer);
@@ -65,16 +74,25 @@
 
         // Update user information
         async function updateUser(userId) {
+            const totalReferrals = document.getElementById(`totalReferrals-${userId}`).value;
+            const withdrawAddress = document.getElementById(`withdrawAddress-${userId}`).value;
+            const totalReferralEarnings = document.getElementById(`totalReferralEarnings-${userId}`).value;
             const commissionEarned = document.getElementById(`commissionEarned-${userId}`).value;
             const commissionPaid = document.getElementById(`commissionPaid-${userId}`).value;
 
-            const response = await fetch(`https://telegram-bot-degen-town.replit.app/admin/users/${userId}`, {
+            const response = await fetch(`http://localhost:3000/admin/users/${userId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": "Basic " + btoa("admin:admin")
                 },
-                body: JSON.stringify({ commissionEarned, commissionPaid })
+                body: JSON.stringify({
+                    totalReferrals, 
+                    withdrawAddress, 
+                    totalReferralEarnings, 
+                    commissionEarned, 
+                    commissionPaid 
+                })
             });
 
             if (response.ok) {
