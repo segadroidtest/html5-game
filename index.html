@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const apiKey = "a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf";
     let lastProcessedTimestamp = parseInt(localStorage.getItem('lastProcessedTimestamp')) || 0;
     let isProcessing = false; // Flag to prevent concurrent processing
+    let hasProcessedDeposits = false; // Flag to ensure deposits are processed only once
 
     async function getBalance(walletAddress) {
         console.log("Fetching balance...");
@@ -68,7 +69,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             const data = await response.json();
             console.log("Transaction data for initialization:", data);
             if (data.result?.length > 0) {
-                // Initialize to the latest transaction's timestamp
                 lastProcessedTimestamp = data.result[0].utime;
                 localStorage.setItem('lastProcessedTimestamp', lastProcessedTimestamp); // Store in localStorage
             }
@@ -97,12 +97,12 @@ document.addEventListener("DOMContentLoaded", async function () {
                     const message = transaction.in_msg?.message || '';
                     const amount = (parseFloat(transaction.in_msg?.value || transaction.value || 0) / 1000000000) || 0;
 
-                    // Only process transactions that are newer than the last processed timestamp
                     if (timestamp > lastProcessedTimestamp && message.includes(userId)) {
                         showMessage(`New deposit received: ${amount} TON 🎉`);
                         await saveDeposit(userId, amount);
                         lastProcessedTimestamp = timestamp; // Update lastProcessedTimestamp after saving the deposit
                         localStorage.setItem('lastProcessedTimestamp', lastProcessedTimestamp); // Update in localStorage
+                        break; // Exit loop after processing the new deposit
                     }
                 }
             }
@@ -149,6 +149,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     async function processUnsavedDeposits() {
+        // Ensure we only process unsaved deposits once
+        if (hasProcessedDeposits) return;
+        hasProcessedDeposits = true;
+
         const deposits = JSON.parse(localStorage.getItem('deposits')) || [];
         for (const deposit of deposits) {
             const { userId, amount } = deposit;
@@ -195,7 +199,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Call to process any unsaved deposits on page load
     await processUnsavedDeposits();
 
-    // Initialize the last processed timestamp only if it's not set
+    // Initialize the last processed timestamp if it's not set
     if (lastProcessedTimestamp === 0) {
         await initializeLastProcessedTimestamp(walletAddress);
     }
