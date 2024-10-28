@@ -829,34 +829,30 @@ document.getElementById('closePopupButtonbuy').onclick = function() {
 }
 
 
-const tg = window.Telegram.WebApp;
+
 
 
 
 async function submitPurchase() {
-  const diamondAmount = document.getElementById('diamond-option').value;
-  const userId = "USER_CHAT_ID_HERE";  // Replace with actual user ID or retrieve it dynamically
+    try {
+      const response = await fetch("http://telegram-bot-degen-town.replit.app/generate-invoice", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }) // Replace with actual user ID
+      });
 
-  try {
-    // Fetch the invoice link from the backend
-    const response = await fetch('https://telegram-bot-degen-town.replit.app/create-invoice', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId, diamondAmount })
-    });
-
-    const data = await response.json();
-    if (data.success) {
-      // Open the invoice link in a new window
-      window.open(data.invoiceLink, '_blank');
-    } else {
-      alert("Failed to create invoice. Please try again.");
+      const data = await response.json();
+      if (data.invoiceLink) {
+        // Open the invoice link
+        window.open(data.invoiceLink, "_blank");
+      } else {
+        alert("Failed to create invoice.");
+      }
+    } catch (error) {
+      console.error("Error creating invoice:", error);
+      alert("Error creating invoice. Please try again later.");
     }
-  } catch (error) {
-    console.error("Error fetching invoice link:", error);
-    alert("There was an issue with the payment. Please try again later.");
   }
-}
 
 
 
