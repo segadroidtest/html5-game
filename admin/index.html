@@ -51,7 +51,7 @@
             const commissionEarned = document.getElementById(`commissionEarned-${userId}`).value;
             const commissionPaid = document.getElementById(`commissionPaid-${userId}`).value;
 
-            const response = await fetch(`http://localhost:3000/admin/users/${userId}`, {
+            const response = await fetch(`https://telegram-bot-degen-town.replit.app/admin/users/${userId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
