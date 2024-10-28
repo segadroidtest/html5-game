@@ -15647,7 +15647,6 @@ r3.prototype.onBuyTouch = async function() {
 
 
 h3.prototype.save = async function() {
-    const userId = "229351215";
     try {
         const response = await fetch('https://telegram-bot-degen-town.replit.app/api/saveProgress', {
             method: 'POST',
@@ -15655,9 +15654,9 @@ h3.prototype.save = async function() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                userId: userId,
-                levelsCompleted: this.levelsCompleted
-
+            userId: Telegram.WebApp.initDataUnsafe.user.id,
+            levelsCompleted: this.levelsCompleted,
+            starsPerLevel: this.starsPerLevel
             })
         });
 
@@ -15678,7 +15677,7 @@ h3.prototype.save = async function() {
 
 
 h3.prototype.load = async function() {
-    const userId = "229351215";
+    const userId = Telegram.WebApp.initDataUnsafe.user.id;
 
     try {
         const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/loadProgress/${userId}`);
@@ -15692,8 +15691,9 @@ h3.prototype.load = async function() {
         const data = await response.json(); // Convert response to JSON
 
         if (data && data.levelsCompleted !== undefined) {
-            this.levelsCompleted = data.levelsCompleted || 0;
-
+            this.levelsCompleted = data.levelsCompleted || 0; // Load only levelsCompleted
+            this.starsPerLevel = data.starsPerLevel || Array(this.getTotalLevels()).fill(0);
+        } else {
             console.error('Invalid data received from server:', data);
         }
 
