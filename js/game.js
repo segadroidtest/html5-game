@@ -15649,15 +15649,15 @@ r3.prototype.onBuyTouch = async function() {
 h3.prototype.save = async function() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id;
     try {
-        const response = await fetch("https://telegram-bot-degen-town.replit.app/api/saveProgress", {
+        const response = await fetch('https://telegram-bot-degen-town.replit.app/api/saveProgress', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-            userId,
-            levelsCompleted: this.levelsCompleted,
-            starsPerLevel: this.starsPerLevel
+                userId: userId,
+                levelsCompleted: this.levelsCompleted,
+                starsPerLevel: this.starsPerLevel
             })
         });
 
@@ -15701,7 +15701,8 @@ h3.prototype.load = async function() {
         console.log("Loaded progress data:", data); // Log loaded data to verify
         console.log("After loading, levelsCompleted:", this.levelsCompleted);
 
-
+        // Update the UI to reflect the loaded levels
+        this.updateLevelSelectionUI();
 
     } catch (error) {
         console.error('Error loading progress:', error);
