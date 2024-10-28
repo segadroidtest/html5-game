@@ -840,17 +840,17 @@ async function submitPurchase() {
   const invoice = {
     title: "Diamonds Purchase",
     description: `Buy ${diamondAmount} Diamonds with Telegram Stars`,
-    payload: JSON.stringify({ totalPoints: diamondAmount }),  // Send dynamic points
-    provider_token: "YOUR_PROVIDER_TOKEN_HERE",  // Replace with your actual provider token
+    payload: JSON.stringify({ totalPoints: diamondAmount }),
+    provider_token: "1877036958:TEST:96aa872fd2afe80b7a8292a4e81b734940cbd458",  // Replace with actual provider token
     start_parameter: "buy_diamonds",
-    currency: "stars",
-    prices: [{ label: `${diamondAmount} Diamonds`, amount: diamondAmount * 50 }]  // Assuming each diamond is worth 50 Stars units
+    currency: "USD",  // Replace with a valid fiat currency
+    prices: [{ label: `${diamondAmount} Diamonds`, amount: diamondAmount * 100 }]  // Adjust amount for currency
   };
 
   tg.openInvoice(invoice).then((response) => {
     if (response.success) {
       alert("Purchase successful! You've received diamonds.");
-      // Optional: make an API call to your backend to confirm the user's new diamond balance
+      // Optionally, verify diamonds with backend
     } else {
       alert("Payment failed or canceled.");
     }
