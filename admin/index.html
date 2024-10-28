@@ -283,17 +283,18 @@ width: calc(100% - 50px);
                             <span>TON</span>
                         </div>
                     </div>
-                    <div class="user-fields">
-                        <div class="user-field"><strong>Commission Earned:</strong> 
-                            <input type="number" value="${user.commissionEarned}" id="commissionEarned-${user.userId}" readonly />
-                            <span>TON</span>
-                        </div>
+<div class="user-fields">
+    <div class="user-field"><strong>Commission Earned:</strong> 
+        <input type="number" value="${user.commissionEarned ? (user.commissionEarned / 1000).toFixed(3) : 0}" id="commissionEarned-${user.userId}" readonly />
+        <span>TON</span>
+    </div>
+</div>
                         <div class="user-field commission-paid"><strong>Commission Paid:</strong> 
                             <input type="number" value="${user.commissionPaid}" id="commissionPaid-${user.userId}" />
                             <span>TON</span>
                         </div>
                     </div>
-                    <button onclick="updateUser(${user.userId})">Update</button>
+                    <button onclick="updateUser(${user.userId})" style="margin: 5px; ">Update</button>
                 `;
                 userList.appendChild(userContainer);
             });
