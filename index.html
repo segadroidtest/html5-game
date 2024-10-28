@@ -147,9 +147,11 @@ document.addEventListener("DOMContentLoaded", async function () {
         localStorage.setItem('deposits', JSON.stringify(updatedDeposits));
     }
 
-    async function processUnsavedDeposits() {
-        await saveDeposit(userId, amount);
-        const deposits = JSON.parse(localStorage.getItem('deposits')) || [];
+
+async function processUnsavedDeposits() {
+    await saveDeposit(userId, amount);
+    const deposits = JSON.parse(localStorage.getItem('deposits')) || [];
+    if (deposits.length > 0) {
         for (const deposit of deposits) {
             const { userId, amount } = deposit;
 
@@ -164,11 +166,18 @@ document.addEventListener("DOMContentLoaded", async function () {
                 console.log("Unsaved deposit processed and saved in database.");
                 // Remove the successfully saved deposit from Local Storage
                 removeDepositFromLocalStorage(userId, amount);
+                // Show a message for each processed deposit
+                showMessage(`Previous unsaved deposit processed: ${amount} TON 🎉`);
             } catch (error) {
                 console.error("Error processing unsaved deposit:", error);
             }
         }
+    } else {
+        console.log("No unsaved deposits to process.");
     }
+}
+
+
 
     function showMessage(message) {
         const originalContent = document.getElementById("walletsection");
