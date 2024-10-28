@@ -5,39 +5,187 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .user-container { margin: 10px; padding: 10px; border: 1px solid #ccc; }
-        .user-field { margin: 5px 0; }
-        button { margin: 5px 0; }
-        #authContainer { display: block; }
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #f4f4f4; 
+            margin: 0; 
+            padding: 0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+        }
+        #dashboard {
+            width: 90%; 
+            max-width: 800px; 
+            background: white; 
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+            margin-top: 20px; 
+            border-radius: 8px; 
+            overflow: hidden;
+            padding: 20px; 
+        }
+#authContainer {
+    width: 90%; 
+    max-width: 400px; 
+    background: white; 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); 
+    border-radius: 8px; 
+    padding: 20px; 
+    text-align: center; /* Center the content */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute; /* Positioning */
+    top: 50%; /* Move it halfway down the page */
+    left: 50%; /* Move it halfway across the page */
+    transform: translate(-50%, -50%); /* Center it */
+}
+
+        h1 {
+color: #494848;
+    margin: 0;
+    padding: 15px;
+    text-align: center;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 25px;
+        }
+        .input-field {
+            margin-bottom: 15px; 
+            display: flex; 
+            flex-direction: column; 
+        }
+        input[type="text"], input[type="password"], input[type="number"] {
+            padding: 12px; 
+            border: 1px solid #ccc; 
+            border-radius: 5px; 
+            transition: border-color 0.3s; 
+        }
+        input[type="text"]:focus, input[type="password"]:focus, input[type="number"]:focus {
+            border-color: #007BFF; 
+            outline: none; 
+        }
+        .user-container { 
+            display: flex; 
+            flex-wrap: wrap; 
+            border: 1px solid #ccc; 
+            border-radius: 5px; 
+            margin: 10px; 
+            padding: 10px; 
+            background-color: #f9f9f9; 
+        }
+        .user-field {
+            flex: 1; 
+            margin: 5px; 
+            padding: 10px; 
+            background: #ffffff; 
+            border-radius: 4px; 
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); 
+        }
+        button { 
+    margin-left: 5px;
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 14px;
+        }
+        button:hover { 
+            background-color: #0056b3; 
+        }
+        #controls {
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 15px; 
+        }
+        #searchBar {
+width: calc(100% - 50px);
+    padding: 22px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+    font-size: 18px;
+        }
+        #searchBar:focus {
+            border-color: #007BFF; 
+            outline: none; 
+        }
+        .user-fields {
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: space-between; 
+            margin: 5px 0; 
+            width: 100%; 
+        }
+        .commission-paid {
+            background-color: #cdf1d0;
+    color: #3a8b3e;
+        }
+        input[readonly] {
+            background-color: #f0f0f0; /* Light gray background for non-editable inputs */
+            cursor: not-allowed; /* Change cursor to indicate non-editable */
+        }
+        .label {
+            font-weight: bold; /* Make label bold */
+        }
+.dashboard-header {
+    text-align: center; /* Center align text */
+    margin: 20px 0; /* Add margin for spacing */
+}
+        .dashboard-header img {
+            max-width: 100px; /* Limit image size */
+            height: auto; /* Maintain aspect ratio */
+            margin-bottom: 10px; /* Spacing between image and title */
+        }
     </style>
 </head>
 <body>
     <div id="authContainer">
+        <img src="title.png" alt="Admin Login Logo" style="max-width: 100px; height: auto; margin-bottom: 10px;" />
         <h1>Admin Login</h1>
-        <form id="loginForm" onsubmit="authenticate(); return false;">
-            <input type="text" id="username" placeholder="Username" required />
-            <input type="password" id="password" placeholder="Password" required />
+        <form id="loginForm" onsubmit="authenticate(); return false;" style=" width: 100%; margin-top: 23px; ">
+            <div class="input-field">
+                <input type="text" id="username" placeholder="Username" required />
+            </div>
+            <div class="input-field">
+                <input type="password" id="password" placeholder="Password" required />
+            </div>
             <button type="submit">Login</button>
         </form>
     </div>
 
     <div id="dashboard" style="display: none;">
-        <h1>Admin Dashboard</h1>
-        <input type="text" id="searchBar" placeholder="Search by username or ID" onkeyup="searchUsers()" />
-        <button onclick="fetchUsers()">Refresh Users</button>
+<div class="dashboard-header" style="
+    margin-left: 9px;
+    margin-right: 9px;
+">
+    <img src="title.png" alt="Admin Dashboard Logo" style="max-width: 100px; height: auto; margin-bottom: 10px;" />
+    <h1>Admin Dashboard</h1>
+</div>
+        <div id="controls" style="
+    margin-left: 9px;
+    margin-right: 9px;
+">
+            <input type="text" id="searchBar" placeholder="Search by username or ID" onkeyup="searchUsers()" />
+            <button onclick="fetchUsers()">Refresh</button>
+        </div>
         <div id="userList"></div>
     </div>
 
     <script>
-        let allUsers = []; // Store the full list of users
+        let allUsers = [];
+        let currentUserIndex = 0; // Track the current index for loading users
+        let loading = false; // Track loading state to prevent duplicate fetches
 
         // Function to authenticate user
         async function authenticate() {
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
 
-            // Make an authentication request to the backend
             const response = await fetch("https://telegram-bot-degen-town.replit.app/admin/users", {
                 headers: {
                     "Authorization": "Basic " + btoa(username + ":" + password)
@@ -48,6 +196,7 @@
                 document.getElementById("authContainer").style.display = "none";
                 document.getElementById("dashboard").style.display = "block";
                 fetchUsers(); // Fetch users after successful login
+                setupScrollListener(); // Setup scroll listener for infinite scroll
             } else {
                 alert("Invalid username or password");
             }
@@ -55,16 +204,22 @@
 
         // Fetch users from backend
         async function fetchUsers() {
+            if (loading) return; // Prevent multiple fetches
+            loading = true;
+
             const response = await fetch("https://telegram-bot-degen-town.replit.app/admin/users", {
                 headers: {
                     "Authorization": "Basic " + btoa(document.getElementById("username").value + ":" + document.getElementById("password").value)
                 }
             });
-            allUsers = await response.json();
-            renderUsers(allUsers);
+            const users = await response.json();
+            allUsers = [...allUsers, ...users]; // Append new users
+            renderUsers(allUsers.slice(0, currentUserIndex + 5)); // Render the next set of users
+            currentUserIndex += 5; // Move to the next set of users
+            loading = false; // Reset loading state
         }
 
-        // Render users based on search results
+        // Render users based on current index
         function renderUsers(users) {
             const userList = document.getElementById("userList");
             userList.innerHTML = ""; // Clear existing user elements
@@ -74,42 +229,51 @@
                 userContainer.classList.add("user-container");
 
                 userContainer.innerHTML = `
-                    <div class="user-field">User ID: ${user.userId}</div>
-                    <div class="user-field">Username: ${user.username}</div>
-                    <div class="user-field">Total Referrals: 
-                        <input type="number" value="${user.totalReferrals}" id="totalReferrals-${user.userId}" readonly />
+                    <div class="user-fields">
+                        <div class="user-field"><strong>User ID:</strong> ${user.userId}</div>
+                        <div class="user-field"><strong>Username:</strong> ${user.username}</div>
+                        <div class="user-field"><strong>Total Referrals:</strong> 
+                            <input type="number" value="${user.totalReferrals}" id="totalReferrals-${user.userId}" readonly />
+                        </div>
                     </div>
-                    <div class="user-field">Withdraw Address: 
-                        <input type="text" value="${user.withdrawAddress}" id="withdrawAddress-${user.userId}" />
+                    <div class="user-fields">
+                        <div class="user-field"><strong>Withdraw Address:</strong> 
+                            <input type="text" value="${user.withdrawAddress}" id="withdrawAddress-${user.userId}" />
+                        </div>
+                        <div class="user-field"><strong>Total Deposits:</strong> 
+                            <input type="number" value="${user.totalDeposit}" id="totalDeposit-${user.userId}" readonly />
+                            <span>TON</span>
+                        </div>
                     </div>
-                    <div class="user-field">Total Deposits: 
-                        <input type="number" value="${user.totalDeposit}" id="totalDeposit-${user.userId}" readonly />
+                    <div class="user-fields">
+                        <div class="user-field"><strong>Commission Earned:</strong> 
+                            <input type="number" value="${user.commissionEarned}" id="commissionEarned-${user.userId}" readonly />
+                            <span>TON</span>
+                        </div>
+                        <div class="user-field commission-paid"><strong>Commission Paid:</strong> 
+                            <input type="number" value="${user.commissionPaid}" id="commissionPaid-${user.userId}" />
+                            <span>TON</span>
+                        </div>
                     </div>
-                    <div class="user-field">Commission Earned: 
-                        <input type="number" value="${user.commissionEarned}" id="commissionEarned-${user.userId}" />
-                    </div>
-                    <div class="user-field">Commission Paid: 
-                        <input type="number" value="${user.commissionPaid}" id="commissionPaid-${user.userId}" />
-                    </div>
-                    <button onclick="updateUser('${user.userId}')">Update User</button>
+                    <button onclick="updateUser(${user.userId})">Update</button>
                 `;
                 userList.appendChild(userContainer);
             });
         }
 
-        // Filter users based on search query
+        // Search users based on input
         function searchUsers() {
             const query = document.getElementById("searchBar").value.toLowerCase();
             const filteredUsers = allUsers.filter(user => 
-                user.username.toLowerCase().includes(query) || user.userId.includes(query)
+                user.username.toLowerCase().includes(query) || 
+                user.userId.toString().includes(query)
             );
-            renderUsers(filteredUsers);
+            renderUsers(filteredUsers.slice(0, 5)); // Display filtered users
         }
 
-        // Update user information
+        // Update user details
         async function updateUser(userId) {
             const withdrawAddress = document.getElementById(`withdrawAddress-${userId}`).value;
-            const commissionEarned = document.getElementById(`commissionEarned-${userId}`).value;
             const commissionPaid = document.getElementById(`commissionPaid-${userId}`).value;
 
             const response = await fetch(`https://telegram-bot-degen-town.replit.app/admin/users/${userId}`, {
@@ -118,19 +282,23 @@
                     "Content-Type": "application/json",
                     "Authorization": "Basic " + btoa(document.getElementById("username").value + ":" + document.getElementById("password").value)
                 },
-                body: JSON.stringify({
-                    withdrawAddress,
-                    commissionEarned, 
-                    commissionPaid 
-                })
+                body: JSON.stringify({ withdrawAddress, commissionPaid })
             });
 
             if (response.ok) {
-                alert("User updated successfully!");
-                fetchUsers(); // Refresh the list
+                alert("User updated successfully");
             } else {
-                alert("Failed to update user.");
+                alert("Error updating user");
             }
+        }
+
+        // Infinite scroll functionality
+        function setupScrollListener() {
+            window.addEventListener("scroll", () => {
+                if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 10) {
+                    fetchUsers(); // Fetch more users when scrolled to bottom
+                }
+            });
         }
     </script>
 </body>
