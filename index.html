@@ -1899,6 +1899,101 @@ async function generateLeaderboard() {
                 console.log("Inside showTon2 function");
                 window.location.href = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
             }
+
+
+
+let lastProcessedTimestamp = localStorage.getItem('lastProcessedTimestamp') || 0;
+let isProcessing = false;
+
+// Function to show an in-page popup
+function showPopup(message) {
+    const popup = document.getElementById('transactionPopup');
+    const messageElement = document.getElementById('popupMessage');
+
+    messageElement.innerText = message;
+    popup.style.display = 'block'; // Show the popup
+}
+
+// Function to hide the popup when the close button is clicked
+document.getElementById('closePopup').addEventListener('click', () => {
+    document.getElementById('transactionPopup').style.display = 'none';
+});
+
+// Function to check transactions
+async function checkTransactions() {
+    if (isProcessing) return; // Prevent new transactions from being processed
+    isProcessing = true;
+
+    console.log("Checking transactions...");
+    try {
+        const response = await fetch(`https://toncenter.com/api/v2/getTransactions?address=${walletAddress}&api_key=${apiKey}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        console.log("Transaction data for checking:", data);
+
+        if (data.result?.length > 0) {
+            data.result.sort((a, b) => b.utime - a.utime); // Sort transactions by timestamp
+
+            for (const transaction of data.result) {
+                const timestamp = transaction.utime;
+                const message = transaction.in_msg?.message || '';
+                const amount = (parseFloat(transaction.in_msg?.value || transaction.value || 0) / 1000000000) || 0;
+
+                // Check if this transaction is new and is related to the user
+                if (timestamp > lastProcessedTimestamp && message.includes(userId)) {
+                    // Show the in-page popup
+                    showMessage(`New deposit received: ${amount} TON 🎉`);
+
+                    // Update lastProcessedTimestamp
+                    lastProcessedTimestamp = timestamp;
+                    localStorage.setItem('lastProcessedTimestamp', lastProcessedTimestamp); // Update in localStorage
+                    break; // Exit loop after processing the new transaction
+                }
+            }
+        }
+    } catch (error) {
+        console.error("Error fetching transactions:", error);
+    } finally {
+        isProcessing = false; // Reset the processing flag
+    }
+}
+
+    function showMessage(message) {
+        const originalContent = document.getElementById("walletsection");
+        const transactionMessage = document.getElementById("transactionMessage");
+
+        // Set the message text in the transaction message div
+        transactionMessage.querySelector("p").textContent = message; // Update the message
+
+        // Shift the original content down
+        originalContent.style.marginTop = "0px"; // Adjust this value as needed
+
+        // Show the transaction message
+        transactionMessage.style.display = "block";
+
+        // Use requestAnimationFrame for smoother transitions
+        requestAnimationFrame(() => {
+            transactionMessage.style.opacity = 1; // Fade in
+        });
+    }
+    function closeMessage() {
+    const originalContent = document.getElementById("walletsection");
+    const transactionMessage = document.getElementById("transactionMessage");
+
+    // Fade out the transaction message
+    transactionMessage.style.opacity = 0;
+    originalContent.style.marginTop = "0px";
+
+    // Wait for the fade-out transition to finish before hiding
+    transactionMessage.addEventListener('transitionend', function() {
+        transactionMessage.style.display = "none"; // Hide after fade out
+        originalContent.style.marginTop = "0"; // Reset margin to return to original position
+    }, { once: true });
+}
+
+// Check for new transactions every 30 seconds
+setInterval(checkTransactions, 30000);
+
 </script>
 
 
