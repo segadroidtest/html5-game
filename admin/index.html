@@ -43,13 +43,13 @@
                     <div class="user-field">User ID: ${user.userId}</div>
                     <div class="user-field">Username: ${user.username}</div>
                     <div class="user-field">Total Referrals: 
-                        <input type="number" value="${user.totalReferrals}" id="totalReferrals-${user.userId}" />
+                        <input type="number" value="${user.totalReferrals}" id="totalReferrals-${user.userId}" readonly />
                     </div>
                     <div class="user-field">Withdraw Address: 
                         <input type="text" value="${user.withdrawAddress}" id="withdrawAddress-${user.userId}" />
                     </div>
                     <div class="user-field">Total Deposits: 
-                        <input type="number" value="${user.totalDeposit}" id="totalDeposit-${user.userId}" />
+                        <input type="number" value="${user.totalDeposit}" id="totalDeposit-${user.userId}" readonly />
                     </div>
                     <div class="user-field">Commission Earned: 
                         <input type="number" value="${user.commissionEarned}" id="commissionEarned-${user.userId}" />
@@ -74,9 +74,7 @@
 
         // Update user information
         async function updateUser(userId) {
-            const totalReferrals = document.getElementById(`totalReferrals-${userId}`).value;
             const withdrawAddress = document.getElementById(`withdrawAddress-${userId}`).value;
-            const totalDeposit = document.getElementById(`totalDeposit-${userId}`).value;
             const commissionEarned = document.getElementById(`commissionEarned-${userId}`).value;
             const commissionPaid = document.getElementById(`commissionPaid-${userId}`).value;
 
@@ -87,9 +85,7 @@
                     "Authorization": "Basic " + btoa("admin:admin")
                 },
                 body: JSON.stringify({
-                    totalReferrals, 
-                    withdrawAddress, 
-                    totalDeposit,
+                    withdrawAddress,
                     commissionEarned, 
                     commissionPaid 
                 })
