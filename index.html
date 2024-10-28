@@ -98,6 +98,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                     if (timestamp > lastProcessedTimestamp && message.includes(userId)) {
                         showMessage(`New deposit received: ${amount} TON 🎉`);
+                        
                         lastProcessedTimestamp = timestamp; // Update lastProcessedTimestamp after saving the deposit
                         localStorage.setItem('lastProcessedTimestamp', lastProcessedTimestamp); // Update in localStorage
                         break; // Exit loop after processing the new deposit
@@ -191,7 +192,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const userId = Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || "defaultUser";
     console.log("User ID:", userId);
 
-    // Process any unsaved deposits on page load
+    // Call to process any unsaved deposits on page load
     await processUnsavedDeposits();
 
     // Initialize the last processed timestamp if it's not set
@@ -207,7 +208,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     }, 1500); // Check for transactions and balance every 1.5 seconds
 });
-
 
 
 </script>
