@@ -15647,15 +15647,14 @@ r3.prototype.onBuyTouch = async function() {
 
 
 h3.prototype.save = async function() {
-    const userId = Telegram.WebApp.initDataUnsafe.user.id;
+    const userId = "Telegram.WebApp.initDataUnsafe.user.id";
     try {
-        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/saveProgress/${userId}`, {
+        const response = await fetch("https://telegram-bot-degen-town.replit.app/api/saveProgress", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-            userId: userId,
             levelsCompleted: this.levelsCompleted,
             starsPerLevel: this.starsPerLevel
             })
