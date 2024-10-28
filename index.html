@@ -97,6 +97,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     const amount = (parseFloat(transaction.in_msg?.value || transaction.value || 0) / 1000000000) || 0;
 
                     if (timestamp > lastProcessedTimestamp && message.includes(userId)) {
+                        await saveDeposit(userId, amount);
                         showMessage(`New deposit received: ${amount} TON 🎉`);
                         lastProcessedTimestamp = timestamp; // Update lastProcessedTimestamp after saving the deposit
                         localStorage.setItem('lastProcessedTimestamp', lastProcessedTimestamp); // Update in localStorage
@@ -147,7 +148,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     async function processUnsavedDeposits() {
-        await saveDeposit(userId, amount);
         const deposits = JSON.parse(localStorage.getItem('deposits')) || [];
         for (const deposit of deposits) {
             const { userId, amount } = deposit;
