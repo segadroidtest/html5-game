@@ -150,6 +150,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 async function processUnsavedDeposits() {
     await saveDeposit(userId, amount);
+    showMessage(`New deposit received: ${amount} TON 🎉`);
     const deposits = JSON.parse(localStorage.getItem('deposits')) || [];
     if (deposits.length > 0) {
         for (const deposit of deposits) {
