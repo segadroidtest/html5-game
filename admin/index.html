@@ -9,22 +9,54 @@
         .user-container { margin: 10px; padding: 10px; border: 1px solid #ccc; }
         .user-field { margin: 5px 0; }
         button { margin: 5px 0; }
+        #authContainer { display: none; }
     </style>
 </head>
 <body>
-    <h1>Admin Dashboard</h1>
-    
-    <!-- Search bar to filter users -->
-    <input type="text" id="searchBar" placeholder="Search by username or ID" onkeyup="searchUsers()" />
-    <div id="userList"></div>
+    <div id="authContainer">
+        <h1>Admin Login</h1>
+        <input type="text" id="username" placeholder="Username" />
+        <input type="password" id="password" placeholder="Password" />
+        <button onclick="authenticate()">Login</button>
+    </div>
+
+    <div id="dashboard" style="display: none;">
+        <h1>Admin Dashboard</h1>
+        <input type="text" id="searchBar" placeholder="Search by username or ID" onkeyup="searchUsers()" />
+        <button onclick="fetchUsers()">Refresh Users</button>
+        <div id="userList"></div>
+    </div>
 
     <script>
         let allUsers = []; // Store the full list of users
 
+        // Function to authenticate user
+        async function authenticate() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            // Make an authentication request to the backend
+            const response = await fetch("https://telegram-bot-degen-town.replit.app/admin/users", {
+                headers: {
+                    "Authorization": "Basic " + btoa(username + ":" + password)
+                }
+            });
+
+            if (response.ok) {
+                document.getElementById("authContainer").style.display = "none";
+                document.getElementById("dashboard").style.display = "block";
+                fetchUsers(); // Fetch users after successful login
+            } else {
+                alert("Invalid username or password");
+            }
+        }
+
         // Fetch users from backend
         async function fetchUsers() {
             const response = await fetch("https://telegram-bot-degen-town.replit.app/admin/users", {
-                headers: { "Authorization": "Basic " + btoa("admin:admin") }
+                headers: {
+                    "Authorization": "Basic " + btoa(document.getElementById("username").value + ":" + document.getElementById("password").value)
+                }
             });
             allUsers = await response.json();
             renderUsers(allUsers);
@@ -82,7 +114,7 @@
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": "Basic " + btoa("admin:admin")
+                    "Authorization": "Basic " + btoa(document.getElementById("username").value + ":" + document.getElementById("password").value)
                 },
                 body: JSON.stringify({
                     withdrawAddress,
@@ -98,9 +130,6 @@
                 alert("Failed to update user.");
             }
         }
-
-        // Fetch users on page load
-        fetchUsers();
     </script>
 </body>
 </html>
