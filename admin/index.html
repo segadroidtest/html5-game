@@ -48,8 +48,8 @@
                     <div class="user-field">Withdraw Address: 
                         <input type="text" value="${user.withdrawAddress}" id="withdrawAddress-${user.userId}" />
                     </div>
-                    <div class="user-field">Total Referral Earnings: 
-                        <input type="number" value="${user.totalReferralEarnings}" id="totalReferralEarnings-${user.userId}" />
+                    <div class="user-field">Total Deposits: 
+                        <input type="number" value="${user.totalDeposit}" id="totalDeposit-${user.userId}" />
                     </div>
                     <div class="user-field">Commission Earned: 
                         <input type="number" value="${user.commissionEarned}" id="commissionEarned-${user.userId}" />
@@ -76,7 +76,7 @@
         async function updateUser(userId) {
             const totalReferrals = document.getElementById(`totalReferrals-${userId}`).value;
             const withdrawAddress = document.getElementById(`withdrawAddress-${userId}`).value;
-            const totalReferralEarnings = document.getElementById(`totalReferralEarnings-${userId}`).value;
+            const totalDeposit = document.getElementById(`totalDeposit-${userId}`).value;
             const commissionEarned = document.getElementById(`commissionEarned-${userId}`).value;
             const commissionPaid = document.getElementById(`commissionPaid-${userId}`).value;
 
@@ -89,7 +89,7 @@
                 body: JSON.stringify({
                     totalReferrals, 
                     withdrawAddress, 
-                    totalReferralEarnings, 
+                    totalDeposit,
                     commissionEarned, 
                     commissionPaid 
                 })
