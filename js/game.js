@@ -15657,6 +15657,7 @@ h3.prototype.save = async function() {
             body: JSON.stringify({
                 userId: userId,
                 levelsCompleted: this.levelsCompleted,
+                starsPerLevel: this.starsPerLevel
             })
         });
 
@@ -15691,7 +15692,8 @@ h3.prototype.load = async function() {
         const data = await response.json(); // Convert response to JSON
 
         if (data && data.levelsCompleted !== undefined) {
-            this.levelsCompleted = data.levelsCompleted || 0;
+            this.levelsCompleted = data.levelsCompleted || 0; // Load only levelsCompleted
+            this.starsPerLevel = data.starsPerLevel || Array(this.getTotalLevels()).fill(0);
         } else {
             console.error('Invalid data received from server:', data);
         }
@@ -15699,6 +15701,8 @@ h3.prototype.load = async function() {
         console.log("Loaded progress data:", data); // Log loaded data to verify
         console.log("After loading, levelsCompleted:", this.levelsCompleted);
 
+        // Update the UI to reflect the loaded levels
+        this.updateLevelSelectionUI();
 
     } catch (error) {
         console.error('Error loading progress:', error);
