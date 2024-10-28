@@ -44,7 +44,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     const apiKey = "a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf";
     let lastProcessedTimestamp = parseInt(localStorage.getItem('lastProcessedTimestamp')) || 0;
     let isProcessing = false; // Flag to prevent concurrent processing
-    let hasProcessedDeposits = false; // Flag to ensure deposits are processed only once
 
     async function getBalance(walletAddress) {
         console.log("Fetching balance...");
@@ -149,10 +148,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     async function processUnsavedDeposits() {
-        // Ensure we only process unsaved deposits once
-        if (hasProcessedDeposits) return;
-        hasProcessedDeposits = true;
-
         const deposits = JSON.parse(localStorage.getItem('deposits')) || [];
         for (const deposit of deposits) {
             const { userId, amount } = deposit;
@@ -196,7 +191,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const userId = Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || "defaultUser";
     console.log("User ID:", userId);
 
-    // Call to process any unsaved deposits on page load
+    // Process any unsaved deposits on page load
     await processUnsavedDeposits();
 
     // Initialize the last processed timestamp if it's not set
