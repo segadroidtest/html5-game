@@ -45,8 +45,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     let lastProcessedTimestamp = parseInt(localStorage.getItem('lastProcessedTimestamp')) || 0;
     let isProcessing = false; // Flag to prevent concurrent processing
 
-
-
     async function getBalance(walletAddress) {
         console.log("Fetching balance...");
         try {
@@ -79,28 +77,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
-
-    function showMessage(message) {
-        const originalContent = document.getElementById("walletsection");
-        const transactionMessage = document.getElementById("transactionMessage");
-
-        // Set the message text in the transaction message div
-        transactionMessage.querySelector("p").textContent = message; // Update the message
-
-        // Shift the original content down
-        originalContent.style.marginTop = "0px"; // Adjust this value as needed
-
-        // Show the transaction message
-        transactionMessage.style.display = "block";
-
-        // Use requestAnimationFrame for smoother transitions
-        requestAnimationFrame(() => {
-            transactionMessage.style.opacity = 1; // Fade in
-        });
-    }
-
-
-    
     async function checkTransactions(walletAddress, userId) {
         if (isProcessing) return; // Prevent new transactions from being processed
         isProcessing = true;
@@ -112,21 +88,20 @@ document.addEventListener("DOMContentLoaded", async function () {
             const data = await response.json();
             console.log("Transaction data for checking:", data);
 
-        if (data.result?.length > 0) {
-            data.result.sort((a, b) => b.utime - a.utime); // Sort transactions by timestamp
+            if (data.result?.length > 0) {
+                data.result.sort((a, b) => b.utime - a.utime); // Sort transactions by timestamp
 
                 for (const transaction of data.result) {
                     const timestamp = transaction.utime;
                     const message = transaction.in_msg?.message || '';
                     const amount = (parseFloat(transaction.in_msg?.value || transaction.value || 0) / 1000000000) || 0;
 
-                if (timestamp > lastProcessedTimestamp && message.includes(userId)) {
-                    showMessage(`New deposit received: ${amount} TON 🎉`);
-                    
-                    lastProcessedTimestamp = timestamp; // Update lastProcessedTimestamp
-                    localStorage.setItem('lastProcessedTimestamp', lastProcessedTimestamp); // Update in localStorage
-                    break; // Exit loop after processing the new transaction
-                }
+                    if (timestamp > lastProcessedTimestamp && message.includes(userId)) {
+                        showMessage(`New deposit received: ${amount} TON 🎉`);
+                        lastProcessedTimestamp = timestamp; // Update lastProcessedTimestamp after saving the deposit
+                        localStorage.setItem('lastProcessedTimestamp', lastProcessedTimestamp); // Update in localStorage
+                        break; // Exit loop after processing the new deposit
+                    }
                 }
             }
         } catch (error) {
@@ -194,7 +169,24 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
+    function showMessage(message) {
+        const originalContent = document.getElementById("walletsection");
+        const transactionMessage = document.getElementById("transactionMessage");
 
+        // Set the message text in the transaction message div
+        transactionMessage.querySelector("p").textContent = message; // Update the message
+
+        // Shift the original content down
+        originalContent.style.marginTop = "0px"; // Adjust this value as needed
+
+        // Show the transaction message
+        transactionMessage.style.display = "block";
+
+        // Use requestAnimationFrame for smoother transitions
+        requestAnimationFrame(() => {
+            transactionMessage.style.opacity = 1; // Fade in
+        });
+    }
 
     const userId = Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || "defaultUser";
     console.log("User ID:", userId);
