@@ -68,6 +68,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             const data = await response.json();
             console.log("Transaction data for initialization:", data);
             if (data.result?.length > 0) {
+                // Initialize to the latest transaction's timestamp
                 lastProcessedTimestamp = data.result[0].utime;
                 localStorage.setItem('lastProcessedTimestamp', lastProcessedTimestamp); // Store in localStorage
             }
@@ -96,11 +97,12 @@ document.addEventListener("DOMContentLoaded", async function () {
                     const message = transaction.in_msg?.message || '';
                     const amount = (parseFloat(transaction.in_msg?.value || transaction.value || 0) / 1000000000) || 0;
 
+                    // Only process transactions that are newer than the last processed timestamp
                     if (timestamp > lastProcessedTimestamp && message.includes(userId)) {
                         showMessage(`New deposit received: ${amount} TON 🎉`);
+                        await saveDeposit(userId, amount);
                         lastProcessedTimestamp = timestamp; // Update lastProcessedTimestamp after saving the deposit
                         localStorage.setItem('lastProcessedTimestamp', lastProcessedTimestamp); // Update in localStorage
-                        break; // Exit loop after processing the new deposit
                     }
                 }
             }
@@ -193,7 +195,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Call to process any unsaved deposits on page load
     await processUnsavedDeposits();
 
-    // Initialize the last processed timestamp if it's not set
+    // Initialize the last processed timestamp only if it's not set
     if (lastProcessedTimestamp === 0) {
         await initializeLastProcessedTimestamp(walletAddress);
     }
@@ -206,6 +208,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     }, 1500); // Check for transactions and balance every 1.5 seconds
 });
+
 
 
 </script>
