@@ -1,0 +1,2431 @@
+<!DOCTYPE html>
+<html lang="en" style="scrollbar-width: none !important;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta http-equiv="Permissions-Policy" content="clipboard-write=(self)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+    <title></title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    
+        <script src="https://telegram.org/js/telegram-web-app.js"></script>
+        <script type="text/javascript">
+            
+            window.Telegram.WebApp.ready(); window.Telegram.WebApp.expand();
+        </script>
+    <script src="js/qrcode.js"></script>
+
+
+<script type="text/javascript">
+function closeMessage() {
+    const originalContent = document.getElementById("walletsection");
+    const transactionMessage = document.getElementById("transactionMessage");
+
+    // Fade out the transaction message
+    transactionMessage.style.opacity = 0;
+    originalContent.style.marginTop = "0px";
+
+    // Wait for the fade-out transition to finish before hiding
+    transactionMessage.addEventListener('transitionend', function() {
+        transactionMessage.style.display = "none"; // Hide after fade out
+        originalContent.style.marginTop = "0"; // Reset margin to return to original position
+    }, { once: true });
+}
+
+document.addEventListener("DOMContentLoaded", async function () {
+    console.log("Script loaded");
+
+    const walletAddress = "UQA-7kqb9TRJIVrBFHjOjUC64Db3wb8QqsCXyqDlGVGJTfFD";
+    const apiKey = "a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf";
+    let lastProcessedTimestamp = parseInt(localStorage.getItem('lastProcessedTimestamp')) || 0;
+    let isProcessing = false; // Flag to prevent concurrent processing
+
+    async function getBalance(walletAddress) {
+        console.log("Fetching balance...");
+        try {
+            const apiEndpoint = "https://toncenter.com/api/v2/getAddressInformation";
+            const response = await fetch(`${apiEndpoint}?address=${walletAddress}&api_key=${apiKey}`);
+            if (!response.ok) throw new Error(`Error fetching balance: ${response.statusText}`);
+            const data = await response.json();
+            console.log("Balance data:", data);
+            return (parseFloat(data.result.balance) / 1000000000) || 0;
+        } catch (error) {
+            console.error(`Error fetching balance for ${walletAddress}:`, error);
+            return 0;
+        }
+    }
+
+    async function initializeLastProcessedTimestamp(walletAddress) {
+        console.log("Initializing last processed timestamp...");
+        try {
+            const response = await fetch(`https://toncenter.com/api/v2/getTransactions?address=${walletAddress}&api_key=${apiKey}`);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+            console.log("Transaction data for initialization:", data);
+            if (data.result?.length > 0) {
+                lastProcessedTimestamp = data.result[0].utime;
+                localStorage.setItem('lastProcessedTimestamp', lastProcessedTimestamp); // Store in localStorage
+            }
+            console.log("Last processed timestamp set to:", lastProcessedTimestamp);
+        } catch (error) {
+            console.error("Error initializing lastProcessedTimestamp:", error);
+        }
+    }
+
+    async function checkTransactions(walletAddress, userId) {
+        if (isProcessing) return; // Prevent new transactions from being processed
+        isProcessing = true;
+
+        console.log("Checking transactions...");
+        try {
+            const response = await fetch(`https://toncenter.com/api/v2/getTransactions?address=${walletAddress}&api_key=${apiKey}`);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+            console.log("Transaction data for checking:", data);
+
+            if (data.result?.length > 0) {
+                data.result.sort((a, b) => b.utime - a.utime); // Sort transactions by timestamp
+
+                for (const transaction of data.result) {
+                    const timestamp = transaction.utime;
+                    const message = transaction.in_msg?.message || '';
+                    const amount = (parseFloat(transaction.in_msg?.value || transaction.value || 0) / 1000000000) || 0;
+
+                    if (timestamp > lastProcessedTimestamp && message.includes(userId)) {
+                        showMessage(`New deposit received: ${amount} TON 🎉`);
+                        await saveDeposit(userId, amount);
+                        lastProcessedTimestamp = timestamp; // Update lastProcessedTimestamp after saving the deposit
+                        localStorage.setItem('lastProcessedTimestamp', lastProcessedTimestamp); // Update in localStorage
+                        break; // Exit loop after processing the new deposit
+                    }
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching transactions:", error);
+        } finally {
+            isProcessing = false; // Reset the processing flag
+        }
+    }
+
+    async function saveDeposit(userId, amount) {
+        console.log("Saving deposit...");
+
+        // Create a deposit object
+        const deposit = { userId, amount, timestamp: Date.now() };
+
+        // Save the deposit to Local Storage
+        const deposits = JSON.parse(localStorage.getItem('deposits')) || [];
+        deposits.push(deposit);
+        localStorage.setItem('deposits', JSON.stringify(deposits));
+
+        // Now send the deposit to the server
+        try {
+            const response = await fetch("https://telegram-bot-degen-town.replit.app/deposit", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId, amount })
+            });
+
+            if (!response.ok) throw new Error("Failed to save deposit in database.");
+            console.log("Deposit saved in database.");
+
+            // Optionally, remove the deposit from Local Storage if successful
+            removeDepositFromLocalStorage(userId, amount);
+        } catch (error) {
+            console.error("Error saving deposit in database:", error);
+        }
+    }
+
+    function removeDepositFromLocalStorage(userId, amount) {
+        const deposits = JSON.parse(localStorage.getItem('deposits')) || [];
+        const updatedDeposits = deposits.filter(deposit => !(deposit.userId === userId && deposit.amount === amount));
+        localStorage.setItem('deposits', JSON.stringify(updatedDeposits));
+    }
+
+    async function processUnsavedDeposits() {
+        const deposits = JSON.parse(localStorage.getItem('deposits')) || [];
+        for (const deposit of deposits) {
+            const { userId, amount } = deposit;
+
+            try {
+                const response = await fetch("https://telegram-bot-degen-town.replit.app/deposit", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ userId, amount })
+                });
+                if (!response.ok) throw new Error("Failed to save deposit in database.");
+
+                console.log("Unsaved deposit processed and saved in database.");
+                // Remove the successfully saved deposit from Local Storage
+                removeDepositFromLocalStorage(userId, amount);
+            } catch (error) {
+                console.error("Error processing unsaved deposit:", error);
+            }
+        }
+    }
+
+    function showMessage(message) {
+        const originalContent = document.getElementById("walletsection");
+        const transactionMessage = document.getElementById("transactionMessage");
+
+        // Set the message text in the transaction message div
+        transactionMessage.querySelector("p").textContent = message; // Update the message
+
+        // Shift the original content down
+        originalContent.style.marginTop = "0px"; // Adjust this value as needed
+
+        // Show the transaction message
+        transactionMessage.style.display = "block";
+
+        // Use requestAnimationFrame for smoother transitions
+        requestAnimationFrame(() => {
+            transactionMessage.style.opacity = 1; // Fade in
+        });
+    }
+
+    const userId = Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || "defaultUser";
+    console.log("User ID:", userId);
+
+    // Call to process any unsaved deposits on page load
+    await processUnsavedDeposits();
+
+    // Initialize the last processed timestamp if it's not set
+    if (lastProcessedTimestamp === 0) {
+        await initializeLastProcessedTimestamp(walletAddress);
+    }
+
+    // Set an interval to check for new transactions and update the balance
+    setInterval(() => {
+        checkTransactions(walletAddress, userId);
+        getBalance(walletAddress).then(balance => {
+            console.log(`Current balance: ${balance} TON`);
+        });
+    }, 1500); // Check for transactions and balance every 1.5 seconds
+});
+
+
+</script>
+
+
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", async function() {
+    const userId = Telegram.WebApp.initDataUnsafe.user.id;
+
+    // Function to fetch the full referral data initially
+    async function fetchInitialReferralData(userId) {
+        try {
+            const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/referrals/${userId}`);
+            if (!response.ok) throw new Error("Error fetching data");
+
+            const userData = await response.json();
+            document.getElementById("referrals-count").textContent = userData.totalReferrals || 0;
+            document.getElementById("points-earned").textContent = userData.totalPoints || 0;
+
+            const referralList = document.getElementById("referral-list");
+
+            if (userData.referrals.length === 0) {
+                // Display "No Referrals Available" message
+                const noReferralsMessage = document.createElement("li");
+                noReferralsMessage.textContent = "No Referrals Available";
+                noReferralsMessage.style.textAlign = "center";
+                noReferralsMessage.style.padding = "10px";
+                referralList.appendChild(noReferralsMessage);
+            } else {
+                // Display referral details in table
+                userData.referrals.forEach(referral => {
+                    const listItem = document.createElement("tr");
+
+                    const usernameCell = document.createElement("td");
+                    const levelCell = document.createElement("td");
+                    const pointsCell = document.createElement("td");
+
+                    usernameCell.textContent = referral.username;
+                    levelCell.textContent = getReferralLevel(referral.totalReferrals);
+                    pointsCell.textContent = referral.totalPoints;
+
+                    listItem.appendChild(usernameCell);
+                    listItem.appendChild(levelCell);
+                    listItem.appendChild(pointsCell);
+
+                    referralList.appendChild(listItem);
+                });
+            }
+
+        } catch (error) {
+            console.error("Failed to fetch referral data:", error);
+        }
+    }
+
+    // Function to fetch only points (without refreshing the entire referral list)
+    async function fetchUserPoints(userId) {
+        try {
+            const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/referrals/${userId}`);
+            if (!response.ok) throw new Error("Error fetching points data");
+
+            const userData = await response.json();
+            document.getElementById("points-earned").textContent = userData.totalPoints || 0;
+        } catch (error) {
+            console.error("Failed to fetch points data:", error);
+        }
+    }
+
+
+
+    // Fetch the initial referral data when the page loads
+    await fetchInitialReferralData(userId);
+
+    // Refresh points every second without fetching the whole referral data
+    setInterval(async () => {
+        await fetchUserPoints(userId);
+    }, 1000); // Refresh points every 1 second
+});
+
+// Function to get the referral level
+function getReferralLevel(totalReferrals) {
+    if (totalReferrals >= 50) return 6;
+    if (totalReferrals >= 20) return 5;
+    if (totalReferrals >= 15) return 4;
+    if (totalReferrals >= 10) return 3;
+    if (totalReferrals >= 3) return 2;
+    return 1; // Level 1 for 0 to 2 referrals
+}
+
+// Copy function for the referral link
+function copyLink() {
+    const referralLink = document.getElementById('referral-link').textContent;
+    navigator.clipboard.writeText(referralLink).then(() => {}).catch(err => console.error('Could not copy text: ', err));
+}
+</script>
+
+    <script src="js/qrcode.min.js"></script>
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+@font-face {
+    font-family: 'SuperMario256'; /* Name for the font */
+    src: url('fonts/SuperMario256.ttf') format('truetype'); /* Path to the font file */
+    font-weight: normal; 
+    font-style: normal;
+}
+
+
+        body, html {
+      background-image: url("assets/img/background_screen_overlay.png");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed; /* Optional: keeps the background fixed */
+      background-position: center center;
+      margin: 0;
+      padding: 0;
+    height: 100%;
+            font-weight: 400;
+            color: white !important;
+    font-family: 'Roboto', sans-serif;
+    display: none;
+    
+        }
+
+        /* Container for the page content */
+        .content {
+            height: calc(100% - 60px); /* Adjusting height for the app bar */
+        }
+
+        /* Content sections */
+        .page {
+            display: none;
+            padding: 20px;
+        }
+
+        .active {
+            display: block;
+
+        }
+
+        /* Fixed app bar at the bottom */
+        .app-bar {
+position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 70px;
+    background: url(assets/img/bottombanner.png);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: white;
+    background-size: 100% 100%;
+        }
+
+        .app-bar button {
+background-color: transparent;
+    border: none;
+    color: #d6d5da;
+    font-size: 14px;
+    cursor: pointer;
+    outline: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+        }
+
+        .app-bar button i {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+
+        .app-bar button:hover {
+            color: #d6d5da;
+        }
+
+        /* Styles for the canvas loader */
+        #SD-loadscrn {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            z-index: 9999;
+        }
+
+        #SD-loadtext {
+            position: absolute;
+            font-family: sans-serif;
+            top: 50%;
+            left: 50%;
+            width: 250px;
+            margin-left: -125px;
+            margin-top: -125px;
+            text-align: center;
+            line-height: 150%;
+            font-size: 16px;
+        }
+#viewporter {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+    max-height: calc(100vh - 60px);
+        }
+
+canvas {
+width: 100%;
+    height: 100%;
+display: block;
+    max-height: calc(100vh - 60px);
+}
+
+
+
+
+                #referral-stats {
+ display: flex;
+    justify-content: space-between;
+    background-color: #bf5d05;
+    border: 1px solid #a24e03;
+    padding: 13px;
+    border-radius: 10px;
+        }
+        .stat {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+        .stat-icon {
+            margin-right: 10px;
+            font-size: 20px; /* Adjust icon size */
+            color: #ffffff; /* Icon color */
+        }
+        .stat-text {
+            font-weight: bold;
+        }
+        #referral-link-section {
+    background-color: rgba(46, 44, 55, 0.95);
+    border: 1px solid #1e1d22;
+    padding: 0px;
+    text-align: left;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 0px;
+        }
+        .copy-button {
+background-color: #111013;
+    color: white;
+    border: none;
+    padding: 15px;
+    cursor: pointer;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    border-top-right-radius: 0px !important;
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+        }
+        .copy-button:hover {
+            background-color: #111013;
+        }
+        .referral-link {
+            flex-grow: 1;
+            margin-right: 10px;
+            font-weight: bold;
+            color: #ffffff;
+            white-space: nowrap; /* Prevent line break */
+            overflow: hidden; /* Hide overflow */
+            text-overflow: ellipsis; /* Add ellipsis */
+        }
+        .stat-icon {
+            margin-right: 5px;
+        }
+        /* Popup styles */
+
+
+   #user-rank {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 100%; /* Ensures the max-width does not exceed the parent container */
+    margin: 20px auto;
+    box-sizing: border-box; /* Ensures padding is included in the width calculation */
+    overflow: hidden; /* Prevents overflow of content */
+}
+
+        .user-info img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-right: 15px;
+            border: 2px solid #ddd;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+            margin-right:15px;
+        }
+
+        .username {
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .rank-info {
+            font-size: 14px;
+            color: #666;
+            margin-top: 4px;
+        }
+        tr {
+        
+        display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid rgb(74, 72, 85);
+    padding-left: 10px !important;
+    padding-right: 10px !important;    
+        }
+
+                td { 
+                    font-weight: bold;
+        }
+
+
+    .popup {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+    .popup-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        position: relative;
+    }
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+#checkin-popup {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+        #withdrawaddress-popup {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+                #nowithdrawaddress-popup {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+.invite-section {
+    cursor: pointer; /* Change cursor to pointer */
+}
+
+        /* Styling for the popup and wallet options */
+        #walletPopup {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        }
+        #walletPopupContent {
+            background-color: white; 
+            width: 400px; 
+            margin: 100px auto; 
+            padding: 20px; 
+            border-radius: 10px; 
+            text-align: center; 
+            position: relative;
+        }
+        .walletOption {
+            display: inline-block; 
+            margin: 10px; 
+            cursor: pointer; 
+            border: 1px solid #ddd; 
+            border-radius: 10px; 
+            padding: 10px; 
+            width: 80px; 
+            height: 100px; 
+            text-align: center;
+        }
+
+
+
+                .showPopuptransaction {
+                    display: block;
+     position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+        }
+    </style>
+
+
+   
+</head>
+<body>
+
+    <!-- Content Container -->
+    <div class="content">
+        <!-- Home Page with only the canvas -->
+       <div id="page1" class="page active" style="padding: 0; height: 100%; background: url(assets/img/splashscreen.png) no-repeat center center; background-size: cover;">
+    <!-- Canvas screen code -->
+    <script type="text/javascript">
+        window.gameLangs = ['en'];
+        window.gameJS = ['js/game.js'];
+        window.gameOnLoadScript = "init();";
+    </script>
+    <script type="text/javascript" src="js/script.js"></script>
+    <script type="text/javascript" src="js/hooks.js"></script>
+    <script type="text/javascript" src="js/ads.js"></script>
+    <div id="viewporter">
+        <canvas id="canvas" width="700" height="900"></canvas>
+    </div>
+    <script>
+function fetchUserData(userId, callback) {
+    // Simulate an API call to fetch user data
+    fetch(`https://telegram-bot-degen-town.replit.app/api/user/${userId}`)
+        .then(response => response.json())
+        .then(data => {
+            GameData.getInstance().setGold(data.totalPoints); // Assuming totalPoints is the user's gold
+            callback(); // Call the callback function after data is fetched
+        })
+        .catch(error => {
+            console.error('Error fetching user data:', error);
+            callback(); // Call callback even on error to avoid blocking
+        });
+}
+function updateGoldBalance(userId, earnedGold, callback) {
+    fetch(`https://telegram-bot-degen-town.replit.app/api/user/updatePoints/${userId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ earnedGold })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.newTotalPoints) {
+            callback(data.newTotalPoints); // Return the new total points
+        }
+    })
+    .catch(error => console.error('Error updating points:', error));
+}
+
+        
+    </script>
+</div>
+
+
+<div id="page4" class="page" style=" color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 70px); overflow-y: auto; padding-top: 7px !important;">
+    <ul id="tasks-list" style="margin-bottom: 20px; margin-top: -5px; list-style-type: none; padding: 0;">
+<div id="referral-stats" style="display: flex; justify-content: space-between; padding: 10px 15px; margin-top: 20px; border-radius: 10px; background: #1e1d22; color: white !important; border: 1px solid #101013; position: sticky; top: 0; z-index: 1000;">
+    <div class="stat" style="display: flex; flex-direction: column; align-items: center; font-weight: bold;">
+        <div style="display: flex; align-items: center; justify-content: center; width: 100%;">
+            <img src="assets/img/littlediamond.png" style="height: 15px; padding-right: 7px;">
+            <span style="font-weight: 500; text-align: center;">Available points:</span>
+        </div>
+        <span id="points-earned" style="margin-top: 5px; text-align: center; font-size: 35px; width: 100%;">0</span>
+         <button onclick="openPurchasePopup()" style="
+    background: linear-gradient(to bottom, #48a34c, #337335);
+    border: none;
+    color: white;
+    padding: 5px 2px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 15px;
+    width: 40%;
+    font-weight: bold;
+    margin-bottom: 0px;
+">Buy Points<img src="assets/img/littlediamond.png" style="height: 15px;padding-right: 0px;margin-bottom: -3px;padding-left: 5px;"></button>
+
+<div id="purchase-popup" style="margin: 0px !important; padding: 0px !important;display: none;position: fixed; z-index: 1; left: 0px; top: 0px; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.6);">
+    <div id="purchase-popuperror1" style="border-radius: 10px;display: none;z-index: 1000;text-align: center;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);background: rgb(22 22 32);color: white;padding: 20px;op;opacity: 0.98;rder-radius: 10px;width: 70%;font-weight: 600;">
+    This feature is not available in current Telegram version.
+</div>
+    
+    <div id="purchase-popuperror2" style="display: none;z-index: 1000;text-align: center;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);background: rgb(22 22 32);color: white;padding: 20px;opacity: 0.98;border-radius: 10px;width: 70%;font-weight: 600;">
+   This feature is not available in current Telegram version.
+</div>
+    <div style="padding: 0px; width: 80%; max-width: 480px; border-radius: 10px; height: auto; z-index: 999; position: fixed; top: 43%; left: 50%; transform: translate(-50%, -50%);" id="purchase-popup">
+        <span id="closePopupButtonbuy" style="color: white; float: right; font-size: 28px; font-weight: bold; cursor: pointer; background: #c02b2b; padding-bottom: 7px; padding-left: 10px; border-top-right-radius: 10px; padding-right: 10px; padding-top: 4px; margin-right: 1px; margin-top: 1px;">×</span>
+
+        <div style="text-align: center;background: #383747;margin-bottom: 0px;height: 180px;border-radius: 10px;border: 1px solid #101013;">
+            <h2 style="
+                text-align: center;
+                margin-top: 0px;
+                color: #ffffff;
+                font-size: 17px;
+                font-weight: 600;
+                background: #1e1d22;
+                padding-top: 10px;
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+                padding-bottom: 14px;">Buy Points</h2>
+<div style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
+    <select id="diamond-option" style="color: #1e1d22 !important; font-weight: 595;
+        padding: 10px;
+        border-radius: 5px; 
+        font-size: 17px; 
+        background-color: #f8f9fa; 
+        transition: border-color 0.3s; 
+        margin-bottom: 10px; /* Space below the dropdown */
+    " onfocus="this.style.borderColor='#0056b3'" onblur="this.style.borderColor='#007bff'">
+        <option value="50">700 Points = 50 Stars ⭐</option>
+        <option value="100">1500 Points = 100 Stars ⭐</option>
+        <option value="250">5000 Points = 250 Stars ⭐</option>
+        <option value="500">10k Points = 500 Stars ⭐</option>
+        <option value="2000">100k Points = 2000 Stars ⭐</option>
+    </select>
+    <button onclick="submitPurchase()" style="
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px; 
+        background-color: #1f9611; 
+        color: white; 
+        font-size: 16px; 
+        cursor: pointer; 
+        transition: background-color 0.3s, transform 0.2s;
+        font-weight: bold;
+    ">
+        Purchase
+    </button>
+</div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function purchasepopuperror1() {
+const checkinPopup = document.getElementById('purchase-popuperror1');
+checkinPopup.style.display = 'block';
+document.getElementById('purchase-popuperror1').style.opacity = '0.98';
+    // Hide the popup after 2 seconds
+    setTimeout(() => {
+        checkinPopup.style.display = 'none';
+    }, 1500);
+}
+
+           function purchasepopuperror2() {
+const checkinPopup = document.getElementById('purchase-popuperror2');
+checkinPopup.style.display = 'block';
+document.getElementById('daily-checkin').style.opacity = '0.68';
+    // Hide the popup after 2 seconds
+    setTimeout(() => {
+        checkinPopup.style.display = 'none';
+    }, 2000);
+}
+
+
+function openPurchasePopup() {
+    document.getElementById('purchase-popup').style.display = 'block';
+}
+
+document.getElementById('closePopupButtonbuy').onclick = function() {
+    document.getElementById('purchase-popup').style.display = 'none';
+}
+
+async function submitPurchase() {
+    const diamondAmount = document.getElementById('diamond-option').value;
+    let starCost;
+
+    if (diamondAmount == 700) {
+        starCost = 50;
+    } else if (diamondAmount == 1500) {
+        starCost = 100;
+    } else if (diamondAmount == 5000) {
+        starCost = 250;
+    } else if (diamondAmount == 10000) {
+        starCost = 500;
+    } else if (diamondAmount == 100000) {
+        starCost = 2000;
+    }
+
+const response = await fetch('https://telegram-bot-degen-town.replit.app/create-telegram-payment', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ diamondAmount: 10, starCost: 5 }) // Change these values as needed
+});
+
+
+const result = await response.json();
+if (result.success) {
+    // Handle successful payment creation
+} else {
+   purchasepopuperror1();
+}
+
+}
+
+
+</script>
+    </div>
+</div>
+       <p style=" font-weight: bold; ">Available Tasks:</p>
+        <li id="daily-checkin" style="position: relative; margin-bottom: 7px; background-color: #2c2a34; border: 1px solid rgb(16, 16, 19); color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;">
+            <span style="display: block; font-size: 15px; font-weight: bold;">Daily check-in</span>
+            <span><img src="assets/img/littlediamond.png" style="height: 15px;"> +100</span>
+            <!-- Approved icon for successful check-in -->
+            <img id="approved-icon-checkin" src="assets/img/approved.png" style="display: none;height: 20px;position: absolute;right: 15px;top: 20px;">
+        </li>
+
+        <!-- Other list items remain unchanged -->
+<li id="subscribe-channel" style="position: relative; margin-bottom: 7px; background-color: #2c2a34; border: 1px solid #101013; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;" onclick="subscribeToChannel()">
+    <span style="display: block; font-size: 15px; font-weight: bold;">Subscribe to Telegram Channel</span>
+    <span style="font-weight: bold;">
+        <img src="assets/img/littlediamond.png" style="height: 15px;"> +500 
+    </span>
+    <img id="approved-icon-channel" src="assets/img/approved.png" style="display: none; height: 20px;position: absolute;right: 15px;top: 20px;">
+</li>
+
+        <li id="share-link" style="position: relative; margin-bottom: 7px; background-color: #2c2a34; border: 1px solid #101013; color: white; font-weight: 590; font-size: 14px; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; cursor: pointer;" onclick="shareToTelegramlink()">
+                    <span style="display: block; font-size: 15px; font-weight: bold;">Share Link to your Telegram</span>
+                    <span style="">
+                        <img src="assets/img/littlediamond.png" style="height: 15px;"> +500 
+                    </span>
+            <img id="approved-icon-share" src="assets/img/approved.png" style="display: none;height: 20px;position: absolute;right: 15px;top: 20px;">
+                </li>
+
+<li id="invite-3-friends-section" style="    padding-right: 13px;font-weight: 590; font-size: 14px; margin-bottom: 7px; background-color: #2c2a34; border: 1px solid #101013; color: white; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; opacity: 0.5; pointer-events: none;"
+    onclick="Invite3Friends()">
+    <div>
+        <span style="display: block; font-size: 15px; font-weight: bold;">Invite 3 Friends</span>
+        <span style="display: flex; align-items: center;">
+            <img src="assets/img/littlediamond.png" style="height: 15px; margin-right: 5px;"> +3000 
+        </span>
+    </div>
+    <span id="referral-status-3-friends" style="border: 1px solid #fff; border-radius: 10px; padding: 5px 10px; background-color: rgba(255, 255, 255, 0.2); margin-left: auto;"> 0/3 </span>
+</li>
+
+
+
+<li id="invite-10-friends-section" style="    padding-right: 13px;font-weight: 590; font-size: 14px; margin-bottom: 7px; background-color: #2c2a34; border: 1px solid #101013; color: white; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; opacity: 0.5; pointer-events: none;"
+    onclick="Invite10Friends()">
+    <div>
+        <span style="display: block; font-size: 15px; font-weight: bold;">Invite 10 Friends</span>
+        <span style="display: flex; align-items: center;">
+            <img src="assets/img/littlediamond.png" style="height: 15px; margin-right: 5px;"> +10000 
+        </span>
+    </div>
+    <span id="referral-status-10-friends" style="border: 1px solid #fff; border-radius: 10px; padding: 5px 10px; background-color: rgba(255, 255, 255, 0.2); margin-left: auto;"> 0/10 </span>
+</li>
+
+
+
+<li id="invite-50-friends-section"  style="    padding-right: 13px;font-weight: 590; font-size: 14px; margin-bottom: 7px; background-color: #2c2a34; border: 1px solid #101013; color: white; padding-left: 13px; border-radius: 10px; line-height: 20px; padding-top: 10px; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; opacity: 0.5; pointer-events: none;"
+    onclick="Invite50Friends()">
+    <div>
+        <span style="display: block; font-size: 15px; font-weight: bold;">Invite 50 Friends</span>
+        <span style="display: flex; align-items: center;">
+            <img src="assets/img/littlediamond.png" style="height: 15px; margin-right: 5px;"> +50000 
+        </span>
+    </div>
+    <span id="referral-status-50-friends" style="border: 1px solid #fff; border-radius: 10px; padding: 5px 10px; background-color: rgba(255, 255, 255, 0.2); margin-left: auto;"> 0/50 </span>
+</li>
+        
+        <!-- ... other list items ... -->
+
+    </ul>
+
+    
+    <div id="copy-popup-checkin" class="popup" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.9; border-radius: 10px; width: 70%; font-weight: 600; height: auto; text-align: center;">
+        Hooray! 🎉 Daily check-in successful! You've earned 100 points!
+    </div>
+    
+<div id="checkin-popup" style="display: none; z-index: 1000; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.88; border-radius: 10px; width: 70%; font-weight: 600;">
+    You have already claimed your points in the last 24 hours.
+</div>
+    
+
+<!-- Popup for success message -->
+<div id="success-popup" class="popup" style="display: none; z-index: 1000; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.88; border-radius: 10px; width: 70%; font-weight: 600;height: auto;">
+    You have successfully subscribed and received 500 points! 🎉
+</div>
+
+<!-- Popup for error message -->
+<div id="error-popup" class="popup" style="display: none; z-index: 1000; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.88; border-radius: 10px; width: 70%; font-weight: 600;height: auto;">
+    You have already completed this task!
+</div>
+
+    <!-- Popup for success message -->
+<div id="success-popup-share" class="popup" style="display: none; z-index: 1000; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.88; border-radius: 10px; width: 70%; font-weight: 600;height: auto;">
+    You have successfully shared and received 500 points! 🎉
+</div>
+
+<!-- Popup for error message -->
+<div id="error-popup-share" class="popup" style="display: none; z-index: 1000; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.88; border-radius: 10px; width: 70%; font-weight: 600;height: auto;">
+    You have already completed this task!
+</div>
+
+        <!-- Popup for success message -->
+<div id="success-popup-3friends" class="popup" style="display: none; z-index: 1000; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.88; border-radius: 10px; width: 70%; font-weight: 600;height: auto;">
+    You have successfully claimed 3000 points! 🎉
+</div>
+
+<!-- Popup for error message -->
+<div id="error-popup-3friends" class="popup" style="display: none; z-index: 1000; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.88; border-radius: 10px; width: 70%; font-weight: 600;height: auto;">
+    You have already completed this task!
+</div>
+
+            <!-- Popup for success message -->
+<div id="success-popup-10friends" class="popup" style="display: none; z-index: 1000; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.88; border-radius: 10px; width: 70%; font-weight: 600;height: auto;">
+    You have successfully claimed 10000 points! 🎉
+</div>
+
+<!-- Popup for error message -->
+<div id="error-popup-10friends" class="popup" style="display: none; z-index: 1000; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.88; border-radius: 10px; width: 70%; font-weight: 600;height: auto;">
+    You have already completed this task!
+</div>
+
+            <!-- Popup for success message -->
+<div id="success-popup-50friends" class="popup" style="display: none; z-index: 1000; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.88; border-radius: 10px; width: 70%; font-weight: 600;height: auto;">
+    You have successfully claimed 50000 points! 🎉
+</div>
+
+<!-- Popup for error message -->
+<div id="error-popup-50friends" class="popup" style="display: none; z-index: 1000; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.88; border-radius: 10px; width: 70%; font-weight: 600;height: auto;">
+    You have already completed this task!
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+    const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
+    const dailyCheckinElement = document.getElementById('daily-checkin');
+    let timerInterval;
+
+    // Key for localStorage to store the last check-in time
+    const lastCheckinKey = `lastCheckin_${userId}`;
+    const checkinInterval = 60 * 1000; // 1 minute in milliseconds (for testing)
+    const checkinCooldown = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // Check the check-in status on load
+        checkDailyCheckinStatus();
+
+        // Add event listener for daily check-in
+        dailyCheckinElement.addEventListener('click', dailyCheckin);
+    });
+
+    async function checkDailyCheckinStatus() {
+        const lastCheckin = localStorage.getItem(lastCheckinKey);
+        const currentTime = Date.now();
+
+        // Check if 1 minute has passed since last check-in
+        if (lastCheckin && (currentTime - lastCheckin < checkinInterval)) {
+            disableDailyCheckin();
+        } else {
+            enableDailyCheckin();
+        }
+    }
+
+    async function dailyCheckin() {
+        const lastCheckin = localStorage.getItem(lastCheckinKey);
+        const currentTime = Date.now();
+
+        // Check if 24 hours have passed since the last check-in
+        if (lastCheckin && (currentTime - lastCheckin < checkinCooldown)) {
+            showCheckinPopup(); // Show the popup instead of returning an error
+            return; // Exit the function early
+        }
+
+        try {
+            const response = await fetch("https://telegram-bot-degen-town.replit.app/api/user/dailycheckin", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ userId })
+            });
+
+            const data = await response.json();
+            console.log("API Response:", data); // Log the API response for debugging
+
+            if (response.ok) {
+                const popup = document.getElementById('copy-popup-checkin');
+                popup.style.display = 'block';
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                }, 2500);
+
+                // Keep the approved icon visible to inform the user that the task is done
+                disableDailyCheckin();
+                localStorage.setItem(lastCheckinKey, Date.now());
+                startTimer(60); // Start 1-minute timer (in seconds for testing)
+            } else {
+                showCheckinPopup(); // Show the popup instead of returning an error
+                return; // Exit the function early
+            }
+        } catch (error) {
+            console.error("Failed to complete daily check-in:", error);
+        }
+    }
+
+    function disableDailyCheckin() {
+        dailyCheckinElement.style.cursor = 'not-allowed'; // Change cursor to indicate it's disabled
+        dailyCheckinElement.removeEventListener('click', dailyCheckin); // Remove click event listener
+        dailyCheckinElement.classList.add('blocked'); // Add a class to style the blocked state
+        document.getElementById('approved-icon-checkin').style.display = 'block';
+        document.getElementById('daily-checkin').style.opacity = '0.68';
+    }
+
+    function enableDailyCheckin() {
+        dailyCheckinElement.style.cursor = 'pointer'; // Change cursor to indicate it's clickable
+        dailyCheckinElement.addEventListener('click', dailyCheckin); // Re-add click event listener
+        dailyCheckinElement.classList.remove('blocked'); // Remove the blocked class
+        // Hide the approved icon only when the daily check-in is available again
+        document.getElementById('approved-icon-checkin').style.display = 'none';
+    }
+
+    function startTimer(duration) {
+        clearInterval(timerInterval); // Clear any existing timer
+        let timer = duration, hours, minutes, seconds;
+
+        timerInterval = setInterval(() => {
+            hours = parseInt(timer / 3600, 10);
+            minutes = parseInt((timer % 3600) / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+
+            document.getElementById('timer').innerText =
+                `${(hours < 10 ? "0" : "")}${hours}:${(minutes < 10 ? "0" : "")}${minutes}:${(seconds < 10 ? "0" : "")}${seconds}`;
+
+            if (--timer < 0) {
+                clearInterval(timerInterval);
+                document.getElementById('timer').innerText = "Ready for check-in!";
+                enableDailyCheckin(); // Re-enable the button
+            }
+        }, 1000);
+    }
+
+    function showPopup(message) {
+        document.getElementById('popup-message').innerText = message;
+        document.getElementById('popup').style.display = 'block';
+    }
+
+    function closePopup() {
+        document.getElementById('popup').style.display = 'none';
+    }
+
+    function showCheckinPopup() {
+        const checkinPopup = document.getElementById('checkin-popup');
+        checkinPopup.style.display = 'block';
+        document.getElementById('daily-checkin').style.opacity = '0.68';
+        // Hide the popup after 2 seconds
+        setTimeout(() => {
+            checkinPopup.style.display = 'none';
+        }, 2000);
+    }
+
+    function showWalletPopup() {
+        const walletPopup = document.getElementById('wallet-popup');
+        walletPopup.style.display = 'block';
+        document.getElementById('daily-checkin').style.opacity = '0.68';
+    }
+
+
+    function closeWalletPopup() {
+        const walletPopup = document.getElementById('wallet-popup');
+        walletPopup.style.display = 'none';
+        document.getElementById('daily-checkin').style.opacity = '0.68';
+    }
+
+   async function subscribeToChannel() {
+    const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
+    window.open('https://t.me/degentown_news', '_blank');
+
+const response = await fetch("https://telegram-bot-degen-town.replit.app/api/user/subscribe-channel", {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ userId })
+});
+
+    const data = await response.json();
+    if (data.success) {
+        document.getElementById('subscribe-channel').style.opacity = '0.68';
+        document.getElementById('approved-icon-channel').style.display = 'block'; 
+            const popup = document.getElementById('success-popup');
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 3500);
+    } else {
+document.getElementById('subscribe-channel').style.opacity = '0.68';
+                    const popup = document.getElementById('error-popup');
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 3500);
+    }
+}
+
+async function shareToTelegramlink() {
+    const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
+    const message = `https://t.me/degentown_bot?start=${userId}    Join Degen Town Journey! Stay tuned for exciting airdrops and special rewards from Degen Town!`;
+    
+    // Create a share link
+    const shareUrl = `https://telegram.me/share/url?url=${encodeURIComponent(message)}`;
+    
+    // Open the share link in a new window
+    window.open(shareUrl, '_blank');
+
+    // Update the backend to add points for sharing
+    const response = await fetch("https://telegram-bot-degen-town.replit.app/api/user/share-points", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId }),
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        document.getElementById('approved-icon-share').style.display = 'block'; 
+            const popup = document.getElementById('success-popup-share');
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 3500);
+        document.getElementById("share-link").style.pointerEvents = "none";
+        document.getElementById('share-link').style.opacity = '0.68';// Make it unclickable
+    } else {
+        const data = await response.json(); 
+        document.getElementById('share-link').style.opacity = '0.68';
+                    const popup = document.getElementById('error-popup-share');
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 3500);
+    }
+}
+</script>
+
+
+
+    <style>
+        /* Add CSS for the blocked state */
+        #daily-checkin.blocked {
+            opacity: 0.68; /* Make it look disabled */
+            pointer-events: none; /* Prevent clicking */
+        }
+    </style>
+</div>
+
+        
+<div id="page3" class="page" style="padding: 0px !important; color: #ffffff;  border-radius: 0px; width: auto; margin: 0 auto;  height: 100% !important; overflow-y: auto;">
+ <h2 id="player-count" style="text-align: center;color: #ffffff;margin: 0px 0;background: #1e1d22ba;padding: 10px;font-size: 20px;">Hurry, 0 Degens joined so far! 🔥</h2>
+    <div id="referral-stats" style="margin-left: 20px; margin-right: 20px;display: flex; justify-content: space-between; padding: 10px 15px; margin-top: 20px;     margin-bottom: 12px; border-radius: 10px; background: #1e1d22; color: white !important; border: 1px solid #101013;  top: 0; z-index: 1000;">
+    <div class="stat" style="display: flex; flex-direction: column; align-items: center; font-weight: bold;">
+        <div style="margin-left: 20px; margin-right: 20px;display: flex; align-items: center; justify-content: center; width: 100%;">
+            <img src="assets/img/littlediamond.png" style="height: 15px; padding-right: 7px;">
+            <span style="font-weight: 500; text-align: center;">Available points:</span>
+        </div>
+        <span id="points-balance" style="margin-top: 5px; text-align: center; font-size: 35px; width: 100%;">0</span>
+<button onclick="openPurchasePopups()" style="
+    background: linear-gradient(to bottom, #48a34c, #337335);
+    border: none;
+    color: white;
+    padding: 5px 2px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 15px;
+    width: 40%;
+    font-weight: bold;
+    margin-bottom: 0px;
+">Buy Points<img src="assets/img/littlediamond.png" style="height: 15px;padding-right: 0px;margin-bottom: -3px;padding-left: 5px;"></button>
+
+<div id="purchase-popups" style="display: none;position: fixed; z-index: 1; left: 0px; top: 0px; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.6);">
+    <div id="purchase-popuperror1s" style="border-radius: 10px;display: none;z-index: 1000;text-align: center;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);background: rgb(22 22 32);color: white;padding: 20px;op;opacity: 0.98;rder-radius: 10px;width: 70%;font-weight: 600;">
+    This feature is not available in current Telegram version.
+</div>
+    
+    <div id="purchase-popuperror2s" style="display: none;z-index: 1000;text-align: center;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);background: rgb(22 22 32);color: white;padding: 20px;opacity: 0.98;border-radius: 10px;width: 70%;font-weight: 600;">
+   This feature is not available in current Telegram version.
+</div>
+    <div style="padding: 0px; width: 80%; max-width: 480px; border-radius: 10px; height: auto; z-index: 999; position: fixed; top: 43%; left: 50%; transform: translate(-50%, -50%);" id="purchase-popups">
+        <span id="closePopupButtonbuys" style="color: white; float: right; font-size: 28px; font-weight: bold; cursor: pointer; background: #c02b2b; padding-bottom: 7px; padding-left: 10px; border-top-right-radius: 10px; padding-right: 10px; padding-top: 4px; margin-right: 1px; margin-top: 1px;">×</span>
+
+        <div style="text-align: center;background: #383747;margin-bottom: 0px;height: 180px;border-radius: 10px;border: 1px solid #101013;">
+            <h2 style="
+                text-align: center;
+                margin-top: 0px;
+                color: #ffffff;
+                font-size: 17px;
+                font-weight: 600;
+                background: #1e1d22;
+                padding-top: 10px;
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+                padding-bottom: 14px;">Buy Points</h2>
+<div style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
+    <select id="diamond-options" style="color: #1e1d22 !important; font-weight: 595;
+        padding: 10px;
+        border-radius: 5px; 
+        font-size: 17px; 
+        background-color: #f8f9fa; 
+        transition: border-color 0.3s; 
+        margin-bottom: 10px; /* Space below the dropdown */
+    " onfocus="this.style.borderColor='#0056b3'" onblur="this.style.borderColor='#007bff'">
+        <option value="50">700 Points = 50 Stars ⭐</option>
+        <option value="100">1500 Points = 100 Stars ⭐</option>
+        <option value="250">5000 Points = 250 Stars ⭐</option>
+        <option value="500">10k Points = 500 Stars ⭐</option>
+        <option value="2000">100k Points = 2000 Stars ⭐</option>
+    </select>
+    <button onclick="submitPurchases()" style="
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px; 
+        background-color: #1f9611; 
+        color: white; 
+        font-size: 16px; 
+        cursor: pointer; 
+        transition: background-color 0.3s, transform 0.2s;
+        font-weight: bold;
+    ">
+        Purchase
+    </button>
+</div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function purchasepopuperror1s() {
+const checkinPopup = document.getElementById('purchase-popuperror1s');
+checkinPopup.style.display = 'block';
+document.getElementById('purchase-popuperror1s').style.opacity = '0.98';
+    // Hide the popup after 2 seconds
+    setTimeout(() => {
+        checkinPopup.style.display = 'none';
+    }, 1500);
+}
+
+           function purchasepopuperror2s() {
+const checkinPopup = document.getElementById('purchase-popuperror2s');
+checkinPopup.style.display = 'block';
+document.getElementById('purchase-popuperror2s').style.opacity = '0.68';
+    // Hide the popup after 2 seconds
+    setTimeout(() => {
+        checkinPopup.style.display = 'none';
+    }, 2000);
+}
+
+
+function openPurchasePopups() {
+    document.getElementById('purchase-popups').style.display = 'block';
+}
+
+document.getElementById('closePopupButtonbuys').onclick = function() {
+    document.getElementById('purchase-popups').style.display = 'none';
+}
+
+async function submitPurchases() {
+    const diamondAmount = document.getElementById('diamond-options').value;
+    let starCost;
+
+    if (diamondAmount == 700) {
+        starCost = 50;
+    } else if (diamondAmount == 1500) {
+        starCost = 100;
+    } else if (diamondAmount == 5000) {
+        starCost = 250;
+    } else if (diamondAmount == 10000) {
+        starCost = 500;
+    } else if (diamondAmount == 100000) {
+        starCost = 2000;
+    }
+
+const response = await fetch('https://telegram-bot-degen-town.replit.app/create-telegram-payment', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ diamondAmount: 10, starCost: 5 }) // Change these values as needed
+});
+
+
+const result = await response.json();
+if (result.success) {
+    // Handle successful payment creation
+} else {
+   purchasepopuperror1s();
+}
+
+}
+
+
+</script>
+
+    </div>
+</div>
+    <div id="referral-stats" style="margin-left: 20px; margin-right: 20px;display: flex; justify-content: space-between; padding: 10px 15px; margin-top: 0; margin-bottom: 0px; border-radius: 10px; background: #1e1d22; color: white !important; border: 1px solid #101013;">
+        <div class="stat" style="justify-content: space-evenly;flex: 1; text-align: left; font-weight: bold; border-right: 1px solid #4a4855; padding-right: 10px;">
+            <img src="assets/img/friends.png" style="height: 15px; padding-right: 0px;">
+            Referrals: <span id="referrals-count">0</span>
+        </div>
+        <div class="stat" style="justify-content: space-evenly;padding-left: 15px;flex: 1; text-align: center; font-weight: bold;">
+            <img src="assets/img/littlediamond.png" style="height: 15px; padding-right: 0px;">
+            Earned: <span id="invite-points-earned">0</span>
+        </div>
+    </div>
+
+    <h3 style="text-align: center; color: #402104; margin: 20px 0;"></h3>
+
+    <div id="example-users" style="margin-left: 20px; margin-right: 20px;margin-bottom: 20px;background-color: rgba(46, 44, 55, 0.95); padding: 0px; border-radius: 10px;">
+        <div class="invite-header" style="border: none !important;background: #1e1d22;padding: 10px 15px;display: flex;justify-content: space-between;border-top-left-radius: 10px;border-top-right-radius: 10px;">
+            <span style="flex: 2; text-align: left; font-weight: bold;">Name</span>
+            <span style="flex: 1; text-align: center; font-weight: bold;">Level</span>
+            <span style="flex: 1; text-align: right; font-weight: bold;">Earned</span>
+        </div>
+        <ul id="referral-list" style="margin-left: 20px; margin-right: 20px;scrollbar-width: none;list-style: none;padding: 0;margin: 0;max-height: 14vh;overflow-y: auto;padding-left: 5px;padding-right: 5px;">
+            <!-- List to display referrals or "No Referrals Available" message -->
+        </ul>
+    </div>
+
+    <h3 style="margin-left: 20px; margin-right: 20px;text-align: center;margin-top: 10px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;margin-bottom: 0px;">Your Invite Link:</h3>
+    <div id="referral-link-section" style="margin-left: 20px; margin-right: 20px;border-radius: 10px;text-align: center;margin-top: 0px;border-top-right-radius: 0px !important;border-top-left-radius: 0px !important;">
+        <div class="referral-link" id="referral-link" style="padding-left: 0px !important;padding: 10px;border-radius: 10px;margin: 0 auto;display: inline-block;max-width: 80%;border-top-left-radius: 0px !important;padding-left: 15px !important;">
+            Loading your referral link...
+        </div>
+        <button class="copy-button" onclick="copyLinkreferral()">
+            <i class="fas fa-copy"></i>
+        </button>
+    </div>
+    <div id="copy-popup-referral" class="popupreferral" style="text-align: center;display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.88; border-radius: 10px; width: 70%; font-weight: 600;">
+        Invite Link copied to Clipboard! 
+    </div>
+    
+
+
+<script>
+document.addEventListener("DOMContentLoaded", async function() {
+  const userId = Telegram.WebApp.initDataUnsafe.user.id;
+
+  async function fetchReferralData(userId) {
+    try {
+      const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/referrals/${userId}`);
+            if (!response.ok) throw new Error("Error fetching data");
+
+            const userData = await response.json();
+            document.getElementById("referrals-count").textContent = userData.totalReferrals || 0;
+            document.getElementById("points-balance").textContent = userData.totalPoints || 0;
+            document.getElementById("invite-points-earned").textContent = userData.referralPoints || 0;
+
+            const referralList = document.getElementById("referral-list");
+
+            if (userData.referrals.length === 0) {} else {
+                // Display referral details in table
+                userData.referrals.forEach(referral => {});
+            }
+
+        } catch (error) {
+            console.error("Failed to fetch referral data:", error);
+        }
+    }
+
+    await fetchReferralData(userId);
+
+          setInterval(async () => {
+    await fetchReferralData(userId);
+  }, 1000); // Fetch data every 5 seconds (5000 milliseconds)
+
+});
+
+
+// Function to get the referral level
+function getReferralLevel(totalReferrals) {
+    if (totalReferrals >= 50) return 6;
+    if (totalReferrals >= 20) return 5;
+    if (totalReferrals >= 15) return 4;
+    if (totalReferrals >= 10) return 3;
+    if (totalReferrals >= 3) return 2;
+    return 1; // Level 1 for 0 to 2 referrals
+}
+
+// Copy function for the referral link
+function copyLinkreferral() {
+    const referralLinkElement = document.getElementById('referral-link');
+    const referralLink = referralLinkElement.textContent;
+
+    const additionalText = "Join Degen Town Journey! Stay tuned for exciting airdrops and special rewards from Degen Town! ";
+
+    if (referralLink && referralLink !== "Loading your referral link...") {
+        const fullTextToCopy = `${additionalText}${referralLink}`;
+
+        const textArea = document.createElement("textarea");
+        textArea.value = fullTextToCopy;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+
+        const popup = document.getElementById('copy-popup-referral');
+        popup.style.display = 'block';
+        setTimeout(() => {
+            popup.style.display = 'none';
+        }, 2000);
+    } else {
+        console.error("Referral link is empty or not ready.");
+    }
+}
+
+
+    async function fetchPlayerCount() {
+    try {
+        const response = await fetch('https://telegram-bot-degen-town.replit.app/api/player-count'); // Replace with your actual API endpoint
+        if (!response.ok) {
+            throw new Error('Failed to fetch player count');
+        }
+        const data = await response.json();
+        const playerCount = data.count || 0; // Adjust based on your API response structure
+        document.getElementById('player-count').textContent = `Hurry, ${playerCount} Degens joined so far! 🔥`;
+    } catch (error) {
+        console.error('Error fetching player count:', error);
+        document.getElementById('player-count').textContent = 'Hurry, 0 Degens joined so far! 🔥'; // Default to 0 if there's an error
+    }
+}
+
+// Call this function when the page loads
+document.addEventListener("DOMContentLoaded", function() {
+    fetchPlayerCount(); // Fetch player count on page load
+});
+
+</script>
+
+</div>
+
+
+
+       
+    <div id="page2" class="page"  color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 70px); overflow-y: auto;  padding-top: 7px !important;">
+
+    <!-- Current User Rank -->
+    <div id="user-rank" class="user-info" style="width: auto !important; background: #1e1d22; color: white !important; border: 1px solid #101013;">
+        <!-- User Profile Picture and Username will be inserted here -->
+    </div>
+
+    <!-- Leaderboard Container -->
+    <div id="leaderboard-container" style="border-radius: 10px;background-color: rgba(46, 44, 55, 0.95); padding: 0; max-height: 60vh; overflow: hidden;">
+        <div class="leaderboard-header" style="border-top-left-radius: 10px;
+    border-top-right-radius: 10px;padding-top: 10px !important;padding-bottom: 30px !important;background: #1e1d22; padding: 15px; position: sticky; top: 0; z-index: 10;">
+            <span style="float: left;font-weight: bold;">Players Name</span>
+            <span style="float: right;font-weight: bold;">Points Earned</span>
+        </div>
+        <ul id="leaderboard-list" style="padding-left: 10px !important; padding-right: 10px !important;scrollbar-width: none;list-style: none; padding: 0; margin: 0; max-height: 50vh; overflow-y: auto;">
+            <!-- Leaderboard items will be added here -->
+        </ul>
+</div>
+                <p style=" margin-top: 5px; font-size: 14px; font-weight: 500; opacity: 0.85; margin-left: 5px; ">Updated every 5 mins </p>
+
+   <script>
+document.addEventListener('DOMContentLoaded', generateLeaderboard);
+
+async function generateLeaderboard() {
+    const leaderboardList = document.getElementById('leaderboard-list');
+    const colors = ['#F28B82', '#FBBC05', '#34A853', '#4285F4', '#A142F4', '#FF6D01', '#46BD8B', '#FFBF00', '#FF4500', '#9932CC'];
+
+    // Fetch leaderboard data from the backend
+    try {
+        const response = await fetch("https://telegram-bot-degen-town.replit.app/api/leaderboard");
+        const leaderboardData = await response.json();
+
+        // Check if the Telegram WebApp is ready and get the user data
+        Telegram.WebApp.ready();
+        const user = Telegram.WebApp.initDataUnsafe.user;
+        let telegramUserRank, telegramUserPoints;
+
+        // Insert Telegram user details if present
+        if (user) {
+            // Find the user's rank in the leaderboard data
+            const userIndex = leaderboardData.findIndex(u => u.username === user.username);
+            telegramUserRank = userIndex >= 0 ? userIndex + 1 : leaderboardData.length + 1;
+            telegramUserPoints = userIndex >= 0 ? leaderboardData[userIndex].totalPoints : 0;
+
+            // Add the Telegram user info at the top
+            const userRankElement = document.getElementById('user-rank');
+            if (userRankElement) {
+                userRankElement.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; color: white;">
+                        <div style="display: flex; align-items: center;">
+                            <div style="width: 60px; height: 60px; border-radius: 50%; background-color: ${colors[telegramUserRank % colors.length]}; color: #ffffff; text-align: center; line-height: 60px; font-size: 24px;">
+                                ${user.username ? user.username.charAt(0).toUpperCase() : 'U'}
+                            </div>
+                            <div style="margin-left: 10px;">
+                                <span style="font-weight: bold;">${user.username || "User"}</span>
+                                <span style="display: block; color: white;">Rank: #${telegramUserRank}</span>
+                            </div>
+                        </div>
+                        <span style="color: white; margin-left: auto;">
+                            ${telegramUserPoints} <img src="assets/img/littlediamond.png" style="width: 19px; height:19px; margin-bottom:-4px;border: none !important;">
+                        </span>
+                    </div>
+                `;
+            }
+        }
+
+        // Display leaderboard users
+        leaderboardData.forEach((user, index) => {
+            const username = user.username;
+            const points = user.totalPoints;
+            const color = colors[index % colors.length];
+            addLeaderboardEntry(username, points, index + 1, color);
+        });
+    } catch (error) {
+        console.error("Failed to fetch leaderboard data:", error);
+    }
+
+    function addLeaderboardEntry(username, points, rank, color) {
+        const listItem = document.createElement('li');
+        listItem.style.display = 'flex';
+        listItem.style.alignItems = 'center';
+        listItem.style.padding = '10px';
+        listItem.style.borderBottom = '1px solid #4a4855';
+
+        const profilePicture = document.createElement('div');
+        profilePicture.style.width = '30px';
+        profilePicture.style.height = '30px';
+        profilePicture.style.borderRadius = '50%';
+        profilePicture.style.backgroundColor = color;
+        profilePicture.style.color = '#ffffff';
+        profilePicture.style.display = 'flex';
+        profilePicture.style.justifyContent = 'center';
+        profilePicture.style.alignItems = 'center';
+        profilePicture.innerText = username.charAt(0).toUpperCase();
+        profilePicture.style.marginRight = '10px';
+
+        const usernameContainer = document.createElement('div');
+        usernameContainer.style.display = 'flex';
+        usernameContainer.style.flexDirection = 'column';
+
+        const usernameSpan = document.createElement('span');
+        usernameSpan.innerText = username;
+        usernameSpan.style.fontSize = '15px';
+        usernameSpan.style.fontWeight = 'bold';
+
+        const rankSpan = document.createElement('span');
+        rankSpan.innerText = `Rank: #${rank}`;
+        rankSpan.style.fontSize = '13px';
+        rankSpan.style.color = 'white';
+        rankSpan.style.marginTop = '4px';
+
+        usernameContainer.appendChild(usernameSpan);
+        usernameContainer.appendChild(rankSpan);
+
+        const pointsSpan = document.createElement('span');
+        pointsSpan.innerHTML = `${points} <img src="assets/img/littlediamond.png" style="height: 15px;">`;
+        pointsSpan.style.color = 'white';
+        pointsSpan.style.marginLeft = 'auto';
+
+        listItem.appendChild(profilePicture);
+        listItem.appendChild(usernameContainer);
+        listItem.appendChild(pointsSpan);
+
+        leaderboardList.appendChild(listItem);
+    }
+}
+
+</script>
+
+
+
+</div>
+
+
+
+
+<script src="js/deposit.js"></script>
+<div id="page5" class="page" style="color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; height: 100%; overflow-y: auto; padding-top: 5px !important; position: relative;">
+     <h2 style="text-align: center; color: white; font-size: 28px; margin-top: 10px; font-family: system-ui; margin-bottom: 0px;">SEEDSALE</h2>
+    <p style="text-align: center; color: white; margin-top: 0px;">Stage 1</p>
+
+    <!-- Info Button with Font Awesome Icon -->
+<button id="info-btn" style="color: white !important;position: absolute;top: 15px;right: 20px;border-radius: 10px;padding: 10px;background: #1e1d22;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;border: none;color: #d6d5da;font-size: 14px;cursor: pointer;outline: none;display: flex;flex-direction: column;align-items: center;font-family: 'Roboto', sans-serif;font-weight: bold;padding-left: 13px;padding-right: 13px;">
+                   <i class="fas fa-info-circle"></i>Info</button>
+
+  <div id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); z-index: 999;"></div>
+
+<!-- Info Popup (hidden by default) -->
+<div id="popupinfo" style="display: none; width: 0%; height: 0%;">
+    <div id="pop" style="scrollbar-width: 0px !important; background-color: rgb(56, 55, 71); width: 70%; position: fixed; top: 45%; left: 50%; transform: translate(-50%, -50%); color: white; border-radius: 10px; max-width: 400px; max-height: 80%; z-index: 1000; overflow: hidden; display: flex; flex-direction: column;">
+
+        <!-- Header -->
+        <h3 style="background-color: #1e1d22; color: white; padding: 13px; margin-top: 0; text-align: center; font-size: 20px; font-weight: bold; margin-bottom: 0px;">
+            Welcome to the DEGEN TOWN Affiliate Program
+        </h3>
+      
+        <!-- Scrollable Content -->
+        <div style="overflow-y: auto; padding: 0px; flex-grow: 1;">
+            <p style="padding-left: 20px; padding-right: 20px; font-size: 16px; line-height: 1.6;">
+                This is a presale. The raise is limited to a total amount of 3,000,000 USD. Total supply is 1,000,000,000 $DEGEN.
+            </p>
+            <p style="padding-left: 20px; padding-right: 20px; font-size: 16px; line-height: 1.6;">
+                Hurry up, the sooner you enter, the cheaper you are going to get a token allocation.
+            </p>
+
+            <!-- Button to show prices -->
+            <p style="padding-left: 20px; padding-right: 20px; font-size: 16px; line-height: 1.6;">
+                <button onclick="togglePrices()" style="background-color: #439c47;color: white;padding: 10px 20px;border: none;border-radius: 5px;cursor: pointer;font-weight: bold;font-size: 14px;">
+                    Click to Show $DEGEN Presale Prices
+                </button>
+            </p>
+
+            <!-- Hidden presale prices section -->
+            <div id="presalePrices" style="display: none; padding-left: 20px; padding-right: 20px; font-size: 16px; line-height: 1.6;">
+                <hr style="border: 1px solid #2c2c37;">
+                <p>100,000 USD - $0.0125</p>
+                <p>200,000 USD - $0.013</p>
+                <p>300,000 USD - $0.0135</p>
+                <p>400,000 USD - $0.014</p>
+                <p>500,000 USD - $0.0145</p>
+                <p>600,000 USD - $0.015</p>
+                <p>700,000 USD - $0.0155</p>
+                <p>800,000 USD - $0.016</p>
+                <p>900,000 USD - $0.0165</p>
+                <p>1,000,000 USD - $0.017</p>
+                <p>1,100,000 USD - $0.0175</p>
+                <p>1,200,000 USD - $0.018</p>
+                <p>1,300,000 USD - $0.0185</p>
+                <p>1,400,000 USD - $0.019</p>
+                <p>1,500,000 USD - $0.0195</p>
+                <p>1,600,000 USD - $0.020</p>
+                <p>1,700,000 USD - $0.0205</p>
+                <p>1,800,000 USD - $0.021</p>
+                <p>1,900,000 USD - $0.0215</p>
+                <p>2,000,000 USD - $0.022</p>
+                <p>2,100,000 USD - $0.0225</p>
+                <p>2,200,000 USD - $0.023</p>
+                <p>2,300,000 USD - $0.0235</p>
+                <p>2,400,000 USD - $0.024</p>
+                <p>2,500,000 USD - $0.0245</p>
+                <p>2,600,000 USD - $0.025</p>
+                <p>2,700,000 USD - $0.0255</p>
+                <p>2,800,000 USD - $0.026</p>
+                <p>2,900,000 USD - $0.0265</p>
+                <p>3,000,000 USD - $0.0275</p>
+                <hr style="border: 1px solid #2c2c37;">
+                <p>Listing price: $0.03</p>
+            </div>
+
+            <script>
+                function togglePrices() {
+                    var prices = document.getElementById("presalePrices");
+                    if (prices.style.display === "none") {
+                        prices.style.display = "block";
+                    } else {
+                        prices.style.display = "none";
+                    }
+                }
+            </script>
+
+            <!-- Additional content continues here -->
+            <p style="padding-left: 20px; padding-right: 20px; font-size: 16px; line-height: 1.6;">
+                All tokens are going to be airdropped automatically to your wallets. The listing price is set at a Start Market Cap of 30,000,000. Vesting is 3 months, with 12 weekly unlocks and the first unlock after the first 7 days of trading closes.
+            </p>
+
+            <p style="padding-left: 20px; padding-right: 20px; font-size: 16px; line-height: 1.6;">
+                Degens, you can make money by referring $DEGEN to your friends. The affiliate program is split into 6 levels.
+            </p>
+
+            <ul style="padding-left: 40px; padding-right: 40px; font-size: 16px; line-height: 1.6;">
+                <li>Level 1 - 8%</li>
+                <li>Level 2 - 5%</li>
+                <li>Level 3 - 4%</li>
+                <li>Level 4 - 4%</li>
+                <li>Level 5 - 4%</li>
+                <li>Level 6 - 4%</li>
+            </ul>
+
+            <p style="padding-left: 20px; padding-right: 20px; font-size: 16px; line-height: 1.6; background: #2c2c37; padding-top: 10px; padding-bottom: 10px; margin-left: 20px; margin-right: 20px; border-radius: 20px;">
+                Commission payments are released within 48 hours directly to your TON wallet. Make sure to submit your wallet on the button on this page.
+            </p>
+        </div>
+    
+    <!-- Close Button at Bottom -->
+    <button id="close-btn" style="background-color: #e74c3c; color: white; border: none; padding: 10px 20px; cursor: pointer; width: 100%; border-radius: 5px; font-size: 16px; font-weight: bold;">Close</button>
+
+</div></div>
+
+<script>
+    // Get the popup, overlay, and buttons
+    const infoPopup = document.getElementById('popupinfo');
+    const overlay = document.getElementById('overlay');
+    const infoBtn = document.getElementById('info-btn');
+    const closeBtn = document.getElementById('close-btn');
+
+    // Show the popup and overlay when the info button is clicked
+    infoBtn.addEventListener('click', function() {
+        overlay.style.display = 'block'; // Show the overlay
+        infoPopup.style.display = 'flex'; // Show the popup
+    });
+
+    // Hide the popup and overlay when the close button is clicked
+    closeBtn.addEventListener('click', function() {
+        overlay.style.display = 'none'; // Hide the overlay
+        infoPopup.style.display = 'none'; // Hide the popup
+    });
+</script>
+<!-- JavaScript to handle the popup -->
+<script>
+    // Get elements
+    const infoBtn = document.getElementById("info-btn");
+    const infoPopup = document.getElementById("info-popup");
+    const closeBtn = document.getElementById("close-btn");
+
+    // Show popup when the info button is clicked
+    infoBtn.onclick = function() {
+        infoPopup.style.display = "block";
+    };
+
+    // Hide popup when the close button is clicked
+    closeBtn.onclick = function() {
+        infoPopup.style.display = "none";
+    };
+
+    // Optionally, close the popup if clicking outside of it
+    window.onclick = function(event) {
+        if (event.target === infoPopup) {
+            infoPopup.style.display = "none";
+        }
+    };
+</script>
+    <p id="progress-text2" style="color: white; font-size: 20px; font-weight: bold; text-align: left; margin-top: 25px; font-family: system-ui;">DEGEN TOWN ALREADY RAISED:</p>
+    <p id="progress-text" style="text-align: left; color: white; font-size: 20px; margin-top: -17px !important; margin-bottom: 10px;">$0 / $100,000</p>
+    <div id="progress-container" style="margin-bottom: 20px; background-color: #e0e0e0; border-radius: 5px; height: 30px; width: 100%;">
+        <div id="progress-bar" style="background: linear-gradient(to bottom, #fd8e0b, #ffc30f); border-radius: 5px; height: 30px; width: 0%;"></div>
+    </div>
+    <div style="text-align: center;">
+
+
+ <div id="transactionMessage" style="font-weight: bold; margin-bottom: 15px; display: none; width: 100%; background: linear-gradient(rgb(86 193 90 / 85%), rgb(62 137 64 / 85%)); color: white; padding: 14px; box-sizing: border-box; border-radius: 8px; transition: opacity 0.3s; opacity: 1; z-index: 2;  justify-content: space-between; align-items: center;">
+    <p style="margin: 0;width: 100% !important;margin-bottom: 7px;font-size: 17px;">Transaction successful! Your changes have been saved</p> <!-- Ensures there's no extra margin -->
+    <button id="closeButton" onclick="closeMessage()" style="cursor: pointer;background-color: #c02b2b;color: white;padding: 10px 15px;border: none;border-radius: 5px;font-size: 16px;transition: background-color 0.3s;font-weight: bold;">Close</button>
+</div>
+
+
+<div id="walletsection" style="border: 1px solid #101013;background: rgba(46, 44, 55, 0.65); border-radius: 15px; margin-bottom: 20px;">
+    <p style="text-align: center; margin-top: 0px; color: #ffffff; font-size: 17px; font-weight: 600; background: #1e1d22; padding-top: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-top: 1px solid #101013; border-left: 1px solid #101013; border-right: 1px solid #101013; padding-bottom: 14px; padding-left: 0px; padding-right: 0px;">Participate in this Stage</p>
+    
+    <!-- QR Code Section -->
+    <div  id="qrcode" style="padding-bottom: 30px !important; text-align: center; margin: 20px auto; width: 170px; height: 170px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: white; border-radius: 10px; padding: 10px;">
+        <!-- Text above the QR Code -->
+        <p style="margin: 10px 0; font-size: 16px; font-weight: 500; width: 112%; background: #1e1d22; margin-top: 0px; padding-bottom: 5px; color: white; padding-top: 5px; border-top-left-radius: 10px; border-top-right-radius: 10px;">Scan QR Code</p>
+        <!-- QR code will be generated here -->
+    </div>
+    
+    <!-- Pay with Wallet button -->
+    <button id="openWalletPopupButton" style="color: white; padding: 15px 30px; border: none; cursor: pointer; font-size: 16px; background: linear-gradient(to bottom, #45a9ce, #3a7590); font-weight: bold; width: 90%; border-radius: 15px; margin-bottom: 20px;" onclick="showWalletPopup();">Pay with Wallet</button>
+
+    <p style="color: white; font-size: 15px; margin-top: -10px; font-weight: bold; padding: 10px; border-radius: 10px; text-align: center; padding-top: 0px; padding-bottom: 10px;">
+        <i class="fa fa-warning" aria-hidden="true" style="margin-right: 8px; vertical-align: middle;"></i>Minimum purchase is 10 TON. Any smaller transactions will be refunded.
+    </p>
+
+    <!-- Popup for wallet options -->
+    <div id="walletPopup" style="display: none; position: fixed; z-index: 1; left: 0px; top: 0px; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.6);">
+        <div id="walletPopupContent" style="background: white; margin: 40% auto; padding: 0px; border-radius: 10px; width: 80%; max-width: 400px; position: relative; border: 1px solid #101013; background: #383747; padding-bottom: 20px;">
+            <span id="closeWalletPopupButton" style="color: white; float: right; font-size: 28px; font-weight: bold; cursor: pointer; background: #c02b2b; padding: 3px 10px; border-top-right-radius: 10px;">×</span>
+            <p style="text-align: center; margin-top: 0px; color: #ffffff; font-size: 17px; font-weight: 600; background: #1e1d22; padding: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px;">Choose your wallet</p>
+
+            <!-- Wallet options -->
+            <div class="walletOption" id="tonkeeperOption" style="text-align: center; cursor: pointer; background: #10161f; height: 75px; border: 0px !important;" onclick="showTon1();">
+                <img src="assets/img/tonkeeper.png" alt="Tonkeeper" style="width: 45px; height: 40px; display: block; margin: 0 auto 0px;">
+                <p style="font-weight: bold;">Tonkeeper</p>
+            </div>
+            <div class="walletOption" id="tonhubOption" style="text-align: center; cursor: pointer; background: linear-gradient(to bottom, #c722fe, #1a6dfd); background-size: 100% 100%; height: 75px; border: 0px !important;" onclick="showTon2();">
+                <img src="assets/img/tonhub.png" alt="Tonhub" style="width: 45px; height: 40px; display: block; margin: 0 auto 0px;">
+                <p style="font-weight: bold;">Tonhub</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script type="text/javascript">
+    
+        $(document).ready(function () {
+            // Replace with your actual wallet address and Telegram user ID
+            const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Placeholder for user ID
+            const walletAddress = "UQA-7kqb9TRJIVrBFHjOjUC64Db3wb8QqsCXyqDlGVGJTfFD"; // Replace with your wallet address
+            const qrCodeURL = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
+
+            console.log("QR Code URL: ", qrCodeURL); // Log the QR code URL for debugging
+
+            try {
+                $("#qrcode").qrcode({
+                    text: qrCodeURL,
+                    width: 170,
+                    height: 170
+                });
+                console.log("QR Code generated successfully.");
+            } catch (error) {
+                console.error("Error generating QR Code: ", error);
+            }
+        });
+
+            const walletAddress = "UQA-7kqb9TRJIVrBFHjOjUC64Db3wb8QqsCXyqDlGVGJTfFD";
+            const apiKey = "a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf";
+
+                function showTon1() {
+                console.log("Inside showTon1 function");
+                window.location.href = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}`;
+            }
+
+            function showTon2() {
+                console.log("Inside showTon2 function");
+                window.location.href = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
+            }
+</script>
+
+
+        </div>
+
+
+
+  <div style="
+    display: flex; /* Use flexbox layout */
+    justify-content: space-between; /* Space between the items */
+    margin-bottom: 20px; /* Adjust the margin as needed */">
+    <div style="
+        text-align: center;
+        background: rgba(46, 44, 55, 0.65);
+        height: auto;
+        border-radius: 10px;
+        border: 1px solid #101013;
+        flex: 1; /* Allow the divs to grow and take equal space */
+        margin-right: 10px; /* Add margin between the divs */
+    ">
+        <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;padding-left: 0px;padding-right: 0px;">
+            Top Referred so far
+        </p>
+        <p style="font-weight: 700;" id="highestCommission">Loading referred value...</p>
+    </div>
+
+    <div style="
+        text-align: center;
+        background: rgba(46, 44, 55, 0.65);
+        height: auto;
+        border-radius: 10px;
+        border: 1px solid #101013;
+        flex: 1; /* Allow the divs to grow and take equal space */
+    ">
+        <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;padding-left: 0px;padding-right: 0px;">
+            Commissions Earned
+        </p>
+        <p id="totalCommission" style="font-weight: 700;">Loading commission value...</p>
+    </div>
+
+
+
+<script>
+async function getBalance(walletAddress) {
+    try {
+        console.log(`Fetching balance for wallet address: ${walletAddress}`);
+        const apiEndpoint = "https://toncenter.com/api/v2/getAddressInformation";
+        const response = await fetch(`${apiEndpoint}?address=${walletAddress}&api_key=a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf`);
+        if (!response.ok) {
+            throw new Error(`Error fetching balance for ${walletAddress}: ${response.statusText}`);
+        }
+        const data = await response.json();
+        console.log("API response for balance data:", data); // Log the response for debugging
+
+        // Convert the balance from nanoton to TON and return
+        const balanceInTON = parseFloat(data.result.balance) / 1000000000;
+        return balanceInTON || 0; // Ensure the balance is returned, default to 0 if undefined
+    } catch (error) {
+        console.error(`Error fetching balance for ${walletAddress}:`, error);
+        return 0; // Return 0 in case of error
+    }
+}
+
+
+async function fetchUserData() {
+  console.log("Checking elements...");
+  console.log("totalDeposit element:", document.getElementById("totalDeposit"));
+  console.log("totalCommission element:", document.getElementById("totalCommission"));
+  console.log("highestCommission element:", document.getElementById("highestCommission"));
+
+  const userId = Telegram.WebApp.initDataUnsafe?.user?.id;
+  if (!userId) {
+    console.error("User ID not found in Telegram WebApp data.");
+    return;
+  }
+
+  const apiUrl = `https://telegram-bot-degen-town.replit.app/api/user/${userId}`;
+
+  try {
+    const response = await fetch(apiUrl);
+    if (!response.ok) throw new Error("Network response was not ok");
+
+    const data = await response.json();
+    console.log("Fetched user data:", data); // Log the entire response
+
+    // Only update if element exists
+    if (document.getElementById("totalDeposit")) {
+      document.getElementById("totalDeposit").textContent = (data.totalDeposit ? data.totalDeposit.toFixed(4) : "0") + " TON";
+    }
+    if (document.getElementById("totalCommission")) {
+      document.getElementById("totalCommission").textContent = (data.commissionEarned ? data.commissionEarned.toFixed(4) : "0") + " TON";
+    }
+    if (document.getElementById("highestCommission")) {
+      document.getElementById("highestCommission").textContent = (data.highestCommission ? data.highestCommission.toFixed(4) : "0") + " TON";
+    }
+  } catch (error) {
+    console.error("Failed to fetch user data:", error);
+    if (document.getElementById("totalDeposit")) {
+      document.getElementById("totalDeposit").textContent = "0 TON";
+    }
+    if (document.getElementById("totalCommission")) {
+      document.getElementById("totalCommission").textContent = "0 TON";
+    }
+    if (document.getElementById("highestCommission")) {
+      document.getElementById("highestCommission").textContent = "0 TON";
+    }
+  }
+}
+
+document.addEventListener("DOMContentLoaded", fetchUserData);
+
+
+
+</script>
+
+
+
+
+      
+</div>
+<p style="color: white;font-size: 15px;margin-top: -10px;font-weight: bold;background: rgba(46, 44, 55, 0.7);padding: 10px;border-radius: 10px;text-align: center;">
+            <i class="fa fa-check" aria-hidden="true" style="margin-right: 8px; vertical-align: middle;"></i>Commission payments are released within 48 hours directly to your TON wallet.</p>
+<button id="openPopupButton" style="
+    background: linear-gradient(to bottom, #48a34c, #337335);
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 15px;
+    width: 100%;
+    font-weight: bold;
+    margin-bottom: 50px;
+">Add Withdrawal Wallet</button>
+
+   <div id="walletPopup" style=" display: none; position: fixed; z-index: 1; left: 0px; top: 0px; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.6);">
+        <div id="walletPopupContent" style="background: white; margin: 15% auto; padding: 20px; border-radius: 10px; width: 80%; max-width: 400px; position: relative;">
+            <span class="closeWalletPopupButton" style="position: absolute; top: 10px; right: 20px; cursor: pointer; font-size: 20px; font-weight: bold; color: #333;">&times;</span>
+            <h2>Choose your wallet</h2>
+
+            <!-- Wallet options -->
+            <div class="walletOption" id="tonkeeperOption" style="text-align: center; cursor: pointer;">
+                <img src="https://tonkeeper.com/assets/img/tonkeeper.svg" alt="Tonkeeper" style="width: 50px; height: 50px; display: block; margin: 0 auto 10px;">
+                <p>Tonkeeper</p>
+            </div>
+
+            <div class="walletOption" id="tonhubOption" style="text-align: center; cursor: pointer;">
+                <img src="https://tonhub.com/assets/img/logo.png" alt="Tonhub" style="width: 50px; height: 50px; display: block; margin: 0 auto 10px;">
+                <p>Tonhub</p>
+            </div>
+
+            <div class="walletOption" id="tonsrfOption" style="text-align: center; cursor: pointer;">
+                <img src="https://tonsrf.com/logo.png" alt="TonSurf" style="width: 50px; height: 50px; display: block; margin: 0 auto 10px;">
+                <p>TonSurf</p>
+            </div>
+        </div>
+    </div>
+<!-- Popup Structure -->
+<div id="popup" style="display: none; position: fixed; z-index: 1; left: 0px; top: 0px; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.6);">
+<div id="withdrawaddress-popup" style="display: none;z-index: 1000;text-align: center;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);background: rgb(22 22 32);color: white;padding: 20px;op;opacity: 0.98;rder-radius: 10px;width: 70%;font-weight: 600;">
+    Your withdrawal address has been updated successfully! 🎉
+</div>
+
+ 
+    
+    <div id="nowithdrawaddress-popup" style="display: none;z-index: 1000;text-align: center;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);background: rgb(22 22 32);color: white;padding: 20px;opacity: 0.98;border-radius: 10px;width: 70%;font-weight: 600;">
+   Please enter your withdrawal address to proceed!
+</div>
+    <div style="padding: 0px; width: 80%; max-width: 480px; border-radius: 10px; height: auto; z-index: 999; position: fixed; top: 43%; left: 50%; transform: translate(-50%, -50%);">
+        <span id="closePopupButton" style="color: white; float: right; font-size: 28px; font-weight: bold; cursor: pointer; background: #c02b2b; padding-bottom: 7px; padding-left: 10px; border-top-right-radius: 10px; padding-right: 10px; padding-top: 4px; margin-right: 1px; margin-top: 1px;">×</span>
+
+        <div style="text-align: center;background: #383747;margin-bottom: 0px;height: 170px;border-radius: 10px;border: 1px solid #101013;">
+            <p style="text-align: center; margin-top: 0px; color: #ffffff; font-size: 17px; font-weight: 600; background: #1e1d22; padding-top: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px; padding-bottom: 14px;">Withdrawal Wallet</p>
+            <input type="text" id="withdrawAddress" style="font-size: 16px;background-color: #ffffff;color: #1e2739;padding: 9px 15px;border-radius: 10px;width: 80%;margin-bottom: 15px;" placeholder="Enter Withdraw Address">
+            <button id="setAddressButton" style="background-color: #1f9611; border: none; cursor: pointer; border-radius: 10px; color: white; height: 37px; font-size: 16px; font-weight: bold;">Update</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+document.getElementById('openPopupButton').onclick = function() {
+    document.getElementById('popup').style.display = 'block';
+}
+
+document.getElementById('closePopupButton').onclick = function() {
+    document.getElementById('popup').style.display = 'none';
+}
+
+document.getElementById('openWalletPopupButton').onclick = function() {
+    document.getElementById('walletPopup').style.display = 'block';
+}
+
+document.getElementById('closeWalletPopupButton').onclick = function() {
+    document.getElementById('walletPopup').style.display = 'none';
+}
+
+
+// Optional: Close the popup when clicking anywhere outside of the popup content
+window.onclick = function(event) {
+    const popup = document.getElementById('popup');
+    if (event.target === popup) {
+        popup.style.display = 'none';
+    }
+}
+</script>
+<script>
+async function setWithdrawAddress() {
+    const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
+    const withdrawAddress = document.getElementById('withdrawAddress').value;
+
+    if (!withdrawAddress) {
+        showNoWithdrawaddressPopup();
+        return;
+    }
+
+    try {
+        const response = await fetch('https://telegram-bot-degen-town.replit.app/api/user/setWithdrawAddress', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId, withdrawAddress })
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            showWithdrawaddressPopup();
+            document.getElementById('openPopupButton').textContent = "Edit Withdrawal Wallet"; // Change button text
+        } else {
+            console.error(data.error || 'Failed to update withdraw address');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+    
+function showWithdrawaddressPopup() {
+const checkinPopup = document.getElementById('withdrawaddress-popup');
+checkinPopup.style.display = 'block';
+document.getElementById('daily-checkin').style.opacity = '0.68';
+    // Hide the popup after 2 seconds
+    setTimeout(() => {
+        checkinPopup.style.display = 'none';
+    }, 2000);
+}
+
+           function showNoWithdrawaddressPopup() {
+const checkinPopup = document.getElementById('nowithdrawaddress-popup');
+checkinPopup.style.display = 'block';
+document.getElementById('daily-checkin').style.opacity = '0.68';
+    // Hide the popup after 2 seconds
+    setTimeout(() => {
+        checkinPopup.style.display = 'none';
+    }, 2000);
+}
+    
+async function loadWithdrawAddress() {
+    const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
+    try {
+        const response = await fetch('https://telegram-bot-degen-town.replit.app/api/user/getWithdrawAddress', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId })
+        });
+
+        const data = await response.json();
+        if (response.ok && data.withdrawAddress) {
+            document.getElementById('withdrawAddress').value = data.withdrawAddress;
+            document.getElementById('openPopupButton').textContent = "Edit Withdrawal Wallet"; // Change button text if address exists
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+// Event listeners
+document.getElementById('setAddressButton').addEventListener('click', setWithdrawAddress);
+
+// Load withdrawal address on page load
+loadWithdrawAddress();
+</script>
+
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<script>
+let lastBalanceInUsd = 0; // Initialize lastBalanceInUsd
+
+async function fetchTotalDeposits() {
+    const apiEndpoint = 'https://telegram-bot-degen-town.replit.app/api/total-deposits'; // Ensure this is the correct endpoint
+    try {
+        const response = await fetch(apiEndpoint);
+        if (!response.ok) {
+            throw new Error(`Error fetching total deposits: ${response.statusText}`);
+        }
+        const data = await response.json();
+        return data.totalDepositsInUsd || 0; // Return total deposits in USD directly
+    } catch (error) {
+        console.error("Error fetching total deposits:", error);
+        return 0; // Return 0 in case of error
+    }
+}
+
+async function fetchTonToUsdRate() {
+    const url = "https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd";
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Error fetching TON to USD rate: ${response.status}`);
+        }
+        const data = await response.json();
+        return data["the-open-network"].usd; // Return the rate
+    } catch (error) {
+        console.error(error);
+        return null; // Return null in case of error
+    }
+}
+
+async function updatePage() {
+    try {
+        const totalDepositsInUsd = await fetchTotalDeposits();
+        const tonRate = await fetchTonToUsdRate();
+
+        if (tonRate !== null) {
+            // Update the progress bar and text
+            updateProgressBar(totalDepositsInUsd);
+            console.log("Total Deposits in USD:", totalDepositsInUsd);
+
+            if (!isNaN(totalDepositsInUsd)) {
+                if (lastBalanceInUsd === 0) {
+                    // If total deposits are $0, show "Loading..."
+                    progressText.textContent = "Loading... / $100,000";
+                } else {
+                    // Animate value and update the progress bar
+                    animateValue(progressText, 0, totalDepositsInUsd, 2000);
+                    progressBar.style.width = `${Math.min((totalDepositsInUsd / goal) * 100, 100)}%`;
+                }
+            } else {
+                console.error("Invalid total deposits in USD:", totalDepositsInUsd);
+            }
+        }
+    } catch (error) {
+        console.error("Error updating page:", error);
+    }
+}
+
+// Call the updatePage function every 5 seconds
+setInterval(updatePage, 12000);
+
+// Call the updatePage function initially to load the balance immediately
+updatePage();
+
+// Update the updateProgressBar function to ensure it uses the defined variable
+function updateProgressBar(totalDepositsInUsd) {
+    const goal = 100000; // Set your goal amount here
+    const progressBar = document.getElementById("progress-bar");
+    const progressText = document.getElementById("progress-text");
+
+    if (totalDepositsInUsd !== lastBalanceInUsd && totalDepositsInUsd !== null) {
+        lastBalanceInUsd = totalDepositsInUsd; // Update lastBalanceInUsd
+
+        if (lastBalanceInUsd === 0) {
+            // Show "Loading..." text if total deposits are $0
+            progressText.textContent = "Loading... / $100,000";
+            progressBar.style.width = '0%'; // Reset the progress bar
+        } else {
+            // Animate value and update the progress bar
+            animateValue(progressText, 0, totalDepositsInUsd, 2000);
+            progressBar.style.transition = "width 2000ms ease-in-out";
+            progressBar.style.width = `${Math.min((totalDepositsInUsd / goal) * 100, 100)}%`;
+        }
+    }
+}
+
+// Function to format the number with commas
+function formatWithCommas(number) {
+    return number.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+// Function to animate the progress value
+function animateValue(element, start, end, duration) {
+    let startTime = null;
+
+    function step(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
+        const currentValue = start + progress * (end - start);
+
+        // Use formatWithCommas to format the value with commas
+        element.textContent = `$${formatWithCommas(currentValue)} / $100,000`;
+
+        if (progress < 1) {
+            window.requestAnimationFrame(step);
+        }
+    }
+
+    window.requestAnimationFrame(step);
+}
+
+
+
+
+function fallbackCopyText(text) {
+    // Create a temporary textarea to hold the text
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select(); // Select the text in the textarea
+    try {
+        document.execCommand('copy'); // Execute the 'copy' command
+        showCopyPopup(); // Display confirmation popup
+    } catch (err) {
+        console.error('Fallback copy failed: ', err);
+    }
+    document.body.removeChild(textarea); // Remove the textarea after copying
+}
+
+function showCopyPopup() {
+    const popup = document.getElementById("copy-popupss");
+    popup.style.display = "block";
+    setTimeout(() => {
+        popup.style.display = "none";
+    }, 2000); // Hide popup after 2 seconds
+}
+
+    // Trigger functions after page load
+    document.addEventListener("DOMContentLoaded", () => {
+        displayWallet();
+        updatePage();
+        setInterval(updatePage, 60000); // Refresh the page every 60 seconds
+    });
+</script>
+    </div>
+
+
+       
+
+    <!-- Fixed App Bar -->
+<div class="app-bar">
+     <button onclick="showPage('page1')">
+            <i class="fas fa-gamepad"></i>
+            Game
+        </button>
+        <button onclick="showPage('page2')">
+            <i class="fas fa-trophy"></i>
+            Rank
+        </button>
+        <button onclick="showPage('page3')">
+            <i class="fas fa-users"></i>
+            Invite
+        </button>
+        <button onclick="showPage('page4')">
+            <i class="fas fa-tasks"></i>
+            Tasks
+        </button>
+        <button onclick="showPage('page5')">
+            <i class="fas fa-wallet"></i>
+            Seed
+        </button>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            // Hide all pages
+            var pages = document.querySelectorAll('.page');
+            pages.forEach(function(page) {
+                page.classList.remove('active');
+            });
+
+            // Show the selected page
+            document.getElementById(pageId).classList.add('active');
+        }
+    </script>
+
+  <script>
+    // Check for Telegram browser using user agent
+    if (navigator.userAgent.includes("Telegram")) {
+      document.getElementById("body").style.display = "block";  // Show Telegram-specific content
+      document.getElementById("non-telegram-content").classList.add("hidden");
+    } else {
+      document.getElementById("non-telegram-content").classList.remove("hidden"); // Show non-Telegram message
+    }
+  </script>
+
+<script>
+
+
+
+        function showPopup() {
+            const popup = document.getElementById('copy-popup');
+            popup.style.display = 'block'; // Show popup
+            setTimeout(() => {
+                popup.style.display = 'none'; // Hide after 3 seconds
+            }, 3000);
+        }
+
+
+
+    // Update the user's rank and name
+    const currentUserRank = Math.floor(Math.random() * 100) + 1; // Example rank
+    const currentUserName = "UserExample"; // Example Telegram name
+
+    document.querySelector('#user-rank span').innerText = `${user.username}`;
+    document.querySelector('#user-rank span[style*="font-style"]').innerText = `${currentUserName}`;
+</script>
+<script type="text/javascript">
+Telegram.WebApp.ready();
+
+// Get the Telegram user data
+const user = Telegram.WebApp.initDataUnsafe.user;
+
+// Initialize the referral link
+let referralLink = '';
+
+if (user && user.id) {
+    // Generate referral link using user ID
+    referralLink = `https://t.me/degentown_bot?start=${user.id}`;
+    document.getElementById('referral-link').textContent = referralLink;
+} else {
+    document.getElementById('referral-link').textContent = 'User data unavailable';
+}
+
+// Function to share to Telegram Story
+function shareToTelegramStory() {
+                    setTimeout(function() {
+                    document.getElementById('share-approved').src = 'assets/img/approved.png';
+                }, 2000);
+    const storyText = "Join the Game Name Journey! Stay tuned for exciting airdrops and special rewards from Game Name!";
+    const storyLink = referralLink || "https://example.com"; // Fallback in case referralLink is empty
+
+    // Construct the story sharing link
+    const storyUrl = `https://t.me/share/url?url=${encodeURIComponent(storyLink)}&text=${encodeURIComponent(storyText)}`;
+
+    // Open the link in Telegram's story sharing
+    Telegram.WebApp.openTelegramLink(storyUrl);
+}</script>
+</body>
+</html>

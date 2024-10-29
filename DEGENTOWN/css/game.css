@@ -1,0 +1,354 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+@font-face {
+    font-family: 'SuperMario256'; /* Name for the font */
+    src: url('fonts/SuperMario256.ttf') format('truetype'); /* Path to the font file */
+    font-weight: normal; 
+    font-style: normal;
+}
+
+        body, html {
+      background-image: url("assets/img/background_screen_overlay.png");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed; /* Optional: keeps the background fixed */
+      background-position: center center;
+      margin: 0;
+      padding: 0;
+    height: 100%;
+            font-weight: 400;
+            color: white !important;
+    font-family: 'Roboto', sans-serif;
+    
+        }
+       /* Add CSS for the blocked state */
+        #daily-checkin.blocked {
+            opacity: 0.68; /* Make it look disabled */
+            pointer-events: none; /* Prevent clicking */
+        }
+        /* Container for the page content */
+        .content {
+            height: calc(100% - 60px); /* Adjusting height for the app bar */
+        }
+
+        /* Content sections */
+        .page {
+            display: none;
+            padding: 20px;
+        }
+
+        .active {
+            display: block;
+
+        }
+
+        /* Fixed app bar at the bottom */
+        .app-bar {
+position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 70px;
+    background: url(assets/img/bottombanner.png);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: white;
+    background-size: 100% 100%;
+        }
+
+        .app-bar button {
+background-color: transparent;
+    border: none;
+    color: #d6d5da;
+    font-size: 14px;
+    cursor: pointer;
+    outline: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+        }
+
+        .app-bar button i {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+
+        .app-bar button:hover {
+            color: #d6d5da;
+        }
+
+        /* Styles for the canvas loader */
+        #SD-loadscrn {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            z-index: 9999;
+        }
+
+        #SD-loadtext {
+            position: absolute;
+            font-family: sans-serif;
+            top: 50%;
+            left: 50%;
+            width: 250px;
+            margin-left: -125px;
+            margin-top: -125px;
+            text-align: center;
+            line-height: 150%;
+            font-size: 16px;
+        }
+#viewporter {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+    max-height: calc(100vh - 60px);
+        }
+
+canvas {
+width: 100%;
+    height: 100%;
+display: block;
+    max-height: calc(100vh - 60px);
+}
+
+
+
+
+                #referral-stats {
+ display: flex;
+    justify-content: space-between;
+    background-color: #bf5d05;
+    border: 1px solid #a24e03;
+    padding: 13px;
+    border-radius: 10px;
+        }
+        .stat {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+        .stat-icon {
+            margin-right: 10px;
+            font-size: 20px; /* Adjust icon size */
+            color: #ffffff; /* Icon color */
+        }
+        .stat-text {
+            font-weight: bold;
+        }
+        #referral-link-section {
+    background-color: rgba(46, 44, 55, 0.95);
+    border: 1px solid #1e1d22;
+    padding: 0px;
+    text-align: left;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 0px;
+        }
+        .copy-button {
+background-color: #111013;
+    color: white;
+    border: none;
+    padding: 15px;
+    cursor: pointer;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    border-top-right-radius: 0px !important;
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+        }
+        .copy-button:hover {
+            background-color: #111013;
+        }
+        .referral-link {
+            flex-grow: 1;
+            margin-right: 10px;
+            font-weight: bold;
+            color: #ffffff;
+            white-space: nowrap; /* Prevent line break */
+            overflow: hidden; /* Hide overflow */
+            text-overflow: ellipsis; /* Add ellipsis */
+        }
+        .stat-icon {
+            margin-right: 5px;
+        }
+        /* Popup styles */
+
+
+   #user-rank {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 100%; /* Ensures the max-width does not exceed the parent container */
+    margin: 20px auto;
+    box-sizing: border-box; /* Ensures padding is included in the width calculation */
+    overflow: hidden; /* Prevents overflow of content */
+}
+
+        .user-info img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-right: 15px;
+            border: 2px solid #ddd;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+            margin-right:15px;
+        }
+
+        .username {
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .rank-info {
+            font-size: 14px;
+            color: #666;
+            margin-top: 4px;
+        }
+        tr {
+        
+        display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid rgb(74, 72, 85);
+    padding-left: 10px !important;
+    padding-right: 10px !important;    
+        }
+
+                td { 
+                    font-weight: bold;
+        }
+
+
+    .popup {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+    .popup-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        position: relative;
+    }
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+#checkin-popup {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+        #withdrawaddress-popup {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+                #nowithdrawaddress-popup {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+.invite-section {
+    cursor: pointer; /* Change cursor to pointer */
+}
+
+        /* Styling for the popup and wallet options */
+        #walletPopup {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        }
+        #walletPopupContent {
+            background-color: white; 
+            width: 400px; 
+            margin: 100px auto; 
+            padding: 20px; 
+            border-radius: 10px; 
+            text-align: center; 
+            position: relative;
+        }
+        .walletOption {
+            display: inline-block; 
+            margin: 10px; 
+            cursor: pointer; 
+            border: 1px solid #ddd; 
+            border-radius: 10px; 
+            padding: 10px; 
+            width: 80px; 
+            height: 100px; 
+            text-align: center;
+        }
+
+
+
+                .showPopuptransaction {
+                    display: block;
+     position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+        }
+  
