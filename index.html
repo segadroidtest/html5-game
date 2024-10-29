@@ -12,6 +12,7 @@
     <div id="status"></div>
 
     <script>
+        const userId = Telegram.WebApp.initDataUnsafe.user.id;
         async function submitPurchase() {
             document.getElementById("status").textContent = "Processing purchase...";
 
@@ -21,7 +22,7 @@
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({ userId: Telegram.WebApp.initDataUnsafe.user.id })
+                    body: JSON.stringify({ userId })
                 });
 
                 if (!response.ok) {
