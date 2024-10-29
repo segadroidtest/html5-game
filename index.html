@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Purchase Page</title>
+    <title>Purchase with Telegram Stars</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
@@ -13,32 +13,26 @@
 <body>
 
 <h1>Purchase Item</h1>
-<p>Click the button below to purchase.</p>
-<button id="purchaseButton">Purchase</button>
+<p>Click the button below to purchase with Telegram Stars.</p>
+<button id="purchaseButton">Purchase with Stars</button>
 
 <script>
     document.getElementById('purchaseButton').onclick = function() {
         // Use Telegram Web Apps API to open the payment interface
-        const invoicePayload = {
-            provider_token: 'YOUR_PROVIDER_TOKEN', // Replace with your payment provider token
+        const paymentData = {
             title: 'Your Product Title',
             description: 'Description of the product',
             start_parameter: 'unique_start_parameter',
-            currency: 'USD', // or your desired currency
-            prices: [
-                { label: 'Product Price', amount: 1000 } // Price in cents, e.g., $10.00
-            ],
+            currency: 'USD', // This is illustrative; use actual currency if required
+            amount: 1000, // Amount in the smallest unit (e.g., 1000 for $10.00)
             photo_url: 'https://example.com/product_image.jpg', // Optional: URL of product image
-            photo_size: 512, // Optional: Image size
-            photo_width: 512, // Optional: Image width
-            photo_height: 512, // Optional: Image height
             need_name: true, // Optional: Ask for buyer's name
             need_phone_number: true, // Optional: Ask for phone number
             need_email: true // Optional: Ask for email
         };
 
-        // Sending the payment request
-        Telegram.WebApp.openInvoice(invoicePayload);
+        // This will trigger the payment interface; adjust based on your needs
+        Telegram.WebApp.openInvoice(paymentData);
     };
 </script>
 
