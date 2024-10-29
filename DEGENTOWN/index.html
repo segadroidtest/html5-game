@@ -2145,93 +2145,59 @@ loadWithdrawAddress();
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <script>
-let lastBalanceInUsd = 0; // Initialize lastBalanceInUsd
+        let lastTotalDeposits = 0; // Store last known total deposits
+        const goal = 100000; // Set your goal amount here
 
-async function fetchTotalDeposits() {
-    const apiEndpoint = 'https://telegram-bot-degen-town.replit.app/api/total-deposits'; // Ensure this is the correct endpoint
-    try {
-        const response = await fetch(apiEndpoint);
-        if (!response.ok) {
-            throw new Error(`Error fetching total deposits: ${response.statusText}`);
-        }
-        const data = await response.json();
-        return data.totalDepositsInUsd || 0; // Return total deposits in USD directly
-    } catch (error) {
-        console.error("Error fetching total deposits:", error);
-        return 0; // Return 0 in case of error
-    }
-}
-
-async function fetchTonToUsdRate() {
-    const url = "https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd";
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`Error fetching TON to USD rate: ${response.status}`);
-        }
-        const data = await response.json();
-        return data["the-open-network"].usd; // Return the rate
-    } catch (error) {
-        console.error(error);
-        return null; // Return null in case of error
-    }
-}
-
-async function updatePage() {
-    try {
-        const totalDepositsInUsd = await fetchTotalDeposits();
-        const tonRate = await fetchTonToUsdRate();
-
-        if (tonRate !== null) {
-            // Update the progress bar and text
-            updateProgressBar(totalDepositsInUsd);
-            console.log("Total Deposits in USD:", totalDepositsInUsd);
-
-            if (!isNaN(totalDepositsInUsd)) {
-                if (lastBalanceInUsd === 0) {
-                    // If total deposits are $0, show "Loading..."
-                    progressText.textContent = "Loading.. / $100,000";
-                } else {
-                    // Animate value and update the progress bar
-                    animateValue(progressText, 0, totalDepositsInUsd, 2000);
-                    progressBar.style.width = `${Math.min((totalDepositsInUsd / goal) * 100, 100)}%`;
+        async function fetchAllUsersDeposits() {
+            const apiEndpoint = 'https://telegram-bot-degen-town.replit.app/api/users'; // Change this to your actual endpoint
+            try {
+                const response = await fetch(apiEndpoint);
+                if (!response.ok) {
+                    throw new Error(`Error fetching users: ${response.statusText}`);
                 }
-            } else {
-                console.error("Invalid total deposits in USD:", totalDepositsInUsd);
+                const users = await response.json();
+
+                // Calculate total deposits
+                const totalDeposits = users.reduce((total, user) => total + (user.totalDeposit || 0), 0);
+                return totalDeposits;
+            } catch (error) {
+                console.error("Error fetching user deposits:", error);
+                return lastTotalDeposits; // Return last valid total deposits in case of error
             }
         }
-    } catch (error) {
-        console.error("Error updating page:", error);
-    }
-}
 
-// Call the updatePage function every 5 seconds
-setInterval(updatePage, 12000);
+        function updateProgressBar(totalDeposits) {
+            const progressBar = document.getElementById("progress-bar");
+            const progressText = document.getElementById("progress-text");
 
-// Call the updatePage function initially to load the balance immediately
-updatePage();
+            // Multiply total deposits by 5
+            const displayedTotal = totalDeposits * 5;
 
-// Update the updateProgressBar function to ensure it uses the defined variable
-function updateProgressBar(totalDepositsInUsd) {
-    const goal = 100000; // Set your goal amount here
-    const progressBar = document.getElementById("progress-bar");
-    const progressText = document.getElementById("progress-text");
-
-    if (totalDepositsInUsd !== lastBalanceInUsd && totalDepositsInUsd !== null) {
-        lastBalanceInUsd = totalDepositsInUsd; // Update lastBalanceInUsd
-
-        if (lastBalanceInUsd === 0) {
-            // Show "Loading..." text if total deposits are $0
-            progressText.textContent = "Loading.. / $100,000";
-            progressBar.style.width = '0%'; // Reset the progress bar
-        } else {
-            // Animate value and update the progress bar
-            animateValue(progressText, 0, totalDepositsInUsd, 2000);
-            progressBar.style.transition = "width 2000ms ease-in-out";
-            progressBar.style.width = `${Math.min((totalDepositsInUsd / goal) * 100, 100)}%`;
+            // Update the displayed total if it's different from the lastTotalDeposits
+            if (displayedTotal !== lastTotalDeposits) {
+                lastTotalDeposits = displayedTotal; // Update the last total deposits
+                progressText.textContent = `$${formatWithCommas(displayedTotal.toFixed(2))} / $100,000`;
+                progressBar.style.width = `${Math.min((displayedTotal / goal) * 100, 100)}%`; // Update progress bar width
+            }
         }
-    }
-}
+
+        // Function to format the number with commas
+        function formatWithCommas(number) {
+            return number.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        async function updatePage() {
+            const totalDeposits = await fetchAllUsersDeposits();
+            updateProgressBar(totalDeposits);
+        }
+
+        // Call the updatePage function every 5 seconds
+        setInterval(updatePage, 5000);
+
+        // Initial call to load the balance immediately
+        updatePage();
+
+
 
 // Function to format the number with commas
 function formatWithCommas(number) {
