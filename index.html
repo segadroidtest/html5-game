@@ -3,30 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Button Example</title>
+    <title>Button Trigger</title>
 </head>
 <body>
-    <h1>Click the Button</h1>
-    <button onclick="executeAction()">Click Me</button>
-    <div id="response"></div>
+    <button id="actionButton">Click Me</button>
+    <p id="responseMessage"></p>
 
     <script>
-        async function executeAction() {
+        document.getElementById('actionButton').onclick = async function () {
             try {
                 const response = await fetch('https://telegram-bot-degen-town.replit.app/execute', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    body: JSON.stringify({ action: 'execute' }) // You can send any necessary data here
                 });
 
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
                 const data = await response.json();
-                document.getElementById('response').textContent = data.message;
+                document.getElementById('responseMessage').innerText = data.message;
             } catch (error) {
                 console.error('Error:', error);
-                document.getElementById('response').textContent = 'An error occurred.';
+                document.getElementById('responseMessage').innerText = 'An error occurred: ' + error.message;
             }
-        }
+        };
     </script>
 </body>
 </html>
