@@ -80,9 +80,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     let lastProcessedTimestamp = parseInt(localStorage.getItem('lastProcessedTimestamp')) || 0;
     let isProcessing = false; // Flag to prevent concurrent processing
 
-
-
-
+    // Load processed transactions from localStorage
+    let processedTransactionIds = JSON.parse(localStorage.getItem('processedTransactionIds')) || {};
 
     async function getBalance(walletAddress) {
         console.log("Fetching balance...");
@@ -134,12 +133,18 @@ document.addEventListener("DOMContentLoaded", async function () {
                     const timestamp = transaction.utime;
                     const message = transaction.in_msg?.message || '';
                     const amount = (parseFloat(transaction.in_msg?.value || transaction.value || 0) / 1000000000) || 0;
+                    const transactionId = transaction.id; // Unique ID for the transaction
 
-                    if (timestamp > lastProcessedTimestamp && message.includes(userId)) {
+                    // Check if this transaction has already been processed
+                    if (timestamp > lastProcessedTimestamp && message.includes(userId) && !processedTransactionIds[transactionId]) {
                         showMessage(`New deposit received: ${amount} TON 🎉`);
                         await saveDeposit(userId, amount);
                         lastProcessedTimestamp = timestamp; // Update lastProcessedTimestamp after saving the deposit
                         localStorage.setItem('lastProcessedTimestamp', lastProcessedTimestamp); // Update in localStorage
+
+                        // Mark this transaction as processed
+                        processedTransactionIds[transactionId] = true;
+                        localStorage.setItem('processedTransactionIds', JSON.stringify(processedTransactionIds)); // Store in localStorage
                         break; // Exit loop after processing the new deposit
                     }
                 }
@@ -247,58 +252,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     }, 1500); // Check for transactions and balance every 1.5 seconds
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    let currentPage = 0; // Track the current page
-    const depositsPerPage = 3; // Number of deposits to show per page
-    let allDeposits = JSON.parse(localStorage.getItem('deposits')) || [];
 
-    // Function to display deposits based on the current page
-    function displayDeposits() {
-        const lastDepositInfo = document.getElementById("lastDepositInfo");
-        const start = currentPage * depositsPerPage;
-        const end = start + depositsPerPage;
-        const depositsToShow = allDeposits.slice(start, end);
 
-        if (depositsToShow.length === 0) {
-            lastDepositInfo.textContent = "No deposits available.";
-            document.getElementById("prevButton").disabled = true;
-            document.getElementById("nextButton").disabled = true;
-            return;
-        }
-
-        const depositDetails = depositsToShow.map(deposit => {
-            const amount = deposit.amount.toFixed(2); // Format amount
-            const date = new Date(deposit.timestamp).toLocaleString(); // Format timestamp
-            return `Amount: ${amount} TON, Transaction ID: ${deposit.transactionId}, Time: ${date}`;
-        }).join("<br>");
-
-        lastDepositInfo.innerHTML = depositDetails;
-
-        // Disable previous button if on the first page
-        document.getElementById("prevButton").disabled = currentPage === 0;
-        // Disable next button if on the last page
-        document.getElementById("nextButton").disabled = end >= allDeposits.length;
-    }
-
-    // Show next deposits
-    window.showNextDeposits = function () {
-        if ((currentPage + 1) * depositsPerPage < allDeposits.length) {
-            currentPage++;
-            displayDeposits();
-        }
-    };
-
-    // Show previous deposits
-    window.showPreviousDeposits = function () {
-        if (currentPage > 0) {
-            currentPage--;
-            displayDeposits();
-        }
-    };
-
-    // Initial display of deposits
-    displayDeposits();
-});
 </script>
 
 
