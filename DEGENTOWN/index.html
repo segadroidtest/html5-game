@@ -2131,19 +2131,10 @@ async function generateLeaderboard() {
 
         </div>
 
-<div style="display: flex;align-items: center;justify-content: center;background: rgba(46, 44, 55, 0.65);border-radius: 10px;border: 1px solid #101013;padding: 0px;margin-bottom: 20px;">
-    <p style="color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding: 10px;border-top-left-radius: 10px;border-bottom-left-radius: 10px;border: 1px solid #101013;margin: 0;flex: 1;text-align: center;!i;!;">
-        Total Deposits
-    </p>
-    <p id="totalDeposit" style="font-weight: 700;margin: 0;text-align: left;margin-right: 100px;padding-left: 20px;justify-content: center;">Loading deposits value...</p>
-</div>
 
-<div style="display: flex;align-items: center;justify-content: center;background: rgba(46, 44, 55, 0.65);border-radius: 10px;border: 1px solid #101013;padding: 0px;margin-bottom: 20px;">
-    <p style="color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding: 10px;border-top-left-radius: 10px;border-bottom-left-radius: 10px;border: 1px solid #101013;margin: 0;flex: 1;text-align: center;!i;!;">
-        Total Commission Paid
-    </p>
-    <p id="totalCommission" style="font-weight: 700;margin: 0;text-align: left;margin-right: 100px;padding-left: 20px;justify-content: center;">Loading paid Commission value...</p>
-</div>
+
+
+
 
   <div style="
     display: flex; /* Use flexbox layout */
@@ -2159,7 +2150,43 @@ async function generateLeaderboard() {
         margin-right: 10px; /* Add margin between the divs */
     ">
         <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;padding-left: 0px;padding-right: 0px;">
-            Top Referred so far
+            Total Deposits
+        </p>
+        <p style="font-weight: 700;" id="totalDeposit">Loading deposits value...</p>
+    </div>
+
+    <div style="
+        text-align: center;
+        background: rgba(46, 44, 55, 0.65);
+        height: auto;
+        border-radius: 10px;
+        border: 1px solid #101013;
+        flex: 1; /* Allow the divs to grow and take equal space */
+    ">
+        <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;padding-left: 0px;padding-right: 0px;">
+            Total Commissions Paid
+        </p>
+        <p id="totalCommission" style="font-weight: 700;">Loading Paid Commission value...</p>
+    </div>
+
+ </div>
+
+
+  <div style="
+    display: flex; /* Use flexbox layout */
+    justify-content: space-between; /* Space between the items */
+    margin-bottom: 20px; /* Adjust the margin as needed */">
+    <div style="
+        text-align: center;
+        background: rgba(46, 44, 55, 0.65);
+        height: auto;
+        border-radius: 10px;
+        border: 1px solid #101013;
+        flex: 1; /* Allow the divs to grow and take equal space */
+        margin-right: 10px; /* Add margin between the divs */
+    ">
+        <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;padding-left: 0px;padding-right: 0px;">
+            Highest Commission so far
         </p>
         <p style="font-weight: 700;" id="highestCommission">Loading referred value...</p>
     </div>
@@ -2173,7 +2200,7 @@ async function generateLeaderboard() {
         flex: 1; /* Allow the divs to grow and take equal space */
     ">
         <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;padding-left: 0px;padding-right: 0px;">
-            Commissions Earned
+            Total Commissions Earned
         </p>
         <p id="alltotalCommission" style="font-weight: 700;">Loading commission value...</p>
     </div>
