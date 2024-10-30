@@ -217,7 +217,58 @@ document.addEventListener("DOMContentLoaded", async function () {
     }, 1500); // Check for transactions and balance every 1.5 seconds
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    let currentPage = 0; // Track the current page
+    const depositsPerPage = 3; // Number of deposits to show per page
+    let allDeposits = JSON.parse(localStorage.getItem('deposits')) || [];
 
+    // Function to display deposits based on the current page
+    function displayDeposits() {
+        const lastDepositInfo = document.getElementById("lastDepositInfo");
+        const start = currentPage * depositsPerPage;
+        const end = start + depositsPerPage;
+        const depositsToShow = allDeposits.slice(start, end);
+
+        if (depositsToShow.length === 0) {
+            lastDepositInfo.textContent = "No deposits available.";
+            document.getElementById("prevButton").disabled = true;
+            document.getElementById("nextButton").disabled = true;
+            return;
+        }
+
+        const depositDetails = depositsToShow.map(deposit => {
+            const amount = deposit.amount.toFixed(2); // Format amount
+            const date = new Date(deposit.timestamp).toLocaleString(); // Format timestamp
+            return `Amount: ${amount} TON, Transaction ID: ${deposit.transactionId}, Time: ${date}`;
+        }).join("<br>");
+
+        lastDepositInfo.innerHTML = depositDetails;
+
+        // Disable previous button if on the first page
+        document.getElementById("prevButton").disabled = currentPage === 0;
+        // Disable next button if on the last page
+        document.getElementById("nextButton").disabled = end >= allDeposits.length;
+    }
+
+    // Show next deposits
+    window.showNextDeposits = function () {
+        if ((currentPage + 1) * depositsPerPage < allDeposits.length) {
+            currentPage++;
+            displayDeposits();
+        }
+    };
+
+    // Show previous deposits
+    window.showPreviousDeposits = function () {
+        if (currentPage > 0) {
+            currentPage--;
+            displayDeposits();
+        }
+    };
+
+    // Initial display of deposits
+    displayDeposits();
+});
 </script>
 
 
@@ -1869,6 +1920,26 @@ async function generateLeaderboard() {
         </div>
 
 
+<div style="
+        text-align: center;
+        background: rgba(46, 44, 55, 0.65);
+        height: auto;
+        border-radius: 10px;
+        border: 1px solid #101013;
+        flex: 1; /* Allow the divs to grow and take equal space */
+        margin-bottom: 15px;
+    ">
+    <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;padding-left: 0px;padding-right: 0px;">
+        Last Deposits
+    </p>
+    <div id="lastDepositsContainer" style="color: #ffffff;">
+        <p id="lastDepositInfo">Loading deposits...</p>
+    </div>
+    <div style="display: flex; justify-content: space-between; padding: 10px;">
+        <button id="prevButton" onclick="showPreviousDeposits()" style="background-color: #1e1d22; color: white; border: none; padding: 5px 10px; cursor: pointer;">Previous</button>
+        <button id="nextButton" onclick="showNextDeposits()" style="background-color: #1e1d22; color: white; border: none; padding: 5px 10px; cursor: pointer;">Next</button>
+    </div>
+</div>
 
   <div style="
     display: flex; /* Use flexbox layout */
