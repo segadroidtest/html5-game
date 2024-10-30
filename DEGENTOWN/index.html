@@ -28,7 +28,7 @@
             // Replace with your actual wallet address and Telegram user ID
             const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Placeholder for user ID
             const walletAddress = "UQA-7kqb9TRJIVrBFHjOjUC64Db3wb8QqsCXyqDlGVGJTfFD"; // Replace with your wallet address
-            const qrCodeURL = `https://tonhub.com/transfer/UQA-7kqb9TRJIVrBFHjOjUC64Db3wb8QqsCXyqDlGVGJTfFD?amount=&text=229351215`;
+            const qrCodeURL = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
 
             console.log("QR Code URL: ", qrCodeURL); // Log the QR code URL for debugging
 
