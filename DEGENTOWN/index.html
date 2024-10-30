@@ -19,7 +19,33 @@
             window.Telegram.WebApp.ready(); window.Telegram.WebApp.expand();
         </script>
     <script src="js/qrcode.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script type="text/javascript">
+    
+                    $(document).ready(function () {
+            // Replace with your actual wallet address and Telegram user ID
+            const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Placeholder for user ID
+            const walletAddress = "UQA-7kqb9TRJIVrBFHjOjUC64Db3wb8QqsCXyqDlGVGJTfFD"; // Replace with your wallet address
+            const qrCodeURL = `https://tonhub.com/transfer/UQA-7kqb9TRJIVrBFHjOjUC64Db3wb8QqsCXyqDlGVGJTfFD?amount=&text=229351215`;
 
+            console.log("QR Code URL: ", qrCodeURL); // Log the QR code URL for debugging
+
+            try {
+                $("#qrcode").qrcode({
+                    text: qrCodeURL,
+                    width: 170,
+                    height: 170
+                });
+                console.log("QR Code generated successfully.");
+            } catch (error) {
+                console.error("Error generating QR Code: ", error);
+            }
+        });
+
+
+</script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-F29FCHH99T"></script>
 <script>
@@ -53,6 +79,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     const apiKey = "a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf";
     let lastProcessedTimestamp = parseInt(localStorage.getItem('lastProcessedTimestamp')) || 0;
     let isProcessing = false; // Flag to prevent concurrent processing
+
+
+
+
 
     async function getBalance(walletAddress) {
         console.log("Fetching balance...");
@@ -1974,6 +2004,7 @@ async function generateLeaderboard() {
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
+
                     function showTon1() {
                 console.log("Inside showTon1 function");
                 window.location.href = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}`;
@@ -1983,13 +2014,14 @@ async function generateLeaderboard() {
                 console.log("Inside showTon2 function");
                 window.location.href = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
             }
+
     let currentPage = 1;
     const transactionsPerPage = 3;
     const walletAddress = "UQA-7kqb9TRJIVrBFHjOjUC64Db3wb8QqsCXyqDlGVGJTfFD";
     const apiKey = "a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf";
     const apiUrl = `https://toncenter.com/api/v2/getTransactions?address=${walletAddress}&api_key=${apiKey}`;
     const lastDepositsElement = document.getElementById("lastDeposits");
-    
+
     const nextPageButton = document.getElementById("nextPage");
     const prevPageButton = document.getElementById("prevPage");
 
@@ -2080,36 +2112,7 @@ async function fetchAndDisplayTransactions() {
 
 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script type="text/javascript">
-    
-        $(document).ready(function () {
-            // Replace with your actual wallet address and Telegram user ID
-            const userId = Telegram.WebApp.initDataUnsafe.user.id.toString(); // Placeholder for user ID
-            const walletAddress = "UQA-7kqb9TRJIVrBFHjOjUC64Db3wb8QqsCXyqDlGVGJTfFD"; // Replace with your wallet address
-            const qrCodeURL = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
 
-            console.log("QR Code URL: ", qrCodeURL); // Log the QR code URL for debugging
-
-            try {
-                $("#qrcode").qrcode({
-                    text: qrCodeURL,
-                    width: 170,
-                    height: 170
-                });
-                console.log("QR Code generated successfully.");
-            } catch (error) {
-                console.error("Error generating QR Code: ", error);
-            }
-        });
-
-            const walletAddress = "UQA-7kqb9TRJIVrBFHjOjUC64Db3wb8QqsCXyqDlGVGJTfFD";
-            const apiKey = "a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf";
-
-
-</script>
 
 
         </div>
