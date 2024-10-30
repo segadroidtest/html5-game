@@ -818,6 +818,7 @@ border-bottom-left-radius: 10px;
     font-size: 15px;
     font-weight: bold;
     margin: 15px;
+    
         }
 
         @media (max-width: 600px) {
@@ -1994,9 +1995,9 @@ async function generateLeaderboard() {
 
 
 <div class="container">
-    <p class="header" style=" margin-bottom: 5px; ">Last Deposits</p>
-    <div id="lastDeposits" style=" padding-left: 10px; padding-right: 10px;padding-top: 10px; padding-bottom: 10px; font-weight: bold;"></div>
-    <div class="pagination" style=" margin-top: 5px; ">
+    <p class="header" style="margin-bottom: 5px;">Last Deposits</p>
+    <div id="lastDeposits" style="padding: 10px; font-weight: bold;"></div>
+    <div class="pagination" style="display: flex; justify-content: space-between; margin-top: 5px;">
         <button id="prevPage" style="display: none;">Previous</button>
         <button id="nextPage" style="display: none;">Next</button>
     </div>
@@ -2004,16 +2005,15 @@ async function generateLeaderboard() {
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
+    function showTon1() {
+        console.log("Inside showTon1 function");
+        window.location.href = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}`;
+    }
 
-                    function showTon1() {
-                console.log("Inside showTon1 function");
-                window.location.href = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}`;
-            }
-
-            function showTon2() {
-                console.log("Inside showTon2 function");
-                window.location.href = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
-            }
+    function showTon2() {
+        console.log("Inside showTon2 function");
+        window.location.href = `https://tonhub.com/transfer/${walletAddress}?amount=&text=${userId}`;
+    }
 
     let currentPage = 1;
     const transactionsPerPage = 3;
@@ -2035,28 +2035,28 @@ async function generateLeaderboard() {
         return hex;
     }
 
-async function fetchAndDisplayTransactions() {
-    try {
-        const response = await fetch(apiUrl);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    async function fetchAndDisplayTransactions() {
+        try {
+            const response = await fetch(apiUrl);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-        const data = await response.json();
-        console.log(data); // Log the API response
-        const transactions = data.result || [];
-        
-        // Debugging filter logic
-        const filteredTransactions = transactions.filter(transaction => {
-            console.log(transaction); // Log each transaction
-            return transaction.in_msg && transaction.in_msg.message && transaction.in_msg.message.includes(userId);
-        });
+            const data = await response.json();
+            console.log(data); // Log the API response
+            const transactions = data.result || [];
 
-        console.log(filteredTransactions); // Log the filtered transactions
-        displayTransactions(filteredTransactions);
-    } catch (error) {
-        console.error("Error fetching transactions:", error);
-        lastDepositsElement.innerHTML = "Error fetching transactions.";
+            // Debugging filter logic
+            const filteredTransactions = transactions.filter(transaction => {
+                console.log(transaction); // Log each transaction
+                return transaction.in_msg && transaction.in_msg.message && transaction.in_msg.message.includes(userId);
+            });
+
+            console.log(filteredTransactions); // Log the filtered transactions
+            displayTransactions(filteredTransactions);
+        } catch (error) {
+            console.error("Error fetching transactions:", error);
+            lastDepositsElement.innerHTML = "Error fetching transactions.";
+        }
     }
-}
 
     function displayTransactions(transactions) {
         lastDepositsElement.innerHTML = '';
@@ -2105,13 +2105,6 @@ async function fetchAndDisplayTransactions() {
     setInterval(fetchAndDisplayTransactions, 3000);
     fetchAndDisplayTransactions();
 </script>
-
-
-
-
-
-
-
 
 
 
