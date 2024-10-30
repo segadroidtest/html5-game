@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     // Check if this transaction has already been processed
                     if (timestamp > lastProcessedTimestamp && message.includes(userId) && !processedTransactionIds[transactionId]) {
                         showMessage(`New deposit received: ${amount} TON 🎉`);
-                        await saveDeposit(userId, amount);
+                        
                         lastProcessedTimestamp = timestamp; // Update lastProcessedTimestamp after saving the deposit
                         localStorage.setItem('lastProcessedTimestamp', lastProcessedTimestamp); // Update in localStorage
 
@@ -192,6 +192,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     async function processUnsavedDeposits() {
+        await saveDeposit(userId, amount);
         const deposits = JSON.parse(localStorage.getItem('deposits')) || [];
         for (const deposit of deposits) {
             const { userId, amount } = deposit;
