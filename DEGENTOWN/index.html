@@ -2034,7 +2034,7 @@ async function generateLeaderboard() {
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
-    function showTon1() {
+   function showTon1() {
         console.log("Inside showTon1 function");
         window.location.href = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}`;
     }
@@ -2096,12 +2096,26 @@ async function generateLeaderboard() {
             const transactionIdHex = base64ToHex(transaction.transaction_id.hash);
             const transactionLink = `https://tonviewer.com/transaction/${transactionIdHex}`;
 
+            // Convert utime to UTC date and time
+            const date = new Date(transaction.utime * 1000).toLocaleDateString();
+            const timeUTC = new Date(transaction.utime * 1000).toUTCString().split(' ')[4].slice(0, 5); // Get HH:MM
+            const tonToUsdRate = 5; // Example exchange rate (1 TON = 2.5 USD)
             const depositElement = document.createElement("div");
             depositElement.className = "transaction";
             depositElement.innerHTML = `
-                <div class="transaction-amount" style="color: #65dd6a;font-weight: bold;">+ ${(transaction.in_msg.value / 1e9).toFixed(3)} TON</div>
-                <div class="transaction-id" style="font-weight: bold;"><a href="${transactionLink}" target="_blank">Transaction ID</a></div>
-                <div class="transaction-time" style="font-weight: bold;">${new Date(transaction.utime * 1000).toLocaleDateString()}</div>
+    <div class="transaction-amount" style="color: #65dd6a; font-weight: bold; padding-top: 5px;">
+        + ${(transaction.in_msg.value / 1e9).toFixed(3)} TON
+        <div style="font-size: smaller; color: #a6a2a2;">
+            (~ ${(transaction.in_msg.value / 1e9 * tonToUsdRate).toFixed(2)} USD)
+        </div>
+    </div>
+           <div class="transaction-id" style="font-weight: bold; padding-top: 5px; text-align: center;">
+        <a href="${transactionLink}" target="_blank">
+            Transaction ID  <i class="fas fa-external-link"></i>
+        </a>
+    </div>
+                <div class="transaction-time" style="font-weight: bold;">${date}
+                <div class="transaction-utc-time" style="font-size: smaller; color: white; opacity: .75;">${timeUTC} UTC</div>
             `;
             lastDepositsElement.appendChild(depositElement);
         });
