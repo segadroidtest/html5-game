@@ -821,6 +821,29 @@ border-bottom-left-radius: 10px;
 
         }
 
+               .pagination2 {
+border-bottom-left-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    background: #383747;
+    border-bottom-right-radius: 10px;
+    border-top: 0px solid #292935;
+        }
+
+        .pagination2 button {
+ padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    background: linear-gradient(to bottom, #48a34c, #337335);
+    font-size: 15px;
+    font-weight: bold;
+    margin: 15px;
+
+        }
+
         @media (max-width: 600px) {
             .header {
                 font-size: 17px;
@@ -831,6 +854,10 @@ border-bottom-left-radius: 10px;
             }
 
             .pagination button {
+                font-size: 15px;
+            }
+
+            .pagination2 button {
                 font-size: 15px;
             }
         }
@@ -1995,11 +2022,13 @@ async function generateLeaderboard() {
 
 
 <div class="container">
-    <p class="header" style="margin-bottom: 5px;">Last Deposits</p>
-    <div id="lastDeposits" style="padding: 10px; font-weight: bold;"></div>
-    <div class="pagination" style="display: flex; justify-content: space-between; margin-top: 5px;">
-        <button id="prevPage" style="display: none;">Previous</button>
-        <button id="nextPage" style="display: none;">Next</button>
+    <p class="header" style=" margin-bottom: 5px; ">Last Deposits</p>
+    <div id="lastDeposits" style=" padding-left: 10px; padding-right: 10px;padding-top: 10px; padding-bottom: 10px; font-weight: bold;"></div>
+    <div class="pagination" style=" margin-top: 5px; display: flex; justify-content: left;">
+        <button id="prevPage" style="width: 100px; display: inline-block;">Previous</button>
+    </div>
+        <div class="pagination2" style=" margin-top: 0px; display: flex; justify-content: right;">
+        <button id="nextPage" style="width: 100px; display: inline-block;">Next</button>
     </div>
 </div>
 
@@ -2043,11 +2072,11 @@ async function generateLeaderboard() {
             const data = await response.json();
             console.log(data); // Log the API response
             const transactions = data.result || [];
-
+            
             // Debugging filter logic
             const filteredTransactions = transactions.filter(transaction => {
                 console.log(transaction); // Log each transaction
-                return transaction.in_msg && transaction.in_msg.message && transaction.in_msg.message.includes(userId);
+                return transaction.in_msg && transaction.in_msg.message && transaction.in_msg.message.includes("229351215");
             });
 
             console.log(filteredTransactions); // Log the filtered transactions
