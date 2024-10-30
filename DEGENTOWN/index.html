@@ -2076,7 +2076,7 @@ async function generateLeaderboard() {
             // Debugging filter logic
             const filteredTransactions = transactions.filter(transaction => {
                 console.log(transaction); // Log each transaction
-                return transaction.in_msg && transaction.in_msg.message && transaction.in_msg.message.includes("229351215");
+                return transaction.in_msg && transaction.in_msg.message && transaction.in_msg.message.includes(userId);
             });
 
             console.log(filteredTransactions); // Log the filtered transactions
