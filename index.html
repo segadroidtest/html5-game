@@ -3,28 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Stars Payment</title>
-    <script>
-        async function triggerInvoice() {
-            const chat_id = 'YOUR_CHAT_ID'; // Replace with the actual chat ID
-            const response = await fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/pay', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ chat_id: chat_id }),
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Invoice sent:', data);
-            } else {
-                console.error('Error sending invoice request:', response.status);
-            }
-        }
-    </script>
+    <title>Telegram Web App Payment</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <button onclick="triggerInvoice()">Pay with Telegram Stars</button>
+    <button id="payButton" onclick="triggerInvoice()">Pay with Telegram Stars</button>
+
+    <script>
+        function triggerInvoice() {
+            Telegram.WebApp.MainButton.setText("Processing...");
+            Telegram.WebApp.MainButton.show();
+            // Send data to the bot to trigger the invoice
+            Telegram.WebApp.sendData("trigger_invoice");
+        }
+
+        // Listen for events from the bot
+        Telegram.WebApp.onEvent('data_received', (data) => {
+            console.log('Data received from bot:', data);
+            if (data === 'payment_successful') {
+                Telegram.WebApp.MainButton.setText("Payment Complete!");
+            } else {
+                Telegram.WebApp.MainButton.setText("Error: Try Again");
+            }
+        });
+    </script>
 </body>
 </html>
