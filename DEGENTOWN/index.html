@@ -1964,11 +1964,11 @@ function showTon1() {
     console.log("Inside showTon1 function");
 
     const walletURL = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}`;
-    
-    // Open the link in a new tab or external browser
+
+    // Use a small delay to avoid the in-app browser popup confirmation
     setTimeout(() => {
-        window.open(walletURL, '_blank');
-    }, 100);  // A short delay to ensure it opens outside the in-app browser
+        window.location.assign(walletURL);  // Redirects without opening a new tab or triggering confirmation
+    }, 100);  // Adjust delay if needed
 }
 
 
