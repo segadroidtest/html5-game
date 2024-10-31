@@ -2115,7 +2115,7 @@ async function generateLeaderboard() {
         <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;padding-left: 0px;padding-right: 0px;">
             Total Commissions Paid
         </p>
-        <p id="totalCommission" style="font-weight: 700;">Loading Paid Commission value...</p>
+        <p id="commissionPaid" style="font-weight: 700;">Loading Paid Commission value...</p>
     </div>
 
  </div>
@@ -2135,7 +2135,7 @@ async function generateLeaderboard() {
         margin-right: 10px; /* Add margin between the divs */
     ">
         <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;padding-left: 0px;padding-right: 0px;">
-            Highest Commission so far
+            Top Commission so far
         </p>
         <p style="font-weight: 700;" id="highestCommission">Loading referred value...</p>
     </div>
@@ -2151,7 +2151,7 @@ async function generateLeaderboard() {
         <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;padding-left: 0px;padding-right: 0px;">
             Total Commissions Earned
         </p>
-        <p id="alltotalCommission" style="font-weight: 700;">Loading commission value...</p>
+        <p id="allcommissionEarned" style="font-weight: 700;">Loading commission value...</p>
     </div>
 
 
@@ -2203,8 +2203,8 @@ async function fetchUserData() {
     if (document.getElementById("totalDeposit")) {
       document.getElementById("totalDeposit").textContent = (data.totalDeposit ? data.totalDeposit.toFixed(4) : "0") + " TON";
     }
-    if (document.getElementById("totalCommission")) {
-      document.getElementById("totalCommission").textContent = (data.commissionEarned ? data.commissionEarned.toFixed(4) : "0") + " TON";
+    if (document.getElementById("commissionPaid")) {
+      document.getElementById("commissionPaid").textContent = (data.commissionPaid ? data.commissionPaid.toFixed(4) : "0") + " TON";
     }
     if (document.getElementById("highestCommission")) {
       document.getElementById("highestCommission").textContent = (data.highestCommission ? data.highestCommission.toFixed(4) : "0") + " TON";
@@ -2212,8 +2212,8 @@ async function fetchUserData() {
         if (document.getElementById("totalDeposit")) {
       document.getElementById("totalDeposit").textContent = (data.totalDeposit ? data.totalDeposit.toFixed(4) : "0") + " TON";
     }
-        if (document.getElementById("alltotalCommission")) {
-      document.getElementById("alltotalCommission").textContent = (data.alltotalCommission ? data.alltotalCommission.toFixed(4) : "0") + " TON";
+        if (document.getElementById("allcommissionEarned")) {
+      document.getElementById("allcommissionEarned").textContent = (data.allcommissionEarned ? data.allcommissionEarned.toFixed(4) : "0") + " TON";
     }
 
   } catch (error) {
