@@ -859,7 +859,7 @@ function updateGoldBalance(userId, earnedGold, callback) {
     <div class="stat" style="display: flex; flex-direction: column; align-items: center; font-weight: bold;">
         <div style="display: flex; align-items: center; justify-content: center; width: 100%;">
             <img src="assets/img/littlediamond.png" style="height: 15px; padding-right: 7px;">
-            <span style="font-weight: 500; text-align: center;">Available pointss:</span>
+            <span style="font-weight: 500; text-align: center;">Available points:</span>
         </div>
         <span id="points-earned" style="margin-top: 5px; text-align: center; font-size: 35px; width: 100%;">0</span>
           <button onclick="openPurchasePopup()" style="
@@ -904,9 +904,19 @@ function updateGoldBalance(userId, earnedGold, callback) {
                 padding-bottom: 14px;">Buy Points</h2>
 <div style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
 <script>
+    // Define a points mapping for each star amount
+    const pointsMapping = {
+        "50": 700,
+        "100": 1500,
+        "250": 5000,
+        "500": 10000,
+        "2000": 100000
+    };
+
     function handlePayment(selectedOption) {
-        // Get the selected option value
-        const points = selectedOption.value;
+        // Get the selected option value and map to points
+        const stars = selectedOption.value;
+        const points = pointsMapping[stars]; // Lookup points based on stars
 
         // API call to your server to generate the invoice link
         fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
@@ -915,7 +925,7 @@ function updateGoldBalance(userId, earnedGold, callback) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                points: points // Send selected option value (points)
+                points: points // Send mapped points value to server
             }),
         })
         .then(response => response.json())
@@ -927,7 +937,7 @@ function updateGoldBalance(userId, earnedGold, callback) {
                     alert("Payment successful!");
 
                     // Call another function to update user points
-                    updateUserPoints(points); // Pass the points value
+                    updateUserPoints(points); // Pass the mapped points value
                 }
             });
         })
@@ -946,7 +956,7 @@ function updateGoldBalance(userId, earnedGold, callback) {
             },
             body: JSON.stringify({
                 userId: '229351215', // Replace with the actual user ID
-                points: points // Use points from the function parameter
+                points: points // Use the mapped points value
             }),
         })
         .then(response => response.json())
@@ -990,6 +1000,7 @@ function updateGoldBalance(userId, earnedGold, callback) {
 ">
     Purchase
 </button>
+
 
 </div>
 
@@ -1467,9 +1478,19 @@ async function shareToTelegramlink() {
 <div style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
 
 <script>
+    // Define a points mapping for each star amount
+    const pointsMapping = {
+        "50": 700,
+        "100": 1500,
+        "250": 5000,
+        "500": 10000,
+        "2000": 100000
+    };
+
     function handlePayment(selectedOption) {
-        // Get the selected option value
-        const points = selectedOption.value;
+        // Get the selected option value and map to points
+        const stars = selectedOption.value;
+        const points = pointsMapping[stars]; // Lookup points based on stars
 
         // API call to your server to generate the invoice link
         fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
@@ -1478,7 +1499,7 @@ async function shareToTelegramlink() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                points: points // Send selected option value (points)
+                points: points // Send mapped points value to server
             }),
         })
         .then(response => response.json())
@@ -1490,7 +1511,7 @@ async function shareToTelegramlink() {
                     alert("Payment successful!");
 
                     // Call another function to update user points
-                    updateUserPoints(points); // Pass the points value
+                    updateUserPoints(points); // Pass the mapped points value
                 }
             });
         })
@@ -1509,7 +1530,7 @@ async function shareToTelegramlink() {
             },
             body: JSON.stringify({
                 userId: '229351215', // Replace with the actual user ID
-                points: points // Use points from the function parameter
+                points: points // Use the mapped points value
             }),
         })
         .then(response => response.json())
@@ -1553,6 +1574,7 @@ async function shareToTelegramlink() {
 ">
     Purchase
 </button>
+
 
 </div>
 
