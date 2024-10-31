@@ -903,56 +903,63 @@ function updateGoldBalance(userId, earnedGold, callback) {
                 border-top-right-radius: 10px;
                 padding-bottom: 14px;">Buy Points</h2>
 <div style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
-        <script>
-        function handlePayment(selectedOption) {
-            // API call to your server to generate the invoice link
-            fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    points: selectedOption.value // Send selected option value (points)
-                }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Use WebApp SDK to open the invoice link
-                window.Telegram.WebApp.openInvoice(data.invoiceLink, (status) => {
-                    if (status === "paid") {
-                        // Handle successful payment here
-                        alert("Payment successful!");
+<script>
+    function handlePayment(selectedOption) {
+        // API call to your server to generate the invoice link
+        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                points: selectedOption.value // Send selected option value (points)
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Use WebApp SDK to open the invoice link
+            window.Telegram.WebApp.openInvoice(data.invoiceLink, (status) => {
+                if (status === "paid") {
+                    // Handle successful payment here
+                    alert("Payment successful!");
 
-                        // Call another function to update user points
-                        updateUserPoints(selectedOption.value);
-                    }
-                });
-            })
-            .catch(error => {
-                console.error("Error generating invoice:", error);
-                alert("An error occurred while generating the invoice.");
+                    // Call another function to update user points
+                    // Make sure to replace 'userId' with the actual user ID you want to update
+                    updateUserPoints(selectedOption.value); // Pass the points value
+                }
             });
-        }
+        })
+        .catch(error => {
+            console.error("Error generating invoice:", error);
+            alert("An error occurred while generating the invoice.");
+        });
+    }
 
-        function updateUserPoints(points) {
-            // Update user points in the database after successful payment
-            fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/update-points', { // Change to your actual endpoint
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ totalPoints: totalPoints }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Handle response from the backend
-                console.log(data.message);
-            })
-            .catch(error => {
-                console.error("Error updating user points:", error);
-            });
-        }
-    </script>
+    function updateUserPoints(points) {
+        // Update user points in the database after successful payment
+        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/update-points', { // Change to your actual endpoint
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId: '229351215', // Replace with the actual user ID
+                points: points // Use points from the function parameter
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle response from the backend
+            console.log(data.message);
+            alert("User points updated successfully!"); // Optional alert for success
+        })
+        .catch(error => {
+            console.error("Error updating user points:", error);
+            alert("An error occurred while updating user points.");
+        });
+    }
+</script>
+
     <select id="diamond-options" style="color: #1e1d22 !important; font-weight: 595;
             padding: 10px;
             border-radius: 5px; 
@@ -1456,56 +1463,62 @@ async function shareToTelegramlink() {
                 padding-bottom: 14px;">Buy Points</h2>
 <div style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
 
-        <script>
-        function handlePayment(selectedOption) {
-            // API call to your server to generate the invoice link
-            fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    points: selectedOption.value // Send selected option value (points)
-                }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Use WebApp SDK to open the invoice link
-                window.Telegram.WebApp.openInvoice(data.invoiceLink, (status) => {
-                    if (status === "paid") {
-                        // Handle successful payment here
-                        alert("Payment successful!");
+<script>
+    function handlePayment(selectedOption) {
+        // API call to your server to generate the invoice link
+        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                points: selectedOption.value // Send selected option value (points)
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Use WebApp SDK to open the invoice link
+            window.Telegram.WebApp.openInvoice(data.invoiceLink, (status) => {
+                if (status === "paid") {
+                    // Handle successful payment here
+                    alert("Payment successful!");
 
-                        // Call another function to update user points
-                        updateUserPoints(selectedOption.value);
-                    }
-                });
-            })
-            .catch(error => {
-                console.error("Error generating invoice:", error);
-                alert("An error occurred while generating the invoice.");
+                    // Call another function to update user points
+                    // Make sure to replace 'userId' with the actual user ID you want to update
+                    updateUserPoints(selectedOption.value); // Pass the points value
+                }
             });
-        }
+        })
+        .catch(error => {
+            console.error("Error generating invoice:", error);
+            alert("An error occurred while generating the invoice.");
+        });
+    }
 
-        function updateUserPoints(points) {
-            // Update user points in the database after successful payment
-            fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/update-points', { // Change to your actual endpoint
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ totalPoints: totalPoints }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Handle response from the backend
-                console.log(data.message);
-            })
-            .catch(error => {
-                console.error("Error updating user points:", error);
-            });
-        }
-    </script>
+    function updateUserPoints(points) {
+        // Update user points in the database after successful payment
+        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/update-points', { // Change to your actual endpoint
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId: '229351215', // Replace with the actual user ID
+                points: points // Use points from the function parameter
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle response from the backend
+            console.log(data.message);
+            alert("User points updated successfully!"); // Optional alert for success
+        })
+        .catch(error => {
+            console.error("Error updating user points:", error);
+            alert("An error occurred while updating user points.");
+        });
+    }
+</script>
     <select id="diamond-options" style="color: #1e1d22 !important; font-weight: 595;
             padding: 10px;
             border-radius: 5px; 
