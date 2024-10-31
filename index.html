@@ -21,7 +21,7 @@
             // Send the chat ID to the backend to request an invoice
             const chatId = telegramWebApp.initDataUnsafe.user.id;
             
-            fetch('https://telegram-bot-degen-town.replit.app/webapp', {
+            fetch('https://telegram-bot-degen-town.replit.app/tgstars/webapp', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ chat_id: chatId })
