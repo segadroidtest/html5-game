@@ -905,6 +905,9 @@ function updateGoldBalance(userId, earnedGold, callback) {
 <div style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
 <script>
     function handlePayment(selectedOption) {
+        // Get the selected option value
+        const points = selectedOption.value;
+
         // API call to your server to generate the invoice link
         fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
             method: 'POST',
@@ -912,7 +915,7 @@ function updateGoldBalance(userId, earnedGold, callback) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                points: selectedOption.value // Send selected option value (points)
+                points: points // Send selected option value (points)
             }),
         })
         .then(response => response.json())
@@ -924,8 +927,7 @@ function updateGoldBalance(userId, earnedGold, callback) {
                     alert("Payment successful!");
 
                     // Call another function to update user points
-                    // Make sure to replace 'userId' with the actual user ID you want to update
-                    updateUserPoints(selectedOption.value); // Pass the points value
+                    updateUserPoints(points); // Pass the points value
                 }
             });
         })
@@ -937,7 +939,7 @@ function updateGoldBalance(userId, earnedGold, callback) {
 
     function updateUserPoints(points) {
         // Update user points in the database after successful payment
-        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/update-points', { // Change to your actual endpoint
+        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/update-points', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -960,34 +962,35 @@ function updateGoldBalance(userId, earnedGold, callback) {
     }
 </script>
 
-    <select id="diamond-options" style="color: #1e1d22 !important; font-weight: 595;
-            padding: 10px;
-            border-radius: 5px; 
-            font-size: 17px; 
-            background-color: #f8f9fa; 
-            transition: border-color 0.3s; 
-            margin-bottom: 10px;" 
-            onfocus="this.style.borderColor='#0056b3'" 
-            onblur="this.style.borderColor='#007bff'">
-        <option value="50">700 Points = 50 Stars ⭐</option>
-        <option value="100">1500 Points = 100 Stars ⭐</option>
-        <option value="250">5000 Points = 250 Stars ⭐</option>
-        <option value="500">10k Points = 500 Stars ⭐</option>
-        <option value="2000">100k Points = 2000 Stars ⭐</option>
-    </select>
-    <button onclick="handlePayment(document.getElementById('diamond-options'))" style="
-        padding: 10px 20px;
-        border: none;
+<select id="diamond-options" style="color: #1e1d22 !important; font-weight: 595;
+        padding: 10px;
         border-radius: 5px; 
-        background-color: #1f9611; 
-        color: white; 
-        font-size: 16px; 
-        cursor: pointer; 
-        transition: background-color 0.3s, transform 0.2s;
-        font-weight: bold;
-    ">
-        Purchase
-    </button>
+        font-size: 17px; 
+        background-color: #f8f9fa; 
+        transition: border-color 0.3s; 
+        margin-bottom: 10px;" 
+        onfocus="this.style.borderColor='#0056b3'" 
+        onblur="this.style.borderColor='#007bff'">
+    <option value="50">700 Points = 50 Stars ⭐</option>
+    <option value="100">1500 Points = 100 Stars ⭐</option>
+    <option value="250">5000 Points = 250 Stars ⭐</option>
+    <option value="500">10k Points = 500 Stars ⭐</option>
+    <option value="2000">100k Points = 2000 Stars ⭐</option>
+</select>
+<button onclick="handlePayment(document.getElementById('diamond-options'))" style="
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px; 
+    background-color: #1f9611; 
+    color: white; 
+    font-size: 16px; 
+    cursor: pointer; 
+    transition: background-color 0.3s, transform 0.2s;
+    font-weight: bold;
+">
+    Purchase
+</button>
+
 </div>
 
         </div>
@@ -1465,6 +1468,9 @@ async function shareToTelegramlink() {
 
 <script>
     function handlePayment(selectedOption) {
+        // Get the selected option value
+        const points = selectedOption.value;
+
         // API call to your server to generate the invoice link
         fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
             method: 'POST',
@@ -1472,7 +1478,7 @@ async function shareToTelegramlink() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                points: selectedOption.value // Send selected option value (points)
+                points: points // Send selected option value (points)
             }),
         })
         .then(response => response.json())
@@ -1484,8 +1490,7 @@ async function shareToTelegramlink() {
                     alert("Payment successful!");
 
                     // Call another function to update user points
-                    // Make sure to replace 'userId' with the actual user ID you want to update
-                    updateUserPoints(selectedOption.value); // Pass the points value
+                    updateUserPoints(points); // Pass the points value
                 }
             });
         })
@@ -1497,7 +1502,7 @@ async function shareToTelegramlink() {
 
     function updateUserPoints(points) {
         // Update user points in the database after successful payment
-        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/update-points', { // Change to your actual endpoint
+        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/update-points', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -1519,34 +1524,36 @@ async function shareToTelegramlink() {
         });
     }
 </script>
-    <select id="diamond-options" style="color: #1e1d22 !important; font-weight: 595;
-            padding: 10px;
-            border-radius: 5px; 
-            font-size: 17px; 
-            background-color: #f8f9fa; 
-            transition: border-color 0.3s; 
-            margin-bottom: 10px;" 
-            onfocus="this.style.borderColor='#0056b3'" 
-            onblur="this.style.borderColor='#007bff'">
-        <option value="50">700 Points = 50 Stars ⭐</option>
-        <option value="100">1500 Points = 100 Stars ⭐</option>
-        <option value="250">5000 Points = 250 Stars ⭐</option>
-        <option value="500">10k Points = 500 Stars ⭐</option>
-        <option value="2000">100k Points = 2000 Stars ⭐</option>
-    </select>
-    <button onclick="handlePayment(document.getElementById('diamond-options'))" style="
-        padding: 10px 20px;
-        border: none;
+
+<select id="diamond-options" style="color: #1e1d22 !important; font-weight: 595;
+        padding: 10px;
         border-radius: 5px; 
-        background-color: #1f9611; 
-        color: white; 
-        font-size: 16px; 
-        cursor: pointer; 
-        transition: background-color 0.3s, transform 0.2s;
-        font-weight: bold;
-    ">
-        Purchase
-    </button>
+        font-size: 17px; 
+        background-color: #f8f9fa; 
+        transition: border-color 0.3s; 
+        margin-bottom: 10px;" 
+        onfocus="this.style.borderColor='#0056b3'" 
+        onblur="this.style.borderColor='#007bff'">
+    <option value="50">700 Points = 50 Stars ⭐</option>
+    <option value="100">1500 Points = 100 Stars ⭐</option>
+    <option value="250">5000 Points = 250 Stars ⭐</option>
+    <option value="500">10k Points = 500 Stars ⭐</option>
+    <option value="2000">100k Points = 2000 Stars ⭐</option>
+</select>
+<button onclick="handlePayment(document.getElementById('diamond-options'))" style="
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px; 
+    background-color: #1f9611; 
+    color: white; 
+    font-size: 16px; 
+    cursor: pointer; 
+    transition: background-color 0.3s, transform 0.2s;
+    font-weight: bold;
+">
+    Purchase
+</button>
+
 </div>
 
         </div>
