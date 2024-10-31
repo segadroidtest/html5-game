@@ -116,40 +116,45 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
-    async function checkTransactions(walletAddress, userId) {
-        if (isProcessing) return; // Prevent new transactions from being processed
-        isProcessing = true;
+async function checkTransactions(walletAddress, userId) {
+    if (isProcessing) return; // Prevent new transactions from being processed
+    isProcessing = true;
 
-        console.log("Checking transactions...");
-        try {
-            const response = await fetch(`https://toncenter.com/api/v2/getTransactions?address=${walletAddress}&api_key=${apiKey}`);
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            const data = await response.json();
-            console.log("Transaction data for checking:", data);
+    console.log("Checking transactions...");
+    try {
+        const response = await fetch(`https://toncenter.com/api/v2/getTransactions?address=${walletAddress}&api_key=${apiKey}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        console.log("Transaction data for checking:", data);
 
-            if (data.result?.length > 0) {
-                data.result.sort((a, b) => b.utime - a.utime); // Sort transactions by timestamp
+        if (data.result?.length > 0) {
+            data.result.sort((a, b) => b.utime - a.utime); // Sort transactions by timestamp
 
-                for (const transaction of data.result) {
-                    const timestamp = transaction.utime;
-                    const message = transaction.in_msg?.message || '';
-                    const amount = (parseFloat(transaction.in_msg?.value || transaction.value || 0) / 1000000000) || 0;
+            const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+            const twoMinutesAgo = currentTime - 120; // 2 minutes ago in seconds
 
-                    if (timestamp > lastProcessedTimestamp && message.includes(userId)) {
-                        showMessage(`New deposit received: ${amount} TON 🎉`);
-                        await saveDeposit(userId, amount);
-                        lastProcessedTimestamp = timestamp; // Update lastProcessedTimestamp after saving the deposit
-                        localStorage.setItem('lastProcessedTimestamp', lastProcessedTimestamp); // Update in localStorage
-                        break; // Exit loop after processing the new deposit
-                    }
+            for (const transaction of data.result) {
+                const timestamp = transaction.utime;
+                const message = transaction.in_msg?.message || '';
+                const amount = (parseFloat(transaction.in_msg?.value || transaction.value || 0) / 1000000000) || 0;
+
+                // Check if transaction is within the last 2 minutes
+                if (timestamp > twoMinutesAgo && timestamp > lastProcessedTimestamp && message.includes(userId)) {
+                    showMessage(`New deposit received: ${amount} TON 🎉`);
+                    await saveDeposit(userId, amount);
+                    lastProcessedTimestamp = timestamp; // Update lastProcessedTimestamp after saving the deposit
+                    localStorage.setItem('lastProcessedTimestamp', lastProcessedTimestamp); // Update in localStorage
+                    break; // Exit loop after processing the new deposit
                 }
             }
-        } catch (error) {
-            console.error("Error fetching transactions:", error);
-        } finally {
-            isProcessing = false; // Reset the processing flag
         }
+    } catch (error) {
+        console.error("Error fetching transactions:", error);
+    } finally {
+        isProcessing = false; // Reset the processing flag
     }
+}
+
 
     async function saveDeposit(userId, amount) {
         console.log("Saving deposit...");
