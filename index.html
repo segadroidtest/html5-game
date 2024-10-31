@@ -7,34 +7,30 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <button id="payButton" onclick="triggerInvoice()">Pay with Telegram Stars</button>
+    <button id="payButton" onclick="showPaymentInstructions()">Pay with Telegram Stars</button>
+    <p id="instructions" style="display:none; color: #4A90E2; font-weight: bold;">
+        To complete the payment, please click <a id="botLink" href="#" target="_blank">here</a> to open our Telegram bot and finalize your purchase.
+    </p>
 
     <script>
-        function triggerInvoice() {
-            Telegram.WebApp.MainButton.setText("Processing...");
-            Telegram.WebApp.MainButton.show();
-            // Send data to the bot to trigger the invoice
-            Telegram.WebApp.sendData("trigger_invoice");
+        const botUsername = 'tgstarstest_bot'; // Replace with your bot's username
+
+        function showPaymentInstructions() {
+            // Update the button text and disable it
+            const payButton = document.getElementById('payButton');
+            payButton.innerText = 'Processing...';
+            payButton.disabled = true;
+
+            // Display instructions and link to bot for payment
+            const instructions = document.getElementById('instructions');
+            const botLink = document.getElementById('botLink');
+            botLink.href = `https://t.me/tgstarstest_bot`;
+
+            // Display instructions to guide user to complete payment in the bot
+            instructions.style.display = 'block';
+            payButton.innerText = 'Open Bot for Payment';
+            payButton.disabled = false;
         }
-
-        // Listen for data received from the bot
-        Telegram.WebApp.onEvent('data_received', (data) => {
-            console.log('Data received from bot:', data);
-            // Handle different responses from the bot
-            if (data === 'payment_successful') {
-                Telegram.WebApp.MainButton.setText("Payment Complete!");
-                Telegram.WebApp.MainButton.hide();  // Optionally hide the button
-            } else {
-                Telegram.WebApp.MainButton.setText("Error: Try Again");
-            }
-        });
-
-        // Add a listener for the "return_to_web_app" callback
-        Telegram.WebApp.onEvent('callback_query', (query) => {
-            if (query.data === 'return_to_web_app') {
-                Telegram.WebApp.close(); // Close the web app or navigate back
-            }
-        });
     </script>
 </body>
 </html>
