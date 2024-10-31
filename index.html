@@ -914,9 +914,15 @@ function updateGoldBalance(userId, earnedGold, callback) {
     };
 
     function handlePayment(selectedOption) {
-        // Get the selected option value and map to points
+        // Get the selected star amount from the dropdown
         const stars = selectedOption.value;
-        const points = pointsMapping[stars]; // Lookup points based on stars
+        // Use the pointsMapping object to get the correct points for the stars
+        const points = pointsMapping[stars];
+
+        if (!points) {
+            alert("Invalid selection.");
+            return;
+        }
 
         // API call to your server to generate the invoice link
         fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
@@ -972,6 +978,7 @@ function updateGoldBalance(userId, earnedGold, callback) {
     }
 </script>
 
+<!-- Option values are set to stars amounts only -->
 <select id="diamond-options" style="color: #1e1d22 !important; font-weight: 595;
         padding: 10px;
         border-radius: 5px; 
@@ -987,6 +994,7 @@ function updateGoldBalance(userId, earnedGold, callback) {
     <option value="500">10k Points = 500 Stars ⭐</option>
     <option value="2000">100k Points = 2000 Stars ⭐</option>
 </select>
+
 <button onclick="handlePayment(document.getElementById('diamond-options'))" style="
     padding: 10px 20px;
     border: none;
@@ -1000,6 +1008,7 @@ function updateGoldBalance(userId, earnedGold, callback) {
 ">
     Purchase
 </button>
+
 
 
 </div>
@@ -1488,9 +1497,15 @@ async function shareToTelegramlink() {
     };
 
     function handlePayment(selectedOption) {
-        // Get the selected option value and map to points
+        // Get the selected star amount from the dropdown
         const stars = selectedOption.value;
-        const points = pointsMapping[stars]; // Lookup points based on stars
+        // Use the pointsMapping object to get the correct points for the stars
+        const points = pointsMapping[stars];
+
+        if (!points) {
+            alert("Invalid selection.");
+            return;
+        }
 
         // API call to your server to generate the invoice link
         fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
@@ -1546,6 +1561,7 @@ async function shareToTelegramlink() {
     }
 </script>
 
+<!-- Option values are set to stars amounts only -->
 <select id="diamond-options" style="color: #1e1d22 !important; font-weight: 595;
         padding: 10px;
         border-radius: 5px; 
@@ -1561,6 +1577,7 @@ async function shareToTelegramlink() {
     <option value="500">10k Points = 500 Stars ⭐</option>
     <option value="2000">100k Points = 2000 Stars ⭐</option>
 </select>
+
 <button onclick="handlePayment(document.getElementById('diamond-options'))" style="
     padding: 10px 20px;
     border: none;
@@ -1574,6 +1591,7 @@ async function shareToTelegramlink() {
 ">
     Purchase
 </button>
+
 
 
 </div>
