@@ -1962,7 +1962,7 @@ async function generateLeaderboard() {
 <script>
 function showTon1() {
     console.log("Inside showTon1 function");
-    const walletURL = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}`;
+    window.location.href = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}`;
 }
 
 
