@@ -12,36 +12,33 @@
     <script>
         const telegramWebApp = Telegram.WebApp;
         
-        function triggerInvoice() {
-            // Set button to "Processing" state
-            const payButton = document.getElementById('payButton');
-            payButton.innerText = 'Processing...';
-            payButton.disabled = true;
+    function triggerInvoice() {
+        const payButton = document.getElementById('payButton');
+        payButton.innerText = 'Processing...';
+        payButton.disabled = true;
 
-            // Send the chat ID to the backend to request an invoice
-            const chatId = telegramWebApp.initDataUnsafe.user.id;
-            
-            fetch('https://telegram-bot-degen-town.replit.app/tgstars/webapp', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    // If the invoice was sent successfully, inform the user
-                    payButton.innerText = 'Invoice Sent. Check Bot!';
-                } else {
-                    payButton.innerText = 'Failed to send invoice';
-                    payButton.disabled = false;
-                }
-            })
-            .catch(error => {
-                console.error('Error sending invoice request:', error);
-                payButton.innerText = 'Error. Try Again';
+        const chatId = Telegram.WebApp.initDataUnsafe.user.id;
+
+        fetch('https://telegram-bot-degen-town.replit.app/tgstars/webapp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: chatId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                payButton.innerText = 'Invoice Sent. Check Bot!';
+            } else {
+                payButton.innerText = 'Failed to send invoice';
                 payButton.disabled = false;
-            });
-        }
+            }
+        })
+        .catch(error => {
+            console.error('Error sending invoice request:', error);
+            payButton.innerText = 'Error. Try Again';
+            payButton.disabled = false;
+        });
+    }
     </script>
 </body>
 </html>
