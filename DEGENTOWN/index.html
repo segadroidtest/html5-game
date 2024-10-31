@@ -2104,21 +2104,41 @@ async function generateLeaderboard() {
         <p style="font-weight: 700;" id="totalDeposit">Loading deposits value...</p>
     </div>
 
-    <div style="
-        text-align: center;
-        background: rgba(46, 44, 55, 0.65);
-        height: auto;
-        border-radius: 10px;
-        border: 1px solid #101013;
-        flex: 1; /* Allow the divs to grow and take equal space */
-    ">
-        <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;padding-left: 0px;padding-right: 0px;">
-            Total Commissions Paid
-        </p>
-        <p id="commissionPaid" style="font-weight: 700;">Loading Paid Commission value...</p>
-    </div>
+<div style="
+    text-align: center;
+    background: rgba(46, 44, 55, 0.65);
+    height: auto;
+    border-radius: 10px;
+    border: 1px solid #101013;
+    flex: 1;
+">
+    <p style="text-align: center;margin-top: 0px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;padding-left: 0px;padding-right: 0px;">
+        Total Commissions Paid
+    </p>
+    <p id="commissionPaid" style="font-weight: 700;">Loading Paid Commission value...</p>
+</div>
 
- </div>
+<script>
+    const userId = "229351215"; // Replace with the current user's ID
+
+    async function fetchCommissionPaid() {
+        try {
+            const response = await fetch(`https://telegram-bot-degen-town.replit.app/user/${userId}/commission`);
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById("commissionPaid").textContent = `Total Paid: ${data.commissionPaid}`;
+            } else {
+                console.error("Failed to fetch commission paid data");
+            }
+        } catch (error) {
+            console.error("Error fetching commission paid data:", error);
+        }
+    }
+
+    // Poll every 10 seconds
+    setInterval(fetchCommissionPaid, 10000);
+</script>
+
 
 
   <div style="
@@ -2202,9 +2222,6 @@ async function fetchUserData() {
     // Only update if element exists
     if (document.getElementById("totalDeposit")) {
       document.getElementById("totalDeposit").textContent = (data.totalDeposit ? data.totalDeposit.toFixed(4) : "0") + " TON";
-    }
-    if (document.getElementById("commissionPaid")) {
-      document.getElementById("commissionPaid").textContent = (data.commissionPaid ? data.commissionPaid.toFixed(4) : "0") + " TON";
     }
     if (document.getElementById("highestCommission")) {
       document.getElementById("highestCommission").textContent = (data.highestCommission ? data.highestCommission.toFixed(4) : "0") + " TON";
