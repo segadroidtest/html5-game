@@ -17,8 +17,9 @@
             Telegram.WebApp.sendData("trigger_invoice");
         }
 
-        // Handle the data received from the bot
-        Telegram.WebApp.onEvent('receive_data', (data) => {
+        // Listen for events from the bot
+        Telegram.WebApp.onEvent('data_received', (data) => {
+            console.log('Data received from bot:', data);
             if (data === 'payment_successful') {
                 Telegram.WebApp.MainButton.setText("Payment Complete!");
             } else {
