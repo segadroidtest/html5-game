@@ -1921,7 +1921,124 @@ async function generateLeaderboard() {
         <p style="margin: 10px 0; font-size: 16px; font-weight: 500; width: 112%; background: #1e1d22; margin-top: 0px; padding-bottom: 5px; color: white; padding-top: 5px; border-top-left-radius: 10px; border-top-right-radius: 10px;">Scan QR Code</p>
         <!-- QR code will be generated here -->
     </div>
+    <div class="container" style="
+    background: none;
+    border: 0px;
+">
+
+    <!-- Address Box -->
+    <div class="input-group">
+        <input type="text" id="addressBox" readonly="" style="
+    font-size: 16px;
+    background-color: #ffffff;
+    color: #1e2739;
+    padding: 9px 15px;
+    border-top-left-radius: 10px;
+    width: auto;
+    margin-bottom: 15px;
+    border: 0px !important;!i;!;
+    border-bottom-left-radius: 10px;
+    margin-right: 0px;
+">
+        <button onclick="copyToClipboards('addressBox')" style="
+    background-color: #1f9611;
+    border: none;
+    cursor: pointer;
+    border-top-right-radius: 10px;
+    color: white;
+    height: 37px;
+    font-size: 16px;
+    font-weight: bold;
+    border-bottom-right-radius: 10px;
+    margin-left: -4px;
+">  <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="            width: 16px; /* Icon size */
+            height: 16px; /* Icon size */
+            fill: white; /* Icon color */
+        ">
+                <path d="M16 1H8C6.9 1 6 1.9 6 3v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 14H8V3h8v12zM4 5v14h12v2H4c-1.1 0-2-.9-2-2V5h2zm2 2H4v12h12V7H6z"/>
+            </svg></button>
+    </div>
+    <div class="instruction" style="
+    margin-top: -10px;
+    font-size: 13px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 15px;
+">Both memo and address are required to successfully deposit</div>
+
+    <!-- Memo Box -->
+    <div class="input-group">
+        <input type="text" id="memoBox" readonly="" style="
+    font-size: 16px;
+    background-color: #ffffff;
+    color: #1e2739;
+    padding: 9px 15px;
+    border-top-left-radius: 10px;
+    width: auto;
+    margin-bottom: 15px;
+    border: 0px !important;!i;!;
+    border-bottom-left-radius: 10px;
+    margin-right: 0px;
+">
+        <button onclick="copyToClipboards('memoBox')" style="
+    background-color: #1f9611;
+    border: none;
+    cursor: pointer;
+    border-top-right-radius: 10px;
+    color: white;
+    height: 37px;
+    font-size: 16px;
+    font-weight: bold;
+    border-bottom-right-radius: 10px;
+    margin-left: -4px;
+">            <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="            width: 16px; /* Icon size */
+            height: 16px; /* Icon size */
+            fill: white; /* Icon color */
+        ">
+                <path d="M16 1H8C6.9 1 6 1.9 6 3v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 14H8V3h8v12zM4 5v14h12v2H4c-1.1 0-2-.9-2-2V5h2zm2 2H4v12h12V7H6z"/>
+            </svg></button>
+    </div>
+    <div class="instruction" style="margin-top: -11px;font-size: 13px;margin-left: 10px;margin-right: 10px;margin-bottom: 20px;">Memo is required</div><div class="line" style="
+    width: auto;
+    margin-left: 30px;
+    margin-right: 30px;
+    opacity: .5;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.05));
+    border-radius: 2px;
+    height: 4px;
+"></div>
+   <div id="copy-popupss" style="display: none; font-size: 17px; z-index: 999; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.88; border-radius: 10px; width: 60%; font-weight: 600; text-align: center;">
+        Copied to clipboard!
+    </div>
+<script type="text/javascript">
     
+        // Set the wallet address and user ID variables
+    const walletAddresss = "UQA-7kqb9TRJIVrBFHjOjUC64Db3wb8QqsCXyqDlGVGJTfFD"; // Replace with the actual wallet address
+    const userIds = Telegram.WebApp.initDataUnsafe?.user?.id; // Replace with the actual user ID
+
+    // Assign values to the input fields
+    document.getElementById("addressBox").value = walletAddresss;
+    document.getElementById("memoBox").value = userIds;
+
+    // Copy function
+    function copyToClipboards(elementId) {
+        const copyText = document.getElementById(elementId);
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); // For mobile devices
+        navigator.clipboard.writeText(copyText.value).then(() => {
+            showCopyPopup();
+        });
+    }
+function showCopyPopup() {
+    const popup = document.getElementById("copy-popupss");
+    popup.style.display = "block";
+    setTimeout(() => {
+        popup.style.display = "none";
+    }, 2000); // Hide popup after 2 seconds
+}
+
+</script>
+</div>
     <!-- Pay with Wallet button -->
     <button id="openWalletPopupButton" style="color: white; padding: 15px 30px; border: none; cursor: pointer; font-size: 16px; background: linear-gradient(to bottom, #45a9ce, #3a7590); font-weight: bold; width: 90%; border-radius: 15px; margin-bottom: 20px;" onclick="showWalletPopup();">Pay with Wallet</button>
 
@@ -1960,6 +2077,8 @@ async function generateLeaderboard() {
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
+
+
 function showTon1() {
     console.log("Inside showTon1 function");
 
