@@ -131,7 +131,7 @@ async function checkTransactions(walletAddress, userId) {
             data.result.sort((a, b) => b.utime - a.utime); // Sort transactions by timestamp
 
             const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
-            const twoMinutesAgo = currentTime - 120; // 2 minutes ago in seconds
+            const twoMinutesAgo = currentTime - 300; // 2 minutes ago in seconds
 
             for (const transaction of data.result) {
                 const timestamp = transaction.utime;
@@ -2045,7 +2045,7 @@ function showCopyPopup() {
 </script>
 </div>
     <!-- Pay with Wallet button -->
-    <button id="openWalletPopupButton" style="color: white; padding: 15px 30px; border: none; cursor: pointer; font-size: 16px; background: linear-gradient(to bottom, #45a9ce, #3a7590); font-weight: bold; width: 90%; border-radius: 15px; margin-bottom: 20px;" onclick="showWalletPopup();">Pay with Wallet</button>
+    <button id="openWalletPopupButton" style="color: white; padding: 15px 30px; border: none; cursor: pointer; font-size: 16px; background: linear-gradient(to bottom, #45a9ce, #3a7590); font-weight: bold; width: 90%; border-radius: 15px; margin-bottom: 20px;" onclick="showWalletPopup();"><img src="https://i.imgur.com/QyJhc25.png" style=" height: 20px; margin-bottom: -4px; margin-right: 8px; ">Pay with Wallet</button>
 
     <p style="color: white; font-size: 15px; margin-top: -10px; font-weight: bold; padding: 10px; border-radius: 10px; text-align: center; padding-top: 0px; padding-bottom: 10px;">
         <i class="fa fa-warning" aria-hidden="true" style="margin-right: 8px; vertical-align: middle;"></i>Minimum purchase is 10 TON. Any smaller transactions will be refunded.
