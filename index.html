@@ -3,18 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Web App Example</title>
+    <title>Telegram Web App Payment</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
-    <script>
-        function triggerInvoice() {
-    Telegram.WebApp.MainButton.setText("Processing...");
-    Telegram.WebApp.MainButton.show();
-    Telegram.WebApp.sendData("trigger_invoice");
-}
-
-    </script>
 <body>
     <button id="payButton" onclick="triggerInvoice()">Pay with Telegram Stars</button>
+    
+    <script>
+        function triggerInvoice() {
+            Telegram.WebApp.MainButton.setText("Processing...");
+            Telegram.WebApp.MainButton.show();
+            // Send data to the bot to trigger the invoice
+            Telegram.WebApp.sendData("trigger_invoice");
+        }
 
+        // Receive confirmation message from the bot after successful payment
+        Telegram.WebApp.onEvent('receive_data', (data) => {
+            if (data === 'payment_successful') {
+                Telegram.WebApp.MainButton.setText("Payment Complete!");
+            } else {
+                Telegram.WebApp.MainButton.setText("Error: Try Again");
+            }
+        });
+    </script>
 </body>
 </html>
