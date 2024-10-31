@@ -1918,7 +1918,7 @@ async function generateLeaderboard() {
     <!-- QR Code Section -->
     <div  id="qrcode" style="padding-bottom: 30px !important; text-align: center; margin: 20px auto; width: 170px; height: 170px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: white; border-radius: 10px; padding: 10px;">
         <!-- Text above the QR Code -->
-        <p style="margin: 10px 0; font-size: 16px; font-weight: 500; width: 112%; background: #1e1d22; margin-top: 0px; padding-bottom: 5px; color: white; padding-top: 5px; border-top-left-radius: 10px; border-top-right-radius: 10px;">Scan QR Code:</p>
+        <p style="margin: 10px 0; font-size: 16px; font-weight: 500; width: 112%; background: #1e1d22; margin-top: 0px; padding-bottom: 5px; color: white; padding-top: 5px; border-top-left-radius: 10px; border-top-right-radius: 10px;">Scan Qr Code</p>
         <!-- QR code will be generated here -->
     </div>
     
@@ -1936,7 +1936,7 @@ async function generateLeaderboard() {
             <p style="text-align: center; margin-top: 0px; color: #ffffff; font-size: 17px; font-weight: 600; background: #1e1d22; padding: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px;">Choose your wallet</p>
 
             <!-- Wallet options -->
-            <div class="walletOption" id="tonkeeperOption" style="text-align: center; cursor: pointer; background: #10161f; height: 75px; border: 0px !important;" onclick="showTon1();" target="_blank">
+            <div class="walletOption" id="tonkeeperOption" style="text-align: center; cursor: pointer; background: #10161f; height: 75px; border: 0px !important;" onclick="showTon1();">
                 <img src="assets/img/tonkeeper.png" alt="Tonkeeper" style="width: 45px; height: 40px; display: block; margin: 0 auto 0px;">
                 <p style="font-weight: bold;">Tonkeeper</p>
             </div>
@@ -1964,15 +1964,18 @@ function showTon1() {
     console.log("Inside showTon1 function");
 
     const walletURL = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}`;
+    const androidIntentURL = `intent://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}#Intent;scheme=https;package=com.tonkeeper.wallet;end;`;
 
-    // Use intent URL for Android
-    const androidURL = `intent://${walletURL.replace("https://", "")}#Intent;scheme=https;package=com.tonkeeper.wallet;end;`;
-
-    // Check if the user is on Android and use intent URL
     if (/android/i.test(navigator.userAgent)) {
-        window.location.href = androidURL;
+        // Attempt to use the intent URL
+        window.location.href = androidIntentURL;
+        
+        // Set a timeout for fallback if intent fails
+        setTimeout(() => {
+            window.location.href = walletURL;
+        }, 1000); // Adjust delay if necessary
     } else {
-        // For iOS or other platforms, open the regular URL
+        // For iOS, open directly
         window.location.href = walletURL;
     }
 }
