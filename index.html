@@ -911,7 +911,7 @@ function updateGoldBalance(userId, earnedGold, callback) {
         const points = selectedOption.id;
 
         // API call to your server to generate the invoice link
-        fetch('https://your-backend-url/generate-invoice', {
+        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -938,7 +938,7 @@ function updateGoldBalance(userId, earnedGold, callback) {
 
     function updateUserPoints(points) {
         // Update user points in the database after successful payment
-        fetch('https://your-backend-url/update-points', {
+        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/update-points', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -1473,7 +1473,7 @@ async function shareToTelegramlink() {
         const points = selectedOption.id;
 
         // API call to your server to generate the invoice link
-        fetch('https://your-backend-url/generate-invoice', {
+        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -1500,7 +1500,7 @@ async function shareToTelegramlink() {
 
     function updateUserPoints(points) {
         // Update user points in the database after successful payment
-        fetch('https://your-backend-url/update-points', {
+        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/update-points', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
