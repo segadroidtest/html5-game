@@ -3,42 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Web App Payment</title>
+    <title>Telegram Payment</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <button id="payButton" onclick="triggerInvoice()">Pay with Telegram Stars</button>
+    <button id="triggerButton">Trigger Payment</button>
 
     <script>
-        const telegramWebApp = Telegram.WebApp;
-        
-    function triggerInvoice() {
-        const payButton = document.getElementById('payButton');
-        payButton.innerText = 'Processing...';
-        payButton.disabled = true;
+        // Initialize the Telegram Web App API
+        const tg = window.Telegram.WebApp;
 
-        const chatId = Telegram.WebApp.initDataUnsafe.user.id;
-
-        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/webapp', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: chatId })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                payButton.innerText = 'Invoice Sent. Check Bot!';
-            } else {
-                payButton.innerText = 'Failed to send invoice';
-                payButton.disabled = false;
-            }
-        })
-        .catch(error => {
-            console.error('Error sending invoice request:', error);
-            payButton.innerText = 'Error. Try Again';
-            payButton.disabled = false;
-        });
-    }
+        // Show main button outside the web app
+        document.getElementById("triggerButton").onclick = () => {
+            tg.MainButton.setText("Pay Now");
+            tg.MainButton.show();
+            tg.MainButton.onClick(() => {
+                // When the Telegram Main Button is clicked, call the backend to trigger the pay command
+                fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/pay', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: tg.initDataUnsafe.user.id })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        tg.MainButton.setText("Invoice Sent!");
+                    } else {
+                        tg.MainButton.setText("Failed to send invoice");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    tg.MainButton.setText("Error!");
+                });
+            });
+        };
     </script>
 </body>
 </html>
