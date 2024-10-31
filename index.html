@@ -6,14 +6,17 @@
     <title>Telegram Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-        function handlePayment() {
+        function submitPurchases() {
+            const diamondOptions = document.getElementById("diamond-options");
+            const selectedValue = diamondOptions.value;
+
             // API call to your server to generate the invoice link
             fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ /* Add any additional data you need here */ }),
+                body: JSON.stringify({ stars: selectedValue }), // Send selected stars as part of the request
             })
             .then(response => response.json())
             .then(data => {
@@ -22,6 +25,8 @@
                     if (status === "paid") {
                         // Handle successful payment here
                         alert("Payment successful!");
+                        // Optionally, call another API to add points to the user database
+                        addPointsToUserDatabase(selectedValue);
                     }
                 });
             })
@@ -30,10 +35,25 @@
                 alert("An error occurred while generating the invoice.");
             });
         }
+
+        function addPointsToUserDatabase(points) {
+            // Implement your logic here to add points to the user's database
+            console.log(`Adding ${points} points to the user's database.`);
+            // Make another fetch request to your server to update user points
+        }
     </script>
 </head>
 <body>
     <h1>Welcome to the Payment Mini App</h1>
-    <button onclick="handlePayment()">Pay with Telegram Stars</button>
+    <select id="diamond-options" style="color: #1e1d22 !important; font-weight: 595; padding: 10px; border-radius: 5px; font-size: 17px; background-color: #f8f9fa; transition: border-color 0.3s; margin-bottom: 10px;" onfocus="this.style.borderColor='#0056b3'" onblur="this.style.borderColor='#007bff'">
+        <option value="50">700 Points = 50 Stars ⭐</option>
+        <option value="100">1500 Points = 100 Stars ⭐</option>
+        <option value="250">5000 Points = 250 Stars ⭐</option>
+        <option value="500">10k Points = 500 Stars ⭐</option>
+        <option value="2000">100k Points = 2000 Stars ⭐</option>
+    </select>
+    <button onclick="submitPurchases()" style="padding: 10px 20px; border: none; border-radius: 5px; background-color: #1f9611; color: white; font-size: 16px; cursor: pointer; transition: background-color 0.3s, transform 0.2s; font-weight: bold;">
+        Purchase
+    </button>
 </body>
 </html>
