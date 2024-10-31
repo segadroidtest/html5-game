@@ -4,33 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Telegram Mini App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        function handlePayment() {
+            // API call to your server to generate the invoice link
+            fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ /* Add any additional data you need here */ }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Use WebApp SDK to open the invoice link
+                window.Telegram.WebApp.openInvoice(data.invoiceLink, (status) => {
+                    if (status === "paid") {
+                        // Handle successful payment here
+                        alert("Payment successful!");
+                    }
+                });
+            })
+            .catch(error => {
+                console.error("Error generating invoice:", error);
+                alert("An error occurred while generating the invoice.");
+            });
+        }
+    </script>
 </head>
 <body>
-    <button id="payButton">Pay with Telegram Stars</button>
-    
-    <script>
-        document.getElementById('payButton').onclick = async () => {
-            try {
-                const response = await fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({}) // Add any necessary data here
-                });
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const data = await response.json();
-                console.log('Invoice link:', data.invoiceLink);
-                // Show the invoice link in a Telegram popup if needed
-
-            } catch (error) {
-                console.error('Error generating invoice:', error);
-            }
-        };
-    </script>
+    <h1>Welcome to the Payment Mini App</h1>
+    <button onclick="handlePayment()">Pay with Telegram Stars</button>
 </body>
 </html>
