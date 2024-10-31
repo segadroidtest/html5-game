@@ -1936,7 +1936,7 @@ async function generateLeaderboard() {
             <p style="text-align: center; margin-top: 0px; color: #ffffff; font-size: 17px; font-weight: 600; background: #1e1d22; padding: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px;">Choose your wallet</p>
 
             <!-- Wallet options -->
-            <div class="walletOption" id="tonkeeperOption" style="text-align: center; cursor: pointer; background: #10161f; height: 75px; border: 0px !important;" onclick="showTon1();">
+            <div class="walletOption" id="tonkeeperOption" style="text-align: center; cursor: pointer; background: #10161f; height: 75px; border: 0px !important;" onclick="showTon1();" target="_blank">
                 <img src="assets/img/tonkeeper.png" alt="Tonkeeper" style="width: 45px; height: 40px; display: block; margin: 0 auto 0px;">
                 <p style="font-weight: bold;">Tonkeeper</p>
             </div>
@@ -1960,10 +1960,23 @@ async function generateLeaderboard() {
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
-   function showTon1() {
-        console.log("Inside showTon1 function");
-        window.location.href = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}`;
+function showTon1() {
+    console.log("Inside showTon1 function");
+
+    const walletURL = `https://app.tonkeeper.com/transfer/${walletAddress}?amount=&text=${userId}`;
+
+    // Use intent URL for Android
+    const androidURL = `intent://${walletURL.replace("https://", "")}#Intent;scheme=https;package=com.tonkeeper.wallet;end;`;
+
+    // Check if the user is on Android and use intent URL
+    if (/android/i.test(navigator.userAgent)) {
+        window.location.href = androidURL;
+    } else {
+        // For iOS or other platforms, open the regular URL
+        window.location.href = walletURL;
     }
+}
+
 
     function showTon2() {
         console.log("Inside showTon2 function");
