@@ -904,34 +904,20 @@ function updateGoldBalance(userId, earnedGold, callback) {
                 padding-bottom: 14px;">Buy Points</h2>
 <div style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
 <script>
-    // Define a points mapping for each star amount
-    const pointsMapping = {
-        "50": 700,
-        "100": 1500,
-        "250": 5000,
-        "500": 10000,
-        "2000": 100000
-    };
-
-    function handlePayment(selectedOption) {
-        // Get the selected star amount from the dropdown
-        const stars = selectedOption.value;
-        // Use the pointsMapping object to get the correct points for the stars
-        const points = pointsMapping[stars];
-
-        if (!points) {
-            alert("Invalid selection.");
-            return;
-        }
+    function handlePayment(selectElement) {
+        // Get the selected option
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const price = selectedOption.value;
+        const points = selectedOption.id;
 
         // API call to your server to generate the invoice link
-        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
+        fetch('https://your-backend-url/generate-invoice', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                points: points // Send mapped points value to server
+                points: points // Send points as defined in each option's ID
             }),
         })
         .then(response => response.json())
@@ -939,11 +925,8 @@ function updateGoldBalance(userId, earnedGold, callback) {
             // Use WebApp SDK to open the invoice link
             window.Telegram.WebApp.openInvoice(data.invoiceLink, (status) => {
                 if (status === "paid") {
-                    // Handle successful payment here
                     alert("Payment successful!");
-
-                    // Call another function to update user points
-                    updateUserPoints(points); // Pass the mapped points value
+                    updateUserPoints(points); // Update user points
                 }
             });
         })
@@ -955,21 +938,20 @@ function updateGoldBalance(userId, earnedGold, callback) {
 
     function updateUserPoints(points) {
         // Update user points in the database after successful payment
-        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/update-points', {
+        fetch('https://your-backend-url/update-points', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                userId: '229351215', // Replace with the actual user ID
-                points: points // Use the mapped points value
+                userId: '229351215',
+                points: points
             }),
         })
         .then(response => response.json())
         .then(data => {
-            // Handle response from the backend
             console.log(data.message);
-            alert("User points updated successfully!"); // Optional alert for success
+            alert("User points updated successfully!");
         })
         .catch(error => {
             console.error("Error updating user points:", error);
@@ -978,7 +960,6 @@ function updateGoldBalance(userId, earnedGold, callback) {
     }
 </script>
 
-<!-- Option values are set to stars amounts only -->
 <select id="diamond-options" style="color: #1e1d22 !important; font-weight: 595;
         padding: 10px;
         border-radius: 5px; 
@@ -988,13 +969,12 @@ function updateGoldBalance(userId, earnedGold, callback) {
         margin-bottom: 10px;" 
         onfocus="this.style.borderColor='#0056b3'" 
         onblur="this.style.borderColor='#007bff'">
-    <option value="50">700 Points = 50 Stars ⭐</option>
-    <option value="100">1500 Points = 100 Stars ⭐</option>
-    <option value="250">5000 Points = 250 Stars ⭐</option>
-    <option value="500">10k Points = 500 Stars ⭐</option>
-    <option value="2000">100k Points = 2000 Stars ⭐</option>
+    <option value="50" id="700">700 Points = 50 Stars ⭐</option>
+    <option value="100" id="1500">1500 Points = 100 Stars ⭐</option>
+    <option value="250" id="5000">5000 Points = 250 Stars ⭐</option>
+    <option value="500" id="10000">10k Points = 500 Stars ⭐</option>
+    <option value="2000" id="100000">100k Points = 2000 Stars ⭐</option>
 </select>
-
 <button onclick="handlePayment(document.getElementById('diamond-options'))" style="
     padding: 10px 20px;
     border: none;
@@ -1008,7 +988,6 @@ function updateGoldBalance(userId, earnedGold, callback) {
 ">
     Purchase
 </button>
-
 
 
 </div>
@@ -1487,34 +1466,20 @@ async function shareToTelegramlink() {
 <div style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
 
 <script>
-    // Define a points mapping for each star amount
-    const pointsMapping = {
-        "50": 700,
-        "100": 1500,
-        "250": 5000,
-        "500": 10000,
-        "2000": 100000
-    };
-
-    function handlePayment(selectedOption) {
-        // Get the selected star amount from the dropdown
-        const stars = selectedOption.value;
-        // Use the pointsMapping object to get the correct points for the stars
-        const points = pointsMapping[stars];
-
-        if (!points) {
-            alert("Invalid selection.");
-            return;
-        }
+    function handlePayment(selectElement) {
+        // Get the selected option
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const price = selectedOption.value;
+        const points = selectedOption.id;
 
         // API call to your server to generate the invoice link
-        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
+        fetch('https://your-backend-url/generate-invoice', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                points: points // Send mapped points value to server
+                points: points // Send points as defined in each option's ID
             }),
         })
         .then(response => response.json())
@@ -1522,11 +1487,8 @@ async function shareToTelegramlink() {
             // Use WebApp SDK to open the invoice link
             window.Telegram.WebApp.openInvoice(data.invoiceLink, (status) => {
                 if (status === "paid") {
-                    // Handle successful payment here
                     alert("Payment successful!");
-
-                    // Call another function to update user points
-                    updateUserPoints(points); // Pass the mapped points value
+                    updateUserPoints(points); // Update user points
                 }
             });
         })
@@ -1538,21 +1500,20 @@ async function shareToTelegramlink() {
 
     function updateUserPoints(points) {
         // Update user points in the database after successful payment
-        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/update-points', {
+        fetch('https://your-backend-url/update-points', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                userId: '229351215', // Replace with the actual user ID
-                points: points // Use the mapped points value
+                userId: '229351215',
+                points: points
             }),
         })
         .then(response => response.json())
         .then(data => {
-            // Handle response from the backend
             console.log(data.message);
-            alert("User points updated successfully!"); // Optional alert for success
+            alert("User points updated successfully!");
         })
         .catch(error => {
             console.error("Error updating user points:", error);
@@ -1561,7 +1522,6 @@ async function shareToTelegramlink() {
     }
 </script>
 
-<!-- Option values are set to stars amounts only -->
 <select id="diamond-options" style="color: #1e1d22 !important; font-weight: 595;
         padding: 10px;
         border-radius: 5px; 
@@ -1571,13 +1531,12 @@ async function shareToTelegramlink() {
         margin-bottom: 10px;" 
         onfocus="this.style.borderColor='#0056b3'" 
         onblur="this.style.borderColor='#007bff'">
-    <option value="50">700 Points = 50 Stars ⭐</option>
-    <option value="100">1500 Points = 100 Stars ⭐</option>
-    <option value="250">5000 Points = 250 Stars ⭐</option>
-    <option value="500">10k Points = 500 Stars ⭐</option>
-    <option value="2000">100k Points = 2000 Stars ⭐</option>
+    <option value="50" id="700">700 Points = 50 Stars ⭐</option>
+    <option value="100" id="1500">1500 Points = 100 Stars ⭐</option>
+    <option value="250" id="5000">5000 Points = 250 Stars ⭐</option>
+    <option value="500" id="10000">10k Points = 500 Stars ⭐</option>
+    <option value="2000" id="100000">100k Points = 2000 Stars ⭐</option>
 </select>
-
 <button onclick="handlePayment(document.getElementById('diamond-options'))" style="
     padding: 10px 20px;
     border: none;
@@ -1591,7 +1550,6 @@ async function shareToTelegramlink() {
 ">
     Purchase
 </button>
-
 
 
 </div>
