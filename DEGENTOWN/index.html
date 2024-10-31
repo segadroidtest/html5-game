@@ -2079,7 +2079,8 @@ function showCopyPopup() {
         <button id="nextPage" style="width: 100px; display: inline-block;">Next</button>
     </div>
 </div>
-
+<p style="color: white;font-size: 15px;margin-top: -22px;font-weight: bold;padding: 10px;border-radius: 10px;text-align: left;padding-left: 2px;opacity: .8;">
+            Updated every 24 hours</p>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
 
@@ -2180,7 +2181,7 @@ function showTon1() {
 
         // Show message if no deposits found
         if (paginatedTransactions.length === 0) {
-            lastDepositsElement.innerHTML = "No deposits found.";
+            lastDepositsElement.innerHTML = "No deposits in Last 24 hours.";
             nextPageButton.style.display = "none"; // Hide Next button if no deposits
             prevPageButton.style.display = "none"; // Hide Previous button if no deposits
         } else {
