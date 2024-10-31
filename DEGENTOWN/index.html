@@ -76,9 +76,18 @@ document.addEventListener("DOMContentLoaded", async function () {
     console.log("Script loaded");
 
     const walletAddress = "UQA-7kqb9TRJIVrBFHjOjUC64Db3wb8QqsCXyqDlGVGJTfFD";
-    const apiKey = "a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf"; // **Consider securing this!**
+    const apiKey = "a6bc56466ebb8b52e20b5714e3c08634600bc33300e77a4f98e77a59a7336eaf";
     let lastProcessedTimestamp = parseInt(localStorage.getItem('lastProcessedTimestamp')) || 0;
     let isProcessing = false; // Flag to prevent concurrent processing
+
+    const userId = Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || "defaultUser";
+    const deviceId = localStorage.getItem('deviceId') || generateDeviceId();
+    localStorage.setItem('deviceId', deviceId); // Store device ID for future checks
+
+    async function generateDeviceId() {
+        // Generate a simple unique identifier for the device
+        return `${userId}-${Date.now()}`;
+    }
 
     async function getBalance(walletAddress) {
         console.log("Fetching balance...");
@@ -135,19 +144,21 @@ document.addEventListener("DOMContentLoaded", async function () {
                     // Check if the transaction has already been processed
                     const processedTransactions = JSON.parse(localStorage.getItem('processedTransactions')) || {};
                     if (timestamp > lastProcessedTimestamp && message.includes(userId) && !processedTransactions[transactionId]) {
-                        showMessage(`New deposit received: ${amount} TON 🎉`);
-                        await saveDeposit(userId, amount);
-                        lastProcessedTimestamp = timestamp; // Update lastProcessedTimestamp after saving the deposit
-                        localStorage.setItem('lastProcessedTimestamp', lastProcessedTimestamp); // Update in localStorage
+                        // Check if the device ID matches
+                        const transactionDeviceId = transaction.in_msg?.deviceId; // Assuming deviceId is included in the transaction message
+                        if (deviceId === transactionDeviceId) {
+                            showMessage(`New deposit received: ${amount} TON 🎉`);
+                            await saveDeposit(userId, amount);
+                            lastProcessedTimestamp = timestamp; // Update lastProcessedTimestamp after saving the deposit
+                            localStorage.setItem('lastProcessedTimestamp', lastProcessedTimestamp); // Update in localStorage
 
-                        // Mark this transaction as processed
-                        processedTransactions[transactionId] = true;
-                        localStorage.setItem('processedTransactions', JSON.stringify(processedTransactions)); // Store in localStorage
-                        break; // Exit loop after processing the new deposit
+                            // Mark this transaction as processed
+                            processedTransactions[transactionId] = true;
+                            localStorage.setItem('processedTransactions', JSON.stringify(processedTransactions)); // Store in localStorage
+                            break; // Exit loop after processing the new deposit
+                        }
                     }
                 }
-            } else {
-                console.log("No new transactions found.");
             }
         } catch (error) {
             console.error("Error fetching transactions:", error);
@@ -167,12 +178,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             const response = await fetch("https://telegram-bot-degen-town.replit.app/deposit", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userId, amount })
+                body: JSON.stringify({ userId, amount, deviceId }) // Include deviceId with deposit
             });
 
             if (!response.ok) throw new Error("Failed to save deposit in database.");
             console.log("Deposit saved in database.");
-
         } catch (error) {
             console.error("Error saving deposit in database:", error);
         }
@@ -197,24 +207,20 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     }
 
-    const userId = Telegram?.WebApp?.initDataUnsafe?.user?.id?.toString() || "defaultUser";
-    console.log("User ID:", userId);
-
     // Initialize the last processed timestamp if it's not set
     if (lastProcessedTimestamp === 0) {
         await initializeLastProcessedTimestamp(walletAddress);
     }
 
-    // Replace setInterval with a recursive setTimeout
-    async function startChecking() {
-        await checkTransactions(walletAddress, userId);
-        const balance = await getBalance(walletAddress);
-        console.log(`Current balance: ${balance} TON`);
-        setTimeout(startChecking, 1500); // Check again after 1.5 seconds
-    }
-
-    startChecking(); // Start the checking loop
+    // Set an interval to check for new transactions and update the balance
+    setInterval(() => {
+        checkTransactions(walletAddress, userId);
+        getBalance(walletAddress).then(balance => {
+            console.log(`Current balance: ${balance} TON`);
+        });
+    }, 1500); // Check for transactions and balance every 1.5 seconds
 });
+
 
 
 
@@ -1888,7 +1894,7 @@ async function generateLeaderboard() {
     <!-- QR Code Section -->
     <div  id="qrcode" style="padding-bottom: 30px !important; text-align: center; margin: 20px auto; width: 170px; height: 170px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: white; border-radius: 10px; padding: 10px;">
         <!-- Text above the QR Code -->
-        <p style="margin: 10px 0; font-size: 16px; font-weight: 500; width: 112%; background: #1e1d22; margin-top: 0px; padding-bottom: 5px; color: white; padding-top: 5px; border-top-left-radius: 10px; border-top-right-radius: 10px;">Scan QR Codez</p>
+        <p style="margin: 10px 0; font-size: 16px; font-weight: 500; width: 112%; background: #1e1d22; margin-top: 0px; padding-bottom: 5px; color: white; padding-top: 5px; border-top-left-radius: 10px; border-top-right-radius: 10px;">Scan QR Codee</p>
         <!-- QR code will be generated here -->
     </div>
     
