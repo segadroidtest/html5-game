@@ -4,62 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Telegram Web App Example</title>
-    <script>
-        // Wait for the page to load
-        window.onload = function() {
-            const tg = window.Telegram.WebApp;
-
-            tg.ready();  // Ensure the web app is initialized
-
-            // Example: Get user data
-            const user = tg.initDataUnsafe.user;
-            if (user) {
-                console.log('User ID:', user.id);
-                console.log('User First Name:', user.first_name);
-                console.log('User Last Name:', user.last_name);
-                console.log('User Username:', user.username);
-            } else {
-                console.log('User data is not available.');
-            }
-
-            // Example: Handling a button click
-            const button = document.getElementById('myButton');
-            button.onclick = function() {
-                tg.close(); // Closes the web app
-                // Optionally send a message to the user here
-            };
-
-            // Example: Set the app's background color
-            tg.onEvent('mainButtonClicked', function() {
-                // Do something when the main button is clicked
-                console.log('Main button clicked');
-            });
-
-            // Show the main button
-            tg.MainButton.text = "Click Me!";
-            tg.MainButton.show();
-        };
-    </script>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-        }
-        #myButton {
-            padding: 10px 20px;
-            background-color: #0088cc;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-    </style>
 </head>
+    <script>
+        function triggerInvoice() {
+    Telegram.WebApp.MainButton.setText("Processing...");
+    Telegram.WebApp.MainButton.show();
+    Telegram.WebApp.sendData("trigger_invoice");
+}
+
+    </script>
 <body>
-    <button id="myButton">Close Web App</button>
+    <button id="payButton" onclick="triggerInvoice()">Pay with Telegram Stars</button>
+
 </body>
 </html>
