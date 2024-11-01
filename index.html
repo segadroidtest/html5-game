@@ -9,14 +9,14 @@
         let userPoints = 0; // Initialize user points
 
         function updatePointsDisplay() {
-            document.getElementById("points-display").innerText = Your Points: ${userPoints};
+            document.getElementById("points-display").innerText = `Your Points: ${userPoints}`;
         }
 
         function handlePayment() {
             const selectedOption = document.getElementById("points-select").value;
             const [points, stars] = selectedOption.split(',');
 
-            fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
+            fetch('https://your-server-url/generate-invoice', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
