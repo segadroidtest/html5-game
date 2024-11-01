@@ -905,68 +905,45 @@ function updateGoldBalance(userId, earnedGold, callback) {
 <div style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
 <script>
     function handlePayment(selectElement) {
-        // Get the selected option
         const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const price = selectedOption.value;
         const points = selectedOption.id;
 
-        // API call to your server to generate the invoice link
-        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {  // Update with your server URL
+        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ points: points }),
+            body: JSON.stringify({
+                points: points // Send points as defined in each option's ID
+            }),
         })
         .then(response => response.json())
         .then(data => {
-            // Use WebApp SDK to open the invoice link
-            window.Telegram.WebApp.openInvoice(data.invoiceLink, (status) => {
-                if (status === "paid") {
-                    alert("Payment successful!");
-                    updateUserPoints(points); // Update user points
-                } else {
-                    alert("Payment was not successful. Please try again.");
-                }
-            });
+            window.Telegram.WebApp.openInvoice(data.invoiceLink);
         })
         .catch(error => {
             console.error("Error generating invoice:", error);
             alert("An error occurred while generating the invoice.");
         });
     }
-
-    function updateUserPoints(points) {
-        // Update user points in the database after successful payment
-        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/update-points', {  // Update with your server URL
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                userId: '229351215', // Replace with the actual user ID
-                points: points
-            }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data.message);
-            alert("User points updated successfully!");
-        })
-        .catch(error => {
-            console.error("Error updating user points:", error);
-            alert("An error occurred while updating user points.");
-        });
-    }
 </script>
 
-<select id="diamond-options" style="color: #1e1d22 !important; font-weight: 595; padding: 10px; border-radius: 5px; font-size: 17px; background-color: #f8f9fa; transition: border-color 0.3s; margin-bottom: 10px;" onfocus="this.style.borderColor='#0056b3'" onblur="this.style.borderColor='#007bff'" onchange="handlePayment(this)">
-    <option value="1" id="700">700 Points = 50 Stars ⭐</option>
+<select id="diamond-options" style="color: #1e1d22 !important; font-weight: 595;
+        padding: 10px;
+        border-radius: 5px; 
+        font-size: 17px; 
+        background-color: #f8f9fa; 
+        transition: border-color 0.3s; 
+        margin-bottom: 10px;" 
+        onfocus="this.style.borderColor='#0056b3'" 
+        onblur="this.style.borderColor='#007bff'">
+    <option value="50" id="700">700 Points = 50 Stars ⭐</option>
     <option value="100" id="1500">1500 Points = 100 Stars ⭐</option>
     <option value="250" id="5000">5000 Points = 250 Stars ⭐</option>
     <option value="500" id="10000">10k Points = 500 Stars ⭐</option>
     <option value="2000" id="100000">100k Points = 2000 Stars ⭐</option>
 </select>
-
 <button onclick="handlePayment(document.getElementById('diamond-options'))" style="
     padding: 10px 20px;
     border: none;
@@ -980,6 +957,8 @@ function updateGoldBalance(userId, earnedGold, callback) {
 ">
     Purchase
 </button>
+
+
 
 
 </div>
@@ -1461,15 +1440,18 @@ async function shareToTelegramlink() {
     function handlePayment(selectElement) {
         // Get the selected option
         const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const price = selectedOption.value;
         const points = selectedOption.id;
 
         // API call to your server to generate the invoice link
-        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {  // Update with your server URL
+        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ points: points }),
+            body: JSON.stringify({
+                points: points // Send points as defined in each option's ID
+            }),
         })
         .then(response => response.json())
         .then(data => {
@@ -1478,8 +1460,6 @@ async function shareToTelegramlink() {
                 if (status === "paid") {
                     alert("Payment successful!");
                     updateUserPoints(points); // Update user points
-                } else {
-                    alert("Payment was not successful. Please try again.");
                 }
             });
         })
@@ -1491,13 +1471,13 @@ async function shareToTelegramlink() {
 
     function updateUserPoints(points) {
         // Update user points in the database after successful payment
-        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/update-points', {  // Update with your server URL
+        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/update-points', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                userId: '229351215', // Replace with the actual user ID
+                userId: '229351215',
                 points: points
             }),
         })
@@ -1513,14 +1493,21 @@ async function shareToTelegramlink() {
     }
 </script>
 
-<select id="diamond-options" style="color: #1e1d22 !important; font-weight: 595; padding: 10px; border-radius: 5px; font-size: 17px; background-color: #f8f9fa; transition: border-color 0.3s; margin-bottom: 10px;" onfocus="this.style.borderColor='#0056b3'" onblur="this.style.borderColor='#007bff'" onchange="handlePayment(this)">
-    <option value="1" id="700">700 Points = 50 Stars ⭐</option>
+<select id="diamond-options" style="color: #1e1d22 !important; font-weight: 595;
+        padding: 10px;
+        border-radius: 5px; 
+        font-size: 17px; 
+        background-color: #f8f9fa; 
+        transition: border-color 0.3s; 
+        margin-bottom: 10px;" 
+        onfocus="this.style.borderColor='#0056b3'" 
+        onblur="this.style.borderColor='#007bff'">
+    <option value="50" id="700">700 Points = 50 Stars ⭐</option>
     <option value="100" id="1500">1500 Points = 100 Stars ⭐</option>
     <option value="250" id="5000">5000 Points = 250 Stars ⭐</option>
     <option value="500" id="10000">10k Points = 500 Stars ⭐</option>
     <option value="2000" id="100000">100k Points = 2000 Stars ⭐</option>
 </select>
-
 <button onclick="handlePayment(document.getElementById('diamond-options'))" style="
     padding: 10px 20px;
     border: none;
