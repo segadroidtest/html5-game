@@ -6,11 +6,17 @@
     <title>Telegram Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
+        let userPoints = 0; // Initialize user points
+
+        function updatePointsDisplay() {
+            document.getElementById("points-display").innerText = `Your Points: ${userPoints}`;
+        }
+
         function handlePayment() {
             const selectedOption = document.getElementById("points-select").value;
             const [points, stars] = selectedOption.split(',');
 
-            fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
+            fetch('https://your-server-url/generate-invoice', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -27,7 +33,9 @@
                     window.Telegram.WebApp.openInvoice(data.invoiceLink, (status) => {
                         if (status === "paid") {
                             // Update UI for successful payment
-                            alert("Payment successful!");
+                            userPoints += parseInt(points); // Add points to userPoints
+                            alert("Payment successful! You have received " + points + " points.");
+                            updatePointsDisplay(); // Update points display
                             document.getElementById("payment-button").innerText = "Payment Completed";
                         } else {
                             alert("Payment failed or canceled.");
@@ -42,18 +50,24 @@
                 alert("An error occurred while generating the invoice.");
             });
         }
+
+        // Initialize points display on page load
+        window.onload = function() {
+            updatePointsDisplay();
+        }
     </script>
 </head>
 <body>
     <h1>Welcome to the Payment Mini App</h1>
     <label for="points-select">Choose a purchase option:</label>
     <select id="points-select">
-        <option value="100,1">100 Points - 1 Stars</option>
+        <option value="100,20">100 Points - 20 Stars</option>
         <option value="200,40">200 Points - 40 Stars</option>
         <option value="500,100">500 Points - 100 Stars</option>
         <!-- Add more options as needed -->
     </select>
     <br><br>
     <button id="payment-button" onclick="handlePayment()">Purchase</button>
+    <h2 id="points-display">Your Points: 0</h2> <!-- Display user points -->
 </body>
 </html>
