@@ -1480,7 +1480,7 @@ async function shareToTelegramlink() {
         }
 
         function handlePayment() {
-            const selectedOption = document.getElementById("points-select").value;
+            const selectedOption = document.getElementById("points-selectt").value;
             const [points, stars] = selectedOption.split(',');
 
             fetch('https://telegram-bot-degen-town.replit.app/generate-invoice', {
@@ -1501,7 +1501,7 @@ async function shareToTelegramlink() {
                             userPoints += parseInt(points);
                             showPopupaaa(`Payment successful! You have received ${points} points 🎉`);
                             updatePointsDisplay();
-                            document.getElementById("payment-button").innerText = "Payment Completed";
+                            document.getElementById("payment-buttont").innerText = "Payment Completed";
                         } else {
                             showPopupaaa("Payment failed or canceled");
                         }
@@ -1535,14 +1535,14 @@ async function shareToTelegramlink() {
         border-top-right-radius: 10px;
         padding-bottom: 14px;">Buy Points</h2>
     <div style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
-        <select id="points-select" style="color: #1e1d22 !important; font-weight: 595; padding: 10px; border-radius: 5px; font-size: 17px; background-color: #f8f9fa; transition: border-color 0.3s; margin-bottom: 10px;">
+        <select id="points-selectt" style="color: #1e1d22 !important; font-weight: 595; padding: 10px; border-radius: 5px; font-size: 17px; background-color: #f8f9fa; transition: border-color 0.3s; margin-bottom: 10px;">
             <option value="700,1">700 Points = 1 Stars ⭐</option>
             <option value="1500,100">1500 Points = 100 Stars ⭐</option>
             <option value="5000,250">5000 Points = 250 Stars ⭐</option>
             <option value="10000,500">10000 Points = 500 Stars ⭐</option>
             <option value="100000,2000">100000 Points = 2000 Stars ⭐</option>
         </select>
-        <button onclick="handlePayment()" id="payment-button" style="
+        <button onclick="handlePayment()" id="payment-buttont" style="
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
