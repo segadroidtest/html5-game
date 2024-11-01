@@ -5,11 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Telegram Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-     <script>
-        let userPoints = 0; // Initialize user points
+    <style>
+        /* Style for the popup */
+        #popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #383747;
+            color: white;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            width: 80%;
+            max-width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        #popup h3 {
+            margin: 0;
+            font-size: 1.2em;
+        }
+        #popup p {
+            margin: 10px 0;
+        }
+    </style>
+    <script>
+        let userPoints = 0;
 
         function updatePointsDisplay() {
             document.getElementById("points-display").innerText = `Your Points: ${userPoints}`;
+        }
+
+        function showPopup(message) {
+            const popup = document.getElementById("popup");
+            document.getElementById("popup-message").innerText = message;
+            popup.style.display = "block";
+
+            // Hide the popup automatically after 2 seconds
+            setTimeout(() => {
+                popup.style.display = "none";
+            }, 2000);
         }
 
         function handlePayment() {
@@ -22,36 +58,33 @@
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    points: parseInt(points), // Number of points
-                    stars: parseInt(stars)    // Number of stars
+                    points: parseInt(points),
+                    stars: parseInt(stars)
                 }),
             })
             .then(response => response.json())
             .then(data => {
                 if (data.invoiceLink) {
-                    // Open the invoice link in the Telegram Web App
                     window.Telegram.WebApp.openInvoice(data.invoiceLink, (status) => {
                         if (status === "paid") {
-                            // Update UI for successful payment
-                            userPoints += parseInt(points); // Add points to userPoints
-                            alert("Payment successful! You have received " + points + " points.");
-                            updatePointsDisplay(); // Update points display
+                            userPoints += parseInt(points);
+                            showPopup(`Payment successful! You have received ${points} points 🎉`);
+                            updatePointsDisplay();
                             document.getElementById("payment-button").innerText = "Payment Completed";
                         } else {
-                            alert("Payment failed or canceled.");
+                            showPopup("Payment failed or canceled");
                         }
                     });
                 } else {
-                    alert("Error: Invoice link not received.");
+                    showPopup("Error: Invoice link not received.");
                 }
             })
             .catch(error => {
                 console.error("Error generating invoice:", error);
-                alert("An error occurred while generating the invoice.");
+                showPopup("An error occurred while generating the invoice.");
             });
         }
 
-        // Initialize points display on page load
         window.onload = function() {
             updatePointsDisplay();
         }
@@ -59,42 +92,47 @@
 </head>
 <body>
 
+<div style="text-align: center;background: #383747;margin-bottom: 0px;height: 180px;border-radius: 10px;border: 1px solid #101013;">
+    <h2 style="
+        text-align: center;
+        margin-top: 0px;
+        color: #ffffff;
+        font-size: 17px;
+        font-weight: 600;
+        background: #1e1d22;
+        padding-top: 10px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding-bottom: 14px;">Buy Points</h2>
+    <div style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
+        <select id="points-select" style="color: #1e1d22 !important; font-weight: 595; padding: 10px; border-radius: 5px; font-size: 17px; background-color: #f8f9fa; transition: border-color 0.3s; margin-bottom: 10px;">
+            <option value="700,1">700 Points = 1 Stars ⭐</option>
+            <option value="1500,100">1500 Points = 100 Stars ⭐</option>
+            <option value="5000,250">5000 Points = 250 Stars ⭐</option>
+            <option value="10000,500">10000 Points = 500 Stars ⭐</option>
+            <option value="100000,2000">100000 Points = 2000 Stars ⭐</option>
+        </select>
+        <button onclick="handlePayment()" id="payment-button" style="
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #1f9611;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            font-weight: bold;">
+            Purchase
+        </button>
+    </div>
+</div>
 
+<h2 id="points-display" style="text-align: center;">Your Points: 0</h2>
 
+<!-- Popup for messages -->
+<div id="popup" style="display: block;font-size: 17px;z-index: 999;position: fixed;top: 50%;left: 50%;transform: translate(-50%, -50%);background: rgb(30, 29, 34);color: white;padding: 20px;opacity: 0.88;border-radius: 10px;width: 60%;font-weight: 600;text-align: center;">
+    <p id="popup-message"></p>
+</div>
 
-            <div style="text-align: center;background: #383747;margin-bottom: 0px;height: 180px;border-radius: 10px;border: 1px solid #101013;">
-            <h2 style="
-                text-align: center;
-                margin-top: 0px;
-                color: #ffffff;
-                font-size: 17px;
-                font-weight: 600;
-                background: #1e1d22;
-                padding-top: 10px;
-                border-top-left-radius: 10px;
-                border-top-right-radius: 10px;
-                padding-bottom: 14px;">Buy Points</h2>
-<div style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
-    <select id="points-select" style="color: #1e1d22 !important; font-weight: 595; padding: 10px; border-radius: 5px; font-size: 17px; background-color: #f8f9fa; transition: border-color 0.3s; margin-bottom: 10px; /* Space below the dropdown */ ">
-        <option value="700,1">700 Points = 1 Stars ⭐</option>
-        <option value="1500,100">1500 Points = 100 Stars ⭐</option>
-        <option value="5000,250">5000 Points = 250 Stars ⭐</option>
-        <option value="10000,500">10000 Points = 500 Stars ⭐</option>
-        <option value="100000,2000">100000 Points = 2000 Stars ⭐</option>
-        <!-- Add more options as needed -->
-    </select>
-    <button onclick="handlePayment()" style="
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px; 
-        background-color: #1f9611; 
-        color: white; 
-        font-size: 16px; 
-        cursor: pointer; 
-        transition: background-color 0.3s, transform 0.2s;
-        font-weight: bold;
-    ">
-        Purchase
-    </button>
 </body>
 </html>
