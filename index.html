@@ -7,26 +7,21 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         function handlePayment() {
-            fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
+            fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {  // Replace with your backend URL
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ /* Add any additional data you need here */ }),
+                body: JSON.stringify({ /* Add any additional data if necessary */ }),
             })
             .then(response => response.json())
             .then(data => {
                 if (data.invoiceLink) {
-                    // Open the invoice link in the Telegram Web App
-                    window.Telegram.WebApp.openInvoice(data.invoiceLink, (status) => {
-                        if (status === "paid") {
-                            // Update UI for successful payment
-                            alert("Payment successful!");
-                            document.getElementById("payment-button").innerText = "Payment Completed";
-                        } else {
-                            alert("Payment failed or canceled.");
-                        }
-                    });
+                    // Open the invoice within the Telegram app
+                    window.Telegram.WebApp.openTelegramLink(data.invoiceLink);
+                    
+                    // Start checking payment status
+                    confirmPaymentStatus();
                 } else {
                     alert("Error: Invoice link not received.");
                 }
@@ -35,6 +30,20 @@
                 console.error("Error generating invoice:", error);
                 alert("An error occurred while generating the invoice.");
             });
+        }
+
+        async function confirmPaymentStatus() {
+            // Poll the backend every 5 seconds to check if payment was successful
+            const interval = setInterval(async () => {
+                const response = await fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/check-payment-status'); // Replace with your backend URL
+                const data = await response.json();
+
+                if (data.paymentStatus === "paid") {
+                    alert("Payment successful!");
+                    document.getElementById("payment-button").innerText = "Payment Completed";
+                    clearInterval(interval); // Stop polling
+                }
+            }, 5000); // Poll every 5 seconds
         }
     </script>
 </head>
