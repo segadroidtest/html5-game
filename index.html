@@ -7,7 +7,6 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         function handlePayment() {
-            // API call to your server to generate the invoice link
             fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
                 method: 'POST',
                 headers: {
@@ -15,9 +14,14 @@
                 },
                 body: JSON.stringify({ /* Add any additional data you need here */ }),
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
-                // Use WebApp SDK to open the invoice link
+                console.log("Invoice link generated:", data.invoiceLink); // Log invoice link
                 window.Telegram.WebApp.openInvoice(data.invoiceLink);
             })
             .catch(error => {
@@ -26,12 +30,14 @@
             });
         }
 
-        // Listen for events from the Telegram Web App
+        // Check for payment confirmation events
         window.Telegram.WebApp.onEvent('payment', (event) => {
+            console.log("Payment event received:", event); // Log payment event for debugging
             if (event.status === "paid") {
-                // Handle successful payment here
                 alert("Payment successful!");
                 document.getElementById("paymentButton").innerText = "Payment Completed";
+            } else {
+                alert("Payment not successful. Status: " + event.status);
             }
         });
     </script>
