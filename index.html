@@ -18,22 +18,26 @@
             .then(response => response.json())
             .then(data => {
                 // Use WebApp SDK to open the invoice link
-                window.Telegram.WebApp.openInvoice(data.invoiceLink, (status) => {
-                    if (status === "paid") {
-                        // Handle successful payment here
-                        alert("Payment successful!");
-                    }
-                });
+                window.Telegram.WebApp.openInvoice(data.invoiceLink);
             })
             .catch(error => {
                 console.error("Error generating invoice:", error);
                 alert("An error occurred while generating the invoice.");
             });
         }
+
+        // Listen for events from the Telegram Web App
+        window.Telegram.WebApp.onEvent('payment', (event) => {
+            if (event.status === "paid") {
+                // Handle successful payment here
+                alert("Payment successful!");
+                document.getElementById("paymentButton").innerText = "Payment Completed";
+            }
+        });
     </script>
 </head>
 <body>
     <h1>Welcome to the Payment Mini App</h1>
-    <button onclick="handlePayment()">Pay with Telegram Stars</button>
+    <button id="paymentButton" onclick="handlePayment()">Pay with Telegram Stars</button>
 </body>
 </html>
