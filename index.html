@@ -6,44 +6,35 @@
     <title>Telegram Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-function handlePayment() {
-    const userId = window.Telegram.WebApp.initDataUnsafe.user.id; // Get Telegram User ID
-
-    fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userId }), // Send userId to backend
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Optionally trigger payment status check here if needed
-            confirmPaymentStatus();
-        } else {
-            alert("Error: Invoice link not received.");
-        }
-    })
-    .catch(error => {
-        console.error("Error generating invoice:", error);
-        alert("An error occurred while generating the invoice.");
-    });
-}
-
-
-        async function confirmPaymentStatus() {
-            // Poll the backend every 5 seconds to check if payment was successful
-            const interval = setInterval(async () => {
-                const response = await fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/check-payment-status'); // Replace with your backend URL
-                const data = await response.json();
-
-                if (data.paymentStatus === "paid") {
-                    alert("Payment successful!");
-                    document.getElementById("payment-button").innerText = "Payment Completed";
-                    clearInterval(interval); // Stop polling
+        function handlePayment() {
+            fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ /* Add any additional data you need here */ }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.invoiceLink) {
+                    // Open the invoice link in the Telegram Web App
+                    window.Telegram.WebApp.openInvoice(data.invoiceLink, (status) => {
+                        if (status === "paid") {
+                            // Update UI for successful payment
+                            alert("Payment successful!");
+                            document.getElementById("payment-button").innerText = "Payment Completed";
+                        } else {
+                            alert("Payment failed or canceled.");
+                        }
+                    });
+                } else {
+                    alert("Error: Invoice link not received.");
                 }
-            }, 5000); // Poll every 5 seconds
+            })
+            .catch(error => {
+                console.error("Error generating invoice:", error);
+                alert("An error occurred while generating the invoice.");
+            });
         }
     </script>
 </head>
