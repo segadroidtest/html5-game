@@ -886,7 +886,22 @@ function updateGoldBalance(userId, earnedGold, callback) {
             <span style="font-weight: 500; text-align: center;">Available points:</span>
         </div>
         <span id="points-earned" style="margin-top: 5px; text-align: center; font-size: 35px; width: 100%;">0</span>
-
+          <button onclick="openPurchasePopup()" style="
+    background: linear-gradient(to bottom, #48a34c, #337335);
+    border: none;
+    color: white;
+    padding: 5px 2px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 15px;
+    width: 40%;
+    font-weight: bold;
+    margin-bottom: 0px;
+">Buy Points<img src="assets/img/littlediamond.png" style="height: 15px;padding-right: 0px;margin-bottom: -3px;padding-left: 5px;"></button>
 
 <div id="purchase-popup" style="margin: 0px !important; padding: 0px !important;display: none;position: fixed; z-index: 1; left: 0px; top: 0px; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.6);">
     <div id="purchase-popuperror1" style="border-radius: 10px;display: none;z-index: 1000;text-align: center;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);background: rgb(22 22 32);color: white;padding: 20px;op;opacity: 0.98;rder-radius: 10px;width: 70%;font-weight: 600;">
@@ -1450,7 +1465,7 @@ async function shareToTelegramlink() {
         }
 
         function handlePayment() {
-            const selectedOption = document.getElementById("points-select").value;
+            const selectedOption = document.getElementById("points-selectt").value;
             const [points, stars] = selectedOption.split(',');
 
             fetch('https://telegram-bot-degen-town.replit.app/generate-invoice', {
@@ -1471,7 +1486,7 @@ async function shareToTelegramlink() {
                             userPoints += parseInt(points);
                             showPopupaaa(`Payment successful! You have received ${points} points 🎉`);
                             updatePointsDisplay();
-                            document.getElementById("payment-button").innerText = "Payment Completed";
+                            document.getElementById("payment-buttont").innerText = "Payment Completed";
                         } else {
                             showPopupaaa("Payment failed or canceled");
                         }
@@ -1505,14 +1520,14 @@ async function shareToTelegramlink() {
         border-top-right-radius: 10px;
         padding-bottom: 14px;">Buy Points</h2>
     <div style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
-        <select id="points-select" style="color: #1e1d22 !important; font-weight: 595; padding: 10px; border-radius: 5px; font-size: 17px; background-color: #f8f9fa; transition: border-color 0.3s; margin-bottom: 10px;">
+        <select id="points-selectt" style="color: #1e1d22 !important; font-weight: 595; padding: 10px; border-radius: 5px; font-size: 17px; background-color: #f8f9fa; transition: border-color 0.3s; margin-bottom: 10px;">
             <option value="700,1">700 Points = 1 Stars ⭐</option>
             <option value="1500,100">1500 Points = 100 Stars ⭐</option>
             <option value="5000,250">5000 Points = 250 Stars ⭐</option>
             <option value="10000,500">10000 Points = 500 Stars ⭐</option>
             <option value="100000,2000">100000 Points = 2000 Stars ⭐</option>
         </select>
-        <button onclick="handlePayment()" id="payment-button" style="
+        <button onclick="handlePayment()" id="payment-buttont" style="
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
