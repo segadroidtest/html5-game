@@ -904,37 +904,38 @@ function updateGoldBalance(userId, earnedGold, callback) {
                 padding-bottom: 14px;">Buy Points</h2>
 <div style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
 <script>
-    function handlePayment(selectElement) {
-        // Get the selected option
-        const selectedOption = selectElement.options[selectElement.selectedIndex];
-        const price = selectedOption.value;
-        const points = selectedOption.id;
+function handlePayment(selectElement) {
+    const selectedOption = selectElement.options[selectElement.selectedIndex];
+    const price = selectedOption.value;
+    const points = selectedOption.id;
 
-        // API call to your server to generate the invoice link
-        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                points: points // Send points as defined in each option's ID
-            }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            // Use WebApp SDK to open the invoice link
-            window.Telegram.WebApp.openInvoice(data.invoiceLink, (status) => {
-                if (status === "paid") {
-                    alert("Payment successful!");
-                    updateUserPoints(points); // Update user points
-                }
-            });
-        })
-        .catch(error => {
-            console.error("Error generating invoice:", error);
-            alert("An error occurred while generating the invoice.");
+    fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ points }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Use WebApp SDK to open the invoice link
+        window.Telegram.WebApp.openInvoice(data.invoiceLink, (status) => {
+            if (status === "paid") {
+                alert("Payment successful!");
+                updateUserPoints(points); // Call to update user's points
+            } else if (status === "pending") {
+                alert("Payment is still pending. Please wait for confirmation.");
+            } else {
+                alert("Payment failed or was canceled.");
+            }
         });
-    }
+    })
+    .catch(error => {
+        console.error("Error generating invoice:", error);
+        alert("An error occurred while generating the invoice.");
+    });
+}
+
 
     function updateUserPoints(points) {
         // Update user points in the database after successful payment
