@@ -14,36 +14,32 @@
                 },
                 body: JSON.stringify({ /* Add any additional data you need here */ }),
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                console.log("Invoice link generated:", data.invoiceLink); // Log invoice link
-                window.Telegram.WebApp.openInvoice(data.invoiceLink);
+                if (data.invoiceLink) {
+                    // Open the invoice link in the Telegram Web App
+                    window.Telegram.WebApp.openInvoice(data.invoiceLink, (status) => {
+                        if (status === "paid") {
+                            // Update UI for successful payment
+                            alert("Payment successful!");
+                            document.getElementById("payment-button").innerText = "Payment Completed";
+                        } else {
+                            alert("Payment failed or canceled.");
+                        }
+                    });
+                } else {
+                    alert("Error: Invoice link not received.");
+                }
             })
             .catch(error => {
                 console.error("Error generating invoice:", error);
                 alert("An error occurred while generating the invoice.");
             });
         }
-
-        // Check for payment confirmation events
-        window.Telegram.WebApp.onEvent('payment', (event) => {
-            console.log("Payment event received:", event); // Log payment event for debugging
-            if (event.status === "paid") {
-                alert("Payment successful!");
-                document.getElementById("paymentButton").innerText = "Payment Completed";
-            } else {
-                alert("Payment not successful. Status: " + event.status);
-            }
-        });
     </script>
 </head>
 <body>
     <h1>Welcome to the Payment Mini App</h1>
-    <button id="paymentButton" onclick="handlePayment()">Pay with Telegram Stars</button>
+    <button id="payment-button" onclick="handlePayment()">Pay with Telegram Stars</button>
 </body>
 </html>
