@@ -1,68 +1,85 @@
-<div style="text-align: center; background: #383747; margin-bottom: 0px; height: 180px; border-radius: 10px; border: 1px solid #101013;">
-    <h2 style="text-align: center; margin-top: 0px; color: #ffffff; font-size: 17px; font-weight: 600; background: #1e1d22; padding-top: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px; padding-bottom: 14px;">Buy Points</h2>
-    <div style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
-        <select id="diamond-option" style="color: #1e1d22 !important; font-weight: 595; padding: 10px; border-radius: 5px; font-size: 17px; background-color: #f8f9fa; transition: border-color 0.3s; margin-bottom: 10px;" onfocus="this.style.borderColor='#0056b3'" onblur="this.style.borderColor='#007bff'">
-            <option value="1" data-points="700">700 Points = 50 Stars ⭐</option>
-            <option value="100" data-points="1500">1500 Points = 100 Stars ⭐</option>
-            <option value="250" data-points="5000">5000 Points = 250 Stars ⭐</option>
-            <option value="500" data-points="10000">10k Points = 500 Stars ⭐</option>
-            <option value="2000" data-points="100000">100k Points = 2000 Stars ⭐</option>
-        </select>
-        <button onclick="submitPurchase()" style="padding: 10px 20px; border: none; border-radius: 5px; background-color: #1f9611; color: white; font-size: 16px; cursor: pointer; transition: background-color 0.3s, transform 0.2s; font-weight: bold;">Purchase</button>
-    </div>
-</div>
-
 <script>
-function submitPurchase() {
-    const diamondOption = document.getElementById("diamond-option");
-    const selectedOption = diamondOption.options[diamondOption.selectedIndex];
-    const stars = parseInt(selectedOption.value); // Stars to pay
-    const points = getPointsForStars(stars); // Function to map stars to points
+    function handlePayment(selectElement) {
+        // Get the selected option
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const price = selectedOption.value;
+        const points = selectedOption.id;
 
-    // Prepare the data to send to the backend
-    const data = {
-        userId: "229351215", // Replace with actual user ID
-        stars: stars,
-        points: points
-    };
-
-    fetch("https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.error) {
-            alert(data.error);
-        } else {
-            alert(data.message); // Show success message
-        }
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        alert("There was an error processing your request.");
-    });
-}
-
-// Helper function to get points for corresponding stars
-function getPointsForStars(stars) {
-    switch (stars) {
-        case 1:
-            return 700;
-        case 100:
-            return 1500;
-        case 250:
-            return 5000;
-        case 500:
-            return 10000;
-        case 2000:
-            return 100000;
-        default:
-            return 0; // Fallback
+        // API call to your server to generate the invoice link
+        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                points: points // Send points as defined in each option's ID
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Use WebApp SDK to open the invoice link
+            window.Telegram.WebApp.openInvoice(data.invoiceLink, (status) => {
+                if (status === "paid") {
+                    alert("Payment successful!");
+                    updateUserPoints(points); // Update user points
+                }
+            });
+        })
+        .catch(error => {
+            console.error("Error generating invoice:", error);
+            alert("An error occurred while generating the invoice.");
+        });
     }
-}
 
+    function updateUserPoints(points) {
+        // Update user points in the database after successful payment
+        fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/update-points', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId: '229351215',
+                points: points
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.message);
+            alert("User points updated successfully!");
+        })
+        .catch(error => {
+            console.error("Error updating user points:", error);
+            alert("An error occurred while updating user points.");
+        });
+    }
 </script>
+
+<select id="diamond-options" style="color: #1e1d22 !important; font-weight: 595;
+        padding: 10px;
+        border-radius: 5px; 
+        font-size: 17px; 
+        background-color: #f8f9fa; 
+        transition: border-color 0.3s; 
+        margin-bottom: 10px;" 
+        onfocus="this.style.borderColor='#0056b3'" 
+        onblur="this.style.borderColor='#007bff'">
+    <option value="50" id="700">700 Points = 50 Stars ⭐</option>
+    <option value="100" id="1500">1500 Points = 100 Stars ⭐</option>
+    <option value="250" id="5000">5000 Points = 250 Stars ⭐</option>
+    <option value="500" id="10000">10k Points = 500 Stars ⭐</option>
+    <option value="2000" id="100000">100k Points = 2000 Stars ⭐</option>
+</select>
+<button onclick="handlePayment(document.getElementById('diamond-options'))" style="
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px; 
+    background-color: #1f9611; 
+    color: white; 
+    font-size: 16px; 
+    cursor: pointer; 
+    transition: background-color 0.3s, transform 0.2s;
+    font-weight: bold;
+">
+    Purchase
+</button>
