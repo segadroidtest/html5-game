@@ -932,7 +932,7 @@ function updateGoldBalance(userId, earnedGold, callback) {
             const selectedOption = document.getElementById("points-select").value;
             const [points, stars] = selectedOption.split(',');
 
-            fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
+            fetch('https://telegram-bot-degen-town.replit.app/generate-invoice', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1483,7 +1483,7 @@ async function shareToTelegramlink() {
             const selectedOption = document.getElementById("points-select").value;
             const [points, stars] = selectedOption.split(',');
 
-            fetch('https://8cca6e28-57f1-480d-b1c3-bfd484df182d-00-1f9iqamc2bpqc.spock.replit.dev/generate-invoice', {
+            fetch('https://telegram-bot-degen-town.replit.app/generate-invoice', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
