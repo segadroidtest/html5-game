@@ -818,6 +818,32 @@ border-bottom-left-radius: 10px;
         #popupaaa p {
             margin: 10px 0;
         }
+
+        #purchase-popup-overlay {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+#purchase-popup {
+    padding: 0px;
+    width: 80%;
+    max-width: 480px;
+    border-radius: 10px;
+    height: auto;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #383747;
+    border: 1px solid #101013;
+}
+
     </style>
 
 
@@ -883,138 +909,98 @@ function updateGoldBalance(userId, earnedGold, callback) {
     <div class="stat" style="display: flex; flex-direction: column; align-items: center; font-weight: bold;">
         <div style="display: flex; align-items: center; justify-content: center; width: 100%;">
             <img src="assets/img/littlediamond.png" style="height: 15px; padding-right: 7px;">
-            <span style="font-weight: 500; text-align: center;">Available pointss:</span>
+            <span style="font-weight: 500; text-align: center;">Available points</span>
         </div>
         <span id="points-earned" style="margin-top: 5px; text-align: center; font-size: 35px; width: 100%;">0</span>
-          <button onclick="openPurchasePopupTG()" style="
-    background: linear-gradient(to bottom, #48a34c, #337335);
-    border: none;
-    color: white;
-    padding: 5px 2px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 15px;
-    width: 40%;
-    font-weight: bold;
-    margin-bottom: 0px;
-">Buy Points<img src="assets/img/littlediamond.png" style="height: 15px;padding-right: 0px;margin-bottom: -3px;padding-left: 5px;"></button>
+
+
+          <button onclick="openPurchasePopup()" style="background: linear-gradient(to bottom, #48a34c, #337335); border: none; color: white; padding: 5px 2px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 15px; width: 40%; font-weight: bold; margin-bottom: 0px;">Buy Points<img src="assets/img/littlediamond.png" style="height: 15px;padding-right: 0px;margin-bottom: -3px;padding-left: 5px;"></button>
 
 <div id="purchase-popup-overlay" style="display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6);">
     <div id="purchase-popup" style="padding: 0px; width: 80%; max-width: 480px; border-radius: 10px; height: auto; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #383747; border: 1px solid #101013;">
-     
-        <span id="closePopupButtonTG" onclick="closePurchasePopupTG()" style="color: white; float: right; font-size: 28px; font-weight: bold; cursor: pointer; background: #c02b2b; padding: 4px 10px; border-top-right-radius: 10px; margin: 1px;">×</span>
+        <span id="closePopupButtonbuy" onclick="closePopup()" style="color: white; float: right; font-size: 28px; font-weight: bold; cursor: pointer; background: #c02b2b; padding: 4px 10px; border-top-right-radius: 10px; margin: 1px;">×</span>
 
+        <h2 style="text-align: center; margin-top: 0px; color: #ffffff; font-size: 17px; font-weight: 600; background: #1e1d22; padding: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px;">Buy Points</h2>
+        
+        <div style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
+            <select id="points-select" style="width: 100%; color: #1e1d22; font-weight: 595; padding: 10px; border-radius: 5px; font-size: 17px; background-color: #f8f9fa; margin-bottom: 10px;">
+                <option value="700,50">700 Points = 50 Stars ⭐</option>
+                <option value="1500,100">1500 Points = 100 Stars ⭐</option>
+                <option value="5000,250">5000 Points = 250 Stars ⭐</option>
+                <option value="10000,500">10000 Points = 500 Stars ⭐</option>
+                <option value="100000,2000">100000 Points = 2000 Stars ⭐</option>
+            </select>
+            <button onclick="handlePayment()" id="payment-button" style="padding: 10px 20px; border: none; border-radius: 5px; background-color: #1f9611; color: white; font-size: 16px; cursor: pointer; font-weight: bold;">
+                Purchase
+            </button>
+        </div>
+    </div>
 
-    <script>
-        function openPurchasePopupTG() {
+    <div id="popupaaa" style="display: none; font-size: 17px; z-index: 1000; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 5px; opacity: 0.88; border-radius: 10px; width: 60%; font-weight: 600; text-align: center;">
+        <p id="popupaaa-message"></p>
+    </div>
+</div>
+
+<script type="text/javascript">
+    
+function openPopup() {
     document.getElementById("purchase-popup-overlay").style.display = "block";
-    document.getElementById("purchase-popup").style.display = "block";
 }
 
-function closePurchasePopupTG() {
+function closePopup() {
     document.getElementById("purchase-popup-overlay").style.display = "none";
-    document.getElementById("purchase-popup").style.display = "none";
+}
+
+function showPopupaaa(message) {
+    const popupaaa = document.getElementById("popupaaa");
+    document.getElementById("popupaaa-message").innerText = message;
+    popupaaa.style.display = "block";
+
+    // Hide the popup automatically after 1.4 seconds
+    setTimeout(() => {
+        popupaaa.style.display = "none";
+    }, 1400);
+}
+
+function handlePayment() {
+    const selectedOption = document.getElementById("points-select").value;
+    const [points, stars] = selectedOption.split(',');
+
+    fetch('https://telegram-bot-degen-town.replit.app/generate-invoice', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            points: parseInt(points),
+            stars: parseInt(stars)
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.invoiceLink) {
+            window.Telegram.WebApp.openInvoice(data.invoiceLink, (status) => {
+                if (status === "paid") {
+                    userPoints += parseInt(points);
+                    showPopupaaa(`Payment successful! You have received ${points} points 🎉`);
+                    updatePointsDisplay();
+                    document.getElementById("payment-button").innerText = "Payment Completed";
+                } else {
+                    showPopupaaa("Payment failed or canceled");
+                }
+            });
+        } else {
+            showPopupaaa("Error: Invoice link not received.");
+        }
+    })
+    .catch(error => {
+        console.error("Error generating invoice:", error);
+        showPopupaaa("An error occurred while generating the invoice.");
+    });
 }
 
 
-        let userPoints = 0;
-
-        function showPopupaaa(message) {
-            const popupaaa = document.getElementById("popupaaa");
-            document.getElementById("popupaaa-message").innerText = message;
-            popupaaa.style.display = "block";
-
-            // Hide the popup automatically after 2 seconds
-            setTimeout(() => {
-                popupaaa.style.display = "none";
-            }, 1400);
-        }
-
-        function handlePayment() {
-            const selectedOption = document.getElementById("points-select").value;
-            const [points, stars] = selectedOption.split(',');
-
-            fetch('https://telegram-bot-degen-town.replit.app/generate-invoice', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    points: parseInt(points),
-                    stars: parseInt(stars)
-                }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.invoiceLink) {
-                    window.Telegram.WebApp.openInvoice(data.invoiceLink, (status) => {
-                        if (status === "paid") {
-                            userPoints += parseInt(points);
-                            showPopupaaa(`Payment successful! You have received ${points} points 🎉`);
-                            updatePointsDisplay();
-                            document.getElementById("payment-button").innerText = "Payment Completed";
-                        } else {
-                            showPopupaaa("Payment failed or canceled");
-                        }
-                    });
-                } else {
-                    showPopupaaa("Error: Invoice link not received.");
-                }
-            })
-            .catch(error => {
-                console.error("Error generating invoice:", error);
-                showPopupaaa("An error occurred while generating the invoice.");
-            });
-        }
-
-        window.onload = function() {
-            updatePointsDisplay();
-        }
-    </script>
-<div style="text-align: center;background: #383747;margin-bottom: 0px;height: 180px;border-radius: 10px;border: 1px solid #101013;">
-    <h2 style="
-        text-align: center;
-        margin-top: 0px;
-        color: #ffffff;
-        font-size: 17px;
-        font-weight: 600;
-        background: #1e1d22;
-        padding-top: 10px;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-        padding-bottom: 14px;">Buy Points</h2>
-    <div style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
-        <select id="points-select" style="    width: 100% !important;color: #1e1d22 !important; font-weight: 595; padding: 10px; border-radius: 5px; font-size: 17px; background-color: #f8f9fa; transition: border-color 0.3s; margin-bottom: 10px;">
-            <option value="700,50">700 Points = 50 Stars ⭐</option>
-            <option value="1500,100">1500 Points = 100 Stars ⭐</option>
-            <option value="5000,250">5000 Points = 250 Stars ⭐</option>
-            <option value="10000,500">10000 Points = 500 Stars ⭐</option>
-            <option value="100000,2000">100000 Points = 2000 Stars ⭐</option>
-        </select>
-        <button onclick="handlePayment()" id="payment-button" style="
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #1f9611;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-            font-weight: bold;">
-            Purchase
-        </button>
-    </div>
-</div>
-<div id="popupaaa" style="display: none;font-size: 17px;z-index: 999;position: fixed;top: 50%;left: 50%;transform: translate(-50%, -50%);background: rgb(30, 29, 34);color: white;padding: 5px;opacity: 0.88;border-radius: 10px;width: 60%;font-weight: 600;text-align: center;">
-    <p id="popupaaa-message"></p>
-</div>
-
-    </div>
-</div>
+</script>
 
 <script>
     function purchasepopuperror1() {
@@ -1039,11 +1025,11 @@ document.getElementById('daily-checkin').style.opacity = '0.68';
 
 
 function openPurchasePopup() {
-    document.getElementById('purchase-popup').style.display = 'block';
+    document.getElementById('purchase-popup-overlay').style.display = 'block';
 }
 
 document.getElementById('closePopupButtonbuy').onclick = function() {
-    document.getElementById('purchase-popup').style.display = 'none';
+    document.getElementById('purchase-popup-overlay').style.display = 'none';
 }
 
 async function submitPurchase() {
