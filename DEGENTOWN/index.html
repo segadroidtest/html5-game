@@ -818,6 +818,15 @@ border-bottom-left-radius: 10px;
         #popupaaa p {
             margin: 10px 0;
         }
+        /* Styles for the diamond icon to prevent reloading */
+.diamond-icon {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    background-image: url('assets/img/littlediamond.png');
+    background-size: cover;
+    margin-left: 5px;
+}
     </style>
 
 
@@ -1883,8 +1892,8 @@ document.addEventListener("DOMContentLoaded", function() {
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     generateLeaderboard();
-    setInterval(updateUserRankAndPoints, 3000); // Update rank and points every 3 seconds
-    setInterval(generateLeaderboard, 60000); // Refresh leaderboard data every 1 minute
+    setInterval(updateUserRankAndPoints, 1500); // Update rank and points every 3 seconds
+    setInterval(generateLeaderboard, 300000); // Refresh leaderboard data every 1 minute
 });
 
 async function generateLeaderboard() {
@@ -1929,8 +1938,8 @@ function updateUserRankAndPointsDisplay(username, rank, points) {
                         <span style="display: block; color: white;">Rank: #${rank}</span>
                     </div>
                 </div>
-                <span style="color: white; margin-left: auto;">
-                    ${points} <img src="assets/img/littlediamond.png" style="width: 19px; height:19px; margin-bottom:-4px;border: none !important;">
+                <span style="color: white; margin-left: auto; display: flex; align-items: center;">
+                    ${points} <span class="diamond-icon"></span>
                 </span>
             </div>
         `;
@@ -1993,7 +2002,7 @@ function addLeaderboardEntry(username, points, rank, color) {
     usernameContainer.appendChild(rankSpan);
 
     const pointsSpan = document.createElement('span');
-    pointsSpan.innerHTML = `${points} <img src="assets/img/littlediamond.png" style="height: 15px;">`;
+    pointsSpan.innerHTML = `${points} <span class="diamond-icon"></span>`;
     pointsSpan.style.color = 'white';
     pointsSpan.style.marginLeft = 'auto';
 
