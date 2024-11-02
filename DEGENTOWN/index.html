@@ -832,20 +832,7 @@ border-bottom-left-radius: 10px;
             z-index: 1000; /* Make sure it covers everything */
 
         }
-                .spinner {
-            border: 8px solid rgba(0, 0, 0, 0.1); /* Light background for the spinner */
-            border-left-color: #ffffff; /* Blue color for the spinner */
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite; /* Infinite spin animation */
-        }
-
-        /* Spinner Animation */
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+       
     </style>
 
 
@@ -853,7 +840,7 @@ border-bottom-left-radius: 10px;
 </head>
 <body>
     <div id="loading">
-        <div class="spinner"></div> <!-- Stylish loader -->
+       Loading <!-- Stylish loader -->
     </div>
     <!-- Content Container -->
     <div class="content">
