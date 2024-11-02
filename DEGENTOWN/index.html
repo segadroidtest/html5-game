@@ -1389,27 +1389,13 @@ async function Invite3Friends() {
 
 async function updateInvite3FriendsSection(userId) {
     try {
-        // Add timestamp to avoid caching issues
         const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/referrals/${userId}?t=${new Date().getTime()}`);
         const data = await response.json();
-
-        // Log the fetched data to confirm it returns the correct response
-        console.log("Fetched Data:", data);
-
-        // Debug alert for mobile
-        alert(`Fetched Data on Mobile: ${JSON.stringify(data)}`);
+        console.log("Fetched Data:", data); // Debugging log
 
         const referralsCount = data.totalReferrals || 0;
-        const referralStatusElement = document.getElementById("referral-status-3-friends");
-        
-        // Update the referral count display
-        referralStatusElement.textContent = `${referralsCount}/3`;
+        document.getElementById("referral-status-3-friends").textContent = `${referralsCount}/3`;
 
-        // Check if the element is visible on mobile
-        referralStatusElement.style.display = 'block'; // Ensure visibility
-        referralStatusElement.style.color = 'red'; // For testing visibility
-
-        // Manage section interactivity based on referrals count
         const inviteSection = document.getElementById("invite-3-friends-section");
         if (referralsCount >= 3 && !data.invite3FriendsClaimed) {
             inviteSection.style.opacity = "1"; // Fully opaque
@@ -1420,16 +1406,8 @@ async function updateInvite3FriendsSection(userId) {
         }
     } catch (error) {
         console.error("Error fetching referral data:", error);
-        alert("Error fetching referral data: " + error.message); // Mobile alert for errors
     }
 }
-
-// Ensure the DOM is fully loaded before running updateInvite3FriendsSection
-window.onload = function () {
-    const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
-    updateInvite3FriendsSection(userId);
-};
-
 
 async function Invite10Friends() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
