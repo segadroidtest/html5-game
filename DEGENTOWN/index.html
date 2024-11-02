@@ -1771,6 +1771,9 @@ function copyLinkreferral() {
     }
 }
 
+function formatWithCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
     async function fetchPlayerCount() {
     try {
@@ -1780,7 +1783,7 @@ function copyLinkreferral() {
         }
         const data = await response.json();
         const playerCount = data.count || 0; // Adjust based on your API response structure
-        document.getElementById('player-count').textContent = `Hurry, ${playerCount} Degens joined so far! 🔥`;
+        document.getElementById('player-count').textContent = `Hurry, ${formatWithCommas(playerCount)} Degens joined so far! 🔥`;
     } catch (error) {
         console.error('Error fetching player count:', error);
         document.getElementById('player-count').textContent = 'Hurry, 0 Degens joined so far! 🔥'; // Default to 0 if there's an error
@@ -2736,25 +2739,28 @@ loadWithdrawAddress();
             }
         }
 
-        function updateProgressBar(totalDeposits) {
-            const progressBar = document.getElementById("progress-bar");
-            const progressText = document.getElementById("progress-text");
+function formatWithCommas(number) {
+    // Convert number to string, use regex to add commas
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
-            // Multiply total deposits by 5
-            const displayedTotal = totalDeposits * 5;
+function updateProgressBar(totalDeposits) {
+    const progressBar = document.getElementById("progress-bar");
+    const progressText = document.getElementById("progress-text");
 
-            // Update the displayed total if it's different from the lastTotalDeposits
-            if (displayedTotal !== lastTotalDeposits) {
-                lastTotalDeposits = displayedTotal; // Update the last total deposits
-                progressText.textContent = `$${formatWithCommas(displayedTotal.toFixed(2))} / $100,000`;
-                progressBar.style.width = `${Math.min((displayedTotal / goal) * 100, 100)}%`; // Update progress bar width
-            }
-        }
+    // Multiply total deposits by 5
+    const displayedTotal = totalDeposits * 5;
 
-        // Function to format the number with commas
-        function formatWithCommas(number) {
-            return number.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        }
+    // Update the displayed total if it's different from the lastTotalDeposits
+    if (displayedTotal !== lastTotalDeposits) {
+        lastTotalDeposits = displayedTotal; // Update the last total deposits
+        progressText.textContent = `$${formatWithCommas(displayedTotal.toFixed(2))} / $100,000`;
+        progressBar.style.width = `${Math.min((displayedTotal / goal) * 100, 100)}%`; // Update progress bar width
+    }
+}
+
+
+
 
         async function updatePage() {
             const totalDeposits = await fetchAllUsersDeposits();
