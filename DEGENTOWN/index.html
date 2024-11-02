@@ -1092,7 +1092,7 @@ if (result.success) {
 <div id="error-popup-50friends" class="popup" style="display: none; z-index: 1000; text-align: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgb(30, 29, 34); color: white; padding: 20px; opacity: 0.88; border-radius: 10px; width: 70%; font-weight: 600;height: auto;">
     You have already completed this task!
 </div>
-<div id="simple-popup" style="z-index: 1000;text-align: center;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);background: rgb(30, 29, 34);color: white;padding: 20px;opacity: 0.88;border-radius: 10px;width: 70%;font-weight: 600;height: auto;display: none;">
+<div id="simple-popups" style="z-index: 1000;text-align: center;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);background: rgb(30, 29, 34);color: white;padding: 20px;opacity: 0.88;border-radius: 10px;width: 70%;font-weight: 600;height: auto;display: none;">
     "💎 DEGEN TOWN" has been copied to your clipboard!
 </div>
 
@@ -1480,7 +1480,7 @@ window.addEventListener("load", () => {
     document.getElementById('invite-50-friends-section').addEventListener('click', Invite50Friends);
 });
 
-    function copyTextDegen(event) {
+    function copyTextDegen() {
         event.stopPropagation(); // Prevent the event from bubbling up to the <li>
         const textToCopy = "💎 DEGEN TOWN";
         navigator.clipboard.writeText(textToCopy).then(() => {
@@ -1497,7 +1497,7 @@ window.addEventListener("load", () => {
         // Hide the popup after 2 seconds
         setTimeout(() => {
             popup.style.display = "none";
-        }, 2000);
+        }, 1300);
     }
 </script>
 
