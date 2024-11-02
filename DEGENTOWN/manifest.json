@@ -1,0 +1,20 @@
+{
+  "name": "Degen Town",
+  "short_name": "DegenTown",
+  "theme_color": "#4f4e6c",  // Use a purple color code for your theme
+  "background_color": "#4f4e6c",  // Match this with your loading screen color
+  "display": "standalone",
+  "description": "",
+  "icons": [
+    {
+      "src": "icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
