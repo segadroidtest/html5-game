@@ -1479,6 +1479,26 @@ window.addEventListener("load", () => {
     document.getElementById('invite-10-friends-section').addEventListener('click', Invite10Friends);
     document.getElementById('invite-50-friends-section').addEventListener('click', Invite50Friends);
 });
+
+    function copyTextDegen(event) {
+        event.stopPropagation(); // Prevent the event from bubbling up to the <li>
+        const textToCopy = "💎 DEGEN TOWN";
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            showSimplePopup(); // Show the simple popup after successful copy
+        }).catch(err => {
+            console.error("Could not copy text: ", err);
+        });
+    }
+
+    function showSimplePopup() {
+        const popup = document.getElementById("simple-popup");
+        popup.style.display = "block"; // Show the popup
+
+        // Hide the popup after 2 seconds
+        setTimeout(() => {
+            popup.style.display = "none";
+        }, 2000);
+    }
 </script>
 
 
