@@ -1771,9 +1771,6 @@ function copyLinkreferral() {
     }
 }
 
-function formatWithCommas(number) {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
 
     async function fetchPlayerCount() {
     try {
@@ -1783,7 +1780,7 @@ function formatWithCommas(number) {
         }
         const data = await response.json();
         const playerCount = data.count || 0; // Adjust based on your API response structure
-        document.getElementById('player-count').textContent = `Hurry, ${formatWithCommas(playerCount)} Degens joined so far! 🔥`;
+        document.getElementById('player-count').textContent = `Hurry, ${playerCount} Degens joined so far! 🔥`;
     } catch (error) {
         console.error('Error fetching player count:', error);
         document.getElementById('player-count').textContent = 'Hurry, 0 Degens joined so far! 🔥'; // Default to 0 if there's an error
@@ -2775,10 +2772,7 @@ function updateProgressBar(totalDeposits) {
 
 
 
-// Function to format the number with commas
-function formatWithCommas(number) {
-    return number.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-}
+
 
 // Function to animate the progress value
 function animateValue(element, start, end, duration) {
