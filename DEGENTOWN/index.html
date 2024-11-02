@@ -10,7 +10,6 @@
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="manifest" href="manifest.json">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
     
@@ -350,19 +349,18 @@ function copyLink() {
 }
 </script>
 <script>
-    // Wait for the page to fully load
-    window.addEventListener("load", function() {
-        // Set a 3-second timeout before applying the fade-out effect
-        setTimeout(function() {
-            // Add the 'fade-out' class to trigger the transition
-            document.getElementById("splash-screen").classList.add("fade-out");
-            // Display main content after the fade-out effect completes
-            setTimeout(function() {
-                document.getElementById("splash-screen").style.display = "none";
-                document.getElementById("content").style.display = "block";
-            }, 1000); // 1000 milliseconds = duration of the fade-out transition
-        }, 1500); // 3000 milliseconds = 3 seconds
-    });
+// Wait for the page to fully load
+window.addEventListener("load", function() {
+    // Add the 'fade-out' class to trigger the transition immediately
+    document.getElementById("splash-screen").classList.add("fade-out");
+    
+    // Display main content after the fade-out effect completes
+    setTimeout(function() {
+        document.getElementById("splash-screen").style.display = "none";
+        document.getElementById("content").style.display = "block";
+    }, 1000); // 1000 milliseconds = duration of the fade-out transition
+});
+
 </script>
     <script src="js/qrcode.min.js"></script>
     <style>
