@@ -2736,28 +2736,25 @@ loadWithdrawAddress();
             }
         }
 
-function formatWithCommas(number) {
-    // Convert number to string, use regex to add commas
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+        function updateProgressBar(totalDeposits) {
+            const progressBar = document.getElementById("progress-bar");
+            const progressText = document.getElementById("progress-text");
 
-function updateProgressBar(totalDeposits) {
-    const progressBar = document.getElementById("progress-bar");
-    const progressText = document.getElementById("progress-text");
+            // Multiply total deposits by 5
+            const displayedTotal = totalDeposits * 5;
 
-    // Multiply total deposits by 5
-    const displayedTotal = totalDeposits * 5;
+            // Update the displayed total if it's different from the lastTotalDeposits
+            if (displayedTotal !== lastTotalDeposits) {
+                lastTotalDeposits = displayedTotal; // Update the last total deposits
+                progressText.textContent = `$${formatWithCommas(displayedTotal.toFixed(2))} / $100,000`;
+                progressBar.style.width = `${Math.min((displayedTotal / goal) * 100, 100)}%`; // Update progress bar width
+            }
+        }
 
-    // Update the displayed total if it's different from the lastTotalDeposits
-    if (displayedTotal !== lastTotalDeposits) {
-        lastTotalDeposits = displayedTotal; // Update the last total deposits
-        progressText.textContent = `$${formatWithCommas(displayedTotal.toFixed(2))} / $100,000`;
-        progressBar.style.width = `${Math.min((displayedTotal / goal) * 100, 100)}%`; // Update progress bar width
-    }
-}
-
-
-
+        // Function to format the number with commas
+        function formatWithCommas(number) {
+            return number.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
 
         async function updatePage() {
             const totalDeposits = await fetchAllUsersDeposits();
@@ -2772,7 +2769,10 @@ function updateProgressBar(totalDeposits) {
 
 
 
-
+// Function to format the number with commas
+function formatWithCommas(number) {
+    return number.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
 
 // Function to animate the progress value
 function animateValue(element, start, end, duration) {
