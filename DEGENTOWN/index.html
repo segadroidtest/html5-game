@@ -1743,7 +1743,7 @@ if (result.success) {
 
     <h3 style="text-align: center; color: #402104; margin: 20px 0;"></h3>
 
-    <div id="example-users" style="margin-left: 20px; margin-right: 20px;margin-bottom: 20px;background-color: rgba(46, 44, 55, 0.95); padding: 0px; border-radius: 10px;">
+    <div id="example-users" style="margin-left: 20px; margin-right: 20px;margin-bottom: 20px;background-color: rgba(46, 44, 55, 0.95); padding: 0px; border-radius: 10px;     border: 1px solid #101013;">
         <div class="invite-header" style="border: none !important;background: #1e1d22;padding: 10px 15px;display: flex;justify-content: space-between;border-top-left-radius: 10px;border-top-right-radius: 10px;">
             <span style="flex: 2; text-align: left; font-weight: bold;">Name</span>
             <span style="flex: 1; text-align: center; font-weight: bold;">Level</span>
@@ -1872,12 +1872,12 @@ document.addEventListener("DOMContentLoaded", function() {
     <div id="page2" class="page"  color: #ffffff; padding: 20px; border-radius: 0px; width: auto; margin: 0 auto; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); height: calc(100vh - 70px); overflow-y: auto;  padding-top: 7px !important;">
 
     <!-- Current User Rank -->
-    <div id="user-rank" class="user-info" style="width: auto !important; background: #1e1d22; color: white !important; border: 1px solid #101013;">
+    <div id="user-rank" class="user-info" style="width: auto !important; background: #1e1d22; color: white !important; border: 1px solid #101013;margin-top: 2px !important;">
         <!-- User Profile Picture and Username will be inserted here -->
     </div>
 
     <!-- Leaderboard Container -->
-    <div id="leaderboard-container" style="border-radius: 10px;background-color: rgba(46, 44, 55, 0.95); padding: 0; max-height: 60vh; overflow: hidden;">
+    <div id="leaderboard-container" style="border-radius: 10px;background-color: rgba(46, 44, 55, 0.95); padding: 0; max-height: 56.3vh; overflow: hidden; border: 1px solid #101013;">
         <div class="leaderboard-header" style="border-top-left-radius: 10px;
     border-top-right-radius: 10px;padding-top: 10px !important;padding-bottom: 30px !important;background: #1e1d22; padding: 15px; position: sticky; top: 0; z-index: 10;">
             <span style="float: left;font-weight: bold;">Players Name</span>
@@ -1892,7 +1892,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     generateLeaderboard();
-    setInterval(updateUserRankAndPoints, 1500); // Update rank and points every 3 seconds
+    setInterval(updateUserRankAndPoints, 1000); // Update rank and points every 3 seconds
     setInterval(generateLeaderboard, 300000); // Refresh leaderboard data every 1 minute
 });
 
