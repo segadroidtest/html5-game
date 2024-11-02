@@ -827,6 +827,16 @@ border-bottom-left-radius: 10px;
     background-size: cover;
     margin-left: 5px;
 }
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.5);
+        opacity: 0.7;
+    }
+}
     </style>
 
 
@@ -2939,10 +2949,11 @@ function showCopyPopup() {
             <i class="fas fa-users"></i>
             Invite
         </button>
-        <button onclick="showPage('page4')">
-            <i class="fas fa-tasks"></i>
-            Tasks
-        </button>
+<button onclick="showPage('page4')" style="position: relative;">
+    <i class="fas fa-tasks"></i> Tasks
+    <!-- Yellow notification dot -->
+    <span class="notification-dot" style="position: absolute; top: 0px; /* Adjust to your button dimensions */ right: 5px; /* Adjust to your button dimensions */ width: 10px; height: 10px; background-color: yellow; border-radius: 50%; box-shadow: 0 0 5px rgba(255, 255, 0, 0.8); animation: pulse 1.5s infinite;"></span>
+</button>
         <button onclick="showPage('page5')">
             <i class="fas fa-wallet"></i>
             Seed
