@@ -818,54 +818,13 @@ border-bottom-left-radius: 10px;
         #popupaaa p {
             margin: 10px 0;
         }
-
-                /* Loading overlay styles */
-        #loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(255, 255, 255, 0.8);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #3b3a59;
-            opacity: 1;
-            transition: opacity 0.3s ease;
-        }
-        #loading-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        .loader {
-            border: 5px solid #4f4e6c; /* Light grey */
-            border-top: 5px solid white; /* Blue */
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
     </style>
 
-    <script type="text/javascript">
-        // Show the loading overlay on page load
-        window.addEventListener('load', function() {
-            const loadingOverlay = document.getElementById('loading-overlay');
-            loadingOverlay.classList.add('hidden'); // Hide the overlay after content is loaded
-        });
-    </script>
+
    
 </head>
 <body>
-<div id="loading-overlay">
-        <div class="loader"></div>
-    </div>
+
     <!-- Content Container -->
     <div class="content">
         <!-- Home Page with only the canvas -->
