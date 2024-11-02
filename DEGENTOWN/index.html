@@ -1238,47 +1238,7 @@ if (result.success) {
         document.getElementById('daily-checkin').style.opacity = '0.68';
     }
 
-    async function checkAndAddEmoji() {
-        const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
-        const response = await fetch("https://telegram-bot-degen-town.replit.app/api/check-name", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ userId })
-        });
 
-        const data = await response.json();
-        const feedbackElement = document.getElementById("approved-icon-channel");
-
-        if (data.success) {
-            feedbackElement.style.display = "block"; // Show approved icon
-            alert(data.message); // Notify the user about the successful points awarded
-        } else {
-            alert(data.message); // Notify the user to update their name
-        }
-    }
-
-
-    function copyTextDegen(event) {
-        event.stopPropagation(); // Prevent the event from bubbling up to the <li>
-        const textToCopy = "💎 DEGEN TOWN";
-        navigator.clipboard.writeText(textToCopy).then(() => {
-            showSimplePopup(); // Show the simple popup after successful copy
-        }).catch(err => {
-            console.error("Could not copy text: ", err);
-        });
-    }
-
-    function showSimplePopup() {
-        const popup = document.getElementById("simple-popup");
-        popup.style.display = "block"; // Show the popup
-
-        // Hide the popup after 2 seconds
-        setTimeout(() => {
-            popup.style.display = "none";
-        }, 2000);
-    }
 
 
    async function subscribeToChannel() {
