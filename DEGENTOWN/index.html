@@ -1298,7 +1298,7 @@ async function shareToTelegramlink() {
 
 async function Invite3Friends() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
-    const response = await fetch('https://telegram-bot-1-segadroidstudio.replit.app/api/user/invite-three-friends', {
+    const response = await fetch('https://telegram-bot-degen-town.replit.app/api/user/invite-three-friends', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -1328,7 +1328,7 @@ async function Invite3Friends() {
 
 async function updateInvite3FriendsSection(userId) {
     try {
-        const response = await fetch(`https://telegram-bot-1-segadroidstudio.replit.app/api/user/referrals/${userId}?t=${new Date().getTime()}`);
+        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/referrals/${userId}?t=${new Date().getTime()}`);
         const data = await response.json();
         console.log("Fetched Data:", data); // Debugging log
 
@@ -1350,7 +1350,7 @@ async function updateInvite3FriendsSection(userId) {
 
 async function Invite10Friends() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
-    const response = await fetch('https://telegram-bot-1-segadroidstudio.replit.app/api/user/invite-ten-friends', {
+    const response = await fetch('https://telegram-bot-degen-town.replit.app/api/user/invite-ten-friends', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -1380,7 +1380,7 @@ async function Invite10Friends() {
 
 async function updateInvite10FriendsSection(userId) {
     try {
-        const response = await fetch(`https://telegram-bot-1-segadroidstudio.replit.app/api/user/referrals/${userId}?t=${new Date().getTime()}`);
+        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/referrals/${userId}?t=${new Date().getTime()}`);
         const data = await response.json();
         console.log("Fetched Data:", data); // Debugging log
 
@@ -1402,7 +1402,7 @@ async function updateInvite10FriendsSection(userId) {
 
 async function Invite50Friends() {
     const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
-    const response = await fetch('https://telegram-bot-1-segadroidstudio.replit.app/api/user/invite-fifty-friends', {
+    const response = await fetch('https://telegram-bot-degen-town.replit.app/api/user/invite-fifty-friends', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -1432,7 +1432,7 @@ async function Invite50Friends() {
 
 async function updateInvite50FriendsSection(userId) {
     try {
-        const response = await fetch(`https://telegram-bot-1-segadroidstudio.replit.app/api/user/referrals/${userId}?t=${new Date().getTime()}`);
+        const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/referrals/${userId}?t=${new Date().getTime()}`);
         const data = await response.json();
         console.log("Fetched Data:", data); // Debugging log
 
