@@ -853,6 +853,10 @@ background-color: orange;
     box-shadow: 0 0 8px rgb(255 155 0 / 60%);
     animation: pulse 1.5s infinite;
 }
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
     </style>
 
 
@@ -863,7 +867,27 @@ background-color: orange;
     <!-- Content Container -->
     <div class="content">
         <!-- Home Page with only the canvas -->
-       <div id="page1" class="page active" style="padding: 0; height: 100%; background: url(assets/img/splashscreen.png) no-repeat center center; background-size: cover;">
+
+
+
+ <div id="page1" class="page active" style="padding: 0; height: 100%; background: #3c3a5a; background-size: cover; position: relative;">
+    <div class="loading-circle" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; color: white; /* Text color for loading message */">
+        <div class="loader" style="border: 8px solid #4f4e6c; /* Outer circle */ border-top: 8px solid #343248; /* Loading color */ border-radius: 50%; width: 50px; /* Width of the circle */ height: 50px; /* Height of the circle */ animation: spin 1s linear infinite; /* Spin animation */"></div>
+        <span>Loading...</span>
+    </div>
+    <script>
+// Redirect to page6 after 2 seconds
+setTimeout(() => {
+    // Hide current page
+    document.getElementById('page1').classList.remove('active');
+
+    // Show page6
+    document.getElementById('page6').classList.add('active');
+}, 2000); // 2000 milliseconds = 2 seconds
+</script>
+</div>
+
+       <div id="page6" class="page active" style="padding: 0; height: 100%; background: url(assets/img/splashscreen.png) no-repeat center center; background-size: cover;">
     <!-- Canvas screen code -->
     <script type="text/javascript">
         window.gameLangs = ['en'];
@@ -2937,7 +2961,7 @@ function showCopyPopup() {
 
     <!-- Fixed App Bar -->
 <div class="app-bar">
-     <button onclick="showPage('page1')">
+     <button onclick="showPage('page6')">
             <i class="fas fa-gamepad"></i>
             Game
         </button>
