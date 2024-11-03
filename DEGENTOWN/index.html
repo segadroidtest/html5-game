@@ -853,10 +853,42 @@ background-color: orange;
     box-shadow: 0 0 8px rgb(255 155 0 / 60%);
     animation: pulse 1.5s infinite;
 }
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #3d3c5d; /* Purple background */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 1s ease; /* Transition effect for opacity */
+        }
+
+        /* Hidden state for splash screen */
+        #splash-screen.fade-out {
+            opacity: 0;
+            pointer-events: none; /* Prevent interaction */
+        }
+
+        /* Loading icon animation with matching colors */
+        .loading-icon {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #4f4e6c; /* Light purple */
+            border-top: 5px solid #ffffff; /* White to contrast with purple */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Spin animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 
 
@@ -871,10 +903,10 @@ background-color: orange;
 
 
  <div id="page1" class="page active" style="padding: 0; height: 100%; background: #403f61; background-size: cover; position: relative;">
-    <div class="loading-circle" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; color: white; /* Text color for loading message */">
-        <div class="loader" style="border: 8px solid #626084; /* Outer circle */ border-top: 8px solid #323043; /* Loading color */ border-radius: 50%; width: 50px; /* Width of the circle */ height: 50px; /* Height of the circle */ animation: spin 1s linear infinite; /* Spin animation */"></div>
-    </div>
-    <script>
+    <div id="splash-screen">
+    <div class="loading-icon"></div>
+</div>
+<script>
 // Redirect to page6 after 2 seconds
 setTimeout(() => {
     // Hide current page
