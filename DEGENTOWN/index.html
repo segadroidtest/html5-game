@@ -1427,7 +1427,12 @@ async function followXAccount() {
 
 
              else {
-                alert("There was an issue verifying the follow. Please try again.");
+                             document.getElementById('twitter-follow').style.opacity = '0.68';
+                    const popup = document.getElementById('error-popup');
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 3500);
             }
         } catch (error) {
             console.error("Error rewarding follow:", error);
