@@ -1392,21 +1392,21 @@ if (result.success) {
         }, 2000);
     }
 
-    async function followXAccount() {
-        const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
-        window.open("https://x.com/degentown_ton", "_blank");
+async function followXAccount() {
+    const userId = Telegram.WebApp.initDataUnsafe.user.id.toString();
+    window.open("https://x.com/degentown_ton", "_blank");
 
-        // Send request to the backend to check follow status and award points
-        try {
-            const response = await fetch('https://telegram-bot-degen-town.replit.app/api/follow-reward', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId }) // Replace 'USER_ID' with the actual user's ID
-            });
+    // Send request to backend
+    try {
+        const response = await fetch('https://telegram-bot-degen-town.replit.app/api/follow-reward', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId }) // Replace 'USER_ID' dynamically
+        });
 
-            const result = await response.json();
+        const result = await response.json();
 
-            if (result.success) {
+        if (result.success) {
         document.getElementById('twitter-follow').style.opacity = '0.68';
         document.getElementById('approved-icon-channel').style.display = 'block'; 
             const popup = document.getElementById('success-popup');
