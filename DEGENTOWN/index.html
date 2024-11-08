@@ -575,7 +575,7 @@ background-color: #111013;
         }
         tr {
         
-        display: flex;
+       
     justify-content: space-between;
     padding: 10px;
     border-bottom: 1px solid rgb(74, 72, 85);
@@ -1897,29 +1897,34 @@ if (result.success) {
 
     </div>
 </div>
-    <div id="referral-stats" style="margin-left: 20px; margin-right: 20px;display: flex; justify-content: space-between; padding: 10px 15px; margin-top: 0; margin-bottom: 0px; border-radius: 10px; background: #1e1d22; color: white !important; border: 1px solid #101013;">
-        <div class="stat" style="justify-content: space-evenly;flex: 1; text-align: left; font-weight: bold; border-right: 1px solid #4a4855; padding-right: 10px;">
-            <img src="assets/img/friends.png" style="height: 15px; padding-right: 0px;">
-            Referrals: <span id="referrals-count">0</span>
-        </div>
-        <div class="stat" style="justify-content: space-evenly;padding-left: 15px;flex: 1; text-align: center; font-weight: bold;">
-            <img src="assets/img/littlediamond.png" style="height: 15px; padding-right: 0px;">
-            Earned: <span id="invite-points-earned">0</span>
-        </div>
-    </div>
+<div id="referral-info">
+    <table id="referrer-table" style="width: 90%; border-collapse: collapse; margin-top: 20px;     margin-left: 21px; color: white;">
+        <thead>
+            <tr style="background-color:#1e1d22; text-align: left;">
+                <th style="padding: 10px; border: 1px solid #444;">Refer</th>
+                <th style="padding: 10px; border: 1px solid #444;">Referrals</th>
+                <th style="padding: 10px; border: 1px solid #444;">Earned</th>
+            </tr>
+        </thead>
+        <tbody id="referrer-info">
+            <!-- Referrer information will be injected here -->
+        </tbody>
+    </table>
 
-    <h3 style="text-align: center; color: #402104; margin: 20px 0;"></h3>
-
-    <div id="example-users" style="margin-left: 20px; margin-right: 20px;margin-bottom: 20px;background-color: rgba(46, 44, 55, 0.95); padding: 0px; border-radius: 10px;     border: 1px solid #101013;">
-        <div class="invite-header" style="border: none !important;background: #1e1d22;padding: 10px 15px;display: flex;justify-content: space-between;border-top-left-radius: 10px;border-top-right-radius: 10px;">
-            <span style="flex: 2; text-align: left; font-weight: bold;">Name</span>
-            <span style="flex: 1; text-align: center; font-weight: bold;">Level</span>
-            <span style="flex: 1; text-align: right; font-weight: bold;">Earned</span>
-        </div>
-        <ul id="referral-list" style="margin-left: 20px; margin-right: 20px;scrollbar-width: none;list-style: none;padding: 0;margin: 0;max-height: 14vh;overflow-y: auto;padding-left: 5px;padding-right: 5px;">
-            <!-- List to display referrals or "No Referrals Available" message -->
-        </ul>
-    </div>
+    <h3 style="color: white; margin-top: 30px; text-align:center; margin-top: 20px; margin-bottom: 10px;">Referrals List</h3>
+    <table id="downline-table" style="width: 90%; border-collapse: collapse; margin-top: 20px;     margin-left: 21px; color: white;    margin-bottom: 20px;">
+        <thead>
+            <tr style="background-color:#1e1d22; text-align: left;">
+                <th style="padding: 10px; border: 1px solid #444;">Name</th>
+                <th style="padding: 10px; border: 1px solid #444;">Level</th>
+                <th style="padding: 10px; border: 1px solid #444;">Total Points</th>
+            </tr>
+        </thead>
+        <tbody id="downline-referrals">
+            <!-- Downline referrals will be injected here -->
+        </tbody>
+    </table>
+</div>
 
     <h3 style="margin-left: 20px; margin-right: 20px;text-align: center;margin-top: 10px;color: #ffffff;font-size: 17px;font-weight: 600;background: #1e1d22;padding-top: 10px;border-top-left-radius: 10px;border-top-right-radius: 10px;border-top: 1px solid #101013;border-left: 1px solid #101013;border-right: 1px solid #101013;padding-bottom: 14px;margin-bottom: 0px;">Your Invite Link:</h3>
     <div id="referral-link-section" style="margin-left: 20px; margin-right: 20px;border-radius: 10px;text-align: center;margin-top: 0px;border-top-right-radius: 0px !important;border-top-left-radius: 0px !important;">
@@ -1938,29 +1943,64 @@ if (result.success) {
 
 <script>
 document.addEventListener("DOMContentLoaded", async function() {
-  const userId = Telegram.WebApp.initDataUnsafe.user.id;
+const userId = Telegram.WebApp.initDataUnsafe.user.id;
+    async function fetchReferrals(userId) {
+        try {
+            const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/referrals/${userId}`);
+            const data = await response.json();
 
-  async function fetchReferralData(userId) {
-    try {
-      const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/referrals/${userId}`);
-            if (!response.ok) throw new Error("Error fetching data");
+            // Prepare Referrer Information Table Row
+            const referrerInfoContainer = document.getElementById("referrer-info");
+            referrerInfoContainer.innerHTML = ''; // Clear existing content
 
-            const userData = await response.json();
-            document.getElementById("referrals-count").textContent = userData.totalReferrals || 0;
-            document.getElementById("points-balance").textContent = userData.totalPoints || 0;
-            document.getElementById("invite-points-earned").textContent = userData.referralPoints || 0;
+            const referredByUsername = data.referrer?.referredBy?.username || "No refer";
+            const totalReferrals = data.referrals ? data.referrals.length : 0;
+            const totalReferralPoints = data.referrer?.referralPoints || 0;
 
-            const referralList = document.getElementById("referral-list");
+            const referrerRow = document.createElement("tr");
+            referrerRow.style = "background-color: rgba(46, 44, 55, 0.95); border-radius: 8px;";
 
-            if (userData.referrals.length === 0) {} else {
-                // Display referral details in table
-                userData.referrals.forEach(referral => {});
-            }
+            referrerRow.innerHTML = `
+                <td style="padding: 10px; border: 1px solid #444;">${referredByUsername}</td>
+                <td style="padding: 10px; border: 1px solid #444;">${totalReferrals}</td>
+                <td style="padding: 10px; border: 1px solid #444;">${totalReferralPoints}</td>
+            `;
 
+            referrerInfoContainer.appendChild(referrerRow);
+
+            // Display Downline Referrals in Table
+            const downlineContainer = document.getElementById("downline-referrals");
+            downlineContainer.innerHTML = ''; // Clear existing content
+
+            const displayDownline = (downline, level = 1) => {
+                if (!downline || downline.length === 0 || level > 6) return;
+
+                downline.forEach(referral => {
+                    const referralRow = document.createElement("tr");
+                    referralRow.style = "background-color:rgba(46, 44, 55, 0.95); border-radius: 8px;";
+
+                    referralRow.innerHTML = `
+                        <td style="padding: 10px; border: 1px solid #444;">${referral.username}</td>
+                        <td style="padding: 10px; border: 1px solid #444;">${level}</td>
+                        <td style="padding: 10px; border: 1px solid #444;">${referral.totalPoints}</td>
+                    `;
+
+                    downlineContainer.appendChild(referralRow);
+
+                    // Recursively show the downline
+                    displayDownline(referral.downline, level + 1);
+                });
+            };
+
+            // Display the downline referrals
+            displayDownline(data.referrals);
         } catch (error) {
-            console.error("Failed to fetch referral data:", error);
+            console.error('Error fetching referral data:', error);
         }
     }
+
+    // Fetch referrals for a specific user (replace with actual user ID)
+    fetchReferrals(userId);
 
     await fetchReferralData(userId);
 
