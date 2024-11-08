@@ -1960,7 +1960,7 @@ document.addEventListener("DOMContentLoaded", async function() {
 
             const referredByUsername = data.referrer?.referredBy?.username || "No refer";
             const totalReferrals = data.referrals ? data.referrals.length : 0;
-            const totalReferralPoints = data.referrer?.referralPoints || 0;
+            const totalCommissionEarned = data.referrer?.commissionEarned || 0; // Updated to commissionEarned
 
             const referrerRow = document.createElement("tr");
             referrerRow.style = "background-color: rgba(46, 44, 55, 0.95); border-radius: 8px;";
@@ -1968,7 +1968,7 @@ document.addEventListener("DOMContentLoaded", async function() {
             referrerRow.innerHTML = `
                 <td style="padding: 10px; border: 1px solid #444;">${referredByUsername}</td>
                 <td style="padding: 10px; border: 1px solid #444;">${totalReferrals}</td>
-                <td style="padding: 10px; border: 1px solid #444;">${totalReferralPoints}</td>
+                <td style="padding: 10px; border: 1px solid #444;">${totalCommissionEarned}</td> <!-- Updated to commissionEarned -->
             `;
 
             referrerInfoContainer.appendChild(referrerRow);
@@ -1987,7 +1987,7 @@ document.addEventListener("DOMContentLoaded", async function() {
                     referralRow.innerHTML = `
                         <td style="padding: 10px; border: 1px solid #444;">${referral.username}</td>
                         <td style="padding: 10px; border: 1px solid #444;">${level}</td>
-                        <td style="padding: 10px; border: 1px solid #444;">${referral.totalPoints}</td>
+                        <td style="padding: 10px; border: 1px solid #444;">${referral.commissionEarned}</td> <!-- Updated to commissionEarned -->
                     `;
 
                     downlineContainer.appendChild(referralRow);
@@ -2004,7 +2004,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         }
     }
 
-    // Fetch referrals for a specific user (replace with actual user ID)
+    // Fetch referrals for a specific user
     fetchReferrals(userId);
 
     await fetchReferralData(userId);
@@ -2014,6 +2014,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         await fetchReferralData(userId);
     }, 1000); // Fetch data every 1 second
 });
+
 
 
 
