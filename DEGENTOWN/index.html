@@ -1949,6 +1949,10 @@ const userId = Telegram.WebApp.initDataUnsafe.user.id;
             const response = await fetch(`https://telegram-bot-degen-town.replit.app/api/user/referrals/${userId}`);
             const data = await response.json();
 
+            document.getElementById("referrals-count").textContent = userData.totalReferrals || 0;
+            document.getElementById("points-earned").textContent = userData.totalPoints || 0;
+
+
             // Prepare Referrer Information Table Row
             const referrerInfoContainer = document.getElementById("referrer-info");
             referrerInfoContainer.innerHTML = ''; // Clear existing content
