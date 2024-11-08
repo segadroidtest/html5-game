@@ -270,8 +270,8 @@ document.addEventListener("DOMContentLoaded", async function() {
             if (!response.ok) throw new Error("Error fetching data");
 
             const userData = await response.json();
-            document.getElementById("referrals-count").textContent = userData.totalReferrals || 0;
-            document.getElementById("points-earned").textContent = userData.totalPoints || 0;
+            document.getElementById("referrals-count").textContent = userData.user.totalReferrals || 0;
+            document.getElementById("points-earned").textContent = userData.user.totalPoints || 0;
 
             const referralList = document.getElementById("referral-list");
 
@@ -315,7 +315,7 @@ document.addEventListener("DOMContentLoaded", async function() {
             if (!response.ok) throw new Error("Error fetching points data");
 
             const userData = await response.json();
-            document.getElementById("points-earned").textContent = userData.totalPoints || 0;
+            document.getElementById("points-earned").textContent = userData.user.totalPoints || 0;
         } catch (error) {
             console.error("Failed to fetch points data:", error);
         }
